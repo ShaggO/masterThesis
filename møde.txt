@@ -1,0 +1,21 @@
+Spørgsmål til møde
+
+Kontrakt:
+- % supervision
+- datoer
+- omfang af problem description
+- title
+- group exam?
+
+Projektbeskrivelse
+
+Test dataset (dtu robot + pascal challenge?)
+
+Problems:
+- Feature matching
+- Image classification
+- Object classification
+
+Parts matching: used in which problems?
+
+Lån af lokale (billedlab)
