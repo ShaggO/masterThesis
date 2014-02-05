@@ -18,4 +18,39 @@ Problems:
 
 Parts matching: used in which problems?
 
+
 Lån af lokale (billedlab)
+
+
+Fokus på HOG og udvikling af en god højere-ordensdescriptor.
+Evt. vha. et shape index
+
+Designer descriptor med føglende anvendelsesområder for øje, hvoraf vi vil teste
+visse udvalgte anvendelser
+
+Anvendelse:
+    Caltech 101,
+    DTU robot,
+    VLFeat benchmark,
+    Teksturdata/klassifikation,
+    DPM (Deformable parts models) - PASCAL X,
+    Image registration
+
+Successcriteria:
+    analysere os frem til et ikke-trivielt design af mindst én descriptor, og
+    teste og sammenligne denne med HOG
+
+Læringsmål:
+    Litteraturstudie af descriptors og metoder (HOG)
+    Udvikle egen metode baseret på state of the art
+    Parameterstudie af ovennævnte
+    Empirisk evaluering af metoden sammenlignet med state of the art
+
+Title:
+    Study of higher order image descriptors
+
+Tidsplan og deadlines
+    Litteraturstudie
+    Stop for nye idéer
+    Applikationr
+    Start eksperimenter etc.
