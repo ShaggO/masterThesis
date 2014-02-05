@@ -21,17 +21,16 @@ Parts matching: used in which problems?
 
 Lån af lokale (billedlab)
 
-
 Fokus på HOG og udvikling af en god højere-ordensdescriptor.
 Evt. vha. et shape index
 
-Designer descriptor med føglende anvendelsesområder for øje, hvoraf vi vil teste
+Designe descriptor med føglende anvendelsesområder for øje, hvoraf vi vil teste
 visse udvalgte anvendelser
 
 Anvendelse:
     Caltech 101,
     DTU robot,
-    VLFeat benchmark,
+    VLFeat benchmark (VL bench),
     Teksturdata/klassifikation,
     DPM (Deformable parts models) - PASCAL X,
     Image registration

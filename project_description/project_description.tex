@@ -1,0 +1,81 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{amsmath,amssymb,amsfonts}
+
+\title{\bfseries{Study of higher order image descriptors}\\Project description}
+\author{
+    Malte Stær Nissen \\\texttt{tgq958@alumni.ku.dk}
+    \and
+    Benjamin Michael Braithwaite \\ \texttt{cpg608@alumni.ku.dk}
+    \\
+    \\ \small{Supervisor: Kim Steenstrup Pedersen, \texttt{kimstp@diku.dk}}
+    \\ \small{Co-supervisor: Sune Darkner, \texttt{darkner@diku.dk}}
+    }
+
+\begin{document}
+\maketitle
+
+\section{Problem statement}
+Features/interest points are a central concept in computer vision. These
+points mark areas of an image containing a significant amount of information
+about the local structure. A visual descriptor is a representation of the
+local structure of a feature. Such a descriptor can be modelled in numerous
+ways depending on the application and desired properties. In this thesis we
+will study state of the art visual descriptors and develop, implement, test,
+and discuss our own descriptors based on this study.
+
+\section{Motivation}
+Computer scientists have for many years tried to make computers perceive the
+world as humans do. This is done by performing analysis of real world images.
+The analysis is often based on extraction of features in the images. These
+features can then be be used for applications such as: object detection of
+pedestrians \cite{felzenszwalb2008discriminatively},
+content based image retrieval \cite{smeulders2000content},
+feature matching for solving the image correspondence problem
+\cite{dahl2011finding}, etc.
+The state of the art methods are however
+not perfect and hence we will try improve upon the accuracy of the methods.
+
+\section{Proposed solution}
+We will try to design and implement a variant of the HOG descriptor utilizing
+higher order differential information. Furthermore we could expand this
+solution to use shape index for the 2nd order differential information. We
+will select a few of the following applications for testing our solution:
+Texture recognition, pedestrian detection, general object detection using
+deformable parts models, image correspondence, medical image registration, and
+content based image retrieval.
+
+\section{Learning goals}
+The following learning goals will be the success criteria for our
+project.
+\begin{itemize}
+    \item Perform a literature study of visual descriptors and their
+        applications.
+    \item Develop our own visual descriptor based on state of the art work
+        within the field.
+    \item Select and implement solutions of some of the mentioned applications
+        of visual descriptors.
+    \item Perform a parameter study of our solutions.
+    \item Perform an empirical evaluation of our solutions on selected
+        problems compared to state of the art solutions.
+    \item Discuss the results of the empirical studies.
+\end{itemize}
+
+\section{Risk assessment}
+The focus of the thesis is to gain insight into the field of descriptors and
+develop our own non-trivial descriptor on the basis hereof. This makes the risk
+of failure low since no requirements for the accuracy of the final product are
+stated. There is however a risk of developing a solution which performs worse
+than state of the art methods, which will however still have given us
+significant insight into the field in question.
+
+\bibliography{../bibliography}
+\bibliographystyle{alpha}
+
+\end{document}
+

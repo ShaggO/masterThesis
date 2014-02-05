@@ -30,5 +30,8 @@
 *.vrb
 *.xdy
 *.tdo
+*.fls
+
+project_description/project_description.pdf
 
 src/data
