@@ -1,0 +1,45 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{amsmath,amssymb,amsfonts}
+
+\title{\bfseries{Study of higher order image descriptors}\\Article overview}
+\author{
+    Malte Stær Nissen \\\texttt{tgq958@alumni.ku.dk}
+    \and
+    Benjamin Michael Braithwaite \\ \texttt{cpg608@alumni.ku.dk}
+    \\
+    \\ \small{Supervisor: Kim Steenstrup Pedersen, \texttt{kimstp@diku.dk}}
+    \\ \small{Co-supervisor: Sune Darkner, \texttt{darkner@diku.dk}}
+    }
+
+\begin{document}
+\maketitle
+
+This is an overview of the types of descriptors used in various articles.
+
+\subsection{Crosier 2010 \cite{crosier2010using}}
+
+Descriptor for 200x200 pixel texture regions. Consists of a histogram of 6 Basic Image Features (BIFs) built from 2-jet information at 4 different scales. ($6^4 = 1296$ bins)
+
+\subsection{Dalal 2005 \cite{dalal2005histograms}}
+
+Descriptor for 3x3 cell blocks of 6x6 pixel cells used for pedestrian detection. Each cell has a histogram of unsigned gradient orientations divided into 9 bins.
+
+\subsection{Felzenszwalb 2008 \cite{felzenszwalb2008discriminatively}}
+
+Descriptor for 2x2 cell blocks of 8x8 pixel cells used for general object detection. Each cell has a histogram of unsigned gradient orientations divided into 9 bins.
+
+\subsection{Pedersen \cite{pedersenshape}}
+
+Descriptor for 100x100 pixel regions of galaxies used to estimate specific star formation rate (sSFR). Consists of histograms of gradient orientation in 8 bins and shape index in 9 bins, at 8 different scale levels.
+
+\bibliography{../bibliography}
+\bibliographystyle{alpha}
+
+\end{document}
+
