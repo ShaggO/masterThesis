@@ -43,12 +43,18 @@ not perfect and hence we will try improve upon the accuracy of the methods.
 
 \section{Proposed solution}
 We will try to design and implement a variant of the HOG descriptor utilizing
-higher order differential information. Furthermore we could expand this
-solution to use shape index for the 2nd order differential information. We
+higher order differential information. We
 will select a few of the following applications for testing our solution:
 Texture recognition, pedestrian detection, general object detection using
 deformable parts models, image correspondence, medical image registration, and
 content based image retrieval.
+
+At first we will try to experiment with a HOG descriptor extended to various orders
+of differential information and various parameters for the number of cells per
+block, number of pixels per cell and number of channels per cell histogram.
+Furthermore we will experiment with the combination of HOG and the shape index
+\cite{koenderink1992surface}
+as well as different ways of processing the higher order information.
 
 \section{Learning goals}
 The following learning goals will be the success criteria for our
@@ -73,6 +79,27 @@ of failure low since no requirements for the accuracy of the final product are
 stated. There is however a risk of developing a solution which performs worse
 than state of the art methods, which will however still have given us
 significant insight into the field in question.
+
+\section{Time schedule \small{(preliminary)}}
+
+\begin{itemize}
+    \item{\textbf{Literature study:}
+        \textbf{Deadline:} Monday the 24th of February.}
+    \item{\textbf{HOG and shape index:} Basic descriptor implementation and
+        preliminary report section about HOG extended with shape index. \\
+        \textbf{Deadline:} Wednesday the 5th of March.}
+    \item{\textbf{Image correspondence implementation:} Feature matching
+        implementation and test with descriptor on DTU robot dataset. Chosen to
+        get a simple initial estimate of the viability of our descriptor choices.
+        Report section about the subject written. \\
+        \textbf{Deadline:} Wednesday the 19th of March.}
+    \item{\textbf{Unknown workload:} Further work will be determined
+    continously.}
+    \item{\textbf{Final experiments/results:}
+        \textbf{Deadline:} Sunday the 3rd of August}
+    \item{\textbf{Final report:}
+        \textbf{Deadline:} Sunday the 17th of August}
+\end{itemize}
 
 \bibliography{../bibliography}
 \bibliographystyle{alpha}
