@@ -6,6 +6,7 @@
 \usepackage{lmodern}
 
 \usepackage{amsmath,amssymb,amsfonts}
+\setcounter{secnumdepth}{1}
 
 \title{\bfseries{Study of higher order image descriptors}\\Article overview}
 \author{
@@ -22,19 +23,27 @@
 
 This is an overview of the types of descriptors used in various articles.
 
-\subsection{Crosier 2010 \cite{crosier2010using}}
+\subsection{Lowe 2004 \cite{lowe2004distinctive}}
 
-Descriptor for 200x200 pixel texture regions. Consists of a histogram of 6 Basic Image Features (BIFs) built from 2-jet information at 4 different scales. ($6^4 = 1296$ bins)
+SIFT descriptor for 4x4 cell blocks of 4x4 pixel cells. Each cell has a histogram of unsigned gradient orientations divided into 8 bins. ($16 \times 8 = 128$ dimensions)
 
 \subsection{Dalal 2005 \cite{dalal2005histograms}}
 
-Descriptor for 3x3 cell blocks of 6x6 pixel cells used for pedestrian detection. Each cell has a histogram of unsigned gradient orientations divided into 9 bins.
+HOG descriptor for 3x3 cell blocks of 6x6 pixel cells used for pedestrian detection. Each cell has a histogram of unsigned gradient orientations divided into 9 bins. ($9 \times 9 = 81$ dimensions)
 
 \subsection{Felzenszwalb 2008 \cite{felzenszwalb2008discriminatively}}
 
-Descriptor for 2x2 cell blocks of 8x8 pixel cells used for general object detection. Each cell has a histogram of unsigned gradient orientations divided into 9 bins.
+Descriptor for 2x2 cell blocks of 8x8 pixel cells used for general object detection, used in a deformable parts model (DPM). Each cell has a histogram of unsigned gradient orientations divided into 9 bins.
 
-\subsection{Pedersen \cite{pedersenshape}}
+\subsection{Crosier 2010 \cite{crosier2010using}}
+
+Descriptor for 200x200 pixel texture regions. Consists of a histogram of 6 Basic Image Features (BIFs) built from 2-jet information at 4 different scales. ($6^4 = 1296$ bins/dimensions)
+
+\subsection{Larsen 2012 \cite{larsen2012jet}}
+
+$\mathcal{J}_4$-grid2 descriptor for generic 2x2 pixel regions. Consists of 4-jet information at each pixel. ($4 \times 14 = 56$ dimensions)
+
+\subsection{Pedersen 2013 \cite{pedersen2013shape}}
 
 Descriptor for 100x100 pixel regions of galaxies used to estimate specific star formation rate (sSFR). Consists of histograms of gradient orientation in 8 bins and shape index in 9 bins, at 8 different scale levels.
 
