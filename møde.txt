@@ -2,6 +2,7 @@ Spørgsmål til møde
 
 Kontrakt:
 - % supervision
+- et eller andet
 - datoer
 - omfang af problem description
 - title
