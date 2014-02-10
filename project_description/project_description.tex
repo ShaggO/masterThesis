@@ -39,7 +39,7 @@ content based image retrieval \cite{smeulders2000content},
 feature matching for solving the image correspondence problem
 \cite{dahl2011finding}, etc.
 The state of the art methods are however
-not perfect and hence we will try improve upon the accuracy of the methods.
+not perfect and hence we will try to improve upon the accuracy of the methods.
 
 \section{Proposed solution}
 We will try to design and implement a variant of the HOG descriptor utilizing
@@ -49,12 +49,13 @@ Texture recognition, pedestrian detection, general object detection using
 deformable parts models, image correspondence, medical image registration, and
 content based image retrieval.
 
-At first we will try to experiment with a HOG descriptor extended to various orders
-of differential information and various parameters for the number of cells per
+At first we will try to experiment with a HOG descriptor extended to
+various orders of differential information (like Jet descriptors à la
+\cite{larsen2012jet}) and various parameters for the number of cells per
 block, number of pixels per cell and number of channels per cell histogram.
 Furthermore we will experiment with the combination of HOG and the shape index
-\cite{koenderink1992surface}
-as well as different ways of processing the higher order information.
+\cite{koenderink1992surface} as well as different ways of processing the
+higher order information.
 
 \section{Learning goals}
 The following learning goals will be the success criteria for our
