@@ -3,14 +3,17 @@
 
 \section{Related work}
 
+The work by Lowe \cite{lowe2004distinctive} revolutionized the discipline of detecting and describing features in images, and inspired many later descriptors. We will summarize the most successful of these. The descriptors are divided into two categories: spatial pooling and higher order descriptors. We also look at various performance evaluations of descriptors.
+
 \subsection{Spatial pooling descriptors}
 
-SIFT \cite{lowe2004distinctive},
+\emph{Spatial pooling} is the technique of combining spatially localized image information in some manner. SIFT \cite{lowe2004distinctive} achieves this by dividing the image regions surrounding interest points into rectangular cells and, constructing a histogram of unsigned gradient orientations in each cell. The interest points are detected using a multi-scale DoG detector. By computing the gradient orientations at the detection scales, the descriptor becomes scale invariant. The descriptor is also rotation invariant as the cell grid is rotated according to the dominating gradient orientation. The SIFT descriptor uses a grid of $4 \times 4$ cells each consisting of $4 \times 4$ pixels, with 8 histogram bins for each cell. This results in a dimensionality of $4 \times 4 \times 8 = 128$.
+
 PCA-SIFT \cite{ke2004pca},
 HOG \cite{dalal2005histograms},
 DPM \cite{felzenszwalb2008discriminatively},
 GLOH \cite{mikolajczyk2005performance},
-DAISY \cite{tola2008fast,winder2009picking},
+DAISY \cite{tola2008fast,winder2009picking}
 
 \subsection{Higher order descriptors}
 
