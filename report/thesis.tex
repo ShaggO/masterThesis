@@ -4,11 +4,13 @@
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-
+\usepackage{subfiles,bibentry,hyperref}
 \usepackage{amsmath,amssymb,amsfonts}
-\setcounter{secnumdepth}{1}
 
-\title{\bfseries{Study of higher order image descriptors}\\Literature study}
+\setcounter{secnumdepth}{2}
+\bibliographystyle{alpha}
+
+\title{\bfseries{Study of higher order image descriptors}}
 \author{
     Malte Stær Nissen \\\texttt{tgq958@alumni.ku.dk}
     \and
@@ -18,21 +20,16 @@
     \\ \small{Co-supervisor: Sune Darkner, \texttt{darkner@diku.dk}}
     }
 
+\def\subbibliography{\bibliography{../../bibliography}}
 \begin{document}
+\def\subbibliography{}
 \maketitle
 
-\subsection{Spatial pooling}
-
-SIFT \cite{lowe2004distinctive},
-HOG \cite{dalal2005histograms},
-GLOH \cite{mikolajczyk2005performance},
-DAISY 
-PCA-SIFT
-
-
+\subfile{tex/abstract}
+\subfile{tex/introduction}
+\subfile{tex/literature_study}
 
 \bibliography{../bibliography}
-\bibliographystyle{alpha}
 
 \end{document}
 
