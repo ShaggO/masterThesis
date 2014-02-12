@@ -69,9 +69,9 @@
     author={Pedersen, Kim Steenstrup and Stensbo-Smidt, Kristoffer and Zirm,
         Andrew and Igel, Christian}
     booktitle={Computer Vision (ICCV), Conference on},
-    pages={2440-2447},
-    year={2013},
-    organization={IEEE}
+        pages={2440-2447},
+        year={2013},
+        organization={IEEE}
 }
 
 @inproceedings{vondrick2013hog,
@@ -133,13 +133,44 @@
 }
 
 @article{mikolajczyk2005performance,
-  title={A performance evaluation of local descriptors},
-  author={Mikolajczyk, Krystian and Schmid, Cordelia},
-  journal={Pattern Analysis and Machine Intelligence, IEEE Transactions on},
-  volume={27},
-  number={10},
-  pages={1615--1630},
-  year={2005},
-  publisher={IEEE}
+    title={A performance evaluation of local descriptors},
+    author={Mikolajczyk, Krystian and Schmid, Cordelia},
+    journal={Pattern Analysis and Machine Intelligence, IEEE Transactions on},
+    volume={27},
+    number={10},
+    pages={1615--1630},
+    year={2005},
+    publisher={IEEE}
 }
 
+@inproceedings{tola2008fast, 
+    author={Tola, Engin and Lepetit, V. and Fua, P.}, 
+    booktitle={Computer Vision and Pattern Recognition, 2008. CVPR 2008. IEEE Conference on}, 
+    title={A fast local descriptor for dense matching}, 
+    year={2008}, 
+    month={June}, 
+    pages={1-8}, 
+    abstract={We introduce a novel local image descriptor designed for
+        dense wide-baseline matching purposes. We feed our descriptors to a
+            graph-cuts based dense depth map estimation algorithm and this yields
+            better wide-baseline performance than the commonly used correlation
+            windows for which the size is hard to tune. As a result, unlike
+            competing techniques that require many high-resolution images to produce
+            good reconstructions, our descriptor can compute them from pairs of
+            low-quality images such as the ones captured by video streams. Our
+            descriptor is inspired from earlier ones such as SIFT and GLOH but
+            can be computed much faster for our purposes. Unlike SURF which can
+            also be computed efficiently at every pixel, it does not introduce
+            artifacts that degrade the matching performance. Our approach was
+            tested with ground truth laser scanned depth maps as well as on a wide
+            variety of image pairs of different resolutions and we show that good
+            reconstructions are achieved even with only two low quality images.},
+    keywords={correlation methods;estimation theory;graph theory;image
+        matching;image reconstruction;image resolution;correlation window;dense
+            wide-baseline matching;fast local image descriptor;graph-cuts-based dense
+            depth map estimation algorithm;image quality;image reconstruction;image
+            resolution;Computational efficiency;Computer vision;Feeds;Histograms;Image
+            reconstruction;Laboratories;Layout;Pixel;Robustness;Yield estimation},
+    doi={10.1109/CVPR.2008.4587673}, 
+    ISSN={1063-6919},
+}
