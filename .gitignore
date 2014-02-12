@@ -31,6 +31,8 @@
 *.xdy
 *.tdo
 *.fls
+*.bcf
+*.run.xml
 
 project_description/project_description.pdf
 
