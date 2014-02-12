@@ -7,6 +7,9 @@
 \usepackage{subfiles,bibentry,hyperref}
 \usepackage{amsmath,amssymb,amsfonts}
 
+% Must be the last one
+\usepackage{cleveref}
+
 \setcounter{secnumdepth}{2}
 \bibliographystyle{alpha}
 
@@ -24,6 +27,14 @@
 \begin{document}
 \def\subbibliography{}
 \maketitle
+
+\clearpage
+
+\tableofcontents
+
+\listoffigures
+
+\listoftables
 
 \subfile{tex/abstract}
 \subfile{tex/introduction}
