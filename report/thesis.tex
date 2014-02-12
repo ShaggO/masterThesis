@@ -14,19 +14,23 @@
 \setcounter{secnumdepth}{2}
 \bibliographystyle{alpha}
 
-\title{\bfseries{Study of higher order image descriptors}}
-\author{
-    Malte Stær Nissen \\\texttt{tgq958@alumni.ku.dk}
-    \and
-    Benjamin Michael Braithwaite \\ \texttt{cpg608@alumni.ku.dk}
-    \\
-    \\ \small{Supervisor: Kim Steenstrup Pedersen, \texttt{kimstp@diku.dk}}
-    \\ \small{Co-supervisor: Sune Darkner, \texttt{darkner@diku.dk}}
-    }
+%% University of copenhagen front page
+\usepackage[titelside, en, nat]{ku-forside}
+\titel{Study of higher order image descriptors}
+\undertitel{}
+\forfatter{}
+\forfatterET{Benjamin Michael Braithwaite -- \texttt{cpq608@alumni.ku.dk}}
+\forfatterTO{Malte Stær Nissen -- \texttt{tgq958@alumni.ku.dk}}
+\opgave{Master's Thesis} % Findes kun under 'titelside'
+\dato{\today}
+\vejleder{Supervisors: Kim Steenstup Pedersen and Sune Darkner}
 
+%% Define subbibliography hack to let sections be compiled with references
 \def\subbibliography{\bibliography{../../bibliography}}
 \begin{document}
+%% Let the subbibliography be an empty definition
 \def\subbibliography{}
+
 \maketitle
 
 \subfile{tex/abstract}
