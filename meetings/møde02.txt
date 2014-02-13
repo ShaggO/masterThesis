@@ -10,3 +10,4 @@ Spørgsmål:
  5. 50% vejledning
  6. Møde tirsdag kl. 10 og få kontrakter på plads
  7. Fastlagt ferie/væk i længere perioder?
+ 8. Forslag/ide: Kombiner k-jets med PCA som i PCA-sift?
