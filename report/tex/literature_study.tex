@@ -3,21 +3,49 @@
 
 \section{Related work}
 
-The work by Lowe \cite{lowe2004distinctive} revolutionized the discipline of detecting and describing features in images, and inspired many later descriptors. We will summarize the most successful of these. The descriptors are divided into two categories: spatial pooling and higher order descriptors. We also look at various performance evaluations of descriptors.
+The work by Lowe \cite{lowe2004distinctive} revolutionized the discipline
+of detecting and describing features in images, and inspired many later
+descriptors. We will summarize the most successful of these. The descriptors
+are divided into two categories: spatial pooling and higher order descriptors.
+We also look at various performance evaluations of descriptors.
 
 \subsection{Spatial pooling descriptors}
 
-\emph{Spatial pooling} is the technique of combining spatially localized image information. The \emph{scale-invariant feature transform} (SIFT) descriptor \cite{lowe2004distinctive} is the most popular descriptor based on this approach. It works by dividing the image regions surrounding interest points into square cells and constructing a histogram of unsigned gradient orientations for the pixels in each cell. The interest points are detected using a multi-scale DoG detector. By computing the gradient orientations at detection scale, the descriptor becomes scale invariant. The descriptor is also rotation invariant as the cell grid is rotated according to the dominating gradient orientation. Finally the descriptor achieves illumination invariance by normalizing the histograms. The SIFT descriptor uses a grid of $4 \times 4$ cells each consisting of $4 \times 4$ pixels, with 8 histogram bins for each cell. This results in a dimensionality of $4 \times 4 \times 8 = 128$.
+\emph{Spatial pooling} is the technique of combining spatially localized
+image information. The \emph{scale-invariant feature transform} (SIFT)
+descriptor \cite{lowe2004distinctive} is the most popular descriptor based on
+this approach. It works by dividing the image regions surrounding interest
+points into square cells and constructing a histogram of unsigned gradient
+orientations for the pixels in each cell. The interest points are detected
+using a multi-scale DoG detector. By computing the gradient orientations
+at detection scale, the descriptor becomes scale invariant. The descriptor
+is also rotation invariant as the cell grid is rotated according to the
+dominating gradient orientation. Finally the descriptor achieves illumination
+invariance by normalizing the histograms. The SIFT descriptor uses a grid of
+$4 \times 4$ cells each consisting of $4 \times 4$ pixels, with 8 histogram
+bins for each cell. This results in a dimensionality of $4 \times 4 \times 8 =
+128$.
 
-PCA-SIFT \cite{ke2004pca},
+\emph{PCA-SIFT} \cite{ke2004pca} is also based on combining oriented gradients
+within a region, but instead of dividing the feature into cell histograms
+it uses principal component analysis (PCA) to reduce the dimensionality
+of the combined gradients. It also uses a multi-scale DoG detector for
+interest point detection as SIFT. When computing PCA we compute the most
+significant orthogonal dimensions of a dataset. In order to obtain good
+results a large and diverse dataset of images and their features is required.
+PCA-SIFT describes a single patch of $41 \times 41$ pixels. When computing
+the gradients it gives gradient dimensionality of $2\times39\times39 = 3042$,
+which is reduced by PCA to 36 dimensions.
+
 HOG \cite{dalal2005histograms},
-DPM \cite{felzenszwalb2008discriminatively},
+%DPM \cite{felzenszwalb2008discriminatively},
 GLOH \cite{mikolajczyk2005performance},
 DAISY \cite{tola2008fast,winder2009picking}
 
 \subsection{Higher order differential descriptors}
 
-Another approach to descriptor design is to use higher order differential information.
+Another approach to descriptor design is to use higher order differential
+information.
 
 BIF-column texture representation \cite{crosier2010using},
 $\mathcal{J}_4$-grid2 \cite{larsen2012jet},
