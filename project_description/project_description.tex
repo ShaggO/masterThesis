@@ -4,6 +4,7 @@
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\usepackage{hyperref}
 
 \usepackage{amsmath,amssymb,amsfonts}
 
@@ -26,9 +27,10 @@ points mark areas of an image containing a significant amount of information
 about the local structure. A visual descriptor is a representation of the
 local structure of a feature. Such a descriptor can be modelled in numerous
 ways depending on the application and desired properties. In this thesis we
-will study state of the art visual descriptors and develop, implement, evaluate
-against state of the art descriptors,
-and discuss our own descriptors based on this study.
+will study state of the art visual descriptors, and develop and implement our
+own descriptors based on this study. Furthermore we will evaluate our
+descriptors against state of the art descriptors and discuss the results of the
+evaluation.
 
 \section{Motivation}
 Computer scientists have for many years tried to make computers perceive
@@ -81,12 +83,12 @@ project.
 \end{itemize}
 
 \section{Risk assessment}
-The focus of the thesis is to gain insight into the field of descriptors and
-develop our own non-trivial descriptor on the basis hereof. This makes the risk
-of failure low since no requirements for the accuracy of the final product are
-stated. There is however a risk of developing a solution which performs worse
-than state of the art methods, which will however still have given us
-significant insight into the field in question.
+The focus of the thesis is to gain insight into the field of descriptors
+and develop our own non-trivial descriptor on the basis hereof. This makes
+the risk of failure low since no requirements for the accuracy of the final
+product are stated. There is however a risk of developing a solution which
+performs worse than state of the art methods, but this will still have given
+us significant insight into the field in question.
 
 \section{Time schedule \small{(preliminary)}}
 
@@ -94,9 +96,9 @@ significant insight into the field in question.
     \item{\textbf{Literature study:}
         \textbf{Deadline:} Monday the 24th of February.}
     \item{\textbf{HOG and shape index:} Basic descriptor implementation and
-        preliminary report section about HOG extended with shape index. \\
+        preliminary report section about descriptor techniques. \\
         \textbf{Deadline:} Wednesday the 5th of March.}
-    \item{\textbf{Image correspondence implementation:} Feature matching
+    \item{\textbf{Image correspondence implementation:} Image correspondence
         implementation and test with descriptor on DTU robot dataset. Chosen to
         get a simple initial estimate of the viability of our descriptor choices.
         Report section about the subject written. \\
