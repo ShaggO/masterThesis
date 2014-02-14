@@ -10,4 +10,14 @@ Spørgsmål:
  5. 50% vejledning
  6. Møde tirsdag kl. 10 og få kontrakter på plads
  7. Fastlagt ferie/væk i længere perioder?
+    - 9. - 23. marts
+    - væk 3 uger af sommerferien
  8. Forslag/ide: Kombiner k-jets med PCA som i PCA-sift?
+    - Masser af gode idéer
+
+
+Noter:
+ 1. Beskriv fodarbejdet i læringsmålene
+ 2. Få konkurrerende implementeringer til at virke
+ 3. Features på histogrammer for eksempel
+ 4. Måder at differentiere billeder i k. orden
