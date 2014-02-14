@@ -26,36 +26,38 @@ points mark areas of an image containing a significant amount of information
 about the local structure. A visual descriptor is a representation of the
 local structure of a feature. Such a descriptor can be modelled in numerous
 ways depending on the application and desired properties. In this thesis we
-will study state of the art visual descriptors and develop, implement, test,
+will study state of the art visual descriptors and develop, implement, evaluate
+against state of the art descriptors,
 and discuss our own descriptors based on this study.
 
 \section{Motivation}
-Computer scientists have for many years tried to make computers perceive the
-world as humans do. This is done by performing analysis of real world images.
-The analysis is often based on extraction of features in the images. These
-features can then be be used for applications such as: object detection of
-pedestrians \cite{felzenszwalb2008discriminatively},
-content based image retrieval \cite{smeulders2000content},
-feature matching for solving the image correspondence problem
-\cite{dahl2011finding}, etc.
-The state of the art methods are however
-not perfect and hence we will try to improve upon the accuracy of the methods.
+Computer scientists have for many years tried to make computers perceive
+the world as humans do. This is done by performing analysis of real world
+images. The analysis is often based on extraction of features in the images.
+These features can then be be used for applications such as: the image
+correspondence problem \cite{dahl2011finding}, object detection of pedestrians
+\cite{felzenszwalb2008discriminatively}, content based image retrieval
+\cite{smeulders2000content}, etc. The state of the art methods are however not
+perfect and hence we will try to improve upon the accuracy of the methods.
 
 \section{Proposed solution}
-We will try to design and implement a variant of the HOG descriptor utilizing
-higher order differential information. We
-will select a few of the following applications for testing our solution:
-Texture recognition, pedestrian detection, general object detection using
-deformable parts models, image correspondence, medical image registration, and
-content based image retrieval.
-
-At first we will try to experiment with a HOG descriptor extended to
+We will start by experimenting with a HOG descriptor extended to
 various orders of differential information (like Jet descriptors à la
 \cite{larsen2012jet}) and various parameters for the number of cells per
 block, number of pixels per cell and number of channels per cell histogram.
-Furthermore we will experiment with the combination of HOG and the shape index
-\cite{koenderink1992surface} as well as different ways of processing the
-higher order information.
+Furthermore we will experiment with the combination of HOG and the shape
+index \cite{koenderink1992surface} as well as different ways of processing
+the higher order information. Since the higher order differential information
+substantially increases the dimensionality we will experiment with PCA on the
+information. We will also experiment with various ways of computing higher
+order information and histograms, as well as how to compare histograms.
+
+At first we will evaluate our
+proposals on the image correspondence problem using the DTU robot image
+dataset \cite{aanaes2012interesting}. Later we will select at least
+one more of the following applications: Texture recognition, pedestrian
+detection, general object detection using deformable parts models, medical
+image registration, and content based image retrieval.
 
 \section{Learning goals}
 The following learning goals will be the success criteria for our
@@ -63,14 +65,19 @@ project.
 \begin{itemize}
     \item Perform a literature study of visual descriptors and their
         applications.
-    \item Develop our own visual descriptor based on state of the art work
-        within the field.
-    \item Select and implement solutions of some of the mentioned applications
-        of visual descriptors.
+    \item Describe the techniques used in state of the art descriptors such as
+        HOG, SIFT, GLOH and DAISY.
+    \item Develop, describe, and implement our own visual descriptor based on
+        state of the art work within the field.
+    \item Implement a library of competing state of the art descriptors.
+    \item Implement a framework for evaluating descriptors on the image
+        correspondence problem.
+    \item Select and implement a framework for at least one (more if time
+        permits) of the mentioned applications for evaluating descriptors.
     \item Perform a parameter study of our solutions.
-    \item Perform an empirical evaluation of our solutions on selected
-        problems compared to state of the art solutions.
-    \item Discuss the results of the empirical studies.
+    \item Perform an evaluation of our descriptor on the selected
+        applications compared to state of the art descriptors.
+    \item Discuss the results of the evaluation.
 \end{itemize}
 
 \section{Risk assessment}
