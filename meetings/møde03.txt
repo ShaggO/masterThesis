@@ -6,4 +6,4 @@ Spørgsmål:
  3. Hvorfor HOG i stedet for SIFT?
  4. Hvilken belysning er brugt til "Finding the best detector-descriptor combination"?
  5. PCA (Kim)
- 6. 
+ 6. Gauss convolutions vs. histogram
