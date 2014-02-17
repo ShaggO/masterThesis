@@ -1,7 +1,7 @@
 % function [] = imageCorrespondence()
 clc, clear all
 
-EdgeThresh = 10;
+EdgeThresh = 2;
 dFunc = @(I) getSiftFeatures(I,EdgeThresh);
 dDir = ['DTU/results/sift-' num2str(EdgeThresh)];
 

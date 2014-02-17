@@ -35,7 +35,7 @@ if ~exist(dDir,'dir')
     mkdir(dDir)
 end
 dPath = dtuMatchPath(dDir,match.setNum,match.imNum,match.liNum);
-save(dPath,'match','ROC','Area')
+save(dPath,'match','ROC)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Plot for Visual Verification/QC
