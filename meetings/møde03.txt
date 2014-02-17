@@ -3,4 +3,7 @@ Noter til møde d. 18/2 2014
 Spørgsmål:
  1. Reference implementationer af konkurrenter (PCA-SIFT,GLOH,SURF, SIFT=VLFeat, HOG=VLFeat)
  2. Sliding window vs. feature point detectors og HOG
- 3. Why HOG and not sift?
+ 3. Hvorfor HOG i stedet for SIFT?
+ 4. Hvilken belysning er brugt til "Finding the best detector-descriptor combination"?
+ 5. PCA (Kim)
+ 6. 
