@@ -1,0 +1,6 @@
+Features mark areas of an image containing a significant amount of information about the local structure.
+A visual descriptor is a representation of the local structure of a feature. Since state of the art descriptors are still lacking accuracy, we will in this thesis try to develop a new descriptor based on a study of the current state of the art descriptors.
+
+We will start by experimenting with a HOG descriptor extended to various orders of differential information. Furthermore we will experiment with the combination of HOG and the shape index as well as different ways of processing the higher order information such as orientation binning alternatives and PCA.
+
+At first we will evaluate our proposals on the image correspondence problem. Later we will select at least one more of the following applications for further evaluation: Texture recognition, pedestrian detection, general object detection using deformable parts models, medical image registration, and content based image retrieval.
