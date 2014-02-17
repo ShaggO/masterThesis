@@ -6,17 +6,24 @@ if nargin < 5
 end
 
 if isempty(dDir)
-    [X,D] = dFunc(rgb2gray(imread(dtuImagePath(setNum,imNum,liNum))));
+    I = rgb2gray(imread(dtuImagePath(setNum,imNum,liNum)));
+    [X,D] = dFunc(I);
 else
     dPath = dtuDescriptorPath(dDir,setNum,imNum,liNum);
     if exist(dPath,'file')
-        load(dPath)
-    else
-        [X,D] = dFunc(rgb2gray(imread(dtuImagePath(setNum,imNum,liNum))));
+        
+end
+
+if ~isempty(dPath) && exist(dPath,'file')
+    load(dPath)
+else
+    I = rgb2gray(imread(dtuImagePath(setNum,imNum,liNum)));
+    [X,D] = dFunc(I);
+    if ~isempty(dPath)
         if ~exist(dDir,'dir')
             mkdir(dDir)
         end
-        save(dPath,'X','D')
+        save(dPath,'X','D');
     end
 end
 
