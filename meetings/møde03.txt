@@ -2,8 +2,23 @@ Noter til møde d. 18/2 2014
 
 Spørgsmål:
  1. Reference implementationer af konkurrenter (PCA-SIFT,GLOH,SURF, SIFT=VLFeat, HOG=VLFeat)
+    - Oxford
+    - Implement own descriptor into framework
+    - Godt med VLFeat med referenceimpl.
+    - OpenCV
  2. Sliding window vs. feature point detectors og HOG
+    - Har en model som vi skal finde i billedet
+    - Similaritetsmål
  3. Hvorfor HOG i stedet for SIFT?
+    - Objekt genkendelse = HOG
  4. Hvilken belysning er brugt til "Finding the best detector-descriptor combination"?
+    - Diffuse lighting
+    - Manuscript in preparation citering (ny artikel)
  5. PCA (Kim)
+    - Skal vi muligvis ikke ud i
  6. Gauss convolutions vs. histogram
+    - DAISY :-)
+
+1. MSER er alternativ til feature point detector
+2. Eksperimenter med metoderne på forskellige billeder
+3. Samme performance men lavere dimension er også godt
