@@ -6,15 +6,14 @@
 The work by Lowe \cite{lowe2004distinctive} revolutionized the discipline
 of detecting and describing features in images, and inspired many later
 descriptors. We will summarize the most successful of these. The descriptors
-are divided into two categories: spatial pooling and higher order descriptors.
+are divided into two categories: gradient-based and higher order descriptors.
 We also look at various performance evaluations of descriptors.
 
-\subsection{Spatial pooling descriptors}
-
-\emph{Spatial pooling} is the technique of combining spatially localized
-image information. The \emph{scale-invariant feature transform} (SIFT)
-descriptor \cite{lowe2004distinctive} is the most popular descriptor based on
-this approach. It works by dividing the image regions surrounding interest
+\subsection{Gradient-based descriptors}
+Gradients of an image are often used to describe features.
+The \emph{scale-invariant feature transform} (SIFT) descriptor
+\cite{lowe2004distinctive} is the most popular descriptor based on this
+approach. It works by dividing the image regions surrounding interest
 points into square cells and constructing a histogram of unsigned gradient
 orientations for the pixels in each cell. The interest points are detected
 using a multi-scale DoG detector. By computing the gradient orientations
@@ -48,6 +47,16 @@ divided into eight angular cells giving a total of 17 cell bins. The gradient
 orientations are divided into 16 bins giving a histogram of $16 \times 17
 = 272$ bins. This is reduced to 128 dimensions by using the 128 largest
 eigenvectors from PCA on a training dataset.
+
+The \emph{DAISY} descriptor \cite{tola2008fast} is a descriptor originally
+developed for dense wide-baseline matching, and it is therefore developed to
+create a descriptor of each pixel in an image very efficiently. The descriptor
+is created from Gaussian directional derivative convolutions of the image in
+eight directions and at three different scales. The use of these convolutions
+allows for fast computations of simple convolutions compared to the slower
+binning and post-processing used in SIFT. The descriptor of each point is a
+concatenation of the eight directional derivatives of 25 points located in a
+circular grid.
 
 HOG \cite{dalal2005histograms},
 %DPM \cite{felzenszwalb2008discriminatively},
