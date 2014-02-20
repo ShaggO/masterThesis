@@ -49,14 +49,19 @@ orientations are divided into 16 bins giving a histogram of $16 \times 17
 eigenvectors from PCA on a training dataset.
 
 The \emph{DAISY} descriptor \cite{tola2008fast} is a descriptor originally
-developed for dense wide-baseline matching, and it is therefore developed to
-create a descriptor of each pixel in an image very efficiently. The descriptor
-is created from Gaussian directional derivative convolutions of the image in
-eight directions and at three different scales. The use of these convolutions
-allows for fast computations of simple convolutions compared to the slower
-binning and post-processing used in SIFT. The descriptor of each point is a
-concatenation of the eight directional derivatives of 25 points located in a
-circular grid.
+developed for dense wide-baseline matching, and it is therefore developed
+to create a descriptor of each pixel in an image very efficiently. The
+descriptor is created from Gaussian directional derivative convolutions of
+the image in eight directions and at three different scales. The use of these
+convolutions allows for fast computations of simple convolutions compared
+to the slower binning and post-processing used in SIFT. The descriptor of
+each point is a concatenation of the eight directional derivatives of 25
+points located in a circular grid shown in a daisy formation as shown in
+Figure ??\todo{add daisy figure reference}. This results in a descriptor of
+$25 \times 8 = 200$ dimensions. Further refinements of the algorithm and
+experiments with the actual layout of the daisy formation have been examined
+in \cite{winder2009picking}, in which the DAISY descriptor is claimed to perform
+better than SIFT when used on the image correspondence problem.
 
 HOG \cite{dalal2005histograms},
 %DPM \cite{felzenszwalb2008discriminatively},
