@@ -70,11 +70,13 @@ DAISY \cite{tola2008fast,winder2009picking}
 \subsection{Higher order differential descriptors}
 
 Another approach to descriptor design is to use higher order differential
-information.
+information. We use the term \emph{local $k$-jet} to refer to a vector consisting of differential information up to order $k$ at some point. Crosier and Griffin \cite{crosier2010using} base their texture representation, which is just a descriptor but used for textures, on the local $2$-jet. They partition the jet space into 6 Basic Image Features (BIFs) and compute these across a region of pixels at four different scales. The chosen BIFs are distinct texture elements such as dark spots and bright lines. Rather than computing the distribution of BIFs at each scale, the four BIFs at each point are combined into a BIF-column, and a histogram over all $6^4 = 1296$ possible BIF-columns is computed. The 1296-dimensional descriptors are used for texture classification.
 
-BIF-column texture representation \cite{crosier2010using},
-$\mathcal{J}_4$-grid2 \cite{larsen2012jet},
-Galaxy descriptor \cite{pedersen2013shape}
+Anders et al. \cite{larsen2012jet} have had success using local 4-jets. Their $\mathcal{J}_4$-grid2 descriptor is computed from local 4-jets at four points spread out across a pixel region. A whitening process is used on the jet coefficients to scale normalize and decorrelate the descriptors, allowing for Euclidean distance as a distance measure. The descriptor was evaluated against state of the art on the image correspondence problem and performed favourably, despite the simplicity of the descriptor.
+
+Another recent higher order descriptor is the galaxy descriptor from Pedersen et al.\cite{pedersen2013shape}, which is used to predict star-formation rate from galaxy texture. The descriptor consists of multi-scale histograms of gradient orientation as well as shape index, which is a simple 1D representation of second order differential information. The histograms are computed over a single region at eight scale levels.
+
+\subsection{Similarity measures?}
 
 \subsection{Performance evaluations}
 
