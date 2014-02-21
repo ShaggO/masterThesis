@@ -63,18 +63,59 @@ experiments with the actual layout of the daisy formation have been examined
 in \cite{winder2009picking}, in which the DAISY descriptor is claimed to perform
 better than SIFT when used on the image correspondence problem.
 
-HOG \cite{dalal2005histograms},
-%DPM \cite{felzenszwalb2008discriminatively},
-DAISY \cite{tola2008fast,winder2009picking}
+The \emph{Histograms of Oriented Gradient} (HOG) descriptor is another
+alternative for SIFT proposed in \cite{dalal2005histograms} for pedestrian
+detection. Contrary to SIFT which is computed individually at specified
+interest points, the HOG descriptors are computed in a dense grid over a
+detection window and each block descriptor is a part of a larger descriptor
+usually trained using an SVM. The Gradients are first computed using simple
+1D masks. Secondly magnitude and spatially weighted histograms of the
+orientations (0-180$^{\circ}$) of the gradients are computed for spatial
+regions named cells\todo{Add note about interpolation of votes}. The cells are
+then grouped together into blocks of cells for normalization to accomodate
+for local illumination changes. These blocks can either be rectangular with
+rectangular cells (R-HOG), or circular using a log-polar partitioning as the
+DAISY descriptor. The normalization is performed using either the L2-norm,
+a clipped and re-normalized L2-norm, or the square root of the L1-norm for
+best performance. HOG descriptors are able to work directly on RGB images
+unlike the original SIFT descriptor. This is done by computing the gradients
+for each colour channel and choosing the gradient with the highest magnitude
+for each pixel. For R-HOG the optimal bin number is found to be 9, optimal
+block size $3\times3$ cell blocks and optimal cell size $6\times6$ pixels
+with block spacing 8.\todo{Should optimal parameters for C-HOG be mentioned?}
+Furthermore parts models using the HOG descriptor have been developed
+\cite{felzenszwalb2008discriminatively} in order to improve upon the accuracy
+of object detection.
 
 \subsection{Higher order differential descriptors}
 
 Another approach to descriptor design is to use higher order differential
-information. We use the term \emph{local $k$-jet} to refer to a vector consisting of differential information up to order $k$ at some point. Crosier and Griffin \cite{crosier2010using} base their texture representation, which is just a descriptor but used for textures, on the local $2$-jet. They partition the jet space into 6 Basic Image Features (BIFs) and compute these across a region of pixels at four different scales. The chosen BIFs are distinct texture elements such as dark spots and bright lines. Rather than computing the distribution of BIFs at each scale, the four BIFs at each point are combined into a BIF-column, and a histogram over all $6^4 = 1296$ possible BIF-columns is computed. The 1296-dimensional descriptors are used for texture classification.
+information. We use the term \emph{local $k$-jet} to refer to a vector
+consisting of differential information up to order $k$ at some point. Crosier
+and Griffin \cite{crosier2010using} base their texture representation, which
+is just a descriptor but used for textures, on the local $2$-jet. They
+partition the jet space into 6 Basic Image Features (BIFs) and compute these
+across a region of pixels at four different scales. The chosen BIFs are
+distinct texture elements such as dark spots and bright lines. Rather than
+computing the distribution of BIFs at each scale, the four BIFs at each point
+are combined into a BIF-column, and a histogram over all $6^4 = 1296$ possible
+BIF-columns is computed. The 1296-dimensional descriptors are used for texture
+classification.
 
-Anders et al. \cite{larsen2012jet} have had success using local 4-jets. Their $\mathcal{J}_4$-grid2 descriptor is computed from local 4-jets at four points spread out across a pixel region. A whitening process is used on the jet coefficients to scale normalize and decorrelate the descriptors, allowing for Euclidean distance as a distance measure. The descriptor was evaluated against state of the art on the image correspondence problem and performed favourably, despite the simplicity of the descriptor.
+Anders et al. \cite{larsen2012jet} have had success using local 4-jets. Their
+$\mathcal{J}_4$-grid2 descriptor is computed from local 4-jets at four points
+spread out across a pixel region. A whitening process is used on the jet
+coefficients to scale normalize and decorrelate the descriptors, allowing for
+Euclidean distance as a distance measure. The descriptor was evaluated against
+state of the art on the image correspondence problem and performed favourably,
+despite the simplicity of the descriptor.
 
-Another recent higher order descriptor is the galaxy descriptor from Pedersen et al.\cite{pedersen2013shape}, which is used to predict star-formation rate from galaxy texture. The descriptor consists of multi-scale histograms of gradient orientation as well as shape index, which is a simple 1D representation of second order differential information. The histograms are computed over a single region at eight scale levels.
+Another recent higher order descriptor is the galaxy descriptor from Pedersen
+et al.\cite{pedersen2013shape}, which is used to predict star-formation
+rate from galaxy texture. The descriptor consists of multi-scale histograms
+of gradient orientation as well as shape index, which is a simple 1D
+representation of second order differential information. The histograms are
+computed over a single region at eight scale levels.
 
 \subsection{Similarity measures?}
 
