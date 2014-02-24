@@ -1,20 +1,20 @@
-function [X,D] = dtuFeatures(dFunc, setNum, imNum, liNum, dDir)
+function [X,D] = dtuFeatures(setNum, imNum, liNum, mFunc, mDir)
 % Wrapper function for extracting features from a DTU Robot image
 
 if nargin < 5
-    dDir = '';
+    mDir = '';
 end
 
-if isempty(dDir)
-    [X,D] = dFunc(rgb2gray(imread(dtuImagePath(setNum,imNum,liNum))));
+if isempty(mDir)
+    [X,D] = mFunc(imread(dtuImagePath(setNum,imNum,liNum)));
 else
-    dPath = dtuDescriptorPath(dDir,setNum,imNum,liNum);
+    dPath = dtuDescriptorPath(mDir,setNum,imNum,liNum);
     if exist(dPath,'file')
         load(dPath)
     else
-        [X,D] = dFunc(rgb2gray(imread(dtuImagePath(setNum,imNum,liNum))));
-        if ~exist(dDir,'dir')
-            mkdir(dDir)
+        [X,D] = mFunc(imread(dtuImagePath(setNum,imNum,liNum)));
+        if ~exist(mDir,'dir')
+            mkdir(mDir)
         end
         save(dPath,'X','D')
     end

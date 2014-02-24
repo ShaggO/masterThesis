@@ -27,7 +27,9 @@ tot=sum(Scores'>0)+1e-10;
 ROC=zeros(2,100);
 idx=1;
 for i=0.01:0.01:1,
+    % ratio of correct matches under score i
     ROC(1,idx)=sum(Scores(1,:)<i & Scores(1,:)>0 )/tot(1);
+    % ratio of incorrect matches over score i
     ROC(2,idx)=sum(Scores(2,:)>i & Scores(2,:)>0 )/tot(2);
     idx=idx+1;
 end
