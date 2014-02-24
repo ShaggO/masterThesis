@@ -1,0 +1,8 @@
+Spørgsmål:
+
+1. HOG skriver: "To reduce aliasing, votes are interpolated bilinearly between
+    the neighbouring bin centres in both orientation and position". Hvorfor skal der
+    interpoleres / hvad forskel gør det?
+2. Opponent SIFT + multiscale Harris - hvordan implementeret i den "hemmelige" artikel?
+3. Multi-color detector?
+4. Hvorfor Euclidean distance i jeres surveys?
