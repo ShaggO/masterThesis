@@ -2,12 +2,20 @@
 \begin{document}
 
 \section{Related work}
-
-The work by Lowe \cite{lowe2004distinctive} revolutionized the discipline
-of detecting and describing features in images, and inspired many later
-descriptors. We will summarize the most successful of these. The descriptors
-are divided into two categories: gradient-based and higher order descriptors.
-We also look at various performance evaluations of descriptors.
+The different feature descriptors and their algorithms have been constructed
+based on different requirements with respect to the use of storage and
+computations. \cite{heinly2012comparative} has described the overall field of
+descriptors using these two ``variables'' resulting in the following taxonomy:
+real value parametrization (high storage and computation), patch-based (high
+storage and low computation), binarized (low storage and high computation),
+and binary (low storage and computation). We are mainly interested
+in the best performance and hence we will focus on the class of real value
+parametrization descriptors.
+This class of descriptors was revolutionized by \cite{lowe2004distinctive}
+which inspired many later descriptors. We will summarize the most successful
+of these. The descriptors are furthermore divided into two categories:
+gradient-based and higher order descriptors. We also look at various
+performance evaluations of descriptors.
 
 \subsection{Gradient-based descriptors}
 Gradients of an image are often used to describe features.
@@ -102,7 +110,7 @@ are combined into a BIF-column, and a histogram over all $6^4 = 1296$ possible
 BIF-columns is computed. The 1296-dimensional descriptors are used for texture
 classification.
 
-Anders et al. \cite{larsen2012jet} have had success using local 4-jets. Their
+\cite{larsen2012jet} have had success using local 4-jets. Their
 $\mathcal{J}_4$-grid2 descriptor is computed from local 4-jets at four points
 spread out across a pixel region. A whitening process is used on the jet
 coefficients to scale normalize and decorrelate the descriptors, allowing for
@@ -119,7 +127,14 @@ computed over a single region at eight scale levels.
 
 \subsection{Similarity measures?}
 
+Whitening
+
+\emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for
+matching of higher order differential information descriptors
+
 \subsection{Performance evaluations}
+
+ROC, AUC, recall rate, 1-precision.
 
 \cite{mikolajczyk2005performance},
 \cite{dahl2011finding}
