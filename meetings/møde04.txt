@@ -3,29 +3,46 @@ Spørgsmål:
 1.  HOG skriver: "To reduce aliasing, votes are interpolated bilinearly between
      the neighbouring bin centres in both orientation and position". Hvorfor skal der
      interpoleres / hvad forskel gør det?
+ - Lidt det samme som LOI men med lineære "filtre"
 
 2.  Opponent SIFT + multiscale Harris - hvordan implementeret i den "hemmelige" artikel?
+ - Straightforward 26-neighbourhood
 
 3.  Multi-color detector?
+ - Kig efter Goesebroek (refereret i extended artikel)
 
 4.  Hvorfor whitening i Anders' k-Jets og ikke SBSM? Hvad er forskellen på de
      to/hvad gør whitening?
+     Af de to ting Anders forsøgte virkede whitening bedst
 
 5.  SIFT RGB: Normalization of 384 dim. descriptor - how?
+ - Summer til 3 - normaliser ved division med 3
 
-6.  Opponent SIFT: Colour invariants W_lambda,j C_lambda,j and C_lambda,lambda,j
+6.  C SIFT: Colour invariants W_lambda,j C_lambda,j and C_lambda,lambda,j
+ - Kig i referencen til artiklen.
 
 7.  Recall rate i DTU kode: ?
+ - Pas
 
 8.  Hvorfor høj AUC når man kun har 1 korrekt match?
+ - Summary statistics over flere scener
 
 9.  Hvorfor rapporterer ingen hvor mange patches de rent faktisk detecter i deres
     resultater? Er det ikke snyd at forskellige metoder finder forskellige antal
     punkter da færre punkter (hvis de er signifikante) må være lettere at matche.
     TP rate og FP rate vægtes ens i AUC?
+ - Pas. Men det er vigtigt i visse henseender. Det er noteret i nogle få
+   artikler. Sørg for måske selv at gøre det.
 
 10. Lavet tests (1 scene, 1 arc, DoG) med forskellige farve-varianter af SIFT og fået bedst
     performance med Opponent SIFT
 
 11. LDAHash og PCA-DSC? Noget vi skal læse mere om end bare konstatere at de
     eksisterer og referere til artiklerne hvis man ønsker mere information?
+ - Bare konstater at det findes
+
+
+HOG: En del af state of the art
+Textur: Klassificer materialer
+
+Oxford dataset: Kig på VLBench
