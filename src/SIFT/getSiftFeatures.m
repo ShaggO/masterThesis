@@ -1,6 +1,10 @@
 function [X,D] = getSiftFeatures(I,F,colour,debug)
 % Assumes a grayscale image normalized in the [0,255] interval
 
+disp(['Detected ' num2str(size(F,1)) ' features.'])
+% assert(size(F,1) > 1000 && size(F,1) < 2000, ...
+%     ['Error: ' num2str(size(F,1)) ' features detected but not within bounds (1000 - 2000).'])
+
 switch colour
     case 'gray'
         [X,D] = vl_sift(single(rgb2gray(I)),'frames',F(:,1:4)');

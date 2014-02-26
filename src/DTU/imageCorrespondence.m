@@ -1,12 +1,14 @@
 function matches = imageCorrespondence(setNum, imNum, liNum, mFunc, mDir)
 
 imNumKey = 25;
+N = numel(setNum)*numel(imNum)*numel(liNum);
 
 n = 0;
 for s = setNum
     for i = imNum
         for l = liNum
-            n = n + 1
+            n = n + 1;
+            disp(['[' num2str(toc) '] Image ' num2str(n) '/' num2str(N)])
             match.setNum = s;
             match.imNum = i;
             match.liNum = l;
