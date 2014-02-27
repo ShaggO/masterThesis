@@ -4,10 +4,7 @@ function C = brownianCovariance(k,sigma)
 
 beta = 1;
 
-d = [];
-for i = 1:k
-    d = [d; (0:i)' (i:-1:0)'];
-end
+d = kJetCoeffs(k);
 
 C = zeros(size(d,1));
 for i = 1:size(d,1)

@@ -4,13 +4,17 @@ clc, clear all
 hsize = 201;
 sigma = 20;
 m = 1;
-n = 2;
+n = 1;
 
 %% Compute Gaussian derivative filters
+tic
 g = dGauss2d(m,n,hsize,sigma);
 G = fftshift(fft2(ifftshift(g)));
+toc
+tic
 F = dGaussFourier2d(m,n,hsize,sigma);
 f = fftshift(real(ifft2(ifftshift(F))));
+toc
 
 %% 2D figures
 r = max(abs(g(:)));
