@@ -11,7 +11,7 @@ switch m.detector
         addParameter(p,'PeakThreshold',0);
         addParameter(p,'EdgeThreshold',Inf);
         r = parseResults(p,m.detectorArgs);
-        
+
         detName = sprintf('%s-%s-%s',lower(r.Method), ...
             num2str(r.PeakThreshold),num2str(r.EdgeThreshold));
         detFunc = @(I) vl_covdet(single(rgb2gray(I)),m.detectorArgs{:})';
@@ -30,9 +30,19 @@ switch m.descriptor
             'invariant','normal'};
         addOptional(p,'colour',colours{1},okArg(colours));
         r = parseResults(p,m.descriptorArgs);
-        
+
         desName = ['sift-' r.colour];
-        desFunc = @(I,F) getSiftFeatures(I,F,r.colour,r.debug);
+        desFunc = @(I,F) getSiftDescriptors(I,F,r.colour,r.debug);
+    case 'k-jet'
+        domains = {'auto','spatial','fourier'};
+        addRequired(p,'k');
+        addRequired(p,'sigma');
+        addOptional(p,'domain',domains{1},...
+            @(x) any(validatestring(x,domains)));
+        r = parseResults(p,m.descriptorArgs);
+
+        desName = [num2str(r.k) '-jet-' num2str(r.sigma)];
+        desFunc = @(I,F) getKJetDescriptors(I,F,r.k,r.sigma,r.domain);
     otherwise
         error('Unrecognized descriptor!')
 end
