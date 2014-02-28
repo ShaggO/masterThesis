@@ -1,0 +1,17 @@
+Noter til 5. møde med Kim og Sune:
+
+1. Localization på multiscale harris - hvad menes der med localization?
+2. Detaljer for beregning af diffuse light (fig. 4 i DTU technical report)
+3. AUC på PR ved at bytte rundt på recall og 1-precision? Giver det
+    mening og hvordan beregnes det i så fald? (man flytter frem og tilbage på
+    1-precision aksen i visse tilfælde)
+4. Vise beregninger
+5. k-jet whitening - er det korrekt lavet? Hvad bruger man cov-matricen til?
+6. Hvorfor plotter man recall som funktion af 1-precision i stedet for precision
+    som funktion af recall?
+7. Vi har lavet automatiske analytiske gauss filtre i både spatiel og frekvens
+    domænerne. Hvad er hurtigst? Er det nok blot at tjekke på sigma?
+8. Hvorfor ikke lave en 3D measure (recall, FPR, precision) og beregne area
+    under surface? Hvad ville det så betyde?
+9. Definition af groundtruth baseret på ratio ml. 1. og 2. bedste match i stedet
+    for om der findes en feature med samme 3D koordinatsæt.
