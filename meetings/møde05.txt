@@ -13,3 +13,5 @@ Noter til 5. møde med Kim og Sune:
     domænerne. Hvad er hurtigst? Er det nok blot at tjekke på sigma?
 8. Hvorfor ikke lave en 3D measure (recall, FPR, precision) og beregne area
     under surface? Hvad ville det så betyde?
+9. Definition af groundtruth baseret på ratio ml. 1. og 2. bedste match i stedet
+    for om der findes en feature med samme 3D koordinatsæt.
