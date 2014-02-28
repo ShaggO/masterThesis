@@ -11,3 +11,5 @@ Noter til 5. møde med Kim og Sune:
     som funktion af recall?
 7. Vi har lavet automatiske analytiske gauss filtre i både spatiel og frekvens
     domænerne. Hvad er hurtigst? Er det nok blot at tjekke på sigma?
+8. Hvorfor ikke lave en 3D measure (recall, FPR, precision) og beregne area
+    under surface? Hvad ville det så betyde?
