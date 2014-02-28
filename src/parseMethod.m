@@ -35,8 +35,8 @@ switch m.descriptor
         desFunc = @(I,F) getSiftDescriptors(I,F,r.colour,r.debug);
     case 'k-jet'
         domains = {'auto','spatial','fourier'};
-        addRequired(p,'k');
-        addRequired(p,'sigma');
+        addParameter(p,'k',1);
+        addParameter(p,'sigma',1);
         addOptional(p,'domain',domains{1},...
             @(x) any(validatestring(x,domains)));
         r = parseResults(p,m.descriptorArgs);

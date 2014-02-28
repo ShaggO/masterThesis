@@ -22,7 +22,8 @@ switch domain
         for i = 1:size(d,1)
             Filter = dGauss2d(d(i,1),d(i,2),hsize,sigma);
             I2 = imfilter(I,Filter,'conv','replicate');
-            D(:,i) = I2(sub2ind(size(I),F(:,1),F(:,2)));
+%             D(:,i) = I2(sub2ind(size(I),F(:,2),F(:,1)));
+            D(:,i) = interp2(I2,F(:,2),F(:,1),'bilinear');
         end
 end
 end
