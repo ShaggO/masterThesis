@@ -15,3 +15,10 @@ Noter til 5. møde med Kim og Sune:
     under surface? Hvad ville det så betyde?
 9. Definition af groundtruth baseret på ratio ml. 1. og 2. bedste match i stedet
     for om der findes en feature med samme 3D koordinatsæt.
+10. DAISY: Er det nødvendigt med 8 retninger? er de 4 ikke blot negative
+        duplikater?
+11. HOG: Hvordan benytter man præcis en SVM når man har HOG for et helt billede?
+        Anser man hele billedets descriptors som en stor descriptor eller?
+12. Diffuse lighting: RGB farver der tages gennemsnit af eller blot intensiteterne (i en HSI representation).
+
+13. Beregning af jets ved forskellige scales
