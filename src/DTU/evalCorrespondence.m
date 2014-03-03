@@ -17,7 +17,8 @@ ScaleMargin=2;              %Margin for change in scale, corrected for distance 
 [Grid3D,Pts]=GenStrLightGrid_v2(KeyFrame,In3DPath,1200,1600,Rad3D,match.setNum);
 %Get the projective camera matrices.
 Cams=GetCamPair(KeyFrame,match.imNum);
-for i=1:size(match.coord,1),
+match.CorrectMatch = zeros(size(match.coord,1),1);
+for i=1:size(match.coord,1)
     %Get the coordinates of the matched pair from the match structure.
     p2=match.coord(i,:);
     p1=match.coordKey(match.matchIdx(i,1),:);
