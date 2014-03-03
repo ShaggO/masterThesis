@@ -13,6 +13,8 @@ else
         load(dPath)
     else
         [X,D] = mFunc(imread(dtuImagePath(setNum,imNum,liNum)));
+        assert(~any(isnan(D(:))),'NaN present in descriptor.')
+        disp(['Detected ' num2str(size(X,1)) ' features.'])
         if ~exist(mDir,'dir')
             mkdir(mDir)
         end

@@ -3,7 +3,7 @@ function [ROC, PR, T] = analyseMatches(match)
 T = [0; sort(match.distRatio,'ascend')];
 ROC = zeros(numel(T),2);
 PR = zeros(numel(T),2);
-for i = 1:numel(T)
+for i = 2:numel(T)
     t = T(i);
     TP = sum(match.distRatio <= t & match.CorrectMatch == 1);
     FP = sum(match.distRatio <= t & match.CorrectMatch == -1);
