@@ -3,51 +3,20 @@
 
 \section{Introduction}
 
-Computer scientists have for many years tried to make computers perceive real
-world images as humans do, in order to solve problems such as
-object detection of pedestrians \cite{felzenszwalb2008discriminatively},
-content based image retrieval \cite{smeulders2000content}, and
-the image correspondence problem \cite{dahl2011finding}.
+Computer scientists have for many years tried to make computers perceive real world images as humans do, in order to solve problems such as object detection of pedestrians \cite{felzenszwalb2008discriminatively}, content based image retrieval \cite{smeulders2000content}, and the image correspondence problem \cite{dahl2011finding}.
 %
-The approaches to these problems are often based on extraction of
-features/interest points in the images.
-An \emph{interest point} is a single point in an image having an interesting local
-structure such as a corner or a blob. A \emph{feature} can either be defined as a
-single point (like an interest point) or an area typically surrounding an
-interest point. A \emph{visual descriptor} is a representation of the local structure
-of a feature. 
+The approaches to these problems are often based on extraction of features/interest points in the images. An \emph{interest point} is a single point in an image having an interesting local structure such as a corner or a blob. A \emph{feature} can either be defined as a single point (like an interest point) or an area typically surrounding an interest point. A \emph{visual descriptor} is a representation of the local structure of a feature. 
 
-Interest points are found using various detectors. The detectors that are
-popular and have proven to be successful are the Harris corner detector, Hessian
-based detectors, and the Difference of Gaussian (DoG) detector
-\cite{aanaes2012interesting}. The sliding window technique is an alternative
-approach to finding features described in \cite{dalal2005histograms}\todo{Add
-reference to own section about sliding window}.
+Interest points are found using various detectors. The detectors that are popular and have proven to be successful are the Harris corner detector, Hessian based detectors, the Difference of Gaussian (DoG) detector, and the Maximally Stable Extremal Regions detector \cite{aanaes2012interesting,dahl2011finding}. The sliding window technique is an alternative approach to finding features described in \cite{dalal2005histograms}\todo{Add reference to own section about sliding window}.
 
-Descriptors are designed to be invariant to several image transformations such
-as rotation, translation, illumination, scale, perspective, and noise. This way
-real world objects will be described similarly despite being captured under
-different conditions. The choice of invariant properties depends on the
-application of the descriptor. For example rotation invariance is desired for
-texture description but not necessarily for recognition of pedestrians.
+Descriptors are designed to be invariant to several image transformations such as rotation, translation, illumination, scale, perspective, and noise. This way real world objects will be described similarly despite being captured under different conditions. The choice of invariant properties depends on the application of the descriptor. For example rotation invariance is desired for texture description but not necessarily for recognition of pedestrians.
 
 %%%% This is our proposed solution
 % Should be changed to the final solution/what we have tried once we get that
 % far in the process
-We will try to design and implement a variant of the HOG descriptor utilizing
-higher order differential information. We
-will select a few of the following applications for testing our solution:
-Texture recognition, pedestrian detection, general object detection using
-deformable parts models, image correspondence, medical image registration, and
-content based image retrieval.
+We will try to design and implement a variant of the HOG descriptor utilizing higher order differential information. We will select a few of the following applications for testing our solution: Texture recognition, pedestrian detection, general object detection using deformable parts models, image correspondence, medical image registration, and content based image retrieval.
 
-At first we will try to experiment with a HOG descriptor extended to
-various orders of differential information (like Jet descriptors à la
-\cite{larsen2012jet}) and various parameters for the number of cells per
-block, number of pixels per cell and number of channels per cell histogram.
-Furthermore we will experiment with the combination of HOG and the shape index
-\cite{koenderink1992surface} as well as different ways of processing the
-higher order information.
+At first we will try to experiment with a HOG descriptor extended to various orders of differential information (like Jet descriptors à la \cite{larsen2012jet}) and various parameters for the number of cells per block, number of pixels per cell and number of channels per cell histogram. Furthermore we will experiment with the combination of HOG and the shape index \cite{koenderink1992surface} as well as different ways of processing the higher order information.
 %%%% /proposed solution
 
 
@@ -55,4 +24,3 @@ higher order information.
 \subbibliography
 
 \end{document}
-
