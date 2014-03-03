@@ -98,9 +98,13 @@ of object detection.
 \subsection{Higher order differential descriptors}
 
 Another approach to descriptor design is to use higher order differential
-information. We use the term \emph{local $k$-jet} to refer to a vector
-consisting of differential information up to order $k$ at some point. Crosier
-and Griffin \cite{crosier2010using} base their texture representation, which
+information.
+We use the term \emph{local $k$-jet} to refer to a vector
+consisting of differential information up to order $k$ at some point.
+
+\emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for
+matching of higher order differential information descriptors
+Crosier and Griffin \cite{crosier2010using} base their texture representation, which
 is just a descriptor but used for textures, on the local $2$-jet. They
 partition the jet space into 6 Basic Image Features (BIFs) and compute these
 across a region of pixels at four different scales. The chosen BIFs are
@@ -124,13 +128,6 @@ rate from galaxy texture. The descriptor consists of multi-scale histograms
 of gradient orientation as well as shape index, which is a simple 1D
 representation of second order differential information. The histograms are
 computed over a single region at eight scale levels.
-
-\subsection{Similarity measures?}
-
-Whitening
-
-\emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for
-matching of higher order differential information descriptors
 
 \subsection{Performance evaluations}
 
