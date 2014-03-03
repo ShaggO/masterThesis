@@ -2,88 +2,33 @@
 \begin{document}
 
 \section{Related work}
-The different feature descriptors and their algorithms have been constructed
-based on different requirements with respect to the use of storage and
-computations. \cite{heinly2012comparative} has described the overall field of
-descriptors using these two ``variables'' resulting in the following taxonomy:
-real value parametrization (high storage and computation), patch-based (high
-storage and low computation), binarized (low storage and high computation),
-and binary (low storage and computation). We are mainly interested
-in the best performance and hence we will focus on the class of real value
-parametrization descriptors.
-This class of descriptors was revolutionized by \cite{lowe2004distinctive}
-which inspired many later descriptors. We will summarize the most successful
-of these. The descriptors are furthermore divided into two categories:
-gradient-based and higher order descriptors. We also look at various
-performance evaluations of descriptors.
+The different feature descriptors and their algorithms have been constructed based on different requirements with respect to the use of storage and computations. \cite{heinly2012comparative} has described the overall field of descriptors using these two ``variables'' resulting in the following taxonomy: real value parametrization (high storage and computation), patch-based (high storage and low computation), binarized (low storage and high computation), and binary (low storage and computation). We are mainly interested in the best performance and hence we will focus on the class of real value parametrization descriptors. This class of descriptors was revolutionized by \cite{lowe2004distinctive} which inspired many later descriptors. We will summarize the most successful of these. The descriptors are furthermore divided into two categories: gradient-based and higher order descriptors. We also look at various performance evaluations of descriptors.
 
 \subsection{Gradient-based descriptors}
-Gradients of an image are often used to describe features.
-The \emph{scale-invariant feature transform} (SIFT) descriptor
-\cite{lowe2004distinctive} is the most popular descriptor based on this
-approach. It works by dividing the image regions surrounding interest
-points into square cells and constructing a histogram of unsigned gradient
-orientations for the pixels in each cell. The interest points are detected
-using a multi-scale DoG detector. By computing the gradient orientations
-at detection scale, the descriptor becomes scale invariant. The descriptor
-is also rotation invariant as the cell grid is rotated according to the
-dominating gradient orientation. Finally the descriptor achieves illumination
-invariance by normalizing the histograms.
+Gradients of an image are often used to describe features. The \emph{scale-invariant feature transform} (SIFT) descriptor \cite{lowe2004distinctive} is the most popular descriptor based on this approach. It works by dividing the image regions surrounding interest points into square cells and constructing a histogram of unsigned gradient orientations for the pixels in each cell. The interest points are detected using a multi-scale DoG detector. By computing the gradient orientations at detection scale, the descriptor becomes scale invariant. The descriptor is also rotation invariant as the cell grid is rotated according to the dominating gradient orientation. Finally the descriptor achieves illumination invariance by normalizing the histograms.
 
-PCA-SIFT \cite{ke2004pca} is also based on combining oriented gradients
-within a region, but instead of dividing the feature into cell histograms
-it uses \emph{principal component analysis} (PCA) to reduce the dimensionality
-of the combined gradients. It also uses a multi-scale DoG detector for
-interest point detection. PCA computes the most significant linearly independent dimensions of a dataset, and discards the rest. This means that while SIFT is a general purpose descriptor, PCA-SIFT must first be trained on specific data. In order to obtain good results a large and diverse training dataset of images is required. The size of a PCA-SIFT descriptor is substantially lower than SIFT and the other following gradient-based descriptors.
+PCA-SIFT \cite{ke2004pca} is also based on combining oriented gradients within a region, but instead of dividing the feature into cell histograms it uses \emph{principal component analysis} (PCA) to reduce the dimensionality of the combined gradients. It also uses a multi-scale DoG detector for interest point detection. PCA computes the most significant linearly independent dimensions of a dataset, and discards the rest. This means that while SIFT is a general purpose descriptor, PCA-SIFT must first be trained on specific data. In order to obtain good results a large and diverse training dataset of images is required. The size of a PCA-SIFT descriptor is substantially lower than SIFT and the other following gradient-based descriptors.
 
-The \emph{gradient location and orientation histogram} (GLOH) descriptor
-\cite{mikolajczyk2005performance} is a different extension of the SIFT descriptor.
-It differs from SIFT by using a log-polar grid of ring segment cells instead of rectangular cells. The dimensionality of the descriptor is like PCA-SIFT also reduced using PCA, but the analysis is performed on the gradient orientation histograms instead rather than the raw gradients.
+The \emph{gradient location and orientation histogram} (GLOH) descriptor \cite{mikolajczyk2005performance} is a different extension of the SIFT descriptor. It differs from SIFT by using a log-polar grid of ring segment cells instead of rectangular cells. The dimensionality of the descriptor is like PCA-SIFT also reduced using PCA, but the analysis is performed on the gradient orientation histograms instead rather than the raw gradients.
 
-The DAISY descriptor \cite{tola2008fast} is a descriptor originally
-developed for dense wide-baseline matching, and it is therefore developed
-to create a descriptor of each pixel in an image very efficiently. The
-descriptor is created from Gaussian directional derivative convolutions of
-the image, computed at points located in a circular grid resembling a daisy. The directional derivatives are similar to the histogram bins of SIFT, but can be computed much faster. Further refinements of the algorithm and experiments with the actual layout of the daisy formation have been examined in \cite{winder2009picking}, in which the DAISY descriptor is claimed to perform better than SIFT when used on the image correspondence problem.
+The DAISY descriptor \cite{tola2008fast} is a descriptor originally developed for dense wide-baseline matching, and it is therefore developed to create a descriptor of each pixel in an image very efficiently. The descriptor is created from Gaussian directional derivative convolutions of the image, computed at points located in a circular grid resembling a daisy. The directional derivatives are similar to the histogram bins of SIFT, but can be computed much faster. Further refinements of the algorithm and experiments with the actual layout of the daisy formation have been examined in \cite{winder2009picking}, in which the DAISY descriptor is claimed to perform better than SIFT when used on the image correspondence problem.
 
 The \emph{Histograms of Oriented Gradient} (HOG) descriptor is another alternative to SIFT proposed in \cite{dalal2005histograms} for the purpose of pedestrian detection. Rather than using a detector, the whole image is divided into a dense grid of cells, in which histograms of oriented gradients are computed. Adjacent cells are then grouped together into blocks, which are normalized to accommodate for local illumination changes. HOG descriptors consist of one or more of these blocks. HOG works directly on RGB images by computing the gradients for each colour channel and picking the gradient with the highest magnitude for each pixel. Parts models using the HOG descriptor have been developed \cite{felzenszwalb2008discriminatively} in order to improve upon the accuracy of object detection.
 
 \subsection{Higher order differential descriptors}
 
-Another approach to descriptor design is to use higher order differential
-information.
-We use the term \emph{local $k$-jet} to refer to a vector
-consisting of differential information up to order $k$ at some point.
+Another approach to descriptor design is to use higher order differential information. We use the term \emph{local $k$-jet} to refer to a vector consisting of differential information up to order $k$ at some point.
 
-\emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for
-matching of higher order differential information descriptors
-Crosier and Griffin \cite{crosier2010using} base their texture representation, which
-is just a descriptor but used for textures, on the local $2$-jet. They
-partition the jet space into six Basic Image Features (BIFs) and compute these
-across a region of pixels at four different scales. The chosen BIFs are
-distinct texture elements such as dark spots and bright lines. Rather than
-computing the distribution of BIFs at each scale, the four BIFs at each point
-are combined into a BIF-column, and a histogram over all possible
-BIF-columns is computed. The descriptors are used for texture classification.
+\emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for matching of higher order differential information descriptors Crosier and Griffin \cite{crosier2010using} base their texture representation, which is just a descriptor but used for textures, on the local $2$-jet. They partition the jet space into six Basic Image Features (BIFs) and compute these across a region of pixels at four different scales. The chosen BIFs are distinct texture elements such as dark spots and bright lines. Rather than computing the distribution of BIFs at each scale, the four BIFs at each point are combined into a BIF-column, and a histogram over all possible BIF-columns is computed. The descriptors are used for texture classification.
 
-\cite{larsen2012jet} have had success using local 4-jets. Their
-$\mathcal{J}_4$-grid2 descriptor is computed from local 4-jets at four points
-spread out across a pixel region. A whitening process is used on the jet
-coefficients to scale normalize and decorrelate the descriptors, allowing for
-Euclidean distance as a distance measure. The descriptor was evaluated against
-state of the art on the image correspondence problem and performed favourably,
-despite the simplicity of the descriptor.
+\cite{larsen2012jet} have had success using local 4-jets. Their $\mathcal{J}_4$-grid2 descriptor is computed from local 4-jets at four points spread out across a pixel region. A whitening process is used on the jet coefficients to scale normalize and decorrelate the descriptors, allowing for Euclidean distance as a distance measure. The descriptor was evaluated against state of the art on the image correspondence problem and performed favourably, despite the simplicity of the descriptor.
 
-Another recent higher order descriptor is the galaxy descriptor from Pedersen
-et al.\cite{pedersen2013shape}, which is used to predict star-formation
-rate from galaxy texture. The descriptor consists of multi-scale histograms
-of gradient orientation as well as shape index, which is a simple 1D
-representation of second order differential information. The histograms are
-computed over a single region at eight scale levels.
+Another recent higher order descriptor is the galaxy descriptor from Pedersen et al.\cite{pedersen2013shape}, which is used to predict star-formation rate from galaxy texture. The descriptor consists of multi-scale histograms of gradient orientation as well as shape index, which is a simple 1D representation of second order differential information. The histograms are computed over a single region at eight scale levels.
 
 \subsection{Performance evaluations}
+A number of performance evaluations have been performed in order to be able to judge which descriptor (in combination with a detector) performs best on various test datasets. \cite{mikolajczyk2005performance} tests 10 descriptors including SIFT, GLOH, and PCA-SIFT. This is done by solving the image correspondence problem between two images of the same scene but with varying image transformations. In order for two descriptors to be a match the distance between the two descriptors has to be below a threshold $t$, which is varied to obtain a performance curve. Matching regions having an overlap error below $0.5$ under the given image transformation (a homography) are classified as correct matches. A curve showing the $recall$ as a function of the $1-precision$ is used as performance measure. Various matching strategies have been tested (thresholding, best-thresholding, ratio-thresholding). These are described in details in Section ??\todo{Insert ref. to matching strategies}.
 
-ROC, AUC, recall rate, 1-precision.
+\cite{dahl2011finding} tests the SIFT and DAISY descriptors with 7 state of the art detectors to find the best detector-descriptor combination. This is done by having a dataset with various image transformations and known 3D geometry and hence having a known ground truth for patch correspondences. Only the best-thresholding matching strategy is used. The Receiver Operating Characteristics (ROC) curve is computed for varying ratio-threshold $r$ and finally the area under the curve (AUC) is computed. The average AUC over all the scenes of the dataset is used as performance measure. The ROC and AUC measurements are described further in Section ??\todo{Insert ref. to description of ROC and AUC}
 
 \cite{mikolajczyk2005performance},
 \cite{dahl2011finding}
