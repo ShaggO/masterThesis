@@ -8,7 +8,7 @@ for s = setNum
     for i = imNum
         for l = size(liNum,1)
             n = n + 1;
-            disp(['[' num2str(toc) '] Image ' num2str(n) '/' num2str(N)])
+            disp([timestamp() ' Image ' num2str(n) '/' num2str(N)])
             match.setNum = s;
             match.imNum = i;
             match.liNum = liNum(l,:);

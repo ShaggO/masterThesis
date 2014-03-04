@@ -12,9 +12,19 @@ switch m.detector
         addParameter(p,'EdgeThreshold',Inf);
         r = parseResults(p,m.detectorArgs);
 
-        detName = sprintf('%s-%s-%s',lower(r.Method), ...
+        detName = sprintf('vl-%s-%s-%s',lower(r.Method), ...
             num2str(r.PeakThreshold),num2str(r.EdgeThreshold));
-        detFunc = @(I) vl_covdet(single(rgb2gray(I)),m.detectorArgs{:})';
+        detFunc = @(I) vl_covdet(255*rgb2gray(im2single(I)),m.detectorArgs{:})';
+    case 'dog'
+        % Single scale DoG detector
+        addParameter(p,'sigma',1);
+        addParameter(p,'k',2);
+        addParameter(p,'threshold',0);
+        r = parseResults(p,m.detectorArgs);
+        
+        detName = sprintf('dog-%s-%s-%s', ...
+            num2str(r.sigma),num2str(r.k),num2str(r.threshold));
+        detFunc = @(I) dogBlobDetector(rgb2gray(im2double(I)),r.sigma,r.k,r.threshold);
     case ''
         detName = '';
     otherwise

@@ -14,8 +14,15 @@ end
 
 X = F(:,1:2);
 
-% Compute k-Jets, whitening and L2 normalization
+% Compute scaled covariance matrix (whitening factors)
 BCov = brownianCovariance(k,sigma);
-D = normalize(localKJet(rgb2gray(im2double(I)),F,k,sigma,domain) * BCov,2);
+[V,lambda] = eig(BCov);
+lambda = diag(1 ./ sqrt(diag(lambda)));
+V = V * lambda;
+
+% Compute k-Jets, whitening and L2 normalization
+D = localKJet(rgb2gray(im2double(I)),F,k,sigma,domain);
+D = D * V;
+D = normalize(D,2);
 
 end

@@ -1,9 +1,9 @@
-function [ROC, PR, T] = analyseMatches(match)
+function [ROC, PR] = analyseMatches(match)
 
 T = [0; sort(match.distRatio,'ascend')];
 ROC = zeros(numel(T),2);
 PR = zeros(numel(T),2);
-for i = 2:numel(T)
+for i = 1:numel(T)
     t = T(i);
     TP = sum(match.distRatio <= t & match.CorrectMatch == 1);
     FP = sum(match.distRatio <= t & match.CorrectMatch == -1);
@@ -14,6 +14,8 @@ for i = 2:numel(T)
     PR(i,1) = FP / (FP + TP);
     PR(i,2) = TP / (TP + FN);
 end
+% Precision sometimes divides by 0, in this case it should be 0
+PR(isnan(PR(:))) = 0;
 
 end
 

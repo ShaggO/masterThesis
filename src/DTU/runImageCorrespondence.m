@@ -4,6 +4,7 @@ imNumKey = 25;
 setNum = 1;
 imNum = [1 12 24 26 37 49];
 liNum = 'diffuse';
+before = find(imNum < imNumKey,1,'last');
 
 peakThresholdDog = 5;
 peakThresholdHarris = 2*10^4;
@@ -23,20 +24,35 @@ method(4) = methodStruct( ...
 method(5) = methodStruct( ...
    'vl',{'method','dog','peakthreshold',peakThresholdDog}, ...
    'k-jet',{'k',5,'sigma',10.6,'domain','spatial'},{'co-'});
+method(6) = methodStruct( ...
+   'dog',{'sigma',10.6,'k',2,'threshold',0.01}, ...
+   'k-jet',{'k',5,'sigma',10.6,'domain','auto'},{'mo-'});
 
-figure('units','normalized','outerposition',[0 0 1 1])
-axis([imNum(1)-1 imNum(end)+1 0 1])
-hold on
 tic
 for i = 1:numel(method)
     m = method(i);
     [mFunc, mName{i}] = parseMethod(m);
-    disp(['[' num2str(toc) '] Method ' num2str(i) '/' num2str(numel(method)) ': ' mName{i}])
+    disp([timestamp() ' Method ' num2str(i) '/' num2str(numel(method)) ': ' mName{i}])
     mDir = ['DTU/results/' mName{i}];
     matches(i,:) = imageCorrespondence(setNum,imNum,liNum,mFunc,mDir);
-    before = find(imNum < imNumKey,1,'last');
-    h(i) = plot(imNum(1:before),[matches(i,1:before).Area],m.plotParams{:});
-    plot(imNum(before+1:end),[matches(i,before+1:end).Area],m.plotParams{:})
 end
 
+figure('units','normalized','outerposition',[0 0 1 1])
+axis([imNum(1)-1 imNum(end)+1 0 1])
+hold on
+for i = 1:numel(method)
+    h(i) = plot(imNum(1:before),[matches(i,1:before).ROCAUC],method(i).plotParams{:});
+    plot(imNum(before+1:end),[matches(i,before+1:end).ROCAUC],method(i).plotParams{:})
+end
+title('ROC AUC')
+legend(h,mName,'location','southeast','interpreter','none')
+
+figure('units','normalized','outerposition',[0 0 1 1])
+axis([imNum(1)-1 imNum(end)+1 0 1])
+hold on
+for i = 1:numel(method)
+    h(i) = plot(imNum(1:before),[matches(i,1:before).PRAUC],method(i).plotParams{:});
+    plot(imNum(before+1:end),[matches(i,before+1:end).PRAUC],method(i).plotParams{:})
+end
+title('PR AUC')
 legend(h,mName,'location','southeast','interpreter','none')
