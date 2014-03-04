@@ -144,6 +144,27 @@ Thresholding, best-thresholding, ratio-thresholding.
 
 ROC, AUC, recall, 1-precision
 
+\subsection{Invariants}
+
+\subsubsection{Translation}
+
+\subsubsection{Rotation}
+
+\subsubsection{Illumination}
+Affine illumination model:
+\begin{align*}
+  \widetilde{I}(x) &= a I(x)  + b \\
+  \frac{\Diff{n} a I(x)}{\Diff x^n} &= a \frac{\Diff{n}I}{ x^n} \\
+  S(x,y,\sigma) &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + (L_{xx} - L_{yy})^2}}} \\
+  \widetilde{S}(x,y,\sigma) &= \frac{2}{\pi} \Atan{\frac{-a L_{xx} - a L_{yy}}{\sqrt{4(aL_{xy})^2 + (aL_{xx} - aL_{yy})^2}}} \\
+  &= \frac{2}{\pi} \Atan{\frac{a (-L_{xx} - L_{yy})}{\sqrt{a^2 \left(4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2 \right)}}} \\
+  &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2}}} \\
+\end{align*}
+
+\subsubsection{Scale}
+
+\subsubsection{Perspective}
+
 %\subsection{Sliding window}
 %
 %\subsection{Spatial pooling schemes}
