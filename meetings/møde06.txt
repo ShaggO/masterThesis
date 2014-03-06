@@ -1,0 +1,4 @@
+Noter til møde med Kim d. 12/3
+Spørgsmål:
+
+1. Hvordan normaliserer man et histogram med trunkerede bins?
