@@ -1,10 +1,11 @@
-function [H] = create1Dhist(x,weights,binC,fHandle,varargin)
+function [H] = create1Dhist(x,weights,binC,fHandle,r,varargin)
 % CREATE1DHIST Create a 1 dimensional histogram
 % Params:
 %   x       Values to make a histogram for
 %   weights Weights on values x
 %   binC    Bin centers
 %   fHandle Bin filter (symmetric around d=0) taking one input: distances to bin center
+%   r       Bin filter support radius 
 % Optional parameter:
 %   period  Period of periodic values
 
@@ -24,8 +25,8 @@ for i = 1:size(binC,1)
     if any(periodic)
         d(mask) = min(d(mask),pMask(:) - d(mask));
     end
-    fWeights = fHandle(d);
-    H(i) = sum(weights .* fWeights);
+    rMask = all(d <= repmat(r,[size(x,1) 1]),2);
+    H(i) = sum(weights(rMask,:) .* fHandle(d(rMask,:)));
 end
 
 end
