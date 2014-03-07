@@ -2,3 +2,9 @@ Noter til møde med Kim d. 12/3
 Spørgsmål:
 
 1. Hvordan normaliserer man et histogram med trunkerede bins?
+2. Hvad gør man med boksfiltre hvis endepunkterne overlapper i et datapunkt?
+3. Flere idéer til matematiske udtryk for invarianser/transformationer som vi kan bevise
+4. Hvad sker der med jets når man laver whitening i forhold til belysning og
+    vores udregninger af normalisering med L2 normen.
+5. Histogrammer i forskellige skala og rotation: Hvordan? Interpolering til
+    samme størrelse patch?

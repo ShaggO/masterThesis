@@ -163,9 +163,26 @@ Affine illumination model:
   &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2}}} \\
 \end{align*}
 
+
+When normalizing k-jet with L2-norm:
+\begin{align*}
+  \mathcal{J}_k &= \left( \mset{L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
+  \widetilde{\mathcal{J}}_k &=\left( \mset{a L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
+  \left \| \widetilde{\mathcal{J}}_k \right \|_2 &= \sqrt{\sum_{0 < n+m \leq k} (a L_{x^n y^m})^2} \\
+      &= \sqrt{a^2\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
+      &= a\sqrt{\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
+      &= a \left \| \mathcal{J}_k \right \|_2 \\
+  \frac{\widetilde{\mathcal{J}}_k}{\left \| \widetilde{\mathcal{J}}_k \right \|_2} &=
+      \frac{\mathcal{J}_k}{\left \| \mathcal{J}_k \right \|_2}
+\end{align*}
+
+By using a small sigma for calculating the derivatives in the jet, we only use a small spatial area for the calculations which minimizes the risk of crossing a shadow edge. By combining multiple jets or shape indices into histograms we are able to calculate a descriptor across a shadow edge but still maintaining illumination invariance.
+
 \subsubsection{Scale}
+Noget med scalespace \cite{griffin1997scale}.
 
 \subsubsection{Perspective}
+noget med ?
 
 %\subsection{Sliding window}
 %
