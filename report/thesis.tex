@@ -27,9 +27,18 @@
 
 %% Define subbibliography hack to let sections be compiled with references
 \def\subbibliography{\bibliography{../../bibliography}}
+
+%% Differential operators
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+\newcommand*\atan{\tan^{-1}}
+\newcommand*\Atan[1]{\tan^{-1} \left( #1 \right)}
+
+
 \begin{document}
 %% Let the subbibliography be an empty definition
 \def\subbibliography{}
+
 
 \maketitle
 
