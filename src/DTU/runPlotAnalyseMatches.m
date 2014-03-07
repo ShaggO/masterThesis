@@ -1,11 +1,11 @@
 clc, clear all
 
 setNum = 1;
-imNum = 24;
+imNum = 12;
 liNum = 'diffuse';
 
 peakThresholdDog = 5;
-peakThresholdHarris = 2*10^4;
+peakThresholdHarris = 5*10^4;
 
 method = methodStruct( ...
    'vl',{'method','MultiscaleHarris','peakthreshold',peakThresholdHarris}, ...

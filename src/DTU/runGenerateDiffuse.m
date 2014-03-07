@@ -11,7 +11,7 @@ for s = setNum
         for l = liNum
             I = I + double(imread(dtuImagePath(s,i,l)));
         end
-        I = uint8(I / numel(liNum));
+        I = uint8(1.5 * I / numel(liNum));
         imwrite(I,dtuImagePath(s,i,'diffuse'));
     end
 end
