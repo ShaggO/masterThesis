@@ -1,4 +1,4 @@
-function [Cout, Csize] = createBinCenters(left, right, count, varargin)
+function Cout = createBinCenters(left, right, count, varargin)
 % CREATEBINCENTERS  Generate bin centers for use in histogram
 % Params:
 %   left    Left endpoint of the range
@@ -20,7 +20,6 @@ assert(~(any(endpoints & offset ~= 0)),'The combination of using the endpoints a
 assert(all(left < right),'The left endpoint should be to the left of the right endpoint (left < right).')
 
 % Create linear spaces for each histogram dimension
-Csize = zeros(1,numel(left));
 C = cell(1,numel(left));
 for i = 1:numel(left)
     if endpoints(i)
@@ -30,7 +29,6 @@ for i = 1:numel(left)
         assert(abs(offset(i)) <= delta, ['Offset (' num2str(i) ' too large. It should be smaller than (right-left)/(2*count) = ' delta '.']);
         C{i} = linspace(left(i)+delta,right(i)-delta,count(i))'+offset(i);
     end
-    Csize(i) = numel(C{i});
 end
 
 % Create nd-grid for all histogram dimensions

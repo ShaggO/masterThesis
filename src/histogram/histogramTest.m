@@ -1,16 +1,13 @@
+% Test 1D and 2D histograms (without spatial weighting)
 clc, clear all;
 sigma = [1 1];
-fHandle = @(d) 1/(2*pi*sigma^2) * exp(-(d).^2/(2*sigma^2));
-
-%fHandle = @(d) d <= repmat(0.25,[1 numel(x)])
-[fHandle,r] = binFilter('gaussian',sigma(1));
-
+[fHandle,r] = ndFilter('gaussian',sigma(1));
 
 x = (-5:0.1:4.9)';
 y = ones(numel(x),1);
 binC = createBinCenters(-5,5,10,'offset',0.5);
 
-h = create1Dhist(x,y,binC,fHandle,r,10);
+h = ndHist(x,y,binC,fHandle,r,10);
 h = h ./ sum(h);
 
 figure;
@@ -19,7 +16,7 @@ bPadding = (binC(end) - binC(1)) / 20;
 axis([binC(1)-bPadding binC(end)+bPadding 0 1]);
 
 binC2 = createBinCenters(-5,5,10,'endpoints',true);
-h2 = create1Dhist(x,y,binC2,fHandle,r);
+h2 = ndHist(x,y,binC2,fHandle,r);
 h2 = h2 ./ sum(h2);
 
 figure;
@@ -31,11 +28,13 @@ axis([binC2(1)-bPadding2 binC2(end)+bPadding2 0 1]);
 X = [X1(:) X2(:)];
 Y = ones(size(X,1),1);
 
-[binC3, dimensions] = createBinCenters([-1,-1],[1,1],[10 10]);
+dimensions = [10 10];
+[binC3] = createBinCenters([-1,-1],[1,1],dimensions);
 
-[fHandle3,r3] = binFilter('gaussian',sigma);
 
-h3 = create1Dhist(X,Y,binC3,fHandle3,r3,[0,0]);
+[fHandle3,r3] = ndFilter('gaussian',sigma);
+
+h3 = ndHist(X,Y,binC3,fHandle3,r3,[0,0]);
 h3 = h3 ./ sum(h3);
 h3_ = reshape(h3,dimensions);
 X_ = reshape(binC3(:,1),dimensions);

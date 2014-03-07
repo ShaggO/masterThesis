@@ -1,6 +1,6 @@
-function [f,r] = binFilter(type, sigma)
-% BINFILTER Create bin filter of given type
-% type  Type of bin filter.
+function [f,r] = ndFilter(type, sigma)
+% NDFILTER Create N-dimensional filter of given type
+% type  Type of filter.
 % sigma Sigma/width of filter
 
 switch type

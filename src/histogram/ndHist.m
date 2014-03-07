@@ -1,5 +1,5 @@
-function [H] = create1Dhist(x,weights,binC,fHandle,r,varargin)
-% CREATE1DHIST Create a 1 dimensional histogram
+function [H] = ndHist(x,weights,binC,fHandle,r,varargin)
+% NDHIST Create a n-dimensional histogram
 % Params:
 %   x       Values to make a histogram for
 %   weights Weights on values x
