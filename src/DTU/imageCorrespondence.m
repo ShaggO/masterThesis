@@ -1,6 +1,7 @@
 function matches = imageCorrespondence(setNum, imNum, liNum, mFunc, mName)
 
 imNumKey = 25;
+mDir = ['DTU/results/' mName];
 N = numel(setNum)*numel(imNum)*size(liNum,1);
 
 n = 0;
@@ -12,7 +13,7 @@ for s = setNum
             match.setNum = s;
             match.imNum = i;
             match.liNum = liNum(l,:);
-            matchPath = ['DTU/results/' mName '/matches_' dtuImageName(match.setNum,match.imNum,match.liNum)];
+            matchPath = [mDir '/matches_' dtuImageName(match.setNum,match.imNum,match.liNum)];
 
             if exist(matchPath,'file')
                 load(matchPath)
@@ -28,8 +29,8 @@ for s = setNum
                 match = evalCorrespondence(match);
 
                 % Save to file
-                if ~exist(mName,'dir')
-                    mkdir(mName)
+                if ~exist(mDir,'dir')
+                    mkdir(mDir)
                 end
                 save(matchPath,'match')
             end

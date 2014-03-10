@@ -1,7 +1,7 @@
 clc, clear all
 
 setNum = 1;
-imNum = 12;
+imNum = 24;
 liNum = 'diffuse';
 
 peakThresholdDog = 5;
@@ -11,8 +11,8 @@ peakThresholdHarris = 5*10^4;
 %   'vl',{'method','MultiscaleHarris','peakthreshold',peakThresholdHarris}, ...
 %   'sift',{'colour','rgb'},{'go-'});
 method = methodStruct( ...
-   'dog',{'sigma',10.6,'k',2,'threshold',0.01},...
-   'ghist',{'patchSize',[50 50],'spatialSigma',[26 26]},{'co-'});
+   'dog',{'sigma',1,'k',2,'threshold',0.085},...
+   'ghist',{'patchSize',[11 11],'spatialSigma',[7 7]},{'co-'});
 
 % method = methodStruct( ...
 %    'vl',{'method','dog','peakthreshold',peakThresholdDog}, ...
@@ -25,7 +25,6 @@ method = methodStruct( ...
 t = 0.9;
 
 [mFunc, mName] = parseMethod(method);
-mDir = ['DTU/results/' mName];
 tic
-match = imageCorrespondence(setNum,imNum,liNum,mFunc,mDir);
+match = imageCorrespondence(setNum,imNum,liNum,mFunc,mName);
 plotAnalyseMatches(match,t);
