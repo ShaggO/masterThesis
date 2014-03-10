@@ -1,6 +1,27 @@
-function [X,D] = getGHistDescriptors(I,F,patchSize,spatialType,spatialSigma,binType,binSigma,binCount)
+function [X,D] = getGHistDescriptors(I,F, ...
+    blockSize,cellSize,spatialType,spatialSigma,binType,binSigma,binCount)
+% GETGHISTDESCRIPTORS Customizable descriptor based on cells of gradient
+% histograms.
+%
+% Input:
+%   I               RGB image
+%   F               Detected features
+%   blockSize       Number of cells in x and y direction
+%   cellSize        Number of pixels in each cell in x and y direction
+%   spatialType     Type of spatial filter (on distance from cell center)
+%   spatialSigma    Variance of spatial filter
+%   binType         Type of bin filter (on distance from bin center)
+%   binSigma        Variance of bin filter
+%   binCount        Number of bins
 
 I = rgb2gray(im2double(I));
+
+% Remove features too close to border
+minCoords = 1 + (cellSize-1)/2 + (blockSize-1)/2 .* cellSize;
+maxCoords = flip(size(I)) - minCoords + 1;
+
+F = F(F(:,1) >= minCoords(1) & F(:,1) <= maxCoords(1) & ...
+    F(:,2) >= minCoords(2) & F(:,2) <= maxCoords(2),:);
 
 % Assume single-scale detected points
 sigma = F(1,3);
@@ -10,19 +31,35 @@ Iy = imfilter(I,dGauss2d(0,1,hsize,sigma),'replicate','conv');
 Theta = atan2(Iy, Ix);
 M = sigma^2 * sqrt(Ix .^ 2 + Iy .^ 2);
 
-[coordX, coordY] = meshgrid(1:patchSize(2),1:patchSize(1));
-w = spatialWeights([coordX(:) coordY(:)], patchSize, spatialType, spatialSigma);
+[coordX, coordY] = meshgrid(1:cellSize(2),1:cellSize(1));
+w = spatialWeights([coordX(:) coordY(:)],cellSize,spatialType,spatialSigma);
 [f, r] = ndFilter(binType,binSigma);
 c = createBinCenters(0,2*pi,binCount);
-[patchX,patchY] = meshgrid(-(patchSize(1)-1)/2:(patchSize(1)-1)/2,...
-                    -(patchSize(2)-1)/2:(patchSize-1)/2);
+[patchX,patchY] = meshgrid(-(cellSize(1)-1)/2:(cellSize(1)-1)/2,...
+    -(cellSize(2)-1)/2:(cellSize-1)/2);
 
-D = zeros(size(F,1),binCount);
+D = zeros(size(F,1),prod(blockSize)*binCount);
+
+Px = zeros(size(F,1),prod(cellSize),prod(blockSize));
+Py = Px;
+for i = 1:size(F,1)
+    for j = 1:prod(blockSize)
+        [cellX,cellY] = ind2sub(blockSize,j);
+        x = F(i,1) + (cellX-(blockSize(1)+1)/2)*cellSize(1);
+        y = F(i,2) + (cellY-(blockSize(2)+1)/2)*cellSize(2);
+        Px(i,:,j) = x + patchX(:);
+        Py(i,:,j) = y + patchY(:);
+    end
+end
+
+theta = interp2(Theta,Px,Py,'bilinear');
+m = interp2(M,Px,Py,'bilinear');
 
 for i = 1:size(F,1)
-    x = interp2(Theta,F(i,1)+patchX,F(i,2)+patchY,'bilinear');
-    m = interp2(M,F(i,1)+patchX,F(i,2)+patchY,'bilinear');
-    D(i,:) = ndHist(x(:),m(:).*w,c,f,r,2*pi);
+    for j = 1:prod(blockSize)
+        h = ndHist(theta(i,:,j)',m(i,:,j)'.*w,c,f,r,2*pi);
+        D(i,(j-1)*binCount+(1:binCount)) = h;
+    end
 end
 
 X = F(:,1:2);
