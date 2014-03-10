@@ -147,10 +147,13 @@ ROC, AUC, recall, 1-precision
 
 
 \subsection{Invariants}
+When describing features in real world images we experience a lot of transformations of the actual physical objects/features. We are however interested in being able to describe the feature without any of these transformations applied, in which case we have a better chance of recognizing the feature in other images. In this section we will go through a list of possible transformations that we wish for our descriptor to be invariant to.
 
 \subsubsection{Translation}
+The first transformation that we describe is translation. Translation occurs when images are taken from different positions and hence the features are translated in the image plane. Translation invariance is often achieved by combining a descriptor with a feature detector which tells the descriptor where the features are located spatially in the image. Another approach is to use a sliding window technique in which a detection window is moved around the image trying to find a suitable matching feature position as in \cite{felzenszwalb2008discriminatively}. Translation invariance is almost always desired.
 
 \subsubsection{Rotation}
+Rotation naturally occurs when either the camera or the feature in question is rotated. Like the translation invariance we often get rotation invariance by combining the descriptor with a feature detector. The detector often estimates the direction of the feature based on the direction of the gradient in the feature point, and hence it outputs both translation and rotation invariant feature points to compute descriptors for. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed. More general descriptors such as SIFT are however rotational invariant
 
 \subsubsection{Illumination}
 Affine illumination model:

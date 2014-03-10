@@ -8,3 +8,4 @@ Spørgsmål:
     vores udregninger af normalisering med L2 normen.
 5. Histogrammer i forskellige skala og rotation: Hvordan? Interpolering til
     samme størrelse patch?
+6. Feature orientation estimation - how?
