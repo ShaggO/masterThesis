@@ -102,6 +102,9 @@ parse(p,args{:});
 r = p.Results;
 end
 
+% Local function that combines detector and descriptor.
+% Loading and saving of intermediate results is handled
+% in this function.
 function [X,D] = methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc)
 detDir = [resDir '/' detName];
 desDir = [detDir '_' desName];
