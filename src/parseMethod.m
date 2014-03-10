@@ -53,6 +53,27 @@ switch m.descriptor
 
         desName = [num2str(r.k) '-jet-' num2str(r.sigma)];
         desFunc = @(I,F) getKJetDescriptors(I,F,r.k,r.sigma,r.domain);
+    case 'ghist'
+        types = {'gaussian','triangle','box'};
+        addParameter(p,'patchSize',[5 5]);
+        addParameter(p,'spatialType',types{1},@(x) any(validatestring(x,types)));
+        addParameter(p,'spatialSigma',[3 3]);
+        addParameter(p,'binType',types{1},@(x) any(validatestring(x,types)));
+        addParameter(p,'binSigma',pi/8);
+        addParameter(p,'binCount',8);
+        r = parseResults(p,m.descriptorArgs);
+
+        desName = sprintf('ghist-%s-%s-%s-%s-%s-%s-%s-%s',...
+                    num2str(r.patchSize(1)),...
+                    num2str(r.patchSize(2)),...
+                    r.spatialType,...
+                    num2str(r.spatialSigma(1)),...
+                    num2str(r.spatialSigma(2)),...
+                    r.binType,...
+                    num2str(r.binSigma),...
+                    num2str(r.binCount));
+        desFunc = @(I,F) getGHistDescriptors(I,F,r.patchSize,r.spatialType,r.spatialSigma,...
+                        r.binType,r.binSigma,r.binCount);
     otherwise
         error('Unrecognized descriptor!')
 end
@@ -63,7 +84,7 @@ if isempty(detName)
     mFunc = desFunc;
 else
     mName = [detName '_' desName];
-    mFunc = @(I) desFunc(I,detFunc(I));
+    mFunc = @(I,resDir,imName) methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc);
 end
 
 end
@@ -79,4 +100,36 @@ end
 function r = parseResults(p,args)
 parse(p,args{:});
 r = p.Results;
+end
+
+function [X,D] = methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc)
+detDir = [resDir '/' detName];
+desDir = [detDir '_' desName];
+detPath = [detDir '/features_' imName '.mat'];
+desPath = [desDir '/descriptors_' imName '.mat'];
+if exist(desPath,'file')
+    load(desPath);
+else
+    if exist(detPath,'file')
+        load(detPath);
+        disp(['Loaded ' num2str(size(F,1)) ' features.']);
+    else
+        F = detFunc(I);
+
+        if ~exist(detDir,'dir')
+            mkdir(detDir);
+        end
+        save(detPath,'F');
+        disp(['Detected ' num2str(size(F,1)) ' features.']);
+    end
+
+    [X,D] = desFunc(I,F);
+    assert(~any(isnan(D(:))),'NaN present in descriptor.');
+
+    if ~exist(desDir,'dir')
+        mkdir(desDir);
+    end
+    save(desPath,'X','D');
+end
+
 end

@@ -33,8 +33,7 @@ for i = 1:numel(method)
     m = method(i);
     [mFunc, mName{i}] = parseMethod(m);
     disp([timestamp() ' Method ' num2str(i) '/' num2str(numel(method)) ': ' mName{i}])
-    mDir = ['DTU/results/' mName{i}];
-    matches(i,:) = imageCorrespondence(setNum,imNum,liNum,mFunc,mDir);
+    matches(i,:) = imageCorrespondence(setNum,imNum,liNum,mFunc,mName{i});
 end
 
 figure('units','normalized','outerposition',[0 0 1 1])
