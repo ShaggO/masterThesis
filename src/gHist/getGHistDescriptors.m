@@ -54,11 +54,15 @@ end
 theta = interp2(Theta,Px,Py,'bilinear');
 m = interp2(M,Px,Py,'bilinear');
 
-for i = 1:size(F,1)
-    h = ndHist(permute(theta(i,:,:),[2 1 3]),permute(m(i,:,:),[2 1 3]).*repmat(w,[1 1 size(m,3)]),c,f,r,2*pi);
-    for j = 1:prod(blockSize)
-        D(i,(j-1)*binCount+(1:binCount)) = h(:,:,j);
-    end
+% Permute theta and m such that first dimension is points within one
+% cell, second dimension is singleton, third dimension is cell number,
+% and fourth dimension is feature number.
+h = ndHist(permute(theta,[2 4 3 1]), ...
+    permute(m,[2 4 3 1]) .* repmat(w,[1 1 size(m,3) size(m,1)]), ...
+    c,f,r,2*pi);
+
+for j = 1:prod(blockSize)
+    D(:,(j-1)*binCount+(1:binCount)) = permute(h(:,1,j,:),[4 1 3 2]);
 end
 
 X = F(:,1:2);

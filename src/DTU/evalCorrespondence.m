@@ -13,8 +13,19 @@ ScaleMargin=2;              %Margin for change in scale, corrected for distance 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Precomputes the quad tree of projected structured light points, for
-% faster computaion later.
-[Grid3D,Pts]=GenStrLightGrid_v2(KeyFrame,In3DPath,1200,1600,Rad3D,match.setNum);
+% faster computaion later. Loads from file if available.
+strLightDir = 'DTU/results/structuredLight';
+strLightPath = sprintf('%s/set%.2d.mat',match.setNum);
+if ~exist(strLightDir,'dir')
+    mkdir(strLightDir)
+end
+if exist(strLightPath,'file')
+    load(strLightPath)
+else
+    [Grid3D,Pts]=GenStrLightGrid_v2(KeyFrame,In3DPath,1200,1600,Rad3D,match.setNum);
+    save(strLightPath,'Grid3D','Pts')
+end
+
 %Get the projective camera matrices.
 Cams=GetCamPair(KeyFrame,match.imNum);
 match.CorrectMatch = zeros(size(match.coord,1),1);
