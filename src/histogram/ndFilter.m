@@ -5,10 +5,7 @@ function [f,r] = ndFilter(type, sigma)
 
 switch type
     case 'gaussian'
-        n = numel(sigma);
-        f = @(d) 1/((2*pi)^(n/2)*prod(sigma)) * ...
-                exp(-sum((d.^2)./(2*repmat(sigma,[size(d,1) 1])),2));
-
+        f = @(d)gaussFilter(sigma,d);
         r = 6*sigma;
 
     case 'box'
@@ -23,11 +20,19 @@ end
 
 
 function v = triangleFilter(sigma,d)
-    sigma = repmat(sigma,[size(d,1) 1]);
+    sz = size(d);
+    sigma = repmat(sigma,[sz(1) 1 sz(3:end)]);
     v = prod((d <= sigma) .* (1-(d./sigma)),2);
 end
 
 function v = boxFilter(sigma,d)
-    sigma = repmat(sigma/2,[size(d,1) 1]);
+    sz = size(d);
+    sigma = repmat(sigma/2,[sz(1) 1 sz(3:end)]);
     v = prod((d < sigma) + (d == sigma)/2,2);
+end
+
+function v = gaussFilter(sigma,d)
+    sz = size(d);
+    v = 1/((2*pi)^(numel(sigma)/2)*prod(sigma)) * ...
+            exp(-sum((d.^2)./(2*repmat(sigma,[sz(1) 1 sz(3:end)])),2));
 end
