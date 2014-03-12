@@ -2,10 +2,33 @@ Noter til møde med Kim d. 12/3
 Spørgsmål:
 
 1. Hvordan normaliserer man et histogram med trunkerede bins?
+    - Sørger for at alle filtre summer til 1. Find en formel!
+    kig på tætheder: tal / (antal * volumen)
 2. Hvad gør man med boksfiltre hvis endepunkterne overlapper i et datapunkt?
+    - Husk normalisering så burde det gå fint med alt inklusiv
 3. Flere idéer til matematiske udtryk for invarianser/transformationer som vi kan bevise
+    - Translation og skala: Forbedringer/robusthed i forhold til detected patch position
+        ved upræcise målinger
+    - Kig på approksimative invarianser
+    - Rotation: Kig på de afledte i et koordinatsystem og et roteret koordinatsystet
+    - Perspektiv (ingen har lavet det før)
 4. Hvad sker der med jets når man laver whitening i forhold til belysning og
     vores udregninger af normalisering med L2 normen.
+    - Decorrelation: Skift koordinatsystem (gang individuel skalering på men uafhængig af a)
+        Kig på det som et multiplum med en matrice
 5. Histogrammer i forskellige skala og rotation: Hvordan? Interpolering til
     samme størrelse patch?
+    - Resampling af billedet til patch size
+    - Fedt hvis vi kan undgå det - måske med skalering af binfiltret som funktion af skala og
+      dermed også antal pixels til rådighed. Parsen vinduer
+    - I stedet for interpolering kan vi konstruere det spatielle filter ud fra en translation og rotation.
 6. Feature orientation estimation - how?
+    - Gradienter (SIFT giver en descriptor for hver peak i gradienterne)
+    - Evt. kig på 2. orden
+
+Noter til mødet:
+
+- Galaxy bins:
+    Bincentre: -1 + binSize/2 : interval/8 : 1 - binsize/2
+- k-jet normalisering i forhold til gradient størrelserne i lokale områder
+
