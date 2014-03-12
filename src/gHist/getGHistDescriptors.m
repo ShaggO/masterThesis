@@ -42,23 +42,22 @@ D = zeros(size(F,1),prod(blockSize)*binCount);
 
 Px = zeros(size(F,1),prod(cellSize),prod(blockSize));
 Py = Px;
-for i = 1:size(F,1)
-    for j = 1:prod(blockSize)
-        [cellX,cellY] = ind2sub(blockSize,j);
-        x = F(i,1) + (cellX-(blockSize(1)+1)/2)*cellSize(1);
-        y = F(i,2) + (cellY-(blockSize(2)+1)/2)*cellSize(2);
-        Px(i,:,j) = x + patchX(:);
-        Py(i,:,j) = y + patchY(:);
-    end
+
+for j = 1:prod(blockSize)
+    [cellX,cellY] = ind2sub(blockSize,j);
+    x = F(:,1) + (cellX-(blockSize(1)+1)/2)*cellSize(1);
+    y = F(:,2) + (cellY-(blockSize(2)+1)/2)*cellSize(2);
+    Px(:,:,j) = repmat(x,[1 numel(patchX)]) + repmat(patchX(:)',[numel(x) 1]);
+    Py(:,:,j) = repmat(y,[1 numel(patchY)]) + repmat(patchY(:)',[numel(y) 1]);
 end
 
 theta = interp2(Theta,Px,Py,'bilinear');
 m = interp2(M,Px,Py,'bilinear');
 
 for i = 1:size(F,1)
+    h = ndHist(permute(theta(i,:,:),[2 1 3]),permute(m(i,:,:),[2 1 3]).*repmat(w,[1 1 size(m,3)]),c,f,r,2*pi);
     for j = 1:prod(blockSize)
-        h = ndHist(theta(i,:,j)',m(i,:,j)'.*w,c,f,r,2*pi);
-        D(i,(j-1)*binCount+(1:binCount)) = h;
+        D(i,(j-1)*binCount+(1:binCount)) = h(:,:,j);
     end
 end
 

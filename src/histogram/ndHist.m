@@ -19,14 +19,16 @@ periodic = period ~= 0;
 mask = repmat(periodic,[size(x,1) 1]);
 pMask = repmat(period(periodic),[size(x,1) 1]);
 
-H = zeros(size(binC,1),1);
-for i = 1:size(binC,1)
-    d = abs(repmat(binC(i,:),[size(x,1) 1]) - x);
-    if any(periodic)
-        d(mask) = min(d(mask),pMask(:) - d(mask));
+H = zeros(size(binC,1),1,size(x,3));
+for j = 1:size(x,3)
+    for i = 1:size(binC,1)
+        d = abs(repmat(binC(i,:),[size(x,1) 1]) - x(:,:,j));
+        if any(periodic)
+            d(mask) = min(d(mask),pMask(:) - d(mask));
+        end
+        rMask = all(d <= repmat(r,[size(x,1) 1]),2);
+        H(i,1,j) = sum(weights(rMask,:,j) .* fHandle(d(rMask,:)));
     end
-    rMask = all(d <= repmat(r,[size(x,1) 1]),2);
-    H(i) = sum(weights(rMask,:) .* fHandle(d(rMask,:)));
 end
 
 end

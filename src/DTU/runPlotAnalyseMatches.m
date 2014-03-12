@@ -26,5 +26,8 @@ t = 0.9;
 
 [mFunc, mName] = parseMethod(method);
 tic
+profile on;
 match = imageCorrespondence(setNum,imNum,liNum,mFunc,mName);
 plotAnalyseMatches(match,t);
+profile off;
+profile viewer;
