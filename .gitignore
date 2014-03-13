@@ -35,6 +35,7 @@
 *.fls
 *.bcf
 *.run.xml
+*.bib
 
 *~
 
