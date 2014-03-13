@@ -39,6 +39,7 @@ h3 = h3 ./ sum(h3);
 h3_ = reshape(h3,dimensions);
 X_ = reshape(binC3(:,1),dimensions);
 Y_ = reshape(binC3(:,2),dimensions);
+whos;
 
 figure;
 plot3([binC3(:,1) binC3(:,1)]',...
