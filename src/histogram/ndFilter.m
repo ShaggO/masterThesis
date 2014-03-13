@@ -9,11 +9,11 @@ switch type
         r = 6*sigma;
 
     case 'box'
-        f = @(d)boxFilter(sigma,d)
+        f = @(d)boxFilter(sigma,d);
         r = sigma./2;
 
     case 'triangle'
-        f = @(d)triangleFilter(sigma,d)
+        f = @(d)triangleFilter(sigma,d);
         r = sigma;
 end
 end

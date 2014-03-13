@@ -187,6 +187,58 @@ Noget med scalespace \cite{griffin1997scale}.
 \subsubsection{Perspective}
 noget med ?
 
+\subsection{Histograms}
+
+\subsubsection{Gaussian filter}
+
+The 1-dimensional Gaussian filter with variance $\sigma$ is defined as:
+%
+\begin{align}
+G(x,\sigma) = \frac{1}{\sqrt{2\pi} \sigma}
+\exp\left( -\frac{x^2}{2 \sigma^2} \right)
+\end{align}
+%
+The $n$-dimensional Gaussian filter with variances $\boldsymbol{\sigma} = [\sigma_1, ..., \sigma_n]^T$ is defined as the product of $n$ 1-dimensional filters:
+%
+\begin{align}
+G(\mathbf{x},\boldsymbol{\sigma})
+= \frac{1}{(2\pi)^\frac{n}{2} \prod_i \mathbf{\sigma}_i}
+\exp\left( -\sum_i \frac{x_i^2}{2 \sigma_i^2} \right)
+\end{align}
+%
+The definite integral of $G(x,\sigma)$ from $a$ to $b$ cannot be expressed by an elementary function. Instead we can use the non-elementary error function, which is defined as $\mathrm{erf}(b) = \frac{2}{\sqrt{\pi}} \int_0^b \exp(-x^2) \,\mathrm dx$. First we show an intermediate result, using the substitution $u = \sqrt{k} x$ so $\mathrm du = \sqrt{k} \mathrm dx$:
+%
+\begin{align}
+\int_0^b \exp(-k x^2) \,\mathrm dx
+&= \frac{1}{\sqrt{k}} \int_0^{\sqrt{k}b} \exp(-u^2) \,\mathrm du \\
+&= \frac{\sqrt{\pi}}{2} \frac{1}{\sqrt{k}} \mathrm{erf} \left( \sqrt{k} b \right)
+\end{align}
+%
+We use this to compute $\int_a^b G(x,\sigma) \,\mathrm dx$:
+%
+\begin{align}
+\int_a^b G(x,\sigma) \,\mathrm dx
+&= \frac{1}{\sqrt{2\pi} \sigma} \int_a^b \exp\left( -\frac{x^2}{2 \sigma^2} \right) \,\mathrm dx \\
+&= \frac{1}{\sqrt{2\pi} \sigma} \left( \int_0^b \exp\left( -\frac{x^2}{2 \sigma^2} \right) \,\mathrm dx - \int_0^a \exp\left( -\frac{x^2}{2 \sigma^2} \right) \,\mathrm dx \right) \\
+&= \frac{1}{\sqrt{2\pi} \sigma} \frac{\sqrt{\pi}}{2} \sqrt{2} \sigma \left(
+\mathrm{erf} \left( \frac{1}{\sqrt{2} \sigma} b \right) -
+\mathrm{erf} \left( \frac{1}{\sqrt{2} \sigma} a \right) \right) \\
+&= \frac{1}{2} \left(
+\mathrm{erf} \left( \frac{b}{\sqrt{2} \sigma} \right) -
+\mathrm{erf} \left( \frac{a}{\sqrt{2} \sigma} \right)
+\right)
+\end{align}
+%
+The definite integral of $G(\mathbf{x},\boldsymbol{\sigma})$ from $a_i$ to $b_i$ in each dimension is the product of the definite integrals for each dimension:
+%
+\begin{align}
+\int_{a_i}^{b_i} \dots \int_{a_n}^{b_n} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_n} \dots d{x_i}
+&= \prod_i \frac{1}{2} \left(
+\mathrm{erf} \left( \frac{b_i}{\sqrt{2} \sigma_i} \right) -
+\mathrm{erf} \left( \frac{a_i}{\sqrt{2} \sigma_i} \right)
+\right)
+\end{align}
+%
 %\subsection{Sliding window}
 %
 %\subsection{Spatial pooling schemes}

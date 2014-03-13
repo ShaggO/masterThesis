@@ -3,11 +3,11 @@ clc, clear all;
 sigma = [1 1];
 [fHandle,r] = ndFilter('gaussian',sigma(1));
 
-x = (-5:0.1:4.9)';
+x = (-5:0.01:5)';
 y = ones(numel(x),1);
 binC = createBinCenters(-5,5,10,'offset',0.5);
 
-h = ndHist(x,y,binC,fHandle,r,10);
+h = ndHist(x,y,binC,fHandle,r,'period',10);
 h = h ./ sum(h);
 
 figure;
@@ -16,7 +16,8 @@ bPadding = (binC(end) - binC(1)) / 20;
 axis([binC(1)-bPadding binC(end)+bPadding 0 1]);
 
 binC2 = createBinCenters(-5,5,10,'endpoints',true);
-h2 = ndHist(x,y,binC2,fHandle,r);
+wBin2 = renormWeights('gaussian',sigma(1),-5,5,binC2);
+h2 = ndHist(x,y,binC2,fHandle,r,'wBin',wBin2);
 h2 = h2 ./ sum(h2);
 
 figure;
@@ -30,11 +31,11 @@ Y = ones(size(X,1),1);
 
 dimensions = [10 10];
 [binC3] = createBinCenters([-1,-1],[1,1],dimensions);
-
+wBin3 = renormWeights('gaussian',sigma,[-1,-1],[1,1],binC3);
 
 [fHandle3,r3] = ndFilter('gaussian',sigma);
 
-h3 = ndHist(X,Y,binC3,fHandle3,r3,[0,0]);
+h3 = ndHist(X,Y,binC3,fHandle3,r3,'wBin',wBin3);
 h3 = h3 ./ sum(h3);
 h3_ = reshape(h3,dimensions);
 X_ = reshape(binC3(:,1),dimensions);

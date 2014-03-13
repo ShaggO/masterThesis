@@ -1,4 +1,4 @@
-function Cout = createBinCenters(left, right, count, varargin)
+function binC = createBinCenters(left, right, count, varargin)
 % CREATEBINCENTERS  Generate bin centers for use in histogram
 % Params:
 %   left    Left endpoint of the range
@@ -33,12 +33,12 @@ end
 
 % Create nd-grid for all histogram dimensions
 [C{:}] = ndgrid(C{:});
-Cout = zeros(numel(C{1}),numel(left));
+binC = zeros(numel(C{1}),numel(left));
 
 % Format nd-grid as matrix.
 % Column = dimension, row = bin center
 for i = 1:numel(left)
-    Cout(:,i) = C{i}(:);
+    binC(:,i) = C{i}(:);
 end
 
 end

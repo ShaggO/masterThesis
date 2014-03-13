@@ -32,9 +32,10 @@ Theta = atan2(Iy, Ix);
 M = sigma^2 * sqrt(Ix .^ 2 + Iy .^ 2);
 
 [coordX, coordY] = meshgrid(1:cellSize(2),1:cellSize(1));
-w = spatialWeights([coordX(:) coordY(:)],cellSize,spatialType,spatialSigma);
+wSpatial = spatialWeights([coordX(:) coordY(:)],cellSize,spatialType,spatialSigma);
 [f, r] = ndFilter(binType,binSigma);
-c = createBinCenters(0,2*pi,binCount);
+binC = createBinCenters(0,2*pi,binCount);
+% wRenorm = renormWeights(binType,binSigma,0,2*pi,binC);
 [patchX,patchY] = meshgrid(-(cellSize(1)-1)/2:(cellSize(1)-1)/2,...
     -(cellSize(2)-1)/2:(cellSize-1)/2);
 
@@ -57,9 +58,9 @@ m = interp2(M,Px,Py,'bilinear');
 % Permute theta and m such that first dimension is points within one
 % cell, second dimension is singleton, third dimension is cell number,
 % and fourth dimension is feature number.
-h = ndHist(permute(theta,[2 4 3 1]), ...
-    permute(m,[2 4 3 1]) .* repmat(w,[1 1 size(m,3) size(m,1)]), ...
-    c,f,r,2*pi);
+h = ndHist(permute(theta,[2 4 3 1]), permute(m,[2 4 3 1]) .* ...
+    repmat(wSpatial,[1 1 size(m,3) size(m,1)]), ...
+    binC,f,r,'period',2*pi);
 
 for j = 1:prod(blockSize)
     D(:,(j-1)*binCount+(1:binCount)) = permute(h(:,1,j,:),[4 1 3 2]);
