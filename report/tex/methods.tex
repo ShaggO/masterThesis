@@ -146,14 +146,20 @@ ROC, AUC, recall, 1-precision
 \emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for matching of higher order differential information descriptors.
 
 
-\subsection{Invariants}
+\subsection{Invariants and robustness}
 When describing interest points and their local regions in real world images we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any of these transformations applied, in which case we have a better chance of recognizing the interest point in other images. In this section we will go through a list of possible transformations that we wish for our descriptor to be invariant to.
+
+\todo{Add comment to robustness}
 
 \subsubsection{Translation}
 The first transformation that we describe is translation. Translation occurs when images are taken from different positions and hence the interest points are translated in the image plane. Translation invariance is often achieved by combining a descriptor with an interest point detector which tells the descriptor where the interest points are located spatially in the image. Another approach is to use a sliding window technique in which a detection window is moved around the image trying to find a suitable matching position as in \cite{felzenszwalb2008discriminatively}. Translation invariance is almost always desired.
 
+\todo{Add something about robustness against small translation errors}
+
 \subsubsection{Rotation}
 Rotation naturally occurs when either the camera or the object in question is rotated. Like the translation invariance we often get rotation invariance by combining the descriptor with an interest points detector. The detector often estimates the direction of the interest point based on the direction of the gradient in the interest point, and hence it outputs both translation and rotation invariant points to compute descriptors for. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed. More general descriptors such as SIFT are however rotational invariant
+
+\todo{Write up formulas for coordinates in the original image plane and the rotated plane}
 
 \subsubsection{Illumination}
 Affine illumination model:
@@ -188,6 +194,22 @@ Noget med scalespace \cite{griffin1997scale}.
 noget med ?
 
 \subsection{Histograms}
+
+Notes for our n-dimensional histograms
+
+Locally orderless images (LOI) \cite{koenderink1999structure}.
+
+Each bin is counted using a weighting function (bin filter) on all values centered in the bin with a width of $\sigma$.
+Implemented so far: Gaussian, box, triangle
+
+Renormalization to probability densities by computing the finite integrals of each bin which allows for varying bin sizes. See integral in section about Gaussian filter below.
+
+Likewise possible to make histograms over periodic values (wrap-around over a defined interval).
+
+Spatial weighting on each cell (magnitudes) possible as well as on the entire descriptor window.
+
+Input variables when creating a histogram: inner scale $\sigma$, bin-width $\beta$, outer scale/size of ROI $\alpha$ according to \citet{koenderink1999structure}.
+ 
 
 \subsubsection{Gaussian filter}
 
