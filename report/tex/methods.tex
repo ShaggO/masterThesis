@@ -157,18 +157,18 @@ Rotation naturally occurs when either the camera or the object in question is ro
 
 \subsubsection{Illumination}
 Affine illumination model:
-\begin{align*}
+\begin{align}
   \widetilde{I}(x) &= a I(x)  + b \\
   \frac{\Diff{n} a I(x)}{\Diff x^n} &= a \frac{\Diff{n}I}{ x^n} \\
   S(x,y,\sigma) &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + (L_{xx} - L_{yy})^2}}} \\
   \widetilde{S}(x,y,\sigma) &= \frac{2}{\pi} \Atan{\frac{-a L_{xx} - a L_{yy}}{\sqrt{4(aL_{xy})^2 + (aL_{xx} - aL_{yy})^2}}} \\
   &= \frac{2}{\pi} \Atan{\frac{a (-L_{xx} - L_{yy})}{\sqrt{a^2 \left(4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2 \right)}}} \\
   &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2}}} \\
-\end{align*}
+\end{align}
 
 
 When normalizing k-jet with L2-norm:
-\begin{align*}
+\begin{align}
   \mathcal{J}_k &= \left( \mset{L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
   \widetilde{\mathcal{J}}_k &=\left( \mset{a L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
   \left \| \widetilde{\mathcal{J}}_k \right \|_2 &= \sqrt{\sum_{0 < n+m \leq k} (a L_{x^n y^m})^2} \\
@@ -177,7 +177,7 @@ When normalizing k-jet with L2-norm:
       &= a \left \| \mathcal{J}_k \right \|_2 \\
   \frac{\widetilde{\mathcal{J}}_k}{\left \| \widetilde{\mathcal{J}}_k \right \|_2} &=
       \frac{\mathcal{J}_k}{\left \| \mathcal{J}_k \right \|_2}
-\end{align*}
+\end{align}
 
 By using a small sigma for calculating the derivatives in the jet, we only use a small spatial area for the calculations which minimizes the risk of crossing a shadow edge. By combining multiple jets or shape indices into histograms we are able to calculate a descriptor across a shadow edge but still maintaining illumination invariance.
 
@@ -206,12 +206,12 @@ G(\mathbf{x},\boldsymbol{\sigma})
 \exp\left( -\sum_i \frac{x_i^2}{2 \sigma_i^2} \right)
 \end{align}
 %
-The definite integral of $G(x,\sigma)$ from $a$ to $b$ cannot be expressed by an elementary function. Instead we can use the non-elementary error function, which is defined as $\mathrm{erf}(b) = \frac{2}{\sqrt{\pi}} \int_0^b \exp(-x^2) \,\mathrm dx$. First we show an intermediate result, using the substitution $u = \sqrt{k} x$ so $\mathrm du = \sqrt{k} \mathrm dx$:
+The definite integral of $G(x,\sigma)$ from $a$ to $b$ cannot be expressed by an elementary function. Instead we can use the non-elementary error function, which is defined as $\mathrm{erf}(b) = \frac{2}{\sqrt{\pi}} \int_0^b \exp(-x^2) \,\mathrm dx$ and can be computed by its Taylor series. First we show an intermediate result, using the substitution $u = \sqrt{k} x$ with $\mathrm du = \sqrt{k} \mathrm dx$:
 %
 \begin{align}
 \int_0^b \exp(-k x^2) \,\mathrm dx
 &= \frac{1}{\sqrt{k}} \int_0^{\sqrt{k}b} \exp(-u^2) \,\mathrm du \\
-&= \frac{\sqrt{\pi}}{2} \frac{1}{\sqrt{k}} \mathrm{erf} \left( \sqrt{k} b \right)
+&= \frac{1}{\sqrt{k}} \frac{\sqrt{\pi}}{2} \mathrm{erf} \left( \sqrt{k} b \right)
 \end{align}
 %
 We use this to compute $\int_a^b G(x,\sigma) \,\mathrm dx$:
@@ -233,6 +233,7 @@ The definite integral of $G(\mathbf{x},\boldsymbol{\sigma})$ from $a_i$ to $b_i$
 %
 \begin{align}
 \int_{a_i}^{b_i} \dots \int_{a_n}^{b_n} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_n} \dots d{x_i}
+&= \prod_i \int_{a_i}^{b_i} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_i} \\
 &= \prod_i \frac{1}{2} \left(
 \mathrm{erf} \left( \frac{b_i}{\sqrt{2} \sigma_i} \right) -
 \mathrm{erf} \left( \frac{a_i}{\sqrt{2} \sigma_i} \right)
