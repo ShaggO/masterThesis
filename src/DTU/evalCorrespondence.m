@@ -15,7 +15,7 @@ ScaleMargin=2;              %Margin for change in scale, corrected for distance 
 % Precomputes the quad tree of projected structured light points, for
 % faster computaion later. Loads from file if available.
 strLightDir = 'DTU/results/structuredLight';
-strLightPath = sprintf('%s/set%.2d.mat',strLightDir,match.setNum)
+strLightPath = sprintf('%s/set%.2d.mat',strLightDir,match.setNum);
 if ~exist(strLightDir,'dir')
     mkdir(strLightDir)
 end
