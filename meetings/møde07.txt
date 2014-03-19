@@ -1,0 +1,13 @@
+Noter til møde med Kim d. 19/3
+
+1. Uden interpolering/resize: Hvad gør man med rigtig store sigma?
+	- Vi har det ene ekstrema: Skaler alt. Prøv at ignorere skalering. Evt. kan man lave en mellemting (når vi er oppe i stor nok skala kan vi resize)
+2. Hvad er det næste?
+	- Undgå skalering
+	- HOG normalisering
+	- Shape index
+2a. Teksturer: Multiscale information - kunne måske være godt i object detection.
+3. Hvor meget LOI teori skal vi have med i rapporten?
+4. Alternativer til histogram-baseret approach. (Kim sender note)
+	- Parsens vinduer.
+	- Karakteristiske funktioner i fourier, momenter
