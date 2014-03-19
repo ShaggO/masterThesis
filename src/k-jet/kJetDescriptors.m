@@ -1,4 +1,4 @@
-function [X,D] = getKJetDescriptors(I,F,k,sigma,domain)
+function [X,D] = kJetDescriptors(I,F,k,sigma,domain)
 % GETKJETDESCRIPTORS Compute k-jet descriptors
 
 % assert(size(F,1) > 500 && size(F,1) < 2000, ...

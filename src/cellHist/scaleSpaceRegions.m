@@ -10,21 +10,21 @@ function [Y,W,X] = scaleSpaceRegions(S, sigmaS, F, cellOffsets, type, sigmaFacto
 %   sigmaFactor Variance of filter, which is multiplied by each scale
 %   r           Filter support radius   [1,2]
 % Output:
-%   X           Scale space values      {i}[:,1,c,f]
+%   Y           Scale space values      {i}[:,1,c,f]
 %   W           Spatial weights         [:,1,c,f]
 
 nCells = size(cellOffsets,1);
 minOffset = min(cellOffsets,[],1);
 maxOffset = max(cellOffsets,[],1);
 
-[~,idx] = min(abs(repmat(log2(sigmaS),[size(F,1) 1]) - ...
-    repmat(log2(F(:,3)),[1 size(sigmaS,2)])),[],2);
+[~,idx] = min(abs(repmat(log(sigmaS),[size(F,1) 1]) - ...
+    repmat(log(F(:,3)),[1 size(sigmaS,2)])),[],2);
 P = [(F(:,1:2)-1) ./ repmat(sigmaS(idx)',[1 2]) + 1, F(:,3:end)];
 
 % preallocate relative cell meshgrid
 [cellMeshX, cellMeshY] = meshgrid(1:2*r(1)+1,1:2*r(2)+1);
 
-Y = cell(size(S,1));
+Y = cell(size(S,1),1);
 [Y{:}] = deal(zeros(prod(2*r+1),1,nCells,0));
 W = zeros(prod(2*r+1),1,nCells,0);
 X = zeros(0,size(F,2));

@@ -1,4 +1,4 @@
-function [X,D] = getSiftDescriptors(I,F,colour,debug)
+function [X,D] = siftDescriptors(I,F,colour,debug)
 % Assumes a grayscale image normalized in the [0,255] interval
 
 % disp(['Detected ' num2str(size(F,1)) ' features.'])

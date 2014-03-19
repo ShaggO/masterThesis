@@ -262,6 +262,16 @@ The definite integral of $G(\mathbf{x},\boldsymbol{\sigma})$ from $a_i$ to $b_i$
 \right)
 \end{align}
 %
+\subsection{Descriptor}
+%
+\begin{itemize}
+\item Choose scales based on detected scales: closest powers of 2. Compute x and y-derivative images, and rescale them accordingly.
+\item Compute cell centers for each interest point, extract regions around these centers, and compute spatial weights. Lookup in both scale space images with these region indices.
+\item Compute gradient orientations and magnitudes in resulting cell regions.
+\item Compute smooth histograms of gradient orientations weighted by spatial weights and gradient magnitudes, and normalize.
+\item Concatenate cell histograms for each feature to get the descriptors.
+\end{itemize}
+%
 %\subsection{Sliding window}
 %
 %\subsection{Spatial pooling schemes}
