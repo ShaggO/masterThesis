@@ -1,15 +1,23 @@
-function [] = plotAnalyseMatches(match,t)
-
-I = imread(dtuImagePath(match.setNum,match.imNum,match.liNum));
+function [] = plotAnalyseMatches(match,t, mName)
+% Inputs:
+%   match   Match structure after completed matching
+%   t       threshold between best and 2nd best match
+%   mName   Method name (where to lookup)
+imArgin = {match.setNum, match.imNum, match.liNum};
+I = imread(dtuImagePath(imArgin{:}));
+imRes = load(['DTU/results/' mName '/descriptors_' dtuImageName(imArgin{:}) '.mat']);
+keyRes = load(['DTU/results/' mName '/descriptors_' dtuImageName(match.setNum, 25, match.liNum) '.mat']);
+Ikey = imread(dtuImagePath(match.setNum, 25, match.liNum));
 
 T = [0; sort(match.distRatio,'ascend')];
 
 idx = find(T < t,1,'last');
 
-figure('units','normalized','outerposition',[0 0 1 1])
+f1 = figure('units','normalized','outerposition',[0 0 1 1])
 
 while ~isnan(t)
-    rocAxis = subplot(2,4,1);
+    figure(f1);
+    rocAxis = subplot(2,2,1);
     plot(match.ROC(:,1),match.ROC(:,2),'r-','linewidth',2)
     hold on
     plot(match.ROC(idx,1),match.ROC(idx,2),'kx','linewidth',2,'markersize',15)
@@ -20,7 +28,7 @@ while ~isnan(t)
     axis image
     axis([0 1 0 1])
     
-    prAxis = subplot(2,4,2);
+    prAxis = subplot(2,2,2);
     plot(match.PR(:,1),match.PR(:,2),'r-','linewidth',2)
     hold on
     plot(match.PR(idx,1),match.PR(idx,2),'kx','linewidth',2,'markersize',15)
@@ -31,14 +39,15 @@ while ~isnan(t)
     axis image
     axis([0 1 0 1])
     
-    TPidx = match.distRatio <= t & (match.CorrectMatch == 1);
-    FPidx = match.distRatio <= t & (match.CorrectMatch == -1);
-    UPidx = match.distRatio <= t & (match.CorrectMatch == 0);
-    TNidx = match.distRatio > t & (match.CorrectMatch == -1);
-    FNidx = match.distRatio > t & (match.CorrectMatch == 1);
-    UNidx = match.distRatio > t & (match.CorrectMatch == 0);
+    Pidx = match.distRatio <= t;
+    TPidx = Pidx & (match.CorrectMatch == 1);
+    FPidx = Pidx & (match.CorrectMatch == -1);
+    UPidx = Pidx & (match.CorrectMatch == 0);
+    TNidx = ~Pidx & (match.CorrectMatch == -1);
+    FNidx = ~Pidx & (match.CorrectMatch == 1);
+    UNidx = ~Pidx & (match.CorrectMatch == 0);
     
-    subplot(2,4,5)
+    posMatchAxis = subplot(2,2,3);
     imshow(I)
     hold on
     plot(match.coord(TPidx,1),match.coord(TPidx,2),'g.')
@@ -47,7 +56,7 @@ while ~isnan(t)
     hold off
     title('Classified as positive matches')
     
-    subplot(2,4,6)
+    negMatchAxis =subplot(2,2,4);
     imshow(I)
     hold on
     plot(match.coord(TNidx,1),match.coord(TNidx,2),'g.')
@@ -73,6 +82,76 @@ while ~isnan(t)
             dists = (match.PR(:,1)-i) .^ 2 + (match.PR(:,2)-j) .^ 2;
             [~,idx] = min(dists);
             t = T(idx);
+        elseif any(clickedAxis == [posMatchAxis negMatchAxis])
+            if clickedAxis == posMatchAxis
+                wantedIdx = Pidx;
+            else
+                wantedIdx = ~Pidx;
+            end
+            dists = ones(size(wantedIdx)) * Inf;
+            dists(wantedIdx) = (imRes.X(wantedIdx,1)-i).^2 +...
+                           (imRes.X(wantedIdx,2)-j).^2;
+
+            [~,idx] = min(dists);
+            x = imRes.X(idx,:);
+            d = imRes.D(idx,:);
+            matchIdx = match.matchIdx(idx,:);
+            matchX = keyRes.X(matchIdx,:);
+            matchD = keyRes.D(matchIdx,:);
+            desInd = 1:numel(d);
+
+            % Create new figure showing details about the
+            % chosen match
+            f2 = figure('units','normalized','outerposition',[0 0 1 1]);
+            matchType = 'positive';
+            if ~Pidx(idx)
+                matchType = 'negative';
+            end
+            suptitle(['Matched (' matchType ') descriptors ratio: ' num2str(match.distRatio(idx))]);
+
+            subplot(2,3,1);
+            title('Feature to match');
+            hold on;
+
+            if (Pidx(idx) && match.CorrectMatch(idx) == 1) ...
+                || (~Pidx(idx) && match.CorrectMatch(idx) == -1)
+                color = 'g';
+            elseif match.CorrectMatch(idx) == 0
+                color = 'y';
+            else
+                color = 'r';
+            end
+            plotPatch(I,x,[300 300],color);
+
+            subplot(2,3,2);
+            title('Best matching feature');
+            hold on;
+            plotPatch(Ikey,matchX(1,:),[300 300],color);
+
+            subplot(2,3,3);
+            title('2nd best matching feature');
+            hold on;
+            plotPatch(Ikey,matchX(2,:),[300 300],color);
+
+            subplot(2,3,5);
+            title(['Distance to best match: ' num2str(match.dist(idx,1))]);
+            hold on;
+            plot(desInd,d,'-b');
+            plot(desInd,matchD(1,:),'-r');
+            axis([1 numel(d) 0 max(max(d,matchD(1,:)))]);
+            legend('D','D_1');
+            xlabel('Descriptor index');
+            ylabel('value');
+
+            subplot(2,3,6);
+            title(['Distance to 2nd best match: ' num2str(match.dist(idx,2))]);
+            hold on;
+            plot(desInd,d,'-b');
+            plot(desInd,matchD(2,:),'-r');
+            axis([1 numel(d) 0 max(max(d,matchD(1,:)))]);
+            legend('D','D_2');
+            xlabel('Descriptor index');
+            ylabel('value');
         end
     end
 end
