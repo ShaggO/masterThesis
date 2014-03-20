@@ -38,6 +38,14 @@ switch contentType
         binCArgin = {};
         period = 0;
     case 'go,si'
+        [X,Dgo] = cellHistDescriptors(I,F,'go',scaleBase, ...
+            blockType,blockSize,blockSpacing,spatialType,spatialSigma, ...
+            binType,binSigma(1),binCount(1));
+        [~,Dsi] = cellHistDescriptors(I,F,'si',scaleBase, ...
+            blockType,blockSize,blockSpacing,spatialType,spatialSigma, ...
+            binType,binSigma(2),binCount(2));
+        D = [Dgo Dsi];
+        return
     case 'go-si'
         m = [1 0 2 1 0];
         n = [0 1 0 1 2];
