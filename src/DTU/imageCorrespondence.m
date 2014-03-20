@@ -1,4 +1,8 @@
-function matches = imageCorrespondence(setNum, imNum, liNum, mFunc, mName)
+function matches = imageCorrespondence(setNum, imNum, liNum, mFunc, mName, cache)
+
+if nargin < 6
+    cache = 1;
+end
 
 imNumKey = 25;
 mDir = ['DTU/results/' mName];
@@ -15,7 +19,7 @@ for s = setNum
             match.liNum = liNum(l,:);
             matchPath = [mDir '/matches_' dtuImageName(match.setNum,match.imNum,match.liNum)];
 
-            if exist(matchPath,'file')
+            if exist(matchPath,'file') && cache
                 load(matchPath)
             else
                 [match.coord,D1] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc);

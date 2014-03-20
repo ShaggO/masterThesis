@@ -3,6 +3,7 @@ function [mFunc, mName] = parseMethod(m)
 
 %% Parse detector arguments
 p = inputParser;
+addParameter(p,'cache',1);
 switch m.detector
     case 'vl'
         methods = {'DoG','Hessian','HessianLaplace','HarrisLaplace',...
@@ -30,9 +31,11 @@ switch m.detector
     otherwise
         error('Unrecognized detector!')
 end
+detCache = r.cache;
 
 %% Parse descriptor arguments
 p = inputParser;
+addParameter(p,'cache',1);
 addParameter(p,'debug',0);
 switch m.descriptor
     case 'sift'
@@ -87,6 +90,7 @@ switch m.descriptor
     otherwise
         error('Unrecognized descriptor!')
 end
+desCache = r.cache;
 
 %% Combine names and functions
 if isempty(detName)
@@ -94,7 +98,7 @@ if isempty(detName)
     mFunc = desFunc;
 else
     mName = [detName '_' desName];
-    mFunc = @(I,resDir,imName) methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc);
+    mFunc = @(I,resDir,imName) methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache);
 end
 
 end
@@ -115,15 +119,15 @@ end
 % Local function that combines detector and descriptor.
 % Loading and saving of intermediate results is handled
 % in this function.
-function [X,D] = methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc)
+function [X,D] = methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache)
 detDir = [resDir '/' detName];
 desDir = [detDir '_' desName];
 detPath = [detDir '/features_' imName '.mat'];
 desPath = [desDir '/descriptors_' imName '.mat'];
-if exist(desPath,'file')
+if exist(desPath,'file') && desCache
     load(desPath);
 else
-    if exist(detPath,'file')
+    if exist(detPath,'file') && detCache
         load(detPath);
         disp(['Loaded ' num2str(size(F,1)) ' features.']);
     else

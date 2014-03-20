@@ -24,10 +24,10 @@ switch contentType
         n = [0 1];
         vFunc = @(Y) atan2(Y{2}, Y{1});
         mFunc = @(Y) sqrt(Y{1} .^ 2 + Y{2} .^ 2);
-        left = 0;
-        right = 2*pi;
+        left = -pi;
+        right = pi;
         binCArgin = {};
-        hArgin = {'period',2*pi};
+        period = 2*pi;
     case 'si'
         m = [2 1 0];
         n = [0 1 2];
@@ -36,7 +36,7 @@ switch contentType
         left = -1;
         right = 1;
         binCArgin = {};
-        hArgin = {};
+        period = 0;
     case 'go,si'
     case 'go-si'
         m = [1 0 2 1 0];
@@ -45,16 +45,14 @@ switch contentType
             2/pi*atan2(-Y{3}-Y{5},sqrt(4*Y{4}.^2+(Y{3}-Y{5}).^2))];
         mFunc = @(Y) sqrt(Y{1} .^ 2 + Y{2} .^ 2) .* ...
             sqrt(Y{3}.^2 + 2*Y{4}.^2 + Y{5}.^2);
-        left = [0 -1];
-        right = [2*pi 1];
+        left = [-pi -1];
+        right = [pi 1];
         binCArgin = {};
-        hArgin = {'period',[2*pi 0]};
+        period = [2*pi 0];
     case 'kjet'
 end
 
 I = rgb2gray(im2double(I));
-
-% wRenorm = renormWeights(binType,binSigma,0,2*pi,binC);
 
 % compute scale space images
 minLogScale = log(min(F(:,3)))/log(scaleBase);
@@ -69,10 +67,17 @@ cellOffsets = createCellOffsets(blockType,blockSize,blockSpacing);
 % W = repmat(W,[1 numel(binCount) 1 1]);
 
 % compute histogram
-[binF, binR] = ndFilter(binType,binSigma);
+[binF, binR] = ndFilter(binType,binSigma .* (right-left) ./ binCount);
 binC = createBinCenters(left,right,binCount,binCArgin{:});
-h = ndHist(vFunc(Y),mFunc(Y) .* W,binC,binF,binR,hArgin{:});
+wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
+V = vFunc(Y);
+M = mFunc(Y);
+h = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
 h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
+
+% % plot histogram
+% figure
+% plot([binC'; binC'],[sum(sum(h,3),4)'; zeros(size(binC'))],'b-')
 
 % assemble descriptor
 D = zeros(size(h,4),size(h,1)*size(h,3));

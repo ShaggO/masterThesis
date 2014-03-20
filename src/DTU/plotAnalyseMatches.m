@@ -9,7 +9,7 @@ idx = find(T < t,1,'last');
 figure('units','normalized','outerposition',[0 0 1 1])
 
 while ~isnan(t)
-    rocAxis = subplot(2,2,1);
+    rocAxis = subplot(2,4,1);
     plot(match.ROC(:,1),match.ROC(:,2),'r-','linewidth',2)
     hold on
     plot(match.ROC(idx,1),match.ROC(idx,2),'kx','linewidth',2,'markersize',15)
@@ -20,7 +20,7 @@ while ~isnan(t)
     axis image
     axis([0 1 0 1])
     
-    prAxis = subplot(2,2,2);
+    prAxis = subplot(2,4,2);
     plot(match.PR(:,1),match.PR(:,2),'r-','linewidth',2)
     hold on
     plot(match.PR(idx,1),match.PR(idx,2),'kx','linewidth',2,'markersize',15)
@@ -38,7 +38,7 @@ while ~isnan(t)
     FNidx = match.distRatio > t & (match.CorrectMatch == 1);
     UNidx = match.distRatio > t & (match.CorrectMatch == 0);
     
-    subplot(2,2,3)
+    subplot(2,4,5)
     imshow(I)
     hold on
     plot(match.coord(TPidx,1),match.coord(TPidx,2),'g.')
@@ -47,7 +47,7 @@ while ~isnan(t)
     hold off
     title('Classified as positive matches')
     
-    subplot(2,2,4)
+    subplot(2,4,6)
     imshow(I)
     hold on
     plot(match.coord(TNidx,1),match.coord(TNidx,2),'g.')

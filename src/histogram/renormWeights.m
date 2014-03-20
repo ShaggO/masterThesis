@@ -1,4 +1,4 @@
-function w = renormWeights(type, sigma, left, right, binC)
+function w = renormWeights(type, sigma, left, right, periodic, binC)
 % RENORMWEIGHTS
 % Inputs
 %   type    Filter type: gaussian, box or triangle
@@ -6,6 +6,11 @@ function w = renormWeights(type, sigma, left, right, binC)
 %   left    Left endpoint [1,d]
 %   right   Right endpoint [1,d]
 %   binC    Bin centers [i,d]
+% Output
+%   w       Weights [i,1]
+
+left(periodic) = -Inf;
+right(periodic) = Inf;
 
 Sigma = repmat(sigma,[size(binC,1) 1]);
 A = repmat(left,[size(binC,1) 1]) - binC;
