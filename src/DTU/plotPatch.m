@@ -13,7 +13,7 @@ cutoutX = max(floor(P(1)) + offsetMin(1),1) : min(floor(P(1)) + offsetMax(1),siz
 cutoutY = max(floor(P(2)) + offsetMin(2),1) : min(floor(P(2)) + offsetMax(2),size(I,1));
 
 % compute point coordinates in cut out
-Pnew = -offsetMin + (P - floor(P))
+Pnew = -offsetMin + (P - floor(P));
 
 % Correct when upper and/or left part is thresholdet to be within the image
 Pnew = Pnew - ([cutoutX(end) cutoutY(end)]-1 < pSize) .* (pSize - [cutoutX(end) cutoutY(end)]+1);

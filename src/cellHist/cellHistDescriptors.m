@@ -93,6 +93,7 @@ for j = 1:size(h,3)
     D(:,(j-1)*prod(binCount)+(1:prod(binCount))) = ...
         permute(h(:,1,j,:),[4 1 3 2]);
 end
+%D = D ./ repmat(sum(D,2),[1 size(D,2)]);
 
 % return only coordinates
 X = X(:,1:2);
