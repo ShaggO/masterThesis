@@ -15,7 +15,7 @@ switch m.detector
 
         detName = sprintf('vl-%s-%s-%s',lower(r.Method), ...
             num2str(r.PeakThreshold),num2str(r.EdgeThreshold));
-        detFunc = @(I) vl_covdet(255*rgb2gray(im2single(I)),m.detectorArgs{:})';
+        detFunc = @(I) vl_covdet(255*rgb2gray(single(I)),m.detectorArgs{:})';
     case 'dog'
         % Single scale DoG detector
         addParameter(p,'sigma',1);
@@ -25,7 +25,7 @@ switch m.detector
         
         detName = sprintf('dog-%s-%s-%s', ...
             num2str(r.sigma),num2str(r.k),num2str(r.threshold));
-        detFunc = @(I) dogBlobDetector(rgb2gray(im2double(I)),r.sigma,r.k,r.threshold);
+        detFunc = @(I) dogBlobDetector(rgb2gray(I),r.sigma,r.k,r.threshold);
     case ''
         detName = '';
     otherwise
@@ -35,17 +35,17 @@ detCache = r.cache;
 
 %% Parse descriptor arguments
 p = inputParser;
+colours = {'gray','rgb bin','rgb','opponent','gaussian opponent', ...
+            'invariant','normal'};
 addParameter(p,'cache',1);
 addParameter(p,'debug',0);
+addParameter(p,'colour',colours{1},okArg(colours));
 switch m.descriptor
     case 'sift'
-        colours = {'gray','rgb bin','rgb','opponent','gaussian opponent', ...
-            'invariant','normal'};
-        addOptional(p,'colour',colours{1},okArg(colours));
         r = parseResults(p,m.descriptorArgs);
 
         desName = ['sift-' r.colour];
-        desFunc = @(I,F) siftDescriptors(I,F,r.colour,r.debug);
+        desFunc = @(I,F) siftDescriptors(I,F);
     case 'k-jet'
         domains = {'auto','spatial','fourier'};
         addParameter(p,'k',1);
@@ -53,7 +53,7 @@ switch m.descriptor
         addOptional(p,'domain',domains{1},okArg(domains));
         r = parseResults(p,m.descriptorArgs);
 
-        desName = [num2str(r.k) '-jet-' num2str(r.sigma)];
+        desName = [num2str(r.k) '-jet-' r.colour '-' num2str(r.sigma)];
         desFunc = @(I,F) kJetDescriptors(I,F,r.k,r.sigma,r.domain);
     case 'cellhist'
         bTypes = {'square','polar','concentric polar'};
@@ -70,7 +70,8 @@ switch m.descriptor
         addParameter(p,'binCount',8);
         r = parseResults(p,m.descriptorArgs);
 
-        desName = sprintf('cellhist-%s-%s-%s-%s-%s-%s-%s-%s-%s-%s',...
+        desName = sprintf('cellhist-%s-%s-%s-%s-%s-%s-%s-%s-%s-%s-%s',...
+                    r.colour,...
                     r.contentType,...
                     num2str(r.scaleBase),...
                     r.blockType,...
@@ -87,6 +88,7 @@ switch m.descriptor
     otherwise
         error('Unrecognized descriptor!')
 end
+desFunc = colourDescriptors(desFunc,r.colour);
 desCache = r.cache;
 
 %% Combine names and functions
@@ -95,7 +97,7 @@ if isempty(detName)
     mFunc = desFunc;
 else
     mName = [detName '_' desName];
-    mFunc = @(I,resDir,imName) methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache);
+    mFunc = @(I,resDir,imName) methodFunc(im2double(I),resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache);
 end
 
 end
@@ -114,6 +116,7 @@ r = p.Results;
 end
 
 % Local function that combines detector and descriptor.
+% Assumes double precision image input between 0 and 1.
 % Loading and saving of intermediate results is handled
 % in this function.
 function [X,D] = methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache)

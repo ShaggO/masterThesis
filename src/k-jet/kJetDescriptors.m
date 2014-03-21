@@ -21,7 +21,7 @@ lambda = diag(1 ./ sqrt(diag(lambda)));
 V = V * lambda;
 
 % Compute k-Jets, whitening and L2 normalization
-D = localKJet(rgb2gray(im2double(I)),F,k,sigma,domain);
+D = localKJet(I,F,k,sigma,domain);
 D = D * V;
 D = normalize(D,2);
 

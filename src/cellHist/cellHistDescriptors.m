@@ -60,8 +60,6 @@ switch contentType
     case 'kjet'
 end
 
-I = rgb2gray(im2double(I));
-
 % compute scale space images
 minLogScale = log(min(F(:,3)))/log(scaleBase);
 maxLogScale = log(max(F(:,3)))/log(scaleBase);
