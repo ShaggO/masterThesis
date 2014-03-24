@@ -36,8 +36,9 @@ for i = 1:size(binC,1)
     % Find distances within bin filter support radius
     rMask = all(d <= repmat(r,[sizeX(1) 1 sizeX(3:end)]),2);
     % Compute bin value
-    H(i,1,:,:) = repmat(wBin(i),[1 1 sizeX(3:end)]) .* ...
-        sum(rMask .* wX .* fHandle(d),1); % optimize later!
+    fd = zeros(size(d));
+    fd(rMask) = fHandle(d(rMask));
+    H(i,1,:,:) = repmat(wBin(i),[1 1 sizeX(3:end)]) .* sum(wX .* fd,1);
 end
 
 end
