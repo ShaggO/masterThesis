@@ -32,6 +32,7 @@ function v = boxFilter(sigma,d)
 end
 
 function v = gaussFilter(sigma,d)
+%     disp([nums2str(size(d)) '=' num2str(numel(d))])
     sz = size(d);
     v = 1/((2*pi)^(numel(sigma)/2)*prod(sigma)) * ...
             exp(-sum((d.^2)./(2*repmat(sigma,[sz(1) 1 sz(3:end)])),2));

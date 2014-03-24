@@ -86,13 +86,14 @@ else
     [~,idx] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
                     repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
 
+    X = zeros(0,size(F,2));
     h = zeros(prod(binCount),1,size(cellOffsets,1),0);
     for i = 1:numel(scales)
         disp(['Scale: ' num2str(i) '/' num2str(numel(scales))])
         % Find closest scale for each feature
-        [Y,W,X] = scaleSpaceRegions(S(:,i),scales(i),rescale,F(idx == i,:),cellOffsets, ...
+        [Y,W,XSigma] = scaleSpaceRegions(S(:,i),scales(i),rescale,F(idx == i,:),cellOffsets, ...
             spatialType,spatialSigma,ceil(3*spatialSigma));
-
+        X = [X; XSigma];
         V = vFunc(Y);
         M = mFunc(Y);
         hSigma = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
