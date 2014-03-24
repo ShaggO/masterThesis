@@ -5,8 +5,8 @@ function [] = plotAnalyseMatches(match,t, mName)
 %   mName   Method name (where to lookup)
 imArgin = {match.setNum, match.imNum, match.liNum};
 I = imread(dtuImagePath(imArgin{:}));
-imRes = load(['DTU/results/' mName '/descriptors_' dtuImageName(imArgin{:}) '.mat']);
-keyRes = load(['DTU/results/' mName '/descriptors_' dtuImageName(match.setNum, 25, match.liNum) '.mat']);
+imRes = load(['DTU/results/' mName '/descriptors_' dtuImageName(imArgin{:})]);
+keyRes = load(['DTU/results/' mName '/descriptors_' dtuImageName(match.setNum, 25, match.liNum)]);
 Ikey = imread(dtuImagePath(match.setNum, 25, match.liNum));
 
 T = [0; sort(match.distRatio,'ascend')];

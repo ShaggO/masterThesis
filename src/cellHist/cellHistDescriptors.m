@@ -1,4 +1,4 @@
-function [X,D] = cellHistDescriptors(I,F,contentType,scaleBase, ...
+function [X,D] = cellHistDescriptors(I,F,contentType,scaleBase,rescale,...
     blockType,blockSize,blockSpacing, ...
     spatialType,spatialSigma,binType,binSigma,binCount)
 % GETGHISTDESCRIPTORS Customizable descriptor based on cells of gradient
@@ -9,6 +9,7 @@ function [X,D] = cellHistDescriptors(I,F,contentType,scaleBase, ...
 %   F               Detected features
 %   contentType     Type of content in histograms
 %   scaleBase       Logarithmic base used to approximate scale space scales
+%   rescale          Boolean determining whether to rescale depending on scale or not
 %   blockType       Spatial layout of cells: square or polar
 %   blockSize       Number of cells in x,y or polar,cartesian directions
 %   blockSpacing    Distance between cells
@@ -38,10 +39,10 @@ switch contentType
         binCArgin = {};
         period = 0;
     case 'go,si'
-        [X,Dgo] = cellHistDescriptors(I,F,'go',scaleBase, ...
+        [X,Dgo] = cellHistDescriptors(I,F,'go',scaleBase, rescale, ...
             blockType,blockSize,blockSpacing,spatialType,spatialSigma, ...
             binType,binSigma(1),binCount(1));
-        [~,Dsi] = cellHistDescriptors(I,F,'si',scaleBase, ...
+        [~,Dsi] = cellHistDescriptors(I,F,'si',scaleBase, rescale, ...
             blockType,blockSize,blockSpacing,spatialType,spatialSigma, ...
             binType,binSigma(2),binCount(2));
         D = [Dgo Dsi];
@@ -64,22 +65,43 @@ end
 minLogScale = log(min(F(:,3)))/log(scaleBase);
 maxLogScale = log(max(F(:,3)))/log(scaleBase);
 scales = scaleBase .^ (round(minLogScale) : round(maxLogScale));
-S = dGaussScaleSpace(I,m,n,scales);
+S = dGaussScaleSpace(I,m,n,scales, rescale);
 
-% lookup cells in scale space images
+% Create cell offsets
 cellOffsets = createCellOffsets(blockType,blockSize,blockSpacing);
-[Y,W,X] = scaleSpaceRegions(S,scales,F,cellOffsets, ...
-    spatialType,spatialSigma,ceil(3*spatialSigma));
-% W = repmat(W,[1 numel(binCount) 1 1]);
 
-% compute histogram
+% compute histogram variables
 [binF, binR] = ndFilter(binType,binSigma .* (right-left) ./ binCount);
 binC = createBinCenters(left,right,binCount,binCArgin{:});
 wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
-V = vFunc(Y);
-M = mFunc(Y);
-h = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
+
+if rescale
+    [Y,W,X] = scaleSpaceRegions(S,scales,rescale,F,cellOffsets, ...
+        spatialType,spatialSigma,ceil(3*spatialSigma));
+
+    V = vFunc(Y);
+    M = mFunc(Y);
+    h = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
+else
+    [~,idx] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
+                    repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
+
+    h = zeros(prod(binCount),1,size(cellOffsets,1),0);
+    for i = 1:numel(scales)
+        disp(['Scale: ' num2str(i) '/' num2str(numel(scales))])
+        % Find closest scale for each feature
+        [Y,W,X] = scaleSpaceRegions(S(:,i),scales(i),rescale,F(idx == i,:),cellOffsets, ...
+            spatialType,spatialSigma,ceil(3*spatialSigma));
+
+        V = vFunc(Y);
+        M = mFunc(Y);
+        hSigma = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
+        h = cat(4,h, hSigma);
+    end
+end
+
 h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
+
 
 % % plot histogram
 % figure

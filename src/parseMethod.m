@@ -60,6 +60,7 @@ switch m.descriptor
         fTypes = {'gaussian','triangle','box'};
         addParameter(p,'contentType','go');
         addParameter(p,'scaleBase',2);
+        addParameter(p,'rescale',true);
         addParameter(p,'blockType',fTypes{1},okArg(bTypes));
         addParameter(p,'blockSize',[1 1]);
         addParameter(p,'blockSpacing',[1 1]);
@@ -70,10 +71,11 @@ switch m.descriptor
         addParameter(p,'binCount',8);
         r = parseResults(p,m.descriptorArgs);
 
-        desName = sprintf('cellhist-%s-%s-%s-%s-%s-%s-%s-%s-%s-%s-%s',...
+        desName = sprintf('cellhist-%s-%s-%s-%s-%s-%s-%s-%s-%s-%s-%s-%s',...
                     r.colour,...
                     r.contentType,...
                     num2str(r.scaleBase),...
+                    num2str(r.rescale),...
                     r.blockType,...
                     nums2str(r.blockSize),...
                     nums2str(r.blockSpacing),...
@@ -82,8 +84,8 @@ switch m.descriptor
                     r.binType,...
                     nums2str(r.binSigma),...
                     nums2str(r.binCount));
-        desFunc = @(I,F) cellHistDescriptors(I,F,r.contentType,r.scaleBase, ...
-            r.blockType,r.blockSize,r.blockSpacing, ...
+        desFunc = @(I,F) cellHistDescriptors(I,F,r.contentType, ...
+            r.scaleBase,r.rescale,r.blockType,r.blockSize,r.blockSpacing, ...
             r.spatialType,r.spatialSigma,r.binType,r.binSigma,r.binCount);
     otherwise
         error('Unrecognized descriptor!')
@@ -122,8 +124,8 @@ end
 function [X,D] = methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache)
 detDir = [resDir '/' detName];
 desDir = [detDir '_' desName];
-detPath = [detDir '/features_' imName '.mat'];
-desPath = [desDir '/descriptors_' imName '.mat'];
+detPath = [detDir '/features_' imName];
+desPath = [desDir '/descriptors_' imName];
 if exist(desPath,'file') && desCache
     load(desPath);
     disp(['Loaded ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
@@ -148,7 +150,7 @@ else
         mkdir(desDir);
     end
     save(desPath,'X','D');
-    
+
     disp(['Computed ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
 end
 

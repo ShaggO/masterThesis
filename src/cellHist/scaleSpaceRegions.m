@@ -1,9 +1,10 @@
-function [Y,W,X] = scaleSpaceRegions(S, sigmaS, F, cellOffsets, type, sigmaFactor, r)
+function [Y,W,X] = scaleSpaceRegions(S, sigmaS, rescale, F, cellOffsets, type, sigmaFactor, r)
 %SCALESPACEREGIONS Retrieve values and weights from a scale space sorted
 % into regions
 % Input:
 %   S           Scale space images      {i,j}[:,:]
 %   sigmaS      Scales                  [1,j]
+%   rescale      Whether to rescale depending on scale or not
 %   F           Feature points          [f,3]
 %   cellOffsets Offsets of cell centers [c,2]
 %   type        Type of spatial filter
@@ -14,12 +15,28 @@ function [Y,W,X] = scaleSpaceRegions(S, sigmaS, F, cellOffsets, type, sigmaFacto
 %   W           Spatial weights         [:,1,c,f]
 
 nCells = size(cellOffsets,1);
+
+% Find closest scale for each feature
+[~,idx] = min(abs(repmat(log(sigmaS),[size(F,1) 1]) - ...
+    repmat(log(F(:,3)),[1 size(sigmaS,2)])),[],2);
+
+if rescale
+    P = [(F(:,1:2)-1) ./ repmat(sigmaS(idx)',[1 2]) + 1, F(:,3:end)];
+else
+    % Perform no rescaling. This only occurs with a single scale (sigmaS)
+    assert(numel(sigmaS) == 1,['Cannot create scale space regions for multiple'...
+        'sigmas without rescaling. Call the function multiple times instead.']);
+
+    P = F(:,1:2);
+    cellOffsets = cellOffsets * sigmaS;
+    sigmaFactor = sigmaFactor * sigmaS;
+    r = r * sigmaS;
+end
+
 minOffset = min(cellOffsets,[],1);
 maxOffset = max(cellOffsets,[],1);
 
-[~,idx] = min(abs(repmat(log(sigmaS),[size(F,1) 1]) - ...
-    repmat(log(F(:,3)),[1 size(sigmaS,2)])),[],2);
-P = [(F(:,1:2)-1) ./ repmat(sigmaS(idx)',[1 2]) + 1, F(:,3:end)];
+cellOffsets = repmat(permute(cellOffsets,[3 2 1 4]),[1 1 1 size(F,1)]);
 
 % preallocate relative cell meshgrid
 [cellMeshX, cellMeshY] = meshgrid(1:2*r(1)+1,1:2*r(2)+1);
@@ -44,7 +61,7 @@ for j = 1:numel(sigmaS)
     if nJ > 0
         % compute all cell points
         p = repmat(permute(c(:,1:2),[4 2 3 1]),[1 1 nCells 1]) + ...
-            repmat(permute(cellOffsets,[3 2 1 4]),[1 1 1 nJ]);
+            multIdx(cellOffsets,{':',':',':',idxJ},{':',':',':',edgeFilter});
         pCell = round(p-repmat(r,[1 1 nCells nJ]));
         % compute indices for upper left corner of cells
         pCellIdx = sub2ind(size(S{1,j}),pCell(1,2,:,:),pCell(1,1,:,:));
@@ -61,4 +78,5 @@ for j = 1:numel(sigmaS)
         mu = p-pCell+1;
         W = cat(4,W,spatialWeights(coords,mu,type,sigmaFactor));
     end
+end
 end
