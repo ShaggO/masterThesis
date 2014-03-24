@@ -13,7 +13,7 @@ T = [0; sort(match.distRatio,'ascend')];
 
 idx = find(T < t,1,'last');
 
-f1 = figure('units','normalized','outerposition',[0 0 1 1])
+f1 = figure('units','normalized','outerposition',[0 0 1 1]);
 
 while true
     figure(f1);

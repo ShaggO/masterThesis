@@ -36,7 +36,7 @@ detCache = r.cache;
 %% Parse descriptor arguments
 p = inputParser;
 colours = {'gray','rgb bin','rgb','opponent','gaussian opponent', ...
-            'invariant','normal'};
+            'xyz','perceptual'};
 addParameter(p,'cache',1);
 addParameter(p,'debug',0);
 addParameter(p,'colour',colours{1},okArg(colours));
@@ -126,6 +126,7 @@ detPath = [detDir '/features_' imName '.mat'];
 desPath = [desDir '/descriptors_' imName '.mat'];
 if exist(desPath,'file') && desCache
     load(desPath);
+    disp(['Loaded ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
 else
     if exist(detPath,'file') && detCache
         load(detPath);
@@ -147,6 +148,8 @@ else
         mkdir(desDir);
     end
     save(desPath,'X','D');
+    
+    disp(['Computed ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
 end
 
 end

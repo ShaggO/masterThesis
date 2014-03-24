@@ -28,7 +28,7 @@ end
 function v = boxFilter(sigma,d)
     sz = size(d);
     sigma = repmat(sigma/2,[sz(1) 1 sz(3:end)]);
-    v = prod((d < sigma) + (d == sigma)/2,2);
+    v = prod(d <= sigma,2);
 end
 
 function v = gaussFilter(sigma,d)

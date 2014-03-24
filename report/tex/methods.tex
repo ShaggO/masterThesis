@@ -161,6 +161,51 @@ Rotation naturally occurs when either the camera or the object in question is ro
 
 \todo{Write up formulas for coordinates in the original image plane and the rotated plane}
 
+Let $\widetilde{L}$ be the blurred image $L$ rotated around some point $\mathbf{x}$. 
+\begin{align}
+\nabla^2 L_{ij} &= \nabla_{\mathbf{e}_i} (\nabla_{\mathbf{e}_j} L) \\
+\nabla^2 \widetilde{L}_{ij} &= \nabla_{\mathbf{Re}_i} (\nabla_{\mathbf{Re}_j} L) \\
+\mathbf{R} &= \begin{bmatrix}
+\cos \theta & -\sin \theta \\
+\sin \theta & \cos \theta
+\end{bmatrix} \\
+\mathbf{Re}_x &= \begin{bmatrix}
+\cos \theta \\ \sin \theta
+\end{bmatrix} \\
+\mathbf{Re}_y &= \begin{bmatrix}
+-\sin \theta \\ \cos \theta
+\end{bmatrix} \\
+\nabla^2 \widetilde{L}_{ij}
+&= \nabla_{\mathbf{Re}_i} \left( (\mathbf{Re}_j)^T \nabla L \right) \\
+&= (\mathbf{Re}_j)^T \nabla^2 L (\mathbf{Re}_i) \\
+\widetilde{L}_{xx} &= \cos^2 \theta L_{xx} + 2 \cos \theta \sin \theta L_{xy} + \sin^2 \theta L_{yy} \\
+\widetilde{L}_{yy} &= \sin^2 \theta L_{xx} - 2 \cos \theta \sin \theta L_{xy} + \cos^2 \theta L_{yy} \\
+\widetilde{L}_{xy} &= -\cos \theta \sin \theta L_{xx} + (\cos^2 \theta - \sin^2 \theta) L_{xy} + \cos \theta \sin \theta L_{yy}
+\end{align}
+%
+Numerator $n$:
+%
+\begin{align}
+n &= - \widetilde{L}_{xx} - \widetilde{L}_{yy} \\
+&= -(\cos^2 \theta + \sin^2 \theta)  L_{xx} - (\cos^2 \theta + \sin^2 \theta) L_{yy} \\
+&= -L_{xx} - L_{yy}
+\end{align}
+%
+Denominator $d$ (inside square root):
+%
+\begin{align}
+4(\widetilde{L}_{xy})^2 &= 4(-\cos \theta \sin \theta L_{xx} + (\cos^2 \theta - \sin^2 \theta) L_{xy} + \cos \theta \sin \theta L_{yy})^2 \\
+&= (- \sin 2\theta (L_{xx} - L_{yy}) + 2 \cos 2\theta L_{xy})^2 \\
+(\widetilde{L}_{xx} - \widetilde{L}_{yy})^2 &= ((\cos^2 \theta - \sin^2 \theta) L_{xx} + 4 \cos \theta \sin \theta L_{xy} + (\sin^2 \theta - \cos^2 \theta) L_{yy})^2 \\
+&= (\cos 2\theta (L_{xx} - L_{yy}) + 2 \sin 2\theta L_{xy})^2 \\
+d^2 &= 4(\widetilde{L}_{xy})^2 + (\widetilde{L}_{xx} - \widetilde{L}_{yy})^2 \\
+&= (\sin^2 2\theta - \cos^2 2\theta) (L_{xx} - L_{yy})^2 + 4 (\cos^2 2\theta + \sin^2 2\theta) L_{xy}^2 \\
+&= 4 L_{xy}^2 + (L_{xx} - L_{yy})^2
+\end{align}
+%
+And thus $\widetilde{S}(x,y,\sigma) = S(x,y,\sigma)$.
+%
+
 \subsubsection{Illumination}
 Affine illumination model:
 \begin{align}
@@ -272,6 +317,25 @@ With this definition we disallow arbitrary covariances as it does not make sense
 \item Compute smooth histograms of gradient orientations weighted by spatial weights and gradient magnitudes, and normalize.
 \item Concatenate cell histograms for each feature to get the descriptors.
 \end{itemize}
+%
+List of parameters:
+%
+\begin{itemize}
+\item Colour type: gray, RGB bin, RGB, opponent, or Gaussian opponent
+\item Histogram content type: gradient orientation, shape index, or a combination as a marginal or joint histogram
+\item $\sigma_{\text{scale}}$: scale space exponent
+\item Block type: spatial layout of cells (square, polar or concentric)
+polar
+\item $\mathbf{n}_{\text{block}}$: number of cells in each direction
+\item $\boldsymbol\delta_{\text{block}}$: distance between cells in each direction
+\item Cell filter type: Gaussian, box, or triangle
+\item $\boldsymbol\sigma_{\text{cell}}$: cell filter variance
+\item Bin filter type: Gaussian, box, or triangle
+\item $\boldsymbol\sigma_{\text{bin}}$: bin filter variance
+\item $\mathbf{n}_\text{bin}$: number of bins in each direction
+\end{itemize}
+%
+\subsection{Performance evaluation}
 %
 %\subsection{Sliding window}
 %

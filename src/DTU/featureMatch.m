@@ -8,7 +8,7 @@ dists = zeros(size(D1,1),size(D2,1));
 %     end
 % end
 for i = 1:size(D1,1)
-    dists(i,:) = sum((D2 - repmat(D1(i,:),[size(D2,1) 1])) .^ 2,2);
+    dists(i,:) = sum(abs(D2 - repmat(D1(i,:),[size(D2,1) 1])),2);
 end
 
 [dist, matchIdx] = sort(dists,2);
