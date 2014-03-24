@@ -159,6 +159,8 @@ The first transformation that we describe is translation. Translation occurs whe
 \subsubsection{Rotation}
 Rotation naturally occurs when either the camera or the object in question is rotated. Like the translation invariance we often get rotation invariance by combining the descriptor with an interest points detector. The detector often estimates the direction of the interest point based on the direction of the gradient in the interest point, and hence it outputs both translation and rotation invariant points to compute descriptors for. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed. More general descriptors such as SIFT are however rotational invariant
 
+\todo{Show invariance of shape index}
+
 \todo{Write up formulas for coordinates in the original image plane and the rotated plane}
 
 Let $\widetilde{L}$ be the blurred image $L$ rotated around some point $\mathbf{x}$. 
