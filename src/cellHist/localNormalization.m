@@ -1,4 +1,4 @@
-function Mnorm = localNormalization(M,C,L,type,sigma)
+function Hnorm = localNormalization(H,C,L,type,sigma)
 %LOCALNORMALIZATION Summary of this function goes here
 % Input:
 %   M       Magnitude weights
@@ -7,11 +7,14 @@ function Mnorm = localNormalization(M,C,L,type,sigma)
 %   type    Type of filter: gaussian, box or triangle
 %   sigma   Variance of filter
 
+sizeH = size(H);
+
 [f,~] = ndFilter(type,sigma);
-L = permute(L,[3 2 1]);
-w = f(abs(repmat(C,[1 1 size(L,3)])-repmat(L, [size(C,1) 1 1])))
-s = sum(repmat(M,[1 1 size(L,3)]) .* w,1)
-Mnorm = M .* sum(w ./ repmat(s,[size(C,1) 1 1]),3);
+C = permute(C,[3 2 1]);
+d = f(abs(repmat(C,[size(L,1) 1 1])-repmat(L, [1 1 size(C,3)])));
+d = repmat(d,[1 1 1 sizeH(4:end)]);
+s = sum(repmat(sum(H,1),[size(L,1) 1 1]) .* d,3);
+Hnorm = H .* repmat(sum(d ./ repmat(s,[1 1 size(C,3)]),1),[size(H,1) 1]);
 
 end
 

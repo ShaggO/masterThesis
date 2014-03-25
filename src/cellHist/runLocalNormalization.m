@@ -1,8 +1,10 @@
 clc, clear all
 
-M = ones(16,1);
+H = rand(8,1,16,1);
+% H(:,1,1,1) = 0.1;
 C = createCellOffsets('square',[4 4],[1 1]);
-L = createCellOffsets('square',[4 4],[1 1]);
+L = createCellOffsets('square',[3 3],[1 1]);
 
-Mnorm = localNormalization(M,C,L,'gaussian',[2 2]);
-reshape(Mnorm,[4 4])
+Hnorm = localNormalization(H,C,L,'box',[2 2]);
+reshape(sum(Hnorm,1),[4 4 1])
+sum(Hnorm(:))
