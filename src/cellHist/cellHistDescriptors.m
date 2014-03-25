@@ -61,6 +61,9 @@ switch contentType
     case 'kjet'
 end
 
+% scale binSigma
+binSigma = binSigma .* (right-left) ./ binCount;
+
 % compute scale space images
 minLogScale = log(min(F(:,3)))/log(scaleBase);
 maxLogScale = log(max(F(:,3)))/log(scaleBase);
@@ -71,7 +74,7 @@ S = dGaussScaleSpace(I,m,n,scales, rescale);
 cellOffsets = createCellOffsets(blockType,blockSize,blockSpacing);
 
 % compute histogram variables
-[binF, binR] = ndFilter(binType,binSigma .* (right-left) ./ binCount);
+[binF, binR] = ndFilter(binType,binSigma);
 binC = createBinCenters(left,right,binCount,binCArgin{:});
 wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
 

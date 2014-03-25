@@ -15,10 +15,9 @@ if size(r,1) > size(r,2)
 end
 
 % Step through the angles
-theta = (0:2*pi/180:2*pi)';
+theta = (0:2*pi/360:2*pi)';
 x = repmat(r,[numel(theta) 1]) .* repmat(cos(theta),[1 size(x,2)]) + repmat(x,[numel(theta) 1]);
 y = repmat(r,[numel(theta) 1]) .* repmat(sin(theta),[1 size(x,2)]) + repmat(y,[numel(theta) 1]);
 plot(x,y,['-' color]);
 
 end
-

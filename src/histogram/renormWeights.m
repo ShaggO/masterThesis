@@ -22,11 +22,11 @@ switch type
             erf(A./(sqrt(2)*Sigma))),2);
         
     case 'box'
-        w = 1 ./ prod(min(B,Sigma/2) - max(A,-Sigma/2),2);
+        w = 2 ./ prod(min(B,Sigma) - max(A,-Sigma),2);
         
     case 'triangle'
-        A = max(A,-Sigma);
-        B = min(B,Sigma);
-        w = 1 ./ prod(B .* (1 - B./(2*Sigma)) - A .* (1 + A./(2*Sigma)),2);
+        A = max(A,-2*Sigma);
+        B = min(B,2*Sigma);
+        w = 2 ./ prod(B .* (1 - B./(4*Sigma)) - A .* (1 + A./(4*Sigma)),2);
 end
 end

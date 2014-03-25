@@ -1,6 +1,6 @@
 clc, clear all
 
-setNum = 1:2;
+setNum = 1;
 peakThresholdDog = 10;
 peakThresholdHarris = 2*10^5;
 
