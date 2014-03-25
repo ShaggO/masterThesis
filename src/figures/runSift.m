@@ -5,7 +5,7 @@ axis([-0.5 16.5 -0.5 16.5])
 hold on
 for x = 0:4:12
     for y = 0:4:12
-        rectangle('position',[x y 4 4],'curvature',1);
+        rectangle('position',[x y 4 4]);
     end
 end
 
