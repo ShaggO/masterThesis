@@ -1,0 +1,6 @@
+Noter til det 8. møde med Kim d. 26.03
+
+1.  Generalisering af Shape index til højere orden?
+2.  C-Sift: De afledte \hat{E}_{lambda j} - hvilken sigma skal de beregnes på?
+3.  Lokal normalisering implementation. Konstanter og ligninger.
+
