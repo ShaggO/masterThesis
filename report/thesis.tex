@@ -54,7 +54,7 @@
         \textbf{Comment [\uppercase{#1}\themycomment]:}~#2}
     }
 }
-\IfFileExists{../bibliography.bib}{\addbibresource{../bibliography.bib}}{\addbibresource{../../bibliography.bib}}
+\addbibresource{../bibliography.bib}
 
 \begin{document}
 %% Let the subbibliography be an empty definition
@@ -62,7 +62,7 @@
 
 \maketitle
 
-\subfile{tex/abstract}
+\subfile{abstract}
 
 \setcounter{page}{1}
 \pagenumbering{roman}
@@ -80,11 +80,10 @@
 \setcounter{page}{1}
 \pagenumbering{arabic}
 
-\subfile{tex/introduction}
-\subfile{tex/literature_study}
-\subfile{tex/methods}
+\subfile{introduction}
+\subfile{literature_study}
+\subfile{methods}
 
-%\bibliography{../bibliography}
 \printbibliography
 
 \end{document}

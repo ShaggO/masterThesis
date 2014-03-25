@@ -1,4 +1,4 @@
-\documentclass[../thesis.tex]{subfiles}
+\documentclass[thesis.tex]{subfiles}
 \begin{document}
 
 \section{Methods}
@@ -52,6 +52,10 @@ divided into eight angular cells giving a total of 17 cell bins. The gradient
 orientations are divided into 16 bins giving a histogram of $16 \times 17
 = 272$ bins. This is reduced to 128 dimensions by using the 128 largest
 eigenvectors from PCA on a training dataset.
+
+\begin{figure}[H]
+	\includegraphics[width=0.5\textwidth]{../src/figures/img/gloh.pdf}
+\end{figure}
 
 \subsubsection{DAISY}
 
@@ -242,9 +246,15 @@ noget med ?
 
 \subsection{Histograms}
 
-Notes for our n-dimensional histograms
+Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over areas. Traditionally histograms have been constructed using hard boundaries between bins and with hard boundaries between the histograms of a descriptor such as \citet{lowe2004distinctive} does it in SIFT.\mycomment[MSN]{Should we explain SIFT's approach further?}
 
-Locally orderless images (LOI) \cite{koenderink1999structure}.
+These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries, and hence we here describe our histogram framework in which we are able to produce both ordinary as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
+
+The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms and instead let all values contribute to all bins. The contribution of each value to each bin is dependent of the spatial distance to the cell center, the distance between the value and the bin center (angular distance for GO histograms) and the value weight (typically gradient magnitude for GO histograms).\todo{What about spatial weighting with respect to descriptor center as in SIFT}
+
+Both of these distance weights are simple functions of a distance and hence we are able to compute ordinary histograms by using box functions and smooth histograms by using Gaussian functions.
+
+NOTES:
 
 Each bin is counted using a weighting function (bin filter) on all values centered in the bin with a width of $\sigma$.
 Implemented so far: Gaussian, box, triangle
@@ -256,7 +266,8 @@ Likewise possible to make histograms over periodic values (wrap-around over a de
 Spatial weighting on each cell (magnitudes) possible as well as on the entire descriptor window.
 
 Input variables when creating a histogram: inner scale $\sigma$, bin-width $\beta$, outer scale/size of ROI $\alpha$ according to \citet{koenderink1999structure}.
- 
+
+
 
 \subsubsection{Gaussian filter}
 
@@ -326,6 +337,7 @@ List of parameters:
 \item Colour type: gray, RGB bin, RGB, opponent, or Gaussian opponent
 \item Histogram content type: gradient orientation, shape index, or a combination as a marginal or joint histogram
 \item $\sigma_{\text{scale}}$: scale space exponent
+\item Resize flag: determines if resizing using bicubic interpolation should be performed or if the histograms should be computed using a larger grid instead.
 \item Block type: spatial layout of cells (square, polar or concentric)
 polar
 \item $\mathbf{n}_{\text{block}}$: number of cells in each direction
