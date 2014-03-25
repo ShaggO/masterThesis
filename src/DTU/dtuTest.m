@@ -11,12 +11,13 @@ aucSize = [1 before numel(setNum)];
 
 tic
 for i = 1:numel(method)
-    for j = 1:numel(setNum)
     m = method(i);
-    s = setNum(j);
     [mFunc, mName{i}] = parseMethod(m);
     disp([timestamp() ' Method ' num2str(i) '/' num2str(numel(method)) ': ' mName{i}])
-    matches(i,:,j) = imageCorrespondence(s,imNum,liNum,mFunc,mName{i});
+    for j = 1:numel(setNum)
+        s = setNum(j);
+        disp([timestamp() ' Set ' num2str(j) '/' num2str(numel(setNum))])
+        matches(i,:,j) = imageCorrespondence(s,imNum,liNum,mFunc,mName{i});
     end
 end
 

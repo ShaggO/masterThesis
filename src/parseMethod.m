@@ -36,7 +36,7 @@ detCache = r.cache;
 %% Parse descriptor arguments
 p = inputParser;
 colours = {'gray','rgb bin','rgb','opponent','gaussian opponent', ...
-            'xyz','perceptual'};
+            'c-colour','xyz','perceptual'};
 addParameter(p,'cache',1);
 addParameter(p,'debug',0);
 addParameter(p,'colour',colours{1},okArg(colours));
@@ -99,7 +99,7 @@ if isempty(detName)
     mFunc = desFunc;
 else
     mName = [detName '_' desName];
-    mFunc = @(I,resDir,imName) methodFunc(im2double(I),resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache);
+    mFunc = @(I,resDir,imName) methodFunc(im2single(I),resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache);
 end
 
 end

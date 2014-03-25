@@ -12,4 +12,4 @@ for theta = pi/4:pi/4:2*pi
 end
 
 axis off equal
-saveas(gcf,'img/gloh.pdf')
+saveas(gcf,'figures/img/gloh.pdf')

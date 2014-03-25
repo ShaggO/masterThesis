@@ -82,10 +82,6 @@ if rescale
     V = vFunc(Y);
     M = mFunc(Y);
     h = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
-    localOffsets = createCellOffsets(blockType,blockSize-1,blockSpacing);
-    localType = 'gaussian';
-    localSigma = blockSpacing;
-    h = localNormalization(h,cellOffsets,localOffsets,localType,localSigma);
 else
     [~,idx] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
                     repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
@@ -105,7 +101,13 @@ else
     end
 end
 
-% h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
+% % TODO: create parameters for these somehow
+% localOffsets = createCellOffsets(blockType,blockSize-1,blockSpacing);
+% localType = 'gaussian';
+% localSigma = blockSpacing;
+% h = localNormalization(h,cellOffsets,localOffsets,localType,localSigma);
+
+h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
 
 % % plot histogram
 % figure

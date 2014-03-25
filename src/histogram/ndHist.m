@@ -12,6 +12,7 @@ function [H] = ndHist(x,wX,binC,fHandle,r,varargin)
 %   period  Period of periodic values
 
 sizeX = size(x);
+sizeF = [sizeX(1) 1 sizeX(3:end)];
 
 p = inputParser;
 addOptional(p, 'wBin', ones(size(binC,1),1), @isnumeric);
@@ -22,22 +23,25 @@ period = p.Results.period;
 
 % Precompute variables for use when the histogram is periodic
 periodic = period ~= 0;
-mask = repmat(periodic,[sizeX(1) 1 sizeX(3:end)]);
-pMask = repmat(period(periodic),[sizeX(1) 1 sizeX(3:end)]);
+mask = repmat(periodic,sizeF);
+pMask = repmat(period(periodic),sizeF);
 
 H = zeros([size(binC,1),1,sizeX(3:end)]);
 for i = 1:size(binC,1)
     % Compute distance from all points to bin center
-    d = abs(repmat(binC(i,:),[sizeX(1) 1 sizeX(3:end)]) - x);
+    d = abs(repmat(binC(i,:),sizeF) - x);
     if any(periodic)
         % Consider opposite distance if periodic
         d(mask) = min(d(mask),pMask(:) - d(mask));
     end
     % Find distances within bin filter support radius
-    rMask = all(d <= repmat(r,[sizeX(1) 1 sizeX(3:end)]),2);
+    % note: this mask does not include the second dimension by design
+    rMask = all(d <= repmat(r,sizeF),2);
     % Compute bin value
-    fd = zeros(size(d));
-    fd(rMask) = fHandle(d(rMask));
+    dr = d(permute(repmat(rMask,[1 sizeX(2)]),[2 1 3:numel(sizeX)]));
+    dr = permute(reshape(dr,sizeX(2),[]),[2 1]);
+    fd = zeros(sizeF);
+    fd(rMask) = fHandle(dr);
     H(i,1,:,:) = repmat(wBin(i),[1 1 sizeX(3:end)]) .* sum(wX .* fd,1);
 end
 
