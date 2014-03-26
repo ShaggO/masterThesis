@@ -4,8 +4,15 @@ if nargin < 6
     cache = 1;
 end
 
+% Load paths for the data
+% Loads the following variables:
+%   dtuSavePath
+%   dtuDataPath
+%   dtuDataSet
+load('paths');
+
 imNumKey = 25;
-mDir = ['DTU/results/' mName];
+mDir = [dtuSavePath '/' mName];
 N = numel(setNum)*numel(imNum)*size(liNum,1);
 
 n = 0;
