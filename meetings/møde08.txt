@@ -3,8 +3,20 @@
 1.  Har implementeret både marginale og joint histogrammer for GO og SI. Marginale histogrammer gav bedst resultat?
 2.  Histogrammer over ikke-nedskalerede scale spaces: meget langsomt og lidt bedre resultater.
 3.  Lokal normalisering implementation. Konstanter og ligninger.
-4.  Vi har spatialle vægte baseret på afstand til cellecentre. Hvad med afstand til descriptor centre?
+		Shape index skal måske ikke lokalt normaliseres, men curvedness bruges til vægtning
+		Kig på hvad der sker med curvedness i forhold til multiplikationsfaktoren i den affine transformation. Evt. kig på billeder med varierende lys.
+4.  Vi har spatielle vægte baseret på afstand til cellecentre. Hvad med afstand til descriptor centre?
+		Det giver mening. Vi prøver det.
 5.  Optimering af parametre. Vi har rigtig mange. Automatisk optimeringssystem? Skal datasættet deles op for at undgå overfitting?
 6.  Generalisering af Shape index til højere orden? Histogrammer på k-jets ud fra jet metric?
 7.  Kim's note: hvorfor integrere over f i (4)?
+		For at få alle bidrag. H i denne ligning er en funktion så vi kan få værdien i alle f(r) punkter.
 8.  C-Sift: De afledte \hat{E}_{lambda j} - hvilken sigma skal de beregnes på?
+
+Ekstra punkter:
+1, Fast antal bins men find optimal bin filter sigma - evt. skru på sigma afhængig af antal datapunkter
+2. Ny note fra Kim med skala selektion - kan evt. bruges hvis vi vil lave multiskala-descriptor
+3. Flere detektorscales for samme punkt
+4. Måske kig på peak thresholding i histogrammerne
+5. Send ask.diku.dk login til Kim for at få adgang til image clusteret
+6. Skal snart i gang med den næste applikation for ikke at tune for meget til denne specifikke applikation. Kig på Pascal VOC.
