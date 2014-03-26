@@ -8,7 +8,7 @@ function match = evalCorrespondence(match)
 load('paths');
 
 KeyFrame=25;            %The Key Frame, in all our experiments this is the one used. 
-In3DPath=dtuDataPath '/reconstructions/';  %(relative) path of the structured light scans.
+In3DPath=[dtuDataPath '/reconstructions/'];  %(relative) path of the structured light scans.
 Rad3D=10;               %Size of search cells in the structured light grid.
 StrLBoxPad=3e-3;        %=3mm
 BackProjThresh=5;       %pixels
@@ -21,7 +21,7 @@ ScaleMargin=2;              %Margin for change in scale, corrected for distance 
 
 % Precomputes the quad tree of projected structured light points, for
 % faster computaion later. Loads from file if available.
-strLightDir = dtuSavePath '/structuredLight';
+strLightDir = [dtuSavePath '/structuredLight'];
 strLightPath = sprintf('%s/set%.2d.mat',strLightDir,match.setNum);
 if ~exist(strLightDir,'dir')
     mkdir(strLightDir)
