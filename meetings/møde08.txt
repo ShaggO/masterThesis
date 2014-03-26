@@ -1,10 +1,10 @@
 ﻿Noter til det 8. møde med Kim d. 26.03
 
-1.  Har implementeret både marginale og joint histogrammer for GO og SI. Hvad gav bedst resultat?
+1.  Har implementeret både marginale og joint histogrammer for GO og SI. Marginale histogrammer gav bedst resultat?
 2.  Histogrammer over ikke-nedskalerede scale spaces: meget langsomt og lidt bedre resultater.
 3.  Lokal normalisering implementation. Konstanter og ligninger.
 4.  Vi har spatialle vægte baseret på afstand til cellecentre. Hvad med afstand til descriptor centre?
 5.  Optimering af parametre. Vi har rigtig mange. Automatisk optimeringssystem? Skal datasættet deles op for at undgå overfitting?
-6.  Generalisering af Shape index til højere orden? Histogrammer på k-jets?
-7.  C-Sift: De afledte \hat{E}_{lambda j} - hvilken sigma skal de beregnes på?
-
+6.  Generalisering af Shape index til højere orden? Histogrammer på k-jets ud fra jet metric?
+7.  Kim's note: hvorfor integrere over f i (4)?
+8.  C-Sift: De afledte \hat{E}_{lambda j} - hvilken sigma skal de beregnes på?
