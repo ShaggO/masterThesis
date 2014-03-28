@@ -1,0 +1,140 @@
+\documentclass[thesis.tex]{subfiles}
+\begin{document}
+
+\appendix
+\section*{Appendix}
+\section{Invariants}
+\subsection{Rotation}
+
+Let $\widetilde{L}$ be the blurred image $L$ rotated around some point $\mathbf{x}$ by angle $\theta$. That is, we rotate the original coordinate system axes $\mathbf{e}_x, \mathbf{e}_y$ by multiplying by a rotation matrix $\mathbf{R}$:
+%
+\begin{align}
+\mathbf{R} &= \begin{bmatrix}
+\cos \theta & -\sin \theta \\
+\sin \theta & \cos \theta
+\end{bmatrix} \\
+\mathbf{Re}_x &= \begin{bmatrix}
+\cos \theta \\ \sin \theta
+\end{bmatrix} \\
+\mathbf{Re}_y &= \begin{bmatrix}
+-\sin \theta \\ \cos \theta
+\end{bmatrix}
+\end{align}
+%
+Now the first and second order derivatives can be computed by directional derivatives along the coordinate system axes:
+%
+\begin{align}
+L_i &= \nabla_{\mathbf{e}_i} L \\
+\widetilde{L}_i &= \nabla_{\mathbf{Re}_i} L = (\mathbf{Re}_i)^T \nabla L \\
+\widetilde{L}_x &= \cos \theta L_x + \sin \theta L_y \\
+\widetilde{L}_y &= -\sin \theta L_x + \cos \theta L_y \\
+L_{ij} &= \nabla_{\mathbf{e}_i} (\nabla_{\mathbf{e}_j} L) \\
+\widetilde{L}_{ij} &= \nabla_{\mathbf{Re}_i} (\nabla_{\mathbf{Re}_j} L)
+= \nabla_{\mathbf{Re}_i} \left( (\mathbf{Re}_j)^T \nabla L \right)
+= (\mathbf{Re}_j)^T \nabla^2 L (\mathbf{Re}_i) \\
+\widetilde{L}_{xx} &= \cos^2 \theta L_{xx} + \sin^2 \theta L_{yy} + 2 \cos \theta \sin \theta L_{xy} \\
+&= \cos^2 \theta L_{xx} + \sin^2 \theta L_{yy} + \sin 2\theta L_{xy} \\
+\widetilde{L}_{yy} &= \sin^2 \theta L_{xx} + \cos^2 \theta L_{yy} - 2 \cos \theta \sin \theta L_{xy} \\
+&= \sin^2 \theta L_{xx} + \cos^2 \theta L_{yy} - \sin 2\theta L_{xy} \\
+\widetilde{L}_{xy} &= -\cos \theta \sin \theta L_{xx} + (\cos^2 \theta - \sin^2 \theta) L_{xy} + \cos \theta \sin \theta L_{yy} \\
+&= -\frac12 \sin 2\theta (L_{xx} - L_{yy}) + \cos 2\theta L_{xy}
+\end{align}
+%
+\subsubsection{Gradient orientation}
+%
+First we show an intermediate result using a common tangent identity:
+%
+\begin{align}
+\tan \left( \Atan{\frac{L_y}{L_x}} - \theta \right)
+&= \frac{\tan \left( \Atan{\frac{L_y}{L_x}} \right) - \tan \theta}{1 + \tan \left( \Atan{\frac{L_y}{L_x}} \right) \tan \theta} \\
+&= \frac{\frac{L_y}{L_x} - \frac{\sin \theta}{\cos \theta}}{1 + \frac{L_y}{L_x} \frac{\sin \theta}{\cos \theta}} \\
+&= \frac{\left(\frac{-\sin \theta L_x + \cos \theta L_y}{L_x \cos \theta}\right)}{\left(\frac{\cos \theta L_x + \sin \theta L_y}{L_x \cos \theta}\right)} \\
+&= \frac{-\sin \theta L_x + \cos \theta L_y}{\cos \theta L_x + \sin \theta L_y}
+\end{align}
+%
+We use this to compute $\widetilde{\Theta}$:
+%
+\begin{align}
+\widetilde{\Theta} &= \Atan{\frac{\widetilde{L}_y}{\widetilde{L}_x}} \\
+&= \Atan{\frac{-\sin \theta L_x + \cos \theta L_y}{\cos \theta L_x + \sin \theta L_y}} \\
+&= \Atan{\frac{L_y}{L_x}} - \theta = \Theta - \theta
+\end{align}
+%
+\subsubsection{Gradient magnitude}
+%
+\begin{align}
+\widetilde{M} &= \sigma^2 \sqrt{\widetilde{L}_x^2 + \widetilde{L}_y^2} \\
+&= \sigma^2 \sqrt{(\cos \theta L_x + \sin \theta L_y)^2 + (-\sin \theta L_x + \cos \theta L_y)^2} \\
+&= \sigma^2 \sqrt{L_x^2 + L_y^2} = M
+\end{align}
+%
+\subsubsection{Shape index}
+%
+Define $S_n = -L_{xx} - L_{yy}$ and $S_d = 4 L_{xy}^2 + (L_{xx} - L_{yy})^2$ such that $\widetilde{S} = \frac{2}{\pi} \Atan{S_n/\sqrt{S_d}}$, and equivalently for $\widetilde{S}_n,\widetilde{S}_d$. We show that $\widetilde{S}_n = S_n$ and $\widetilde{S}_d = S_d$:
+%
+\begin{align}
+\widetilde{S}_n &= - \widetilde{L}_{xx} - \widetilde{L}_{yy} \\
+&= -(\cos^2 \theta + \sin^2 \theta)  L_{xx} - (\cos^2 \theta + \sin^2 \theta) L_{yy} \\
+&= -L_{xx} - L_{yy} = S_n \\
+4\widetilde{L}_{xy}^2 &= 4(-\frac12 \sin 2\theta (L_{xx} - L_{yy}) + \cos 2\theta L_{xy})^2 \\
+&= (- \sin 2\theta (L_{xx} - L_{yy}) + 2 \cos 2\theta L_{xy})^2 \\
+(\widetilde{L}_{xx} - \widetilde{L}_{yy})^2 &= ((\cos^2 \theta - \sin^2 \theta) (L_{xx} - L_{yy}) + 2 \sin 2\theta L_{xy})^2 \\
+&= (\cos 2\theta (L_{xx} - L_{yy}) + 2 \sin 2\theta L_{xy})^2 \\
+\widetilde{S}_d &= 4\widetilde{L}_{xy}^2 + (\widetilde{L}_{xx} - \widetilde{L}_{yy})^2 \\
+&= (\sin^2 2\theta - \cos^2 2\theta) (L_{xx} - L_{yy})^2 + 4 (\cos^2 2\theta + \sin^2 2\theta) L_{xy}^2 \\
+&= 4 L_{xy}^2 + (L_{xx} - L_{yy})^2 = S_d
+\end{align}
+%
+And thus $\widetilde{S} = S$.
+%
+\subsubsection{Curvedness}
+%
+\begin{align}
+\widetilde{L}_{xx}^2 + \widetilde{L}_{yy}^2
+&= (\cos^4 \theta + \sin^4 \theta) (L_{xx}^2 + L_{yy}^2) + 2 \sin^2 2\theta L_{xy}^2 \\ &\qquad + \sin^2 2\theta L_{xx} L_{yy} + \sin 4\theta (L_{xx} - L_{yy}) L_{xy} \\
+2 \widetilde{L}_{xy}^2 &= \frac12 \sin^2 2\theta (L_{xx} - L_{yy})^2 + 2 \cos^2 2\theta L_{xy}^2 - \sin 4\theta (L_{xx} - L_{yy}) L_{xy} \\
+\widetilde{L}_{xx}^2 + \widetilde{L}_{yy}^2 + 2 \widetilde{L}_{xy}^2
+&= (\cos^4 \theta + \sin^4 \theta) (L_{xx}^2 + L_{yy}^2) + \sin^2 2\theta L_{xx} L_{yy} \\ &\qquad + \frac12 \sin^2 2\theta (L_{xx} - L_{yy})^2 + 2 L_{xy} \\
+&= (\cos^4 \theta + \sin^4 \theta) (L_{xx}^2 + L_{yy}^2) + \frac12 \sin^2 2\theta (L_{xx}^2 + L_{yy}^2) + 2 L_{xy} \\
+&= (\cos^2 \theta + \sin^2 \theta)^2 (L_{xx}^2 + L_{yy}^2) + 2 L_{xy} \\
+&= L_{xx}^2 + L_{yy}^2 + 2 L_{xy}
+\end{align}
+%
+and thus
+%
+\begin{align}
+\widetilde{C} &= \frac12 \sigma^2 \sqrt{\widetilde{L}_{xx}^2 + 2 \widetilde{L}_{xy}^2 + \widetilde{L}_{yy}^2} = C
+\end{align}
+%
+\subsection{Illumination}
+%
+Affine illumination model:
+%
+\begin{align}
+  \widetilde{I} &= a I  + b \\
+  \widetilde{L}_{x^m y^n} &= a L_{x^m y^n}, \quad m+n > 0 \\
+  \widetilde{\theta} &= \Atan{\frac{a L_y}{a L_x}} = \Atan{\frac{L_y}{L_x}} = \theta \\
+  \widetilde{M} &= \sigma^2 \sqrt{(a L_x)^2 + (a L_y)^2} = \sigma^2 a \sqrt{L_x^2 + L_y^2} = a M \\
+  \widetilde{S} &= \frac{2}{\pi} \Atan{\frac{-a L_{xx} - a L_{yy}}{\sqrt{4(aL_{xy})^2 + (aL_{xx} - aL_{yy})^2}}} \\
+  &= \frac{2}{\pi} \Atan{\frac{a (-L_{xx} - L_{yy})}{\sqrt{a^2 \left(4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2 \right)}}} \\
+  &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2}}} = S \\
+  \widetilde{C} &= \frac12 \sigma^2 \sqrt{(a L_{xx})^2 + 2 (a L_{xy})^2 + (a L_{yy})^2} \\
+  &= \frac12 \sigma^2 a \sqrt{L_{xx}^2 + 2 L_{xy}^2 + L_{yy}^2} = a C
+\end{align}
+%
+When normalizing k-jet with L2-norm:
+%
+\begin{align}
+  \mathcal{J}_k &= \left( \mset{L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
+  \widetilde{\mathcal{J}}_k &=\left( \mset{a L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
+  \left \| \widetilde{\mathcal{J}}_k \right \|_2 &= \sqrt{\sum_{0 < n+m \leq k} (a L_{x^n y^m})^2} \\
+      &= \sqrt{a^2\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
+      &= a\sqrt{\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
+      &= a \left \| \mathcal{J}_k \right \|_2 \\
+  \frac{\widetilde{\mathcal{J}}_k}{\left \| \widetilde{\mathcal{J}}_k \right \|_2} &=
+      \frac{\mathcal{J}_k}{\left \| \mathcal{J}_k \right \|_2}
+\end{align}
+
+%\subbibliography
+
+\end{document}

@@ -53,10 +53,6 @@ orientations are divided into 16 bins giving a histogram of $16 \times 17
 = 272$ bins. This is reduced to 128 dimensions by using the 128 largest
 eigenvectors from PCA on a training dataset.
 
-\begin{figure}[H]
-	\includegraphics[width=0.5\textwidth]{../src/figures/img/gloh.pdf}
-\end{figure}
-
 \subsubsection{DAISY}
 
 The \emph{DAISY} descriptor \cite{tola2008fast} is a descriptor originally
@@ -131,7 +127,7 @@ despite the simplicity of the descriptor.
 
 \subsubsection{Galaxy descriptor}
 
-Another recent higher order descriptor is the galaxy descriptor from Pedersen
+Another recent higher order descriptor is the galaxy descriptor by Pedersen
 et al.\cite{pedersen2013shape}, which is used to predict star-formation
 rate from galaxy texture. The descriptor consists of multi-scale histograms
 of gradient orientation as well as shape index, which is a simple 1D
