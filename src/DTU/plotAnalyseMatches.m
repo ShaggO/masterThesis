@@ -5,17 +5,13 @@ function [] = plotAnalyseMatches(match,t, mName)
 %   mName   Method name (where to lookup)
 
 % Load paths for the data
-% Loads the following variables:
-%   dtuSavePath
-%   dtuDataPath
-%   dtuDataSet
 load('paths');
 
 
 imArgin = {match.setNum, match.imNum, match.liNum};
 I = imread(dtuImagePath(imArgin{:}));
-imRes = load([dtuSavePath '/' mName '/descriptors_' dtuImageName(imArgin{:})]);
-keyRes = load([dtuSavePath '/' mName '/descriptors_' dtuImageName(match.setNum, 25, match.liNum)]);
+imRes = load([dtuResults '/' mName '/descriptors_' dtuImageName(imArgin{:})]);
+keyRes = load([dtuResults '/' mName '/descriptors_' dtuImageName(match.setNum, 25, match.liNum)]);
 Ikey = imread(dtuImagePath(match.setNum, 25, match.liNum));
 
 T = [0; sort(match.distRatio,'ascend')];

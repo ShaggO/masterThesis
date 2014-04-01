@@ -5,14 +5,10 @@ if nargin < 6
 end
 
 % Load paths for the data
-% Loads the following variables:
-%   dtuSavePath
-%   dtuDataPath
-%   dtuDataSet
 load('paths');
 
 imNumKey = 25;
-mDir = [dtuSavePath '/' mName];
+mDir = [dtuResults '/' mName];
 N = numel(setNum)*numel(imNum)*size(liNum,1);
 
 n = 0;
