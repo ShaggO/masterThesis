@@ -12,10 +12,18 @@
 %function [Cam,K,R,T]=GetCam(nCam)
 function [Cam,K,R,T]=GetCam(nCam)
 
-load Calib_Results_11
+
+% Load paths for the data
+% Loads the following variables:
+%   dtuSavePath
+%   dtuDataPath
+%   dtuDataSet
+load('paths');
+
+load([dtuDataPath '/' dtuDataSet '/calibrationFile']);
 
 %eval(sprintf('R=rodrigues(omc_%d);',nCam));    
-eval(sprintf('R=Rc_%d;',nCam));    
+eval(sprintf('R=Rc_%d;',nCam));
 eval(sprintf('T=Tc_%d;',nCam));
 
 K=[fc(1) 0 cc(1);0 fc(2) cc(2);0 0 1 ];
