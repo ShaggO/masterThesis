@@ -1,0 +1,23 @@
+Noter til det 9. møde med Kim d. 1. april
+
+1. Lokalnormalisering over shape index confirmed!
+	Godt arbejde
+
+2. Alternativ lokal normalisering med convolution over magnitudes (locally weighted average)
+	Prøv og se hvad det giver af resultater. Så må vi se hvorfor/hvordan det virker
+	1. Normalisering af hvert histogram
+	2. Grupperinger
+	3. Normalisering med convolution over magnitudes
+	4. Normalisering til unit vector descriptor
+
+3. Diskussion omkring Jet normalization artiklen
+ 3a. Iso- og anisotropiske bidrag - Det isotropiske er Laplace
+ 3b. Benyt l (balance mellem isotropisk og summen af de anisotropiske), a og b (vinkel og balance mellem anisotropiske komponenter)
+	- Kig på grænserne på b og a
+	- Normaliser med jet normen
+	- Tegn orienteringsbilledet vægtet med de forskellige vægtningsfunktioner
+ 3c. Benyt jet metric (j) istedet for euklidisk afstand i hver retning af histogrammet
+
+4. Marco Loog's metric alternativt. (eq. 16)
+
+5. Skriverettigheder til /image/data1/DTURobot3DSet/
