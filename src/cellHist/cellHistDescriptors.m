@@ -9,7 +9,7 @@ function [X,D] = cellHistDescriptors(I,F,contentType,scaleBase,rescale,...
 %   F               Detected features
 %   contentType     Type of content in histograms
 %   scaleBase       Logarithmic base used to approximate scale space scales
-%   rescale         Boolean determining whether to rescale depending on scale or not
+%   rescale         If >0, rescale according to this scale
 %   blockType       Spatial layout of cells: square or polar
 %   blockSize       Number of cells in x,y or polar,cartesian directions
 %   blockSpacing    Distance between cells
@@ -52,7 +52,7 @@ switch contentType
     case 'go-si'
         m = [1 0 2 1 0];
         n = [0 1 0 1 2];
-        vFunc = @(Y,sigma) [diffStructure(Y,'Theta'), diffStructure(Y,'S',2)]
+        vFunc = @(Y,sigma) [diffStructure(Y,'Theta'), diffStructure(Y,'S',2)];
         mFunc = @(Y,sigma) diffStructure(Y,'M') .* diffStructure(Y,'C',2);
         left = [-pi -1];
         right = [pi 1];
@@ -95,7 +95,7 @@ cellOffsets = createCellOffsets(blockType,blockSize,blockSpacing);
 binC = createBinCenters(left,right,binCount,binCArgin{:});
 wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
 
-if rescale
+if rescale > 0
     [Y,W,X] = scaleSpaceRegions(S,scales,rescale,F,cellOffsets,...
         centerType,centerSigma,cellType,cellSigma,ceil(3*cellSigma));
 

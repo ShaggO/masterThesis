@@ -5,7 +5,7 @@ function [Y,W,X] = scaleSpaceRegions(S,sigmaS,rescale,F,cellOffsets,...
 % Input:
 %   S           Scale space images      {i,j}[:,:]
 %   sigmaS      Scales                  [1,j]
-%   rescale     Whether to rescale depending on scale or not
+%   rescale     if >0, rescale according to this scale
 %   F           Feature points          [f,3]
 %   cellOffsets Offsets of cell centers [c,2]
 %   centerType  Type of descriptor center spatial filter
@@ -23,8 +23,8 @@ nCells = size(cellOffsets,1);
 [~,idx] = min(abs(repmat(log(sigmaS),[size(F,1) 1]) - ...
     repmat(log(F(:,3)),[1 size(sigmaS,2)])),[],2);
 
-if rescale
-    P = [(F(:,1:2)-1) ./ repmat(sigmaS(idx)',[1 2]) + 1, F(:,3:end)];
+if rescale > 0
+    P = [(F(:,1:2)-1) * rescale ./ repmat(sigmaS(idx)',[1 2]) + 1, F(:,3:end)];
 else
     % Perform no rescaling. This only occurs with a single scale (sigmaS)
     assert(numel(sigmaS) == 1,['Cannot create scale space regions for multiple'...

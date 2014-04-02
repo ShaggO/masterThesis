@@ -63,7 +63,7 @@ switch m.descriptor
         fTypes = {'gaussian','triangle','box'};
         addParameter(p,'contentType','go');
         addParameter(p,'scaleBase',2);
-        addParameter(p,'rescale',true);
+        addParameter(p,'rescale',1);
         addParameter(p,'blockType',fTypes{1},okArg(bTypes));
         addParameter(p,'blockSize',[1 1]);
         addParameter(p,'blockSpacing',[1 1]);
