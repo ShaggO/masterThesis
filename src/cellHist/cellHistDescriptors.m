@@ -85,9 +85,9 @@ binSigma = binSigma .* (right-left) ./ binCount;
 minLogScale = log(min(F(:,3)))/log(scaleBase);
 maxLogScale = log(max(F(:,3)))/log(scaleBase);
 scales = scaleBase .^ (round(minLogScale) : round(maxLogScale));
-S = dGaussScaleSpace(I,m,n,scales, rescale);
+S = dGaussScaleSpace(I,m,n,scales,rescale);
 
-% Create cell offsets
+% create cell offsets
 cellOffsets = createCellOffsets(blockType,blockSize,blockSpacing);
 
 % compute histogram variables
