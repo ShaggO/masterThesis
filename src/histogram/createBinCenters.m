@@ -17,7 +17,7 @@ offset = p.Results.offset;
 
 assert(~(any(endpoints & offset ~= 0)),'The combination of using the endpoints and offsetting them makes no sense...');
 
-assert(all(left < right),'The left endpoint should be to the left of the right endpoint (left < right).')
+assert(all(left <= right),'The left endpoint should be to the left of the right endpoint (left <= right).')
 
 % Create linear spaces for each histogram dimension
 C = cell(1,numel(left));

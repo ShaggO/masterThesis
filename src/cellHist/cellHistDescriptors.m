@@ -1,6 +1,6 @@
-function [X,D] = cellHistDescriptors(I,F,contentType,scaleBase,rescale,...
-    blockType,blockSize,blockSpacing,centerType,centerSigma,...
-    cellType,cellSigma,binType,binSigma,binCount)
+function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
+    scaleBase,rescale,blockType,blockSize,blockSpacing,...
+    centerType,centerSigma,cellType,cellSigma,binType,binSigma,binCount)
 % GETGHISTDESCRIPTORS Customizable descriptor based on cells of gradient
 % histograms.
 %
@@ -8,6 +8,7 @@ function [X,D] = cellHistDescriptors(I,F,contentType,scaleBase,rescale,...
 %   I               RGB image
 %   F               Detected features
 %   contentType     Type of content in histograms
+%   magnitudeType   Type of magnitude weights on histogram content
 %   scaleBase       Logarithmic base used to approximate scale space scales
 %   rescale         If >0, rescale according to this scale
 %   blockType       Spatial layout of cells: square or polar
@@ -21,71 +22,95 @@ function [X,D] = cellHistDescriptors(I,F,contentType,scaleBase,rescale,...
 %   binSigma        Variance of bin filter
 %   binCount        Number of bins
 
+% set variables depending on type of histogram content
 switch contentType
     case 'go'
-        m = [1 0];
-        n = [0 1];
-        vFunc = @(Y,sigma) diffStructure(Y,'Theta');
-        mFunc = @(Y,sigma) diffStructure(Y,'M');
+        dContent = [1 0; 0 1];
+        vFunc = @(L,sigma) diffStructure('Theta',L);
         left = -pi;
         right = pi;
         binCArgin = {};
         period = 2*pi;
     case 'si'
-        m = [2 1 0];
-        n = [0 1 2];
-        vFunc = @(Y,sigma) diffStructure(Y,'S');
-        mFunc = @(Y,sigma) diffStructure(Y,'C');
+        dContent = [2 0; 1 1; 0 2];
+        vFunc = @(L,sigma) diffStructure('S',L);
         left = -1;
         right = 1;
         binCArgin = {};
         period = 0;
     case 'go,si'
-        [X,Dgo] = cellHistDescriptors(I,F,'go',scaleBase, rescale, ...
+        assert(magnitudeType == 'm,c');
+        [X,Dgo] = cellHistDescriptors(I,F,'go','m',scaleBase,rescale, ...
             blockType,blockSize,blockSpacing,cellType,cellSigma, ...
             binType,binSigma(1),binCount(1));
-        [~,Dsi] = cellHistDescriptors(I,F,'si',scaleBase, rescale, ...
+        [~,Dsi] = cellHistDescriptors(I,F,'si','c',scaleBase,rescale, ...
             blockType,blockSize,blockSpacing,cellType,cellSigma, ...
             binType,binSigma(2),binCount(2));
         D = [Dgo Dsi];
         return
     case 'go-si'
-        m = [1 0 2 1 0];
-        n = [0 1 0 1 2];
-        vFunc = @(Y,sigma) [diffStructure(Y,'Theta'), diffStructure(Y,'S',2)];
-        mFunc = @(Y,sigma) diffStructure(Y,'M') .* diffStructure(Y,'C',2);
+        dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
+        vFunc = @(L,sigma) [diffStructure('Theta',L,sigma) ...
+            diffStructure('S',L,sigma)];
         left = [-pi -1];
         right = [pi 1];
         binCArgin = {};
         period = [2*pi 0];
-    case 'go j2'
-        m = [1 0 2 1 0];
-        n = [0 1 0 1 2];
-        vFunc = @(Y,sigma) diffStructure(Y,'Theta');
-        mFunc = @(Y,sigma) diffStructure(Y,'j2',0,sigma);
-        left = -pi;
-        right = pi;
-        binCArgin = {};
-        period = 2*pi;
-    case 'si j2'
-        m = [1 0 2 1 0];
-        n = [0 1 0 1 2];
-        vFunc = @(Y,sigma) diffStructure(Y,'S',2);
-        mFunc = @(Y,sigma) diffStructure(Y,'j2',0,sigma);
-        left = -1;
-        right = 1;
+    case 'l'
+        dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
+        vFunc = @(L,sigma) diffStructure('l',L,sigma);
+        left = -pi/2;
+        right = pi/2;
         binCArgin = {};
         period = 0;
+    case 'b'
+        dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
+        vFunc = @(L,sigma) diffStructure('b',L,sigma);
+        left = 0;
+        right = pi/2;
+        binCArgin = {};
+        period = 0;
+    case 'a'
+        dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
+        vFunc = @(L,sigma) diffStructure('a',L,sigma);
+        left = 0;
+        right = pi/4;
+        binCArgin = {};
+        period = 0;
+    case '0'
+        dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
+        vFunc = @(L,sigma) zeros(size(nthField(L,1)));
+        left = -1;
+        right = 1; % these shouldn't matter for j2, but can't be identical
+        binCArgin = {};
+        period = 0;
+end
+
+switch magnitudeType
+    case 'm'
+        dMagnitude = [1 0; 0 1];
+        mFunc = @(L,sigma) diffStructure('M',L,sigma);
+    case 'c'
+        dMagnitude = [2 0; 1 1; 0 2];
+        mFunc = @(L,sigma) diffStructure('C',L,sigma);
+    case 'm-c'
+        dMagnitude = [1 0; 0 1; 2 0; 1 1; 0 2];
+        mFunc = @(L,sigma) diffStructure('M',L,sigma) .* ...
+            diffStructure('C',L,sigma);
+    case 'j2'
+        dMagnitude = [1 0; 0 1; 2 0; 1 1; 0 2];
+        mFunc = @(L,sigma) diffStructure('j2',L,sigma);
 end
 
 % scale binSigma
 binSigma = binSigma .* (right-left) ./ binCount;
 
 % compute scale space images
+d = union(dContent,dMagnitude,'rows');
 minLogScale = log(min(F(:,3)))/log(scaleBase);
 maxLogScale = log(max(F(:,3)))/log(scaleBase);
 scales = scaleBase .^ (round(minLogScale) : round(maxLogScale));
-S = dGaussScaleSpace(I,m,n,scales,rescale);
+S = dGaussScaleSpace(I,d,scales,rescale);
 
 % create cell offsets
 cellOffsets = createCellOffsets(blockType,blockSize,blockSpacing);
@@ -96,26 +121,27 @@ binC = createBinCenters(left,right,binCount,binCArgin{:});
 wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
 
 if rescale > 0
-    [Y,W,X] = scaleSpaceRegions(S,scales,rescale,F,cellOffsets,...
+    [L,W,X] = scaleSpaceRegions(S,scales,rescale,F,cellOffsets,...
         centerType,centerSigma,cellType,cellSigma,ceil(3*cellSigma));
-
-    V = vFunc(Y);
-    M = mFunc(Y);
+    sigma = repmat(permute(X(:,3),[4 2 3 1]),multIdx(size(nthField(L,1)),1:3));
+    V = vFunc(L,sigma);
+    M = mFunc(L,sigma);
     h = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
 else
     [~,idx] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
-                    repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
-
+        repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
+    
     X = zeros(0,size(F,2));
     h = zeros(prod(binCount),1,size(cellOffsets,1),0);
     for i = 1:numel(scales)
         disp(['Scale: ' num2str(i) '/' num2str(numel(scales))])
         % Find closest scale for each feature
-        [Y,W,XSigma] = scaleSpaceRegions(S(:,i),scales(i),rescale,F(idx == i,:),cellOffsets,...
+        [L,W,XSigma] = scaleSpaceRegions(S(:,i),scales(i),rescale,F(idx == i,:),cellOffsets,...
             centerType,centerSigma,cellType,cellSigma,ceil(3*cellSigma));
         X = [X; XSigma];
-        V = vFunc(Y);
-        M = mFunc(Y);
+        sigma = repmat(permute(X(:,3),[4 2 3 1]),multIdx(size(nthField(L,1)),1:3));
+        V = vFunc(L,sigma);
+        M = mFunc(L,sigma);
         hSigma = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
         h = cat(4,h, hSigma);
     end
@@ -128,7 +154,7 @@ end
 % h = localNormalization(h,cellOffsets,localOffsets,localType,localSigma);
 
 % Normalize each histogram of each vector
-%h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
+% h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
 
 % % plot histogram
 % figure

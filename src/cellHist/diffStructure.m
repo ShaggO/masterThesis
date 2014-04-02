@@ -1,34 +1,30 @@
-function V = diffStructure(Y,type,o,sigma)
+function V = diffStructure(type,L,sigma)
 % DIFFSTRUCTURE Compute various calculations on differential structure
 
 if nargin < 3
-    o = 0;
-end
-if nargin < 4
     sigma = 0;
 end
 
 switch type
     case 'Theta'
-        V = atan2(Y{o+2},Y{o+1});
+        V = atan2(L.y,L.x);
     case 'M'
-        V = sqrt(Y{o+1} .^ 2 + Y{o+2} .^ 2);
+        V = sqrt(L.x.^2 + L.y.^2);
     case 'S'
-        V = 2/pi*atan2(-Y{o+1}-Y{o+3},sqrt(4*Y{o+2}.^2+(Y{o+1}-Y{o+3}).^2));
+        V = 2/pi*atan2(-L.xx-L.yy,sqrt(4*L.xy.^2+(L.xx-L.yy).^2));
     case 'C'
-        V = sqrt(Y{o+1}.^2 + 2*Y{o+2}.^2 + Y{o+3}.^2);
+        V = sqrt(L.xx.^2 + 2*L.xy.^2 + L.yy.^2);
     case 'l'
-        V = atan(sigma.*(Y{o+3}+Y{o+5}) ./ ...
-                sqrt(4*(Y{o+1}.^2 + Y{o+2}.^2) +...
-                    sigma.^2 .* ((Y{o+3}-Y{o+5}).^2) + 4*Y{o+4}.^2));
+        V = atan(sigma.*(L.xx+L.yy) ./ sqrt(4*(L.x.^2 + L.y.^2) + ...
+                    sigma.^2 .* ((L.xx-L.yy).^2) + 4*L.xy.^2));
     case 'b'
-        V = atan(sigma .* sqrt(((Y{o+3}-Y{o+5}).^2 + 4*Y{o+4}.^2)./...
-                (4 * (Y{o+1}.^2 + Y{o+2}.^2))));
+        V = atan(sigma .* sqrt(((L.xx-L.yy).^2 + 4*L.xy.^2)./...
+                (4 * (L.x.^2 + L.y.^2))));
     case 'a'
-        V = 1/2 * abs(atan(2 * ((Y{o+1}.^2-Y{o+2}.^2).*Y{o+4} + ...
-                Y{o+1}.*Y{o+2}.*(Y{o+3}-Y{o+5})) ./ ((Y{o+1}.^2 - Y{o+2}.^2).* ...
-                (Y{o+3}-Y{o+5}) + 4*Y{o+1}.*Y{o+2}.*Y{o+4})));
+        V = 1/2 * abs(atan(2 * ((L.x.^2-L.y.^2).*L.xy + ...
+                L.x.*L.y.*(L.xx-L.yy)) ./ ((L.x.^2 - L.y.^2).* ...
+                (L.xx-L.yy) + 4*L.x.*L.y.*L.xy)));
     case 'j2'
-        V = sqrt(sigma.^2 .* (Y{o+1}.^2+Y{o+2}.^2) +...
-                1/2 * sigma.^4 .* (Y{o+3}.^2 + 2*Y{o+4}.^2 + Y{o+5}.^2));
+        V = sqrt(sigma.^2 .* (L.x.^2+L.y.^2) + ...
+                1/2 * sigma.^4 .* (L.xx.^2 + 2*L.xy.^2 + L.yy.^2));
 end
