@@ -43,9 +43,10 @@ project_description/project_description.pdf
 
 src/data
 src/DTU/img1200x1600
-src/DTU/reconstructions
+src/DTU/img600x800
 src/DTU/img300x400
-src/DTU/RobotEvalCode/CleanRecon_2009_11_16
-src/DTU/results
+src/DTU/results1200x1600
+src/DTU/results600x800
+src/DTU/reconstructions
 src/octave-workspace
 src/DTU/runCreatePathMat.m
