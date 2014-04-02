@@ -151,6 +151,21 @@ When describing interest points and their local regions in real world images we 
 
 \todo{Add comment to robustness}
 
+\begin{table}
+\centering
+\begin{tabular}{@{}l|ll@{}}
+%\toprule
+Measure & Rotation & Illumination \\
+\hline
+$\Theta$ & $\Theta - \theta $ & $\Theta$ \\
+$M$ & $M$ & $a M$ \\
+$S$ & $S$ & $S$ \\
+$C$ & $C$ & $a C$ \\
+%\bottomrule
+\end{tabular}
+\caption{The transformation of various measures by rotation and illumination. The derivations are included in \cref{apx:image_transformations}}.
+\end{table}
+
 \subsubsection{Translation}
 The first transformation that we describe is translation. Translation occurs when images are taken from different positions and hence the interest points are translated in the image plane. Translation invariance is often achieved by combining a descriptor with an interest point detector which tells the descriptor where the interest points are located spatially in the image. Another approach is to use a sliding window technique in which a detection window is moved around the image trying to find a suitable matching position as in \cite{felzenszwalb2008discriminatively}. Translation invariance is almost always desired.
 
