@@ -25,8 +25,8 @@ switch contentType
     case 'go'
         m = [1 0];
         n = [0 1];
-        vFunc = @(Y) atan2(Y{2}, Y{1});
-        mFunc = @(Y) sqrt(Y{1} .^ 2 + Y{2} .^ 2);
+        vFunc = @(Y,sigma) diffStructure(Y,'Theta');
+        mFunc = @(Y,sigma) diffStructure(Y,'M');
         left = -pi;
         right = pi;
         binCArgin = {};
@@ -34,8 +34,8 @@ switch contentType
     case 'si'
         m = [2 1 0];
         n = [0 1 2];
-        vFunc = @(Y) 2/pi*atan2(-Y{1}-Y{3},sqrt(4*Y{2}.^2+(Y{1}-Y{3}).^2));
-        mFunc = @(Y) sqrt(Y{1}.^2 + 2*Y{2}.^2 + Y{3}.^2);
+        vFunc = @(Y,sigma) diffStructure(Y,'S');
+        mFunc = @(Y,sigma) diffStructure(Y,'C');
         left = -1;
         right = 1;
         binCArgin = {};
@@ -52,15 +52,30 @@ switch contentType
     case 'go-si'
         m = [1 0 2 1 0];
         n = [0 1 0 1 2];
-        vFunc = @(Y) [atan2(Y{2}, Y{1}), ...
-            2/pi*atan2(-Y{3}-Y{5},sqrt(4*Y{4}.^2+(Y{3}-Y{5}).^2))];
-        mFunc = @(Y) sqrt(Y{1} .^ 2 + Y{2} .^ 2) .* ...
-            sqrt(Y{3}.^2 + 2*Y{4}.^2 + Y{5}.^2);
+        vFunc = @(Y,sigma) [diffStructure(Y,'Theta'), diffStructure(Y,'S',2)]
+        mFunc = @(Y,sigma) diffStructure(Y,'M') .* diffStructure(Y,'C',2);
         left = [-pi -1];
         right = [pi 1];
         binCArgin = {};
         period = [2*pi 0];
-    case 'kjet'
+    case 'go j2'
+        m = [1 0 2 1 0];
+        n = [0 1 0 1 2];
+        vFunc = @(Y,sigma) diffStructure(Y,'Theta');
+        mFunc = @(Y,sigma) diffStructure(Y,'j2',0,sigma);
+        left = -pi;
+        right = pi;
+        binCArgin = {};
+        period = 2*pi;
+    case 'si j2'
+        m = [1 0 2 1 0];
+        n = [0 1 0 1 2];
+        vFunc = @(Y,sigma) diffStructure(Y,'S',2);
+        mFunc = @(Y,sigma) diffStructure(Y,'j2',0,sigma);
+        left = -1;
+        right = 1;
+        binCArgin = {};
+        period = 0;
 end
 
 % scale binSigma

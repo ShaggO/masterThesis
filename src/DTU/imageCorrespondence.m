@@ -10,21 +10,24 @@ load('paths');
 imNumKey = 25;
 mDir = [dtuResults '/' mName];
 N = numel(setNum)*numel(imNum)*size(liNum,1);
+imSize = size(imread(dtuImagePath(setNum(1),imNum(1),liNum(1,:))));
 
 n = 0;
 for s = setNum
     for i = imNum
-        for l = size(liNum,1)
+        for l = 1:size(liNum,1)
             n = n + 1;
             disp([timestamp() ' Image ' num2str(n) '/' num2str(N)])
-            match.setNum = s;
-            match.imNum = i;
-            match.liNum = liNum(l,:);
-            matchPath = [mDir '/matches_' dtuImageName(match.setNum,match.imNum,match.liNum)];
+            matchPath = [mDir '/matches_' dtuImageName(s,i,liNum(l,:))];
 
             if exist(matchPath,'file') && cache
                 load(matchPath)
             else
+                match.setNum = s;
+                match.imNum = i;
+                match.liNum = liNum(l,:);
+                match.imSize = imSize;
+
                 [match.coord,D1] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc);
                 [match.coordKey,D2] = dtuFeatures(match.setNum,imNumKey,match.liNum,mFunc);
 

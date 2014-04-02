@@ -25,7 +25,7 @@ end
 if exist(strLightPath,'file')
     load(strLightPath)
 else
-    [Grid3D,Pts]=GenStrLightGrid_v2(KeyFrame,In3DPath,1200,1600,Rad3D,match.setNum);
+    [Grid3D,Pts]=GenStrLightGrid_v2(KeyFrame,In3DPath,match.imSize(1),match.imSize(2),Rad3D,match.setNum);
     save(strLightPath,'Grid3D','Pts')
 end
 

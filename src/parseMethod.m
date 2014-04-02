@@ -10,12 +10,15 @@ switch m.detector
             'MultiscaleHessian','MultiscaleHarris'};
         addParameter(p,'Method',methods{1},okArg(methods));
         addParameter(p,'PeakThreshold',0);
-        addParameter(p,'EdgeThreshold',Inf);
+        addParameter(p,'EdgeThreshold',10)
         r = parseResults(p,m.detectorArgs);
 
         detName = sprintf('vl-%s-%s-%s',lower(r.Method), ...
             num2str(r.PeakThreshold),num2str(r.EdgeThreshold));
-        detFunc = @(I) vl_covdet(255*rgb2gray(single(I)),m.detectorArgs{:})';
+        detFunc = @(I) vl_covdet(255*rgb2gray(single(I)),...
+            'Method',r.Method,...
+            'PeakThreshold',r.PeakThreshold,...
+            'EdgeThreshold',r.EdgeThreshold)';
     case 'dog'
         % Single scale DoG detector
         addParameter(p,'sigma',1);
