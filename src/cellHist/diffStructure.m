@@ -27,4 +27,6 @@ switch type
     case 'j2'
         V = sqrt(sigma.^2 .* (L.x.^2+L.y.^2) + ...
                 1/2 * sigma.^4 .* (L.xx.^2 + 2*L.xy.^2 + L.yy.^2));
+    case 'test'
+        V = sqrt(1/6 * sigma.^6 .* (L.xxx.^2 + 3*L.xxy.^2 + 3*L.xyy.^2 + L.yyy.^2));
 end
