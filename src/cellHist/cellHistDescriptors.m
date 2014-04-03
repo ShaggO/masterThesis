@@ -117,10 +117,6 @@ S = dGaussScaleSpace(I,d,scales,rescale);
 
 S = struct('V',vFunc(S,scales),'M',mFunc(S,scales));
 
-if strcmp(normType,'pixel')
-    [S.M] = multIdx(pixelNormalization({S.M},normFilter,normSigma),':');
-end
-
 % create cell offsets
 cellOffsets = createCellOffsets(gridType,gridSize,gridSpacing);
 
@@ -130,11 +126,23 @@ binC = createBinCenters(left,right,binCount,binCArgin{:});
 wRenorm = renormWeights(binFilter,binSigma,left,right,period > 0,binC);
 
 if rescale > 0
+    if strcmp(normType,'pixel')
+        % Pixel-wise normalization of magnitudes
+        normSigma = repmat(normSigma,[numel(scales) 1]);
+        Mnorm = pixelNormalization({S.M},normFilter,normSigma);
+        [S.M] = Mnorm{:};
+    end
     [L,W,X] = scaleSpaceRegions(S,scales,rescale,F,cellOffsets,...
         centerFilter,centerSigma,cellFilter,cellSigma,ceil(3*cellSigma));
 
     h = ndHist(L.V,L.M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
 else
+    if strcmp(normType,'pixel')
+        % Pixel-wise normalization of magnitudes
+        normSigma = scales' * normSigma;
+        Mnorm = pixelNormalization({S.M},normFilter,normSigma);
+        [S.M] = Mnorm{:};
+    end
     [~,idx] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
         repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
 

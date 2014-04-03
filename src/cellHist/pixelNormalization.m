@@ -3,17 +3,20 @@ function Mnorm = pixelNormalization(M,type,sigma)
 %
 % Inputs:
 %   M       Magnitude/weight {i}[:,:]
-%   type  Filter type
-%   sigma   Filter std.dev.
+%   type    Filter type
+%   sigma   Filter std.dev. [i,2]
 
-[f,r] = ndFilter(type,sigma);
-rMin = floor(-r);
-rMax = ceil(r);
+Mnorm = cell(size(M));
+for i = 1:numel(M)
+    [f,r] = ndFilter(type,sigma(i,:));
+    rMin = floor(-r);
+    rMax = ceil(r);
 
-[X,Y] = meshgrid(rMin(2):rMax(2),rMin(1):rMax(1));
+    [X,Y] = meshgrid(rMin(2):rMax(2),rMin(1):rMax(1));
 
-V = f([X(:),Y(:)]);
-F = reshape(V,size(X));
-Mnorm = M ./ imfilter(M,F,'conv','replicate');
+    V = f([X(:),Y(:)]);
+    F = reshape(V,size(X));
+    Mnorm{i} = M{i} ./ imfilter(M{i},F,'conv','replicate');
+end
 
 end
