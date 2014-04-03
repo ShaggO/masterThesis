@@ -54,7 +54,7 @@ Y = struct(structArgs{:});
 W = zeros(prod(2*cellR+1),1,nCells,0);
 X = zeros(0,size(F,2));
 for j = 1:numel(sigmaS)
-    sizeS = size(multIdx(nthField(S,1),j));
+    sizeS = size(nthField(S(j),1));
     % find cell center points for this scale space
     idxJ = idx == j;
     nJ = sum(idxJ);
@@ -80,7 +80,7 @@ for j = 1:numel(sigmaS)
         cellIdx = repmat(relIdx(:),[1 1 nCells nJ]) + ...
             repmat(pCellIdx,[numel(relIdx) 1 1 1]);
         for i = fieldnames(S)'
-            Y.(char(i)) = cat(4,Y.(char(i)),S.(char(i)){j}(cellIdx));
+            Y.(char(i)) = cat(4,Y.(char(i)),S(j).(char(i))(cellIdx));
         end
         % compute weights
         coords = repmat([cellMeshX(:) cellMeshY(:)], [1 1 nCells nJ]);

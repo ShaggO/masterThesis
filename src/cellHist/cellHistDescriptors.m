@@ -1,6 +1,7 @@
 function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
-    scaleBase,rescale,blockType,blockSize,blockSpacing,...
-    centerType,centerSigma,cellType,cellSigma,binType,binSigma,binCount)
+    scaleBase,rescale,gridType,gridSize,gridSpacing,...
+    centerFilter,centerSigma,cellFilter,cellSigma,...
+    normType,normFilter,normSigma,binFilter,binSigma,binCount)
 % GETGHISTDESCRIPTORS Customizable descriptor based on cells of gradient
 % histograms.
 %
@@ -11,14 +12,14 @@ function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
 %   magnitudeType   Type of magnitude weights on histogram content
 %   scaleBase       Logarithmic base used to approximate scale space scales
 %   rescale         If >0, rescale according to this scale
-%   blockType       Spatial layout of cells: square or polar
-%   blockSize       Number of cells in x,y or polar,cartesian directions
-%   blockSpacing    Distance between cells
-%   centerType      Type of descriptor center spatial filter
+%   gridType        Spatial layout of cells: square or polar
+%   gridSize        Number of cells in x,y or polar,cartesian directions
+%   gridSpacing     Distance between cells
+%   centerFilter    Type of descriptor center spatial filter
 %   centerSigma     Variance of center spatial filter
-%   cellType        Type of cell spatial filter
+%   cellFilter      Type of cell spatial filter
 %   cellSigma       Variance of cell spatial filter
-%   binType         Type of bin center filter
+%   binFilter       Type of bin center filter
 %   binSigma        Variance of bin filter
 %   binCount        Number of bins
 
@@ -41,11 +42,11 @@ switch contentType
     case 'go,si'
         assert(magnitudeType == 'm,c');
         [X,Dgo] = cellHistDescriptors(I,F,'go','m',scaleBase,rescale, ...
-            blockType,blockSize,blockSpacing,cellType,cellSigma, ...
-            binType,binSigma(1),binCount(1));
+            gridType,gridSize,gridSpacing,cellFilter,cellSigma, ...
+            binFilter,binSigma(1),binCount(1));
         [~,Dsi] = cellHistDescriptors(I,F,'si','c',scaleBase,rescale, ...
-            blockType,blockSize,blockSpacing,cellType,cellSigma, ...
-            binType,binSigma(2),binCount(2));
+            gridType,gridSize,gridSpacing,cellFilter,cellSigma, ...
+            binFilter,binSigma(2),binCount(2));
         D = [Dgo Dsi];
         return
     case 'go-si'
@@ -89,14 +90,14 @@ end
 switch magnitudeType
     case 'm'
         dMagnitude = [1 0; 0 1];
-        mFunc = @(L,sigma) diffStructure('M',L,sigma);
+        mFunc = @(L,sigma) diffStructure('M',L);
     case 'c'
         dMagnitude = [2 0; 1 1; 0 2];
-        mFunc = @(L,sigma) diffStructure('C',L,sigma);
+        mFunc = @(L,sigma) diffStructure('C',L);
     case 'm-c'
         dMagnitude = [1 0; 0 1; 2 0; 1 1; 0 2];
-        mFunc = @(L,sigma) diffStructure('M',L,sigma) .* ...
-            diffStructure('C',L,sigma);
+        mFunc = @(L,sigma) diffStructure('M',L) .* ...
+            diffStructure('C',L);
     case 'j2'
         dMagnitude = [1 0; 0 1; 2 0; 1 1; 0 2];
         mFunc = @(L,sigma) diffStructure('j2',L,sigma);
@@ -112,49 +113,60 @@ maxLogScale = log(max(F(:,3)))/log(scaleBase);
 scales = scaleBase .^ (round(minLogScale) : round(maxLogScale));
 S = dGaussScaleSpace(I,d,scales,rescale);
 
+S = struct('V',vFunc(S,scales),'M',mFunc(S,scales));
+
+if strcmp(normType,'pixel')
+    S.M = pixelNormalization(S.M,normFilter,normSigma);
+end
+
 % create cell offsets
-cellOffsets = createCellOffsets(blockType,blockSize,blockSpacing);
+cellOffsets = createCellOffsets(gridType,gridSize,gridSpacing);
 
 % compute histogram variables
-[binF, binR] = ndFilter(binType,binSigma);
+[binF, binR] = ndFilter(binFilter,binSigma);
 binC = createBinCenters(left,right,binCount,binCArgin{:});
-wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
+wRenorm = renormWeights(binFilter,binSigma,left,right,period > 0,binC);
 
 if rescale > 0
     [L,W,X] = scaleSpaceRegions(S,scales,rescale,F,cellOffsets,...
-        centerType,centerSigma,cellType,cellSigma,ceil(3*cellSigma));
-    sigma = repmat(permute(X(:,3),[4 2 3 1]),multIdx(size(nthField(L,1)),1:3));
-    V = vFunc(L,sigma);
-    M = mFunc(L,sigma);
-    h = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
+        centerFilter,centerSigma,cellFilter,cellSigma,ceil(3*cellSigma));
+
+    h = ndHist(L.V,L.M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
 else
     [~,idx] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
         repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
-    
+
     X = zeros(0,size(F,2));
     h = zeros(prod(binCount),1,size(cellOffsets,1),0);
     for i = 1:numel(scales)
         disp(['Scale: ' num2str(i) '/' num2str(numel(scales))])
         % Find closest scale for each feature
-        [L,W,XSigma] = scaleSpaceRegions(S(:,i),scales(i),rescale,F(idx == i,:),cellOffsets,...
-            centerType,centerSigma,cellType,cellSigma,ceil(3*cellSigma));
-        X = [X; XSigma];
-        sigma = repmat(permute(X(:,3),[4 2 3 1]),multIdx(size(nthField(L,1)),1:3));
-        V = vFunc(L,sigma);
-        M = mFunc(L,sigma);
-        hSigma = ndHist(V,M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
+        [L,W,Xi] = scaleSpaceRegions(S(i),scales(i),rescale,F(idx == i,:),cellOffsets,...
+            centerFilter,centerSigma,cellFilter,cellSigma,ceil(3*cellSigma));
+        X = [X; Xi];
+
+        hSigma = ndHist(L.V,L.M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
         h = cat(4,h, hSigma);
     end
 end
 
-% % TODO: create parameters for these somehow
-% localOffsets = createCellOffsets(blockType,blockSize-1,blockSpacing);
-% localType = 'gaussian';
-% localSigma = blockSpacing;
-% h = localNormalization(h,cellOffsets,localOffsets,localType,localSigma);
+% Normalizations
+if strcmp(normType,'cell')
+    % Normalize each histogram of each vector
+    h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
+elseif strcmp(normType,'block')
+    % Block normalization
+    switch gridType
+    case 'square'
+        localOffsets = createCellOffsets(gridType,gridSize-1,gridSpacing);
+    case 'polar'
+        localOffsets = createCellOffsets(gridType,gridSize - [0 1],gridSpacing);
+    case 'concentric polar'
+        localOffsets = createCellOffsets(gridType,gridSize - [0 1],gridSpacing);
+    end
 
-% Normalize each histogram of each vector
-% h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
+    h = blockNormalization(h,cellOffsets,localOffsets,normFilter,normSigma);
+end
 
 % % plot histogram
 % figure

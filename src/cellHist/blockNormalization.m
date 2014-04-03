@@ -1,5 +1,5 @@
-function Hnorm = localNormalization(H,C,L,type,sigma)
-%LOCALNORMALIZATION Summary of this function goes here
+function Hnorm = blockNormalization(H,C,L,type,sigma)
+%BLOCKNORMALIZATION Summary of this function goes here
 % Input:
 %   M       Magnitude weights
 %   C       Cell offsets

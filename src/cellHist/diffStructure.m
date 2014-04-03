@@ -5,26 +5,31 @@ if nargin < 3
     sigma = 0;
 end
 
+V = cell(1,numel(L));
+
+for i = 1:numel(L)
 switch type
     case 'Theta'
-        V = atan2(L.y,L.x);
+        V{i} = atan2(L(i).y,L(i).x);
     case 'M'
-        V = sqrt(L.x.^2 + L.y.^2);
+        V{i} = sqrt((L(i).x).^2 + (L(i).y).^2);
     case 'S'
-        V = 2/pi*atan2(-L.xx-L.yy,sqrt(4*L.xy.^2+(L.xx-L.yy).^2));
+        V{i} = 2/pi*atan2(-L(i).xx-L(i).yy,sqrt(4*L(i).xy.^2+(L(i).xx-L(i).yy).^2));
     case 'C'
-        V = sqrt(L.xx.^2 + 2*L.xy.^2 + L.yy.^2);
+        V{i} = sqrt(L(i).xx.^2 + 2*L(i).xy.^2 + L(i).yy.^2);
     case 'l'
-        V = atan(sigma.*(L.xx+L.yy) ./ sqrt(4*(L.x.^2 + L.y.^2) + ...
-                    sigma.^2 .* ((L.xx-L.yy).^2) + 4*L.xy.^2));
+        V{i} = atan(sigma(i)*(L(i).xx+L(i).yy) ./ sqrt(4*(L(i).x.^2 + L(i).y.^2) + ...
+                    sigma(i)^2 .* ((L(i).xx-L(i).yy).^2) + 4*L(i).xy.^2));
     case 'b'
-        V = atan(sigma .* sqrt(((L.xx-L.yy).^2 + 4*L.xy.^2)./...
-                (4 * (L.x.^2 + L.y.^2))));
+        V{i} = atan(sigma(i)* sqrt(((L(i).xx-L(i).yy).^2 + 4*L(i).xy.^2)./...
+                (4 * (L(i).x.^2 + L(i).y.^2))));
     case 'a'
-        V = 1/2 * abs(atan(2 * ((L.x.^2-L.y.^2).*L.xy + ...
-                L.x.*L.y.*(L.xx-L.yy)) ./ ((L.x.^2 - L.y.^2).* ...
-                (L.xx-L.yy) + 4*L.x.*L.y.*L.xy)));
+        V{i} = 1/2 * abs(atan(2 * ((L(i).x.^2-L(i).y.^2).*L(i).xy + ...
+                L(i).x.*L(i).y.*(L(i).xx-L(i).yy)) ./ ((L(i).x.^2 - L(i).y.^2).* ...
+                (L(i).xx-L(i).yy) + 4*L(i).x.*L(i).y.*L(i).xy)));
     case 'j2'
-        V = sqrt(sigma.^2 .* (L.x.^2+L.y.^2) + ...
-                1/2 * sigma.^4 .* (L.xx.^2 + 2*L.xy.^2 + L.yy.^2));
+        V{i} = sqrt(sigma(i)^2 .* (L(i).x.^2+L(i).y.^2) + ...
+                1/2 * sigma(i)^4 .* (L(i).xx.^2 + 2*L(i).xy.^2 + L(i).yy.^2));
+end
+
 end

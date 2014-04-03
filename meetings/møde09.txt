@@ -5,9 +5,9 @@ Noter til det 9. møde med Kim d. 1. april
 
 2. Alternativ lokal normalisering med convolution over magnitudes (locally weighted average)
 	Prøv og se hvad det giver af resultater. Så må vi se hvorfor/hvordan det virker
-	1. Normalisering af hvert histogram
-	2. Grupperinger
-	3. Normalisering med convolution over magnitudes
+	1. Normalisering af hvert histogram parametre: ingen
+	2. Grupperinger (HOG) parametre: type, sigma
+	3. Normalisering med convolution over magnitudes, parametre: type, sigma
 	4. Normalisering til unit vector descriptor
 
 3. Diskussion omkring Jet normalization artiklen
