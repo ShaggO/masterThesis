@@ -110,9 +110,7 @@ binSigma = binSigma .* (right-left) ./ binCount;
 
 % compute scale space images
 d = union(dContent,dMagnitude,'rows');
-minLogScale = log(min(F(:,3)))/log(scaleBase);
-maxLogScale = log(max(F(:,3)))/log(scaleBase);
-scales = scaleBase .^ (round(minLogScale) : round(maxLogScale));
+scales = approxScales(F(:,3),scaleBase);
 S = dGaussScaleSpace(I,d,scales,rescale);
 
 S = struct('V',vFunc(S,scales),'M',mFunc(S,scales));
@@ -166,15 +164,7 @@ if strcmp(normType,'cell')
     h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
 elseif strcmp(normType,'block')
     % Block normalization
-    switch gridType
-    case 'square'
-        localOffsets = createCellOffsets(gridType,gridSize-1,gridSpacing);
-    case 'polar'
-        localOffsets = createCellOffsets(gridType,gridSize - [0 1],gridSpacing);
-    case 'concentric polar'
-        localOffsets = createCellOffsets(gridType,gridSize - [0 1],gridSpacing);
-    end
-
+    localOffsets = createCellOffsets(gridType,gridSize,gridSpacing,true);
     h = blockNormalization(h,cellOffsets,localOffsets,normFilter,normSigma);
 end
 
