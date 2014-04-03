@@ -118,7 +118,7 @@ S = dGaussScaleSpace(I,d,scales,rescale);
 S = struct('V',vFunc(S,scales),'M',mFunc(S,scales));
 
 if strcmp(normType,'pixel')
-    S.M = pixelNormalization(S.M,normFilter,normSigma);
+    [S.M] = multIdx(pixelNormalization({S.M},normFilter,normSigma),':');
 end
 
 % create cell offsets

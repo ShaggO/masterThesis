@@ -3,7 +3,7 @@ function [] = drawBinFilters(binType,binSigma,left,right,binCount,binCArgin,peri
 % scale binSigma
 binSigma = binSigma .* (right-left) ./ binCount;
 
-[binF, binR] = ndFilter(binType,binSigma);
+[binF, ~] = ndFilter(binType,binSigma);
 binC = createBinCenters(left,right,binCount,binCArgin{:});
 wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
 

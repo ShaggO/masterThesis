@@ -6,7 +6,7 @@ function [f,r] = ndFilter(type, sigma)
 switch type
     case 'gaussian'
         f = @(d)gaussFilter(sigma,d);
-        r = 6*sigma;
+        r = 3*sigma;
 
     case 'box'
         f = @(d)boxFilter(sigma,d);
