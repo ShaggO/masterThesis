@@ -3,18 +3,10 @@ function x = multIdx(x,varargin)
 
 for i = 1:numel(varargin)
     idx = varargin{i};
-    if iscell(x)
-        if iscell(idx)
-            x = x{idx{:}};
-        else
-            x = x{idx};
-        end
+    if iscell(idx)
+        x = x(idx{:});
     else
-        if iscell(idx)
-            x = x(idx{:});
-        else
-            x = x(idx);
-        end
+        x = x(idx);
     end
 end
 
