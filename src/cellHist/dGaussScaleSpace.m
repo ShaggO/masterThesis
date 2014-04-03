@@ -13,19 +13,19 @@ function S = dGaussScaleSpace(I, d, sigma, rescale)
 fd = cell(size(d,1),1);
 for i = 1:size(d,1)
     fd{i} = [repmat('x',[1 d(i,1)]) repmat('y',[1 d(i,2)])];
-    S.(fd{i}) = cell(numel(sigma),1);
 end
-% temp = cell(numel(sigma),1);
-% structArgs = interweave(fd,repmat(temp,[size(d,1) 1]))
-% S = struct(structArgs{:});
+% Initialize structure of derivatives
+temp = {cell(numel(sigma),1)};
+structArgs = interweave(fd,repmat(temp,[size(d,1) 1]));
+S = struct(structArgs{:});
 
 for j = 1:numel(sigma)
     hsize = ceil(6*sigma(j));
     for i = 1:size(d,1)
-        S.(fd{i}){j} = imfilter(I,dGauss2d(d(i,1),d(i,2),hsize,sigma(j)), ...
+        S(j).(fd{i})  = imfilter(I,dGauss2d(d(i,1),d(i,2),hsize,sigma(j)), ...
             'replicate','conv');
         if rescale > 0
-            S.(fd{i}){j} = imresize(S.(fd{i}){j},rescale/sigma(j));
+            S(j).(fd{i}) = imresize(S(j).(fd{i}),rescale/sigma(j));
         end
     end
 end
