@@ -27,14 +27,14 @@ function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
 switch contentType
     case 'go'
         dContent = [1 0; 0 1];
-        vFunc = @(L,sigma) diffStructure('Theta',L);
+        vFunc = @(L,s) diffStructure('Theta',L,s);
         left = -pi;
         right = pi;
         binCArgin = {};
         period = 2*pi;
     case 'si'
         dContent = [2 0; 1 1; 0 2];
-        vFunc = @(L,sigma) diffStructure('S',L);
+        vFunc = @(L,s) diffStructure('S',L,s);
         left = -1;
         right = 1;
         binCArgin = {};
@@ -51,36 +51,36 @@ switch contentType
         return
     case 'go-si'
         dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
-        vFunc = @(L,sigma) [diffStructure('Theta',L,sigma) ...
-            diffStructure('S',L,sigma)];
+        vFunc = @(L,s) [diffStructure('Theta',L,s) ...
+            diffStructure('S',L,s)];
         left = [-pi -1];
         right = [pi 1];
         binCArgin = {};
         period = [2*pi 0];
     case 'l'
         dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
-        vFunc = @(L,sigma) diffStructure('l',L,sigma);
+        vFunc = @(L,s) diffStructure('l',L,s);
         left = -pi/2;
         right = pi/2;
         binCArgin = {};
         period = 0;
     case 'b'
         dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
-        vFunc = @(L,sigma) diffStructure('b',L,sigma);
+        vFunc = @(L,s) diffStructure('b',L,s);
         left = 0;
         right = pi/2;
         binCArgin = {};
         period = 0;
     case 'a'
         dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
-        vFunc = @(L,sigma) diffStructure('a',L,sigma);
+        vFunc = @(L,s) diffStructure('a',L,s);
         left = 0;
         right = pi/4;
         binCArgin = {};
         period = 0;
     case '0'
-        dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
-        vFunc = @(L,sigma) zeros(size(nthField(L,1)));
+        dContent = [1 0];
+        vFunc = @(L,s) diffStructure('0',L,s);
         left = -1;
         right = 1; % these shouldn't matter for j2, but can't be identical
         binCArgin = {};
@@ -90,17 +90,19 @@ end
 switch magnitudeType
     case 'm'
         dMagnitude = [1 0; 0 1];
-        mFunc = @(L,sigma) diffStructure('M',L);
+        mFunc = @(L,s) diffStructure('M',L,s);
     case 'c'
         dMagnitude = [2 0; 1 1; 0 2];
-        mFunc = @(L,sigma) diffStructure('C',L);
+        mFunc = @(L,s) diffStructure('C',L,s);
     case 'm-c'
         dMagnitude = [1 0; 0 1; 2 0; 1 1; 0 2];
-        mFunc = @(L,sigma) diffStructure('M',L) .* ...
-            diffStructure('C',L);
+        mFunc = @(L,s) diffStructure('M',L,s) .* diffStructure('C',L,s);
     case 'j2'
         dMagnitude = [1 0; 0 1; 2 0; 1 1; 0 2];
-        mFunc = @(L,sigma) diffStructure('j2',L,sigma);
+        mFunc = @(L,s) diffStructure('j2',L,s);
+    case '1'
+        dMagnitude = [1 0];
+        mFunc = @(L,s) diffStructure('1',L,s);
 end
 
 % scale binSigma

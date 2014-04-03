@@ -1,10 +1,6 @@
 function V = diffStructure(type,LS,sigmaS)
 % DIFFSTRUCTURE Compute various calculations on differential structure
 
-if nargin < 3
-    sigmaS = 0;
-end
-
 V = cell(1,numel(LS));
 
 for i = 1:numel(LS)
@@ -32,7 +28,11 @@ for i = 1:numel(LS)
         case 'j2'
             V{i} = sqrt(s^2 .* (L.x.^2+L.y.^2) + ...
                 1/2 * s^4 .* (L.xx.^2 + 2*L.xy.^2 + L.yy.^2));
+        case '0'
+            V{i} = zeros(size(nthField(L,1)));
+        case '1'
+            V{i} = ones(size(nthField(L,1)));
         case 'test'
             V{i} = sqrt(1/6 * s.^6 .* (L.xxx.^2 + 3*L.xxy.^2 + 3*L.xyy.^2 + L.yyy.^2));
-    end 
+    end
 end
