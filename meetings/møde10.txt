@@ -1,0 +1,5 @@
+Noter til det 10. møde med Kim og Sune d. 8. april
+
+1. Parameteroptimering på alternativt datasæt for at undgå overfitting: Oxford måske?
+    - Det bliver heller ikke nær så tungt så.
+2. 

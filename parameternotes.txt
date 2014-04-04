@@ -1,0 +1,37 @@
+Parametre:
+
+Typer der vælges og derefter optimeres andre parametre på
+1. colour
+2. contentType
+3. magnitudeType
+13. normType
+
+
+4. scaleBase - sættes efter detektor (giver måske ikke mening at optimere pt.)
+
+
+5. rescale - uafhængig. Ikke automatisk optimering
+
+Samlet optimering ud fra predefinerede muligheder:
+	[square,1-5,
+6. gridType
+7. gridSize
+
+8. gridSpacing
+10. centerSigma (relative to gridSize*gridSpacing/2)
+12. cellSigma (relative to gridSpacing/2)
+
+TODO: Lav gridSpacing om til gridRadius
+
+
+17. binSigma (relative to content range/(2*binCount))
+18. binCount
+
+
+15. normSigma
+
+Filtre - alle sættes til Gaussian men tests kan også udføres på box og triangle
+9.  centerFilter
+11. cellFilter
+14. normFilter
+16. binFilter
