@@ -1,5 +1,5 @@
 function [gridSpacing,centerSigma,cellSigma,binSigma,normSigma] = ...
-    scaleParameters(rescale,gridType,gridSize,gridSpacing,centerSigma,cellSigma,...
+    scaleParameters(rescale,gridType,gridSize,gridRadius,centerSigma,cellSigma,...
     binSigma,binCount,normType,normSigma,left,right)
 %SCALEPARAMETERS Scale parameters and interest points based on relative
 %definitions and rescale factor
@@ -7,14 +7,15 @@ function [gridSpacing,centerSigma,cellSigma,binSigma,normSigma] = ...
 % Relative definitions
 switch gridType
     case 'square'
-        centerSigma = centerSigma .* gridSize .* gridSpacing / 2;
-    otherwise
-        centerSigma = centerSigma * gridSize(2) * gridSpacing / 2;
+        gridSpacing = 2*gridRadius ./ gridSize;
+    otherwise % polar or concentric polar
+        gridSpacing = 2*gridRadius ./ (2*gridSize(2)+1);
 end
-cellSigma = cellSigma .* gridSpacing / 2;
+centerSigma = centerSigma * gridRadius;
+cellSigma = cellSigma * gridSpacing/2;
 binSigma = binSigma .* (right-left) ./ (2*binCount);
 if strcmp(normType,'block')
-    normSigma = normSigma .* gridSpacing / 2;
+    normSigma = normSigma .* gridRadius/2;
 end
 
 % Rescale factor

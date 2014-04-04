@@ -1,4 +1,4 @@
-Parametre:
+﻿Parametre:
 
 Typer der vælges og derefter optimeres andre parametre på
 1. colour
@@ -17,9 +17,9 @@ Samlet optimering ud fra predefinerede muligheder:
 6. gridType
 7. gridSize
 
-8. gridSpacing
-10. centerSigma (relative to gridSize*gridSpacing/2)
-12. cellSigma (relative to gridSpacing/2)
+8. gridRadius
+10. centerSigma (relative to gridRadius)
+12. cellSigma (relative to gridRadius/gridSize)
 
 TODO: Lav gridSpacing om til gridRadius
 

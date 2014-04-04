@@ -1,4 +1,4 @@
-function path = dtuImagePath(setNum, imNum, liNum,liType)
+function path = dtuImagePath(setNum, imNum, liNum, liType)
 
 if nargin < 4
     liType = 'raw';
