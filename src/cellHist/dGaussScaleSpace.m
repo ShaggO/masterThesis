@@ -12,7 +12,11 @@ function S = dGaussScaleSpace(I, d, sigma, rescale)
 % compute fieldnames
 fd = cell(size(d,1),1);
 for i = 1:size(d,1)
-    fd{i} = [repmat('x',[1 d(i,1)]) repmat('y',[1 d(i,2)])];
+    if d(i,1) == 0 && d(i,2) == 0
+        fd{i} = 'none';
+    else
+        fd{i} = [repmat('x',[1 d(i,1)]) repmat('y',[1 d(i,2)])];
+    end
 end
 % Initialize structure of derivatives
 temp = {cell(numel(sigma),1)};
@@ -22,7 +26,7 @@ S = struct(structArgs{:});
 for j = 1:numel(sigma)
     hsize = ceil(6*sigma(j));
     for i = 1:size(d,1)
-        S(j).(fd{i})  = imfilter(I,dGauss2d(d(i,1),d(i,2),hsize,sigma(j)), ...
+        S(j).(fd{i}) = imfilter(I,dGauss2d(d(i,1),d(i,2),hsize,sigma(j)), ...
             'replicate','conv');
         if rescale > 0
             S(j).(fd{i}) = imresize(S(j).(fd{i}),rescale/sigma(j));

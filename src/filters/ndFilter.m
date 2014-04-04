@@ -10,11 +10,11 @@ switch type
 
     case 'box'
         f = @(d)boxFilter(sigma,d);
-        r = sigma./2;
+        r = sigma;
 
     case 'triangle'
         f = @(d)triangleFilter(sigma,d);
-        r = sigma;
+        r = 2*sigma;
 end
 end
 
