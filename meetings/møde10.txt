@@ -1,5 +1,11 @@
 Noter til det 10. møde med Kim og Sune d. 8. april
 
-1. Parameteroptimering på alternativt datasæt for at undgå overfitting: Oxford måske?
-    - Det bliver heller ikke nær så tungt så.
-2. 
+1a. l,b,a, j2 - prøvede at indsætte dem og lege med parametrene. Virkede ikke overbevisende.
+2. pixel normalisering - så ud til at virke fint bedre end block/cell normalisering
+2a. Computer vision toolbox i matlab 2014a - SURF points giver gode resultater kombineret med vores
+3. Parameteroptimering på alternativt datasæt for at undgå overfitting: Oxford måske?
+    - Det bliver heller ikke nær så tungt så. Måske bare dele DTU sættet op i træning og test?
+3a. Noter/tanker omkring parameterstudie
+4. Light paths. Hvordan vælger man billeder til dette? Lindbo brugte 12, 25, 60 og 87 (random much?)
+5. Matlab 2014a på serveren.
+6. Condensed datasæt evt.
