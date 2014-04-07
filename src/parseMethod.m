@@ -1,5 +1,6 @@
 function [mFunc, mName] = parseMethod(m)
-% Parses a method struct into a descriptor function and directory name
+%PARSEMETHOD Parses a method struct into a combined detector and
+%descriptor function and unique name. We assume original RGB image inputs.
 
 %% Parse detector arguments
 p = inputParser;
@@ -15,20 +16,10 @@ switch lower(m.detector)
         
         detName = sprintf('vl-%s-%s-%s',lower(r.Method), ...
             num2str(r.PeakThreshold),num2str(r.EdgeThreshold));
-        detFunc = @(I) vl_covdet(255*rgb2gray(single(I)),...
+        detFunc = @(I) vlDetector(I,...
             'Method',r.Method,...
             'PeakThreshold',r.PeakThreshold,...
             'EdgeThreshold',r.EdgeThreshold)';
-    case 'dog'
-        % Single scale DoG detector
-        addParameter(p,'sigma',1);
-        addParameter(p,'k',2);
-        addParameter(p,'threshold',0);
-        r = parseResults(p,m.detectorArgs);
-        
-        detName = sprintf('dog-%s-%s-%s', ...
-            num2str(r.sigma),num2str(r.k),num2str(r.threshold));
-        detFunc = @(I) dogBlobDetector(rgb2gray(I),r.sigma,r.k,r.threshold);
     case 'cvtbrisk'
         addParameter(p,'MinContrast',0.2);
         addParameter(p,'MinQuality',0.1);
@@ -39,11 +30,10 @@ switch lower(m.detector)
             num2str(r.MinContrast),...
             num2str(r.MinQuality),...
             num2str(r.NumOctaves));
-        detFunc = @(I) unwrapBrisk(detectBRISKFeatures(...
-            rgb2gray(im2single(I)),...
+        detFunc = @(I) cvtDetector(I,'brisk',...
             'MinContrast',r.MinContrast,...
             'MinQuality',r.MinQuality,...
-            'NumOctaves',r.NumOctaves));
+            'NumOctaves',r.NumOctaves);
     case 'cvtmser'
         addParameter(p,'ThresholdDelta',2)
         addParameter(p,'RegionAreaRange',[30 14000])
@@ -54,11 +44,10 @@ switch lower(m.detector)
             num2str(r.ThresholdDelta),...
             nums2str(r.RegionAreaRange),...
             num2str(r.MaxAreaVariation));
-        detFunc = @(I) unwrapMser(detectMSERFeatures(...
-            rgb2gray(im2single(I)),...
+        detFunc = @(I) cvtDetector(I,type,...
             'ThresholdDelta',r.ThresholdDelta,...
             'RegionAreaRange',r.RegionAreaRange,...
-            'MaxAreaVariation',r.MaxAreaVariation));
+            'MaxAreaVariation',r.MaxAreaVariation);
     case 'cvtsurf'
         addParameter(p,'MetricThreshold',1000.0)
         addParameter(p,'NumOctaves',3)
@@ -69,11 +58,24 @@ switch lower(m.detector)
             num2str(r.MetricThreshold),...
             num2str(r.NumOctaves),...
             num2str(r.NumScaleLevels));
-        detFunc = @(I) unwrapSurf(detectSURFFeatures(...
-            rgb2gray(im2single(I)),...
+        detFunc = @(I) cvtDetector(I,type,...
             'MetricThreshold',r.MetricThreshold,...
             'NumOctaves',r.NumOctaves,...
-            'NumScaleLevels',r.NumScaleLevels));
+            'NumScaleLevels',r.NumScaleLevels);
+    case 'dog'
+        % Single scale DoG detector
+        addParameter(p,'sigma',1);
+        addParameter(p,'k',2);
+        addParameter(p,'threshold',0);
+        r = parseResults(p,m.detectorArgs);
+        
+        detName = sprintf('dog-%s-%s-%s', ...
+            num2str(r.sigma),num2str(r.k),num2str(r.threshold));
+        detFunc = @(I) dogBlobDetector(I,r.sigma,r.k,r.threshold);
+    case ''
+        r.cache = false;
+        detName = '';
+        detFunc = false;
     otherwise
         error('Unrecognized detector!')
 end
@@ -89,18 +91,53 @@ addParameter(p,'colour',colours{1},okArg(colours));
 switch lower(m.descriptor)
     case 'sift'
         r = parseResults(p,m.descriptorArgs);
-        
         desName = ['sift-' r.colour];
-        desFunc = @(I,F) siftDescriptors(I,F);
+        desFunc = @(I,F) siftDescriptor(I,F);
+    case 'full-sift'
+        addParameter(p,'PeakThresh',0)
+        addParameter(p,'EdgeThresh',10)
+        addParameter(p,'NormThresh',0)
+        addParameter(p,'Magnif',3)
+        addParameter(p,'WindowSize',2)
+        r = parseResults(p,m.descriptorArgs);
+        desName = sprintf(['full-sift' repmat('-%s',[1 5])],...
+            num2str(r.PeakThresh),...
+            num2str(r.EdgeThresh),...
+            num2str(r.NormThresh),...
+            num2str(r.Magnif),...
+            num2str(r.WindowSize));
+        desFunc = @(I) fullSiftDescriptor(I,...
+            'PeakThresh',r.PeakThresh,...
+            'EdgeThresh',r.EdgeThresh,...
+            'NormThresh',r.NormThresh,...
+            'Magnif',r.Magnif,...
+            'WindowSize',r.WindowSize);
     case 'k-jet'
         domains = {'auto','spatial','fourier'};
         addParameter(p,'k',1);
         addParameter(p,'sigma',1);
         addOptional(p,'domain',domains{1},okArg(domains));
         r = parseResults(p,m.descriptorArgs);
-        
         desName = [num2str(r.k) '-jet-' r.colour '-' num2str(r.sigma)];
         desFunc = @(I,F) kJetDescriptors(I,F,r.k,r.sigma,r.domain);
+    case 'cvtbrisk'
+        r = parseResults(p,m.descriptorArgs);
+        desName = ['cvtbrisk-' r.colour];
+        desFunc = @(I,F) cvtDescriptor(I,F,'brisk');
+    case 'cvtfreak'
+        r = parseResults(p,m.descriptorArgs);
+        desName = ['cvtfreak-' r.colour];
+        desFunc = @(I,F) cvtDescriptor(I,F,'freak');
+    case 'cvtsurf'
+        addParameter(p,'SURFSize',64);
+        r = parseResults(p,m.descriptorArgs);
+        desName = ['cvtsurf-' r.colour '-' num2str(r.SURFSize)];
+        desFunc = @(I,F) cvtDescriptor(I,F,'surf','SURFSize',r.SURFSize);
+    case 'cvtblock'
+        addParameter(p,'BlockSize',11);
+        r = parseResults(p,m.descriptorArgs);
+        desName = ['cvtblock-' r.colour '-' num2str(r.BlockSize)];
+        desFunc = @(I,F) cvtDescriptor(I,F,'block','BlockSize',r.BlockSize);
     case 'cellhist'
         bTypes = {'square','polar','concentric polar'};
         fTypes = {'gaussian','triangle','box'};
@@ -156,17 +193,15 @@ switch lower(m.descriptor)
     otherwise
         error('Unrecognized descriptor!')
 end
-desFunc = colourDescriptors(desFunc,r.colour);
+if ~isempty(detName)
+    desFunc = colourDescriptors(desFunc,r.colour);
+end
 desCache = r.cache;
 
 %% Combine names and functions
-if isempty(detName)
-    mName = desName;
-    mFunc = desFunc;
-else
-    mName = [detName '_' desName];
-    mFunc = @(I,resDir,imName) methodFunc(im2single(I),resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache);
-end
+mName = combineNames(detName,desName);
+mFunc = @(I,resDir,imName) methodFunc(I,resDir,imName,...
+        detName,desName,detFunc,desFunc,detCache,desCache);
 
 end
 
@@ -189,27 +224,32 @@ end
 % in this function.
 function [X,D] = methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache)
 detDir = [resDir '/' detName];
-desDir = [detDir '_' desName];
+desDir = [resDir '/' combineNames(detName,desName)];
 detPath = [detDir '/features_' imName];
 desPath = [desDir '/descriptors_' imName];
 if exist(desPath,'file') && desCache
-    load(desPath);
+    load(desPath,'X','D');
     disp(['Loaded ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
 else
-    if exist(detPath,'file') && detCache
-        load(detPath);
-        disp(['Loaded ' num2str(size(F,1)) ' features.']);
+    I = im2single(I);
+    if isempty(detName) % check if the detector should be used
+        [X,D] = desFunc(I);
     else
-        F = detFunc(I);
-        
-        if ~exist(detDir,'dir')
-            mkdir(detDir);
+        if exist(detPath,'file') && detCache
+            load(detPath,'F');
+            disp(['Loaded ' num2str(size(F,1)) ' features.']);
+        else
+            F = detFunc(rgb2gray(I));
+            
+            if ~exist(detDir,'dir')
+                mkdir(detDir);
+            end
+            save(detPath,'F');
+            disp(['Detected ' num2str(size(F,1)) ' features.']);
         end
-        save(detPath,'F');
-        disp(['Detected ' num2str(size(F,1)) ' features.']);
+        
+        [X,D] = desFunc(I,F);
     end
-    
-    [X,D] = desFunc(I,F);
     assert(~any(isnan(D(:))),'NaN present in descriptor.');
     
     if ~exist(desDir,'dir')
@@ -222,14 +262,10 @@ end
 
 end
 
-function F = unwrapBrisk(P)
-F = double([P.Location P.Scale/6]);
+function name = combineNames(detName,desName)
+if isempty(detName)
+    name = desName;
+else
+    name = [detName '_' desName];
 end
-
-function F = unwrapMser(R)
-F = double([R.Location, 1/8 * sqrt(R.Axes(:,1) .* R.Axes(:,2))]);
-end
-
-function F = unwrapSurf(P)
-F = double([P.Location P.Scale]);
 end

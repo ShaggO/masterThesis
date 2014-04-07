@@ -89,6 +89,7 @@ switch contentType
         period = 0;
 end
 
+% set variables depending on magnitude type
 switch magnitudeType
     case 'm'
         dMagnitude = [1 0; 0 1];

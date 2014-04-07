@@ -50,3 +50,4 @@ src/DTU/results600x800
 src/DTU/reconstructions
 src/octave-workspace
 src/DTU/runCreatePathMat.m
+src/startup.m
