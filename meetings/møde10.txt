@@ -1,11 +1,27 @@
 Noter til det 10. møde med Kim og Sune d. 8. april
 
 1a. l,b,a, j2 - prøvede at indsætte dem og lege med parametrene. Virkede ikke overbevisende.
+    l+j2 bedre end m og si men ikke m,si
+    j2 ikke godt på go og si indtil videre (arcs)
+    Pas på med at konkludere noget på små eksperimenter
+
 2. pixel normalisering - så ud til at virke fint bedre end block/cell normalisering
+
 2a. Computer vision toolbox i matlab 2014a - SURF points giver gode resultater kombineret med vores
+
 3. Parameteroptimering på alternativt datasæt for at undgå overfitting: Oxford måske?
     - Det bliver heller ikke nær så tungt så. Måske bare dele DTU sættet op i træning og test?
+    - Krydsvalidering 6 fold, resultat = 6 forskellige sæt parametre
+        - Tjek om de er grupperet eller ej (gennemsnit eller median)
+    - Kig på tiden det kører
+
 3a. Noter/tanker omkring parameterstudie
+
 4. Light paths. Hvordan vælger man billeder til dette? Lindbo brugte 12, 25, 60 og 87 (random much?)
+    - Lidt mere repræsentativt måske.
+
 5. Matlab 2014a på serveren.
+    Det sker ikke
+
 6. Condensed datasæt evt.
+    - Brug det.
