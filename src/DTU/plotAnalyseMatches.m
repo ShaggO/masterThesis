@@ -7,7 +7,6 @@ function [] = plotAnalyseMatches(match,t, mName)
 % Load paths for the data
 load('paths');
 
-
 imArgin = {match.setNum, match.imNum, match.liNum};
 I = imread(dtuImagePath(imArgin{:}));
 imRes = load([dtuResults '/' mName '/descriptors_' dtuImageName(imArgin{:})]);
