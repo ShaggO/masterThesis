@@ -164,7 +164,7 @@ else
 end
 
 % Normalizations
-if strcmp(normType,'cell')
+if strcmp(normType,'cell') || strcmp(normType,'pixel')
     % Normalize each histogram of each vector
     h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
 elseif strcmp(normType,'block')
