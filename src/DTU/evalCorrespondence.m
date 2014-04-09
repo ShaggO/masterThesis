@@ -44,6 +44,6 @@ end
 
 [match.ROC, match.PR] = analyseMatches(match);
 match.ROCAUC = ROCarea(match.ROC');
-match.PRAUC = 1 - ROCarea(flip(match.PR,2)');
+match.PRAUC = 1 - ROCarea(fliplr(match.PR)');
 
 end
