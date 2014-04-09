@@ -51,6 +51,9 @@ matchROCAUC = cell(numel(method),numel(pathTypes));
 matchPRAUC = cell(numel(method),numel(pathTypes));
 ROCAUC = zeros(numel(method),1);
 PRAUC = zeros(numel(method),1);
+
+% Start/get cluster with current profile
+gcp;
 for i = 1:numel(method) % Run each method
     m = method(i);
     [mFunc, mName{i}] = parseMethod(m);

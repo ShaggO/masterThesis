@@ -1,3 +1,4 @@
 *.pdf
 DTU/paths.mat
 addParameter.m
+gcp.m
