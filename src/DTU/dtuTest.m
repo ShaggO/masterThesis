@@ -51,31 +51,34 @@ matchROCAUC = cell(numel(method),numel(pathTypes));
 matchPRAUC = cell(numel(method),numel(pathTypes));
 ROCAUC = zeros(numel(method),1);
 PRAUC = zeros(numel(method),1);
+mName = cell(numel(method),1);
+mFunc = cell(numel(method),1);
+for i = 1:numel(method)
+    m = method(i);
+    [mFunc{i}, mName{i}] = parseMethod(m);
+end
 
 % Start/get cluster with current profile
 gcp;
-for i = 1:numel(method) % Run each method
-    m = method(i);
-    [mFunc, mName{i}] = parseMethod(m);
-    disp([timestamp() ' Method ' num2str(i) '/' num2str(numel(method)) ': ' mName{i}])
-    parfor k = pathTypes % Run on each chosen image path
-        tic
-        disp([timestamp() ' Path: ' pathLabels{k}]);
+parfor c = 1:numel(method)*numel(pathTypes) % Run on each method and each chosen image path (pathType)
+    [i,k] = ind2sub([numel(method) numel(pathTypes)],c);
+    %disp([timestamp() ' Method ' num2str(i) '/' num2str(numel(method)) ': ' mName{i}])
+    tic
+    %disp([timestamp() ' Path: ' pathLabels{k}]);
 
-        % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(setNum,imNum{k},liNum{k},mFunc,mName{i},m.cache);
+    % Run on all lighting settings and all images in path across all sets
+    pathMatches = imageCorrespondence(setNum,imNum{k},liNum{k},mFunc{i},mName{i},method(i).cache);
 
-        if numel(liNum{k}) > 1
-            meanDim = 2;
-        else
-            meanDim = 3;
-        end
-        roc = reshape([pathMatches.ROCAUC],[numel(setNum) numel(imNum{k}) numel(liNum{k})]);
-        pr = reshape([pathMatches.PRAUC],[numel(setNum) numel(imNum{k}) numel(liNum{k})]);
-
-        matchROCAUC{i,k}(:,1) = mean(mean(roc,1),meanDim);
-        matchPRAUC{i,k}(:,1) = mean(mean(pr,1),meanDim);
+    if numel(liNum{k}) > 1
+        meanDim = 2;
+    else
+        meanDim = 3;
     end
+    roc = reshape([pathMatches.ROCAUC],[numel(setNum) numel(imNum{k}) numel(liNum{k})]);
+    pr = reshape([pathMatches.PRAUC],[numel(setNum) numel(imNum{k}) numel(liNum{k})]);
+
+    matchROCAUC{c} = mean(mean(roc,1),meanDim);
+    matchPRAUC{c} = mean(mean(pr,1),meanDim);
 end
 
 % Display results
