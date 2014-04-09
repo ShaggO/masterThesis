@@ -1,4 +1,4 @@
-function [ROCAUC, PRAUC] = dtuTest(setNum,method,pathTypes,display)
+function [ROCAUC, PRAUC] = dtuTest(setNum,method,pathTypes,display,matchCache)
 %DTUTEST Evaluates given methods by the image correspondence problem on the
 % DTU dataset. Plots the average ROC AUC and PR AUC over given image sets
 % for each method.
@@ -8,6 +8,10 @@ end
 
 if nargin < 4
     display = true;
+end
+
+if nargin < 5
+    matchCache = false;
 end
 
 pathLabels = {...
@@ -55,11 +59,11 @@ for i = 1:numel(method) % Run each method
     m = method(i);
     [mFunc, mName{i}] = parseMethod(m);
     disp([timestamp() ' Method ' num2str(i) '/' num2str(numel(method)) ': ' mName{i}])
-    for k = pathTypes % Run on each chosen image path
+    parfor k = pathTypes % Run on each chosen image path
         disp([timestamp() ' Path: ' pathLabels{k}]);
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(setNum,imNum{k},liNum{k},mFunc,mName{i});
+        pathMatches = imageCorrespondence(setNum,imNum{k},liNum{k},mFunc,mName{i},matchCache);
 
         if numel(liNum{k}) > 1
             meanDim = 2;
