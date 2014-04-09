@@ -11,8 +11,8 @@ switch gridType
     otherwise % polar or concentric polar
         gridSpacing = 2*gridRadius ./ (2*gridSize(2)+1);
 end
-centerSigma = centerSigma * gridRadius;
-cellSigma = cellSigma * gridSpacing/2;
+centerSigma = centerSigma .* gridRadius;
+cellSigma = cellSigma .* gridSpacing/2;
 binSigma = binSigma .* (right-left) ./ (2*binCount);
 if strcmp(normType,'block')
     normSigma = normSigma .* gridRadius/2;

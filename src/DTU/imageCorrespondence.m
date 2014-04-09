@@ -8,8 +8,9 @@ end
 load('paths');
 
 imNumKey = 25;
+liNumKey = 0;
 mDir = [dtuResults '/' mName];
-N = numel(setNum)*numel(imNum)*size(liNum,1);
+N = numel(setNum)*numel(imNum)*numel(liNum);
 imSize = size(imread(dtuImagePath(setNum(1),imNum(1),liNum(1))));
 
 n = 0;
@@ -21,6 +22,7 @@ for s = setNum
             matchPath = [mDir '/matches_' dtuImageName(s,i,l)];
 
             if exist(matchPath,'file') && cache
+                disp('Matches loaded');
                 load(matchPath)
             else
                 match.setNum = s;
@@ -29,7 +31,7 @@ for s = setNum
                 match.imSize = imSize;
 
                 [match.coord,D1] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc);
-                [match.coordKey,D2] = dtuFeatures(match.setNum,imNumKey,match.liNum,mFunc);
+                [match.coordKey,D2] = dtuFeatures(match.setNum,imNumKey,liNumKey,mFunc);
 
                 [match.matchIdx, match.dist] = featureMatch(D1,D2);
                 match.distRatio = match.dist(:,1) ./ (match.dist(:,2) + eps);
