@@ -18,9 +18,10 @@ for s = setNum
     for i = imNum
         for l = liNum
             n = n + 1;
-            disp([timestamp() ' Image ' num2str(n) '/' num2str(N)])
+            disp([timestamp() ' Image ' num2str(n) '/' num2str(N)]);
             matchPath = [mDir '/matches_' dtuImageName(s,i,l)];
 
+            loaded = false;
             if cache
                 [loaded,matchLoad] = loadIfExist(matchPath,'file');
             end
