@@ -1,6 +1,6 @@
 clc, clear all
 
-setNum = 1;
+setNum = 1:60;
 peakThresholdDog = 5;
 peakThresholdHarris = 10^4;
 
@@ -111,5 +111,5 @@ method(end+1) = methodStruct( ...
 %    'gridType','square','gridSize',[4 4],'gridSpacing',[3 3], ...
 %    'cellSigma',[1.5 1.5],'binSigma',[1/2 1/2],'binCount',[4 4]},{'ko-'});
 totalTime = tic;
-dtuTest(setNum,method,1:6,false);
+dtuTest(setNum,method,1,false,true);
 totalTime = toc(totalTime)

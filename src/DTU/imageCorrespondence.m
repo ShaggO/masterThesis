@@ -21,9 +21,12 @@ for s = setNum
             disp([timestamp() ' Image ' num2str(n) '/' num2str(N)])
             matchPath = [mDir '/matches_' dtuImageName(s,i,l)];
 
-            if exist(matchPath,'file') && cache
+            if cache
+                [loaded,matchLoad] = loadIfExist(matchPath,'file');
+            end
+            if loaded
                 disp('Matches loaded');
-                load(matchPath)
+                match = matchLoad.match;
             else
                 match.setNum = s;
                 match.imNum = i;

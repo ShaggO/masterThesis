@@ -22,8 +22,11 @@ strLightPath = sprintf('%s/set%.2d.mat',strLightDir,match.setNum);
 if ~exist(strLightDir,'dir')
     mkdir(strLightDir)
 end
-if exist(strLightPath,'file')
-    load(strLightPath)
+
+[loaded,strL] = loadIfExist(strLightPath,'file');
+if loaded
+    Grid3D = strL.Grid3D;
+    Pts = strL.Pts;
 else
     [Grid3D,Pts]=GenStrLightGrid_v2(KeyFrame,In3DPath,match.imSize(1),match.imSize(2),Rad3D,match.setNum);
     save(strLightPath,'Grid3D','Pts')

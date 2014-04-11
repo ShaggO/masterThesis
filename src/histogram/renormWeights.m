@@ -9,6 +9,9 @@ function w = renormWeights(type, sigma, left, right, periodic, binC)
 % Output
 %   w       Weights [i,1]
 
+assert(all(size(sigma) == size(left) & size(sigma) == size(right)),...
+    'Sigma, left, and right need to have equal size');
+
 left(periodic) = -Inf;
 right(periodic) = Inf;
 
@@ -20,10 +23,10 @@ switch type
     case 'gaussian'
         w = 1 ./ prod(1/2*(erf(B./(sqrt(2)*Sigma)) - ...
             erf(A./(sqrt(2)*Sigma))),2);
-        
+
     case 'box'
         w = 2 ./ prod(min(B,Sigma) - max(A,-Sigma),2);
-        
+
     case 'triangle'
         A = max(A,-2*Sigma);
         B = min(B,2*Sigma);

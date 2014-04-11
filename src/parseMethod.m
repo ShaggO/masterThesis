@@ -13,7 +13,7 @@ switch lower(m.detector)
         addParameter(p,'PeakThreshold',0);
         addParameter(p,'EdgeThreshold',10)
         r = parseResults(p,m.detectorArgs);
-        
+
         detName = sprintf('vl-%s-%s-%s',lower(r.Method), ...
             num2str(r.PeakThreshold),num2str(r.EdgeThreshold));
         detFunc = @(I) vlDetector(I,...
@@ -25,7 +25,7 @@ switch lower(m.detector)
         addParameter(p,'MinQuality',0.1);
         addParameter(p,'NumOctaves',4);
         r = parseResults(p,m.detectorArgs);
-        
+
         detName = sprintf(['cvtbrisk' repmat('-%s',[1 3])],...
             num2str(r.MinContrast),...
             num2str(r.MinQuality),...
@@ -39,7 +39,7 @@ switch lower(m.detector)
         addParameter(p,'RegionAreaRange',[30 14000])
         addParameter(p,'MaxAreaVariation',0.25)
         r = parseResults(p,m.detectorArgs);
-        
+
         detName = sprintf(['cvtmser' repmat('-%s',[1 3])],...
             num2str(r.ThresholdDelta),...
             nums2str(r.RegionAreaRange),...
@@ -53,7 +53,7 @@ switch lower(m.detector)
         addParameter(p,'NumOctaves',3)
         addParameter(p,'NumScaleLevels',4)
         r = parseResults(p,m.detectorArgs);
-        
+
         detName = sprintf(['cvtsurf' repmat('-%s',[1 3])],...
             num2str(r.MetricThreshold),...
             num2str(r.NumOctaves),...
@@ -68,7 +68,7 @@ switch lower(m.detector)
         addParameter(p,'k',2);
         addParameter(p,'threshold',0);
         r = parseResults(p,m.detectorArgs);
-        
+
         detName = sprintf('dog-%s-%s-%s', ...
             num2str(r.sigma),num2str(r.k),num2str(r.threshold));
         detFunc = @(I) dogBlobDetector(I,r.sigma,r.k,r.threshold);
@@ -160,7 +160,7 @@ switch lower(m.descriptor)
         addParameter(p,'binSigma',1);
         addParameter(p,'binCount',8);
         r = parseResults(p,m.descriptorArgs);
-        
+
         if strcmp(r.normType,'cell') || strcmp(r.normType,'none')
             r.normFilter = fTypes{1};
             r.normSigma = [3 3];
@@ -168,7 +168,7 @@ switch lower(m.descriptor)
         else
             normString = [r.normType '-' r.normFilter '-' nums2str(r.normSigma)];
         end
-        
+
         desName = sprintf(['cellhist' repmat('-%s',[1 16])],...
             r.colour,...
             r.contentType,...
@@ -227,36 +227,47 @@ detDir = [resDir '/' detName];
 desDir = [resDir '/' combineNames(detName,desName)];
 detPath = [detDir '/features_' imName];
 desPath = [desDir '/descriptors_' imName];
-if exist(desPath,'file') && desCache
-    load(desPath,'X','D');
+
+loaded = false;
+if desCache
+    [loaded, des] = loadIfExist(desPath,'file');
+end
+
+if loaded
+    X = des.X;
+    D = des.D;
     disp(['Loaded ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
 else
     I = im2single(I);
     if isempty(detName) % check if the detector should be used
         [X,D] = desFunc(I);
     else
-        if exist(detPath,'file') && detCache
-            load(detPath,'F');
+        loaded = false;
+        if detCache
+            [loaded, det] = loadIfExist(detPath,'file');
+        end
+        if loaded
+            F = det.F;
             disp(['Loaded ' num2str(size(F,1)) ' features.']);
         else
             F = detFunc(rgb2gray(I));
-            
+
             if ~exist(detDir,'dir')
                 mkdir(detDir);
             end
             save(detPath,'F');
             disp(['Detected ' num2str(size(F,1)) ' features.']);
         end
-        
+
         [X,D] = desFunc(I,F);
     end
     assert(~any(isnan(D(:))),'NaN present in descriptor.');
-    
+
     if ~exist(desDir,'dir')
         mkdir(desDir);
     end
     save(desPath,'X','D');
-    
+
     disp(['Computed ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
 end
 
