@@ -63,7 +63,6 @@ for i = 1:numel(method)
 end
 
 % Start/get cluster with current profile
-for s = 1:numel(setNum)
 if runInParallel
     gcp;
     parfor c = 1:numel(method)*numel(pathTypes) % Run on each method and each chosen image path (pathType)
@@ -76,7 +75,7 @@ if runInParallel
         %disp([timestamp() ' Path: ' pathLabels{k}]);
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(setNum(s),imNum{k},liNum{k},mFunc{i},mName{i},method(i).cache);
+        pathMatches = imageCorrespondence(setNum,imNum{k},liNum{k},mFunc{i},mName{i},method(i).cache);
 
         if numel(liNum{k}) > 1
             meanDim = 2;
@@ -89,7 +88,6 @@ if runInParallel
         matchROCAUC{c} = mean(mean(roc,1),meanDim);
         matchPRAUC{c} = mean(mean(pr,1),meanDim);
     end
-end
 end
 
 % Display results
