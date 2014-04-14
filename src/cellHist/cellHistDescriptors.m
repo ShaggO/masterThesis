@@ -116,77 +116,64 @@ end
 % compute scale space images
 d = union(dContent,dMagnitude,'rows');
 scales = approxScales(F(:,3),scaleBase);
-S = dGaussScaleSpace(I,d,scales,rescale);
+[S,Isizes] = dGaussScaleSpace(I,d,scales,rescale);
+V = vFunc(S,scales);
+M = mFunc(S,scales);
 
-S = struct('V',vFunc(S,scales),'M',mFunc(S,scales));
+% Pixel-wise normalization of magnitudes
+if strcmp(normType,'pixel')
+    if rescale > 0
+        normSigma = repmat(normSigma,[numel(scales) 1]);
+    else
+        normSigma = scales' * normSigma;
+    end
+    M = pixelNormalization(M,normFilter,normSigma);
+end
 
-% create cell offsets
-cellOffsets = createCellOffsets(gridType,gridSize,gridSpacing);
+V = cells2vector(V);
+M = cells2vector(M);
+
+% create cells
+P = scaleSpaceFeatures(F,scales,rescale);
+[C,Wcell,validP] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
+    centerFilter,centerSigma,cellFilter,cellSigma);
+X = F(validP,1:2);
 
 % compute histogram variables
 [binF, binR] = ndFilter(binFilter,binSigma);
 binC = createBinCenters(left,right,binCount,binCArgin{:});
+nBin = size(binC,1);
 wRenorm = renormWeights(binFilter,binSigma,left,right,period > 0,binC);
 
-if rescale > 0
-    if strcmp(normType,'pixel')
-        % Pixel-wise normalization of magnitudes
-        normSigma = repmat(normSigma,[numel(scales) 1]);
-        Mnorm = pixelNormalization({S.M},normFilter,normSigma);
-        [S.M] = Mnorm{:};
-    end
-    [L,W,X] = scaleSpaceRegions(S,scales,rescale,F,cellOffsets,...
-        centerFilter,centerSigma,cellFilter,cellSigma,ceil(3*cellSigma));
+% compute bin and magnitude weights (at cell mask points only)
+maskC = false(size(V,1),1);
+maskC(C.vector) = true;
+B = zeros(size(V,1),nBin);
+B(maskC,:) = ndBinWeights(V(maskC,:),binC,binF,binR, ...
+    'period',period,'wBin',wRenorm) .* repmat(M(maskC),[1 nBin]);
 
-    h = ndHist(L.V,L.M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
-else
-    if strcmp(normType,'pixel')
-        % Pixel-wise normalization of magnitudes
-        normSigma = scales' * normSigma;
-        Mnorm = pixelNormalization({S.M},normFilter,normSigma);
-        [S.M] = Mnorm{:};
-    end
-    [~,idx] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
-        repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
-
-    X = zeros(0,size(F,2));
-    h = zeros(prod(binCount),1,size(cellOffsets,1),0);
-    for i = 1:numel(scales)
-        disp(['Scale: ' num2str(i) '/' num2str(numel(scales))])
-        % Find closest scale for each feature
-        [L,W,Xi] = scaleSpaceRegions(S(i),scales(i),rescale,F(idx == i,:),cellOffsets,...
-            centerFilter,centerSigma,cellFilter,cellSigma,ceil(3*cellSigma));
-        X = [X; Xi];
-
-        hSigma = ndHist(L.V,L.M .* W,binC,binF,binR,'period',period,'wBin',wRenorm);
-        h = cat(4,h, hSigma);
-    end
+% compute histograms
+H = zeros([nBin size(C.map)]);
+for i = 1:size(C.sizes,1)
+    [Ci,maskPart] = C.partData(i);
+    Bi = reshape(B(Ci(:),:),[C.sizes(i,:) nBin]) .* ...
+        repmat(Wcell.partData(i),[1 1 1 1 nBin]);
+    Di = permute(sum(Bi,1),[5 2 3 4 1]);
+    H(repmat(maskPart,[nBin 1])) = Di(:);
 end
 
-% Normalizations
+% Histogram normalization
 if strcmp(normType,'cell') || strcmp(normType,'pixel')
     % Normalize each histogram of each vector
-    h = h ./ repmat(sum(h,1),[prod(binCount) 1 1 1]);
+    H = H ./ repmat(sum(H,1),[nBin 1]);
 elseif strcmp(normType,'block')
     % Block normalization
     localOffsets = createCellOffsets(gridType,gridSize,gridSpacing,true);
-    h = blockNormalization(h,cellOffsets,localOffsets,normFilter,normSigma);
+    H = blockNormalization(H,cellOffsets,localOffsets,normFilter,normSigma);
 end
 
-% % plot histogram
-% figure
-% plot([binC'; binC'],[sum(sum(h,3),4)'; zeros(size(binC'))],'b-')
-
-% assemble descriptor
-D = zeros(size(h,4),size(h,1)*size(h,3));
-for j = 1:size(h,3)
-    D(:,(j-1)*prod(binCount)+(1:prod(binCount))) = ...
-        permute(h(:,1,j,:),[4 1 3 2]);
-end
-% Normalize to unit vector descriptors
+% Reshape and normalize descriptors to unit vectors
+D = reshape(H,[binCount*size(C.map,1) size(C.map,2)])';
 D = D ./ repmat(sum(D,2),[1 size(D,2)]);
-
-% return only coordinates
-X = X(:,1:2);
 
 end

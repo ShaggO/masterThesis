@@ -22,13 +22,13 @@ end
 function v = triangleFilter(sigma,d)
     sz = size(d);
     sigma = repmat(2*sigma,[sz(1) 1 sz(3:end)]);
-    v = prod((d <= sigma) .* (1-(d./sigma))/2,2);
+    v = prod((abs(d) <= sigma) .* (1-(abs(d)./sigma))/2,2);
 end
 
 function v = boxFilter(sigma,d)
     sz = size(d);
     sigma = repmat(sigma,[sz(1) 1 sz(3:end)]);
-    v = prod(d <= sigma,2)/2;
+    v = prod(abs(d) <= sigma,2)/2;
 end
 
 function v = gaussFilter(sigma,d)

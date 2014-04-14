@@ -1,0 +1,7 @@
+TODO:
+
+- Caching of content/magnitude images
+- Optimization of feature matching
+- Support for complex cell grid layouts: cells at different scales and other cell filter types
+- Support for rotationally invariant descriptors
+- Report setion detailing an example of the construction of a descriptor from start to finish

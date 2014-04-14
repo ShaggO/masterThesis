@@ -10,16 +10,19 @@ switch lower(m.detector)
         methods = {'DoG','Hessian','HessianLaplace','HarrisLaplace',...
             'MultiscaleHessian','MultiscaleHarris'};
         addParameter(p,'Method',methods{1},okArg(methods));
-        addParameter(p,'PeakThreshold',0);
+        addParameter(p,'PeakThreshold',0)
         addParameter(p,'EdgeThreshold',10)
+        addParameter(p,'OctaveResolution',3)
         r = parseResults(p,m.detectorArgs);
 
-        detName = sprintf('vl-%s-%s-%s',lower(r.Method), ...
-            num2str(r.PeakThreshold),num2str(r.EdgeThreshold));
+        detName = sprintf('vl-%s-%s-%s-%s',lower(r.Method), ...
+            num2str(r.PeakThreshold),num2str(r.EdgeThreshold), ...
+            num2str(r.OctaveResolution));
         detFunc = @(I) vlDetector(I,...
             'Method',r.Method,...
             'PeakThreshold',r.PeakThreshold,...
-            'EdgeThreshold',r.EdgeThreshold)';
+            'EdgeThreshold',r.EdgeThreshold,...
+            'OctaveResolution',r.OctaveResolution)';
     case 'cvtbrisk'
         addParameter(p,'MinContrast',0.2);
         addParameter(p,'MinQuality',0.1);
@@ -258,6 +261,8 @@ else
             save(detPath,'F');
             disp(['Detected ' num2str(size(F,1)) ' features.']);
         end
+        
+        assert(size(F,1) <= 5000, 'Too many features.')
 
         [X,D] = desFunc(I,F);
     end

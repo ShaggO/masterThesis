@@ -33,13 +33,19 @@ for i=-1:1
     end
 end
 
-P2=P;
-P=[];
-for i=1:size(P2,2),
-    if(norm([P2(1,i)-cCol P2(2,i)-cRow])<=Rad3D)
-        P=[P P2(3:5,i)];
-    end
-end
+% old inefficient code
+% P2=P;
+% P=[];
+% for i=1:size(P2,2),
+%     if(norm([P2(1,i)-cCol P2(2,i)-cRow])<=Rad3D)
+%         P=[P P2(3:5,i)];
+%     end
+% end
+
+cCol = repmat(cCol,[1 size(P,2)]);
+cRow = repmat(cRow,[1 size(P,2)]);
+Rad3D2 = repmat(Rad3D^2,[1 size(P,2)]);
+P = P(3:5,(P(1,:)-cCol).^2 + (P(2,:)-cRow).^2 <= Rad3D2);
 
 if(isempty(P))
     IsEst=false;

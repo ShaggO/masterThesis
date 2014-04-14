@@ -54,3 +54,4 @@ src/DTU/runCreatePathMat.m
 src/startup.m
 
 shell_scripts/
+src/runTestVarArrayOld.m

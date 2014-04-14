@@ -1,6 +1,6 @@
 function J = colourTransform(I, type)
-%COLOURTRANSFORM Various colour transforms, assumes double precision RGB
-% image input between 0 and 1
+%COLOURTRANSFORM Various colour transforms, assumes single/double precision
+%RGB image input between 0 and 1
 
 switch type
     case 'gray'

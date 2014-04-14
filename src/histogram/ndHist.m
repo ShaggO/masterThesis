@@ -25,6 +25,7 @@ period = p.Results.period;
 periodic = period ~= 0;
 mask = repmat(periodic,sizeF);
 pMask = repmat(period(periodic),sizeF);
+pMask2 = repmat(period(periodic)/2,sizeF);
 
 H = zeros([size(binC,1),1,sizeX(3:end)]);
 for i = 1:size(binC,1)
@@ -33,6 +34,8 @@ for i = 1:size(binC,1)
     if any(periodic)
         % Consider opposite distance if periodic
         d(mask) = min(d(mask),pMask(:) - d(mask));
+%         opp = mask(:) & d(mask) > pMask2(:);
+%         d(opp) = pMask(opp) - d(opp);
     end
     % Find distances within bin filter support radius
     % note: this mask does not include the second dimension by design

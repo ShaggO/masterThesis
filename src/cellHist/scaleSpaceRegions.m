@@ -87,6 +87,7 @@ for j = 1:numel(sigmaS)
         mu = p-pCell+1;
         W = cat(4,W,spatialWeights(coords,mu,cellType,cellSigma) .* ...
             spatialWeights(coords,mu-cellOffsetsJ,centerType,centerSigma));
+        % todo: calculate center weights first
     end
 end
 end
