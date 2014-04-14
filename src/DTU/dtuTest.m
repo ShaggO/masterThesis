@@ -1,4 +1,4 @@
-function [ROCAUC, PRAUC] = dtuTest(setNum,method,pathTypes,display,runInParallel)
+function [meanROCAUC, meanPRAUC] = dtuTest(setNum,method,pathTypes,display,runInParallel)
 %DTUTEST Evaluates given methods by the image correspondence problem on the
 % DTU dataset. Plots the average ROC AUC and PR AUC over given image sets
 % for each method.
@@ -19,9 +19,9 @@ end
 % Compute matches
 tic
 matchROCAUC = cell(numel(method),numel(pathTypes));
-matchPRAUC = cell(numel(method),numel(pathTypes));
-ROCAUC = zeros(numel(method),1);
-PRAUC = zeros(numel(method),1);
+matchPRAUC = cell(size(matchROCAUC));
+meanROCAUC = zeros(numel(method),1);
+meanPRAUC = zeros(size(meanROCAUC));
 mName = cell(numel(method),1);
 mFunc = cell(numel(method),1);
 for i = 1:numel(method)
@@ -32,29 +32,67 @@ end
 % Start/get cluster with current profile
 if runInParallel
     gcp;
-    parfor c = 1:numel(method)*numel(pathTypes) % Run on each method and each chosen image path (pathType)
+    parfor c = 1:numel(pathTypes) % Run on each method and each chosen image path (pathType)
         % This code is the body of the compuations in dtuTest.
         % They are put in a separate script in order to turn on/off
         % parallel computations
-        [i,k] = ind2sub([numel(method) numel(pathTypes)],c);
-        %disp([timestamp() ' Method ' num2str(i) '/' num2str(numel(method)) ': ' mName{i}])
+        disp([timestamp() ' Path: ' pathLabels{c}]);
         tic
-        %disp([timestamp() ' Path: ' pathLabels{k}]);
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(setNum,imNum{k},liNum{k},mFunc{i},mName{i},method(i).cache);
+        pathMatches = imageCorrespondence(setNum,imNum{c},liNum{c},mFunc,mName,[method.cache]);
 
-        if numel(liNum{k}) > 1
-            meanDim = 2;
+        % Reshape to given input dimensions
+        roc = reshape([pathMatches.ROCAUC],[numel(method) numel(liNum{c}) numel(imNum{c}) numel(setNum)]);
+        pr = reshape([pathMatches.PRAUC],[numel(method) numel(liNum{c}) numel(imNum{c}) numel(setNum)]);
+        % Dimensions of roc and pr: [method, light, image, set]
+        % Compute means for each path
+        if numel(liNum{c}) > 1
+            roc = mean(mean(roc,4),3);
+            pr = mean(mean(pr,4),3);
         else
-            meanDim = 3;
+            roc = permute(mean(mean(roc,4),2),[1 3 2 4]);
+            pr = permute(mean(mean(pr,4),2),[1 3 2 4]);
         end
-        roc = reshape([pathMatches.ROCAUC],[numel(setNum) numel(imNum{k}) numel(liNum{k})]);
-        pr = reshape([pathMatches.PRAUC],[numel(setNum) numel(imNum{k}) numel(liNum{k})]);
 
-        matchROCAUC{c} = mean(mean(roc,1),meanDim);
-        matchPRAUC{c} = mean(mean(pr,1),meanDim);
+        % Append
+        matchROCAUC(:,c) = mat2cell(roc,ones(1, numel(method)));
+        matchPRAUC(:,c) = mat2cell(pr,ones(1, numel(method)));
     end
+else
+    % Run sequentially
+    for c = 1:numel(pathTypes) % Run on each method and each chosen image path (pathType)
+        % This code is the body of the compuations in dtuTest.
+        % They are put in a separate script in order to turn on/off
+        % parallel computations
+        disp([timestamp() ' Path: ' pathLabels{c}]);
+        tic
+
+        % Run on all lighting settings and all images in path across all sets
+        pathMatches = imageCorrespondence(setNum,imNum{c},liNum{c},mFunc,mName,[method.cache]);
+
+        % Reshape to given input dimensions
+        roc = reshape([pathMatches.ROCAUC],[numel(method) numel(liNum{c}) numel(imNum{c}) numel(setNum)]);
+        pr = reshape([pathMatches.PRAUC],[numel(method) numel(liNum{c}) numel(imNum{c}) numel(setNum)]);
+        % Dimensions of roc and pr: [method, light, image, set]
+        % Compute means for each path
+        if numel(liNum{c}) > 1
+            roc = mean(mean(roc,4),3);
+            pr = mean(mean(pr,4),3);
+        else
+            roc = permute(mean(mean(roc,4),2),[1 3 2 4]);
+            pr = permute(mean(mean(pr,4),2),[1 3 2 4]);
+        end
+
+        % Append
+        matchROCAUC(:,c) = mat2cell(roc,ones(1, numel(method)));
+        matchPRAUC(:,c) = mat2cell(pr,ones(1, numel(method)));
+    end
+end
+
+for m = 1:numel(method)
+    meanROCAUC(m) = mean([matchROCAUC{m,:}]);
+    meanPRAUC(m) = mean([matchPRAUC{m,:}]);
 end
 
 % Display results
@@ -72,6 +110,7 @@ if display
         end
 
         figure('units','normalized','outerposition',[0 0 1 1]);
+        h = zeros(numel(method),1);
         hold on;
         for i = 1:numel(method)
             plot(x(1:before),matchROCAUC{i,k}(1:before),method(i).plotParams{:});
