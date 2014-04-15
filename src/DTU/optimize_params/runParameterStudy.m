@@ -57,7 +57,7 @@ for grid = grids
         counter = counter + 1;
     end
 end
-[ROCAUC, PRAUC] = dtuTest(setNum,method,1:6,false,true,true);
+[ROCAUC, PRAUC] = dtuTest(setNum,method,1:6,false,true,'train');
 [optimalPRAUC, optimalInd] = max(PRAUC);
 method = method(optimalInd);
 disp(['Optimal grid: ' method.gridType ', size: ' nums2str(method.gridSize)]);

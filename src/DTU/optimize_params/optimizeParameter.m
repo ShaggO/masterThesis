@@ -14,7 +14,7 @@ function optimal = optimizeParameter(method,parameter,values,iterations)
             methodV(v).(parameter) = v;
         end
         % Perform dtuTest on defined methods and find optimal value
-        [ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,true);
+        [ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
         [optimalPRAUC optimalInd] = max(PRAUC);
         optialROCAUC = ROCAUC(optimalInd);
         optimal = values(optimalInd);
