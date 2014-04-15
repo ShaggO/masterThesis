@@ -1,6 +1,13 @@
-function s = timestamp()
+function s = timestamp(time)
+if nargin < 1
+    time = NaN;
+end
 
-s = ['[' sprintf('%.0f',toc) 's]'];
+if ~isnan(time);
+    s = ['[' sprintf('%.0f',toc(time)) 's]'];
+else
+    s = ['[' sprintf('%.0f',toc) 's]'];
+end
 
 end
 

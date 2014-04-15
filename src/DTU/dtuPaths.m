@@ -38,6 +38,7 @@ switch type
                  20:2:28,... % [20:28]
                  29:2:35}; % [29:35]
     case 'train'
+        % 21 train images in total (+keyframe)
         imNum = {...
             [1 12 38 49],...
             [65 94],...
@@ -56,11 +57,6 @@ switch type
             [29 35]...
         };
 end
-%{
-imNum{1} = [1 12];
-imNum{5} = [12 25 60];
-liNum{5} = [20 21];
-%}
 
 end
 

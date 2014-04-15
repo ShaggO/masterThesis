@@ -262,7 +262,7 @@ else
             disp(['Detected ' num2str(size(F,1)) ' features.']);
         end
         
-        assert(size(F,1) <= 5000, 'Too many features.')
+        assert(size(F,1) <= 6000, 'Too many features.')
 
         [X,D] = desFunc(I,F);
     end
