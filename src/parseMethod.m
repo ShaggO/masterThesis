@@ -92,6 +92,10 @@ addParameter(p,'cache',1);
 addParameter(p,'debug',0);
 addParameter(p,'colour',colours{1},okArg(colours));
 switch lower(m.descriptor)
+    case 'none'
+        r = parseResults(p,m.descriptorArgs);
+        desName = 'none';
+        desFunc = @(I,F) deal(F(:,1:2),zeros(size(F,1),1));
     case 'sift'
         r = parseResults(p,m.descriptorArgs);
         desName = ['sift-' r.colour];
@@ -203,8 +207,8 @@ desCache = r.cache;
 
 %% Combine names and functions
 mName = combineNames(detName,desName);
-mFunc = @(I,resDir,imName) methodFunc(I,resDir,imName,...
-        detName,desName,detFunc,desFunc,detCache,desCache);
+mFunc = @(I,resDir,imName,desSave) methodFunc(I,resDir,imName,...
+        detName,desName,detFunc,desFunc,detCache,desCache,desSave);
 
 end
 
@@ -225,7 +229,8 @@ end
 % Assumes double precision image input between 0 and 1.
 % Loading and saving of intermediate results is handled
 % in this function.
-function [X,D] = methodFunc(I,resDir,imName,detName,desName,detFunc,desFunc,detCache,desCache)
+function [X,D] = methodFunc(I,resDir,imName,detName,desName,...
+    detFunc,desFunc,detCache,desCache,desSave)
 detDir = [resDir '/' detName];
 desDir = [resDir '/' combineNames(detName,desName)];
 detPath = [detDir '/features_' imName];
@@ -241,7 +246,6 @@ if loaded
     D = des.D;
     disp(['Loaded ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
 else
-    I = im2single(I);
     if isempty(detName) % check if the detector should be used
         [X,D] = desFunc(I);
     else
@@ -271,7 +275,9 @@ else
     if ~exist(desDir,'dir')
         mkdir(desDir);
     end
-    save(desPath,'X','D');
+    if desSave
+        save(desPath,'X','D');
+    end
 
     disp(['Computed ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
 end

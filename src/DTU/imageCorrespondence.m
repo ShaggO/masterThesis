@@ -1,7 +1,12 @@
-function matches = imageCorrespondence(setNum, imNum, liNum, mFunc, mName, cache)
+function matches = imageCorrespondence(setNum, imNum, liNum, mFunc, mName, ...
+    matchCache, desSave)
 
 if nargin < 6
-    cache = 1;
+    matchCache = true;
+end
+
+if nargin < 7
+    desSave = true;
 end
 
 % Load paths for the data
@@ -10,7 +15,7 @@ load('paths');
 imNumKey = 25;
 liNumKey = 0;
 N = numel(setNum)*numel(imNum)*numel(liNum)*numel(mFunc);
-imSize = size(imread(dtuImagePath(setNum(1),imNum(1),liNum(1))));
+imSize = size(loadDtuImage(setNum(1),imNum(1),liNum(1)));
 
 n = 0;
 for s = setNum
@@ -23,7 +28,7 @@ for s = setNum
                 matchPath = [mDir '/matches_' dtuImageName(s,i,l)];
 
                 loaded = false;
-                if cache(m)
+                if matchCache(m)
                     [loaded,matchLoad] = loadIfExist(matchPath,'file');
                 end
                 if loaded
@@ -35,8 +40,8 @@ for s = setNum
                     match.liNum = l;
                     match.imSize = imSize;
 
-                    [match.coord,D1] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc{m});
-                    [match.coordKey,D2] = dtuFeatures(match.setNum,imNumKey,liNumKey,mFunc{m});
+                    [match.coord,D1] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc{m},desSave);
+                    [match.coordKey,D2] = dtuFeatures(match.setNum,imNumKey,liNumKey,mFunc{m},true);
 
                     [match.matchIdx, match.dist] = featureMatch(D1,D2);
                     match.distRatio = match.dist(:,1) ./ (match.dist(:,2) + eps);
