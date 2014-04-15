@@ -26,7 +26,7 @@ parfor setNum = 1:60
         end
 
         for m = 1:numel(imMesh)
-            disp([timestamp(time) ' image: ' num2str(m) '/' numel(imMesh)]);
+            disp([timestamp(time) ' image: ' num2str(m) '/' num2str(numel(imMesh))]);
             imNum = imMesh(m);
             liNum = liMesh(m);
             I = loadDtuImage(setNum,imMesh(m),liMesh(m));
