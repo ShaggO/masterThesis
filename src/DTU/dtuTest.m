@@ -67,7 +67,7 @@ if runInParallel
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache]);
+        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],false);
 
         matchROCAUC(c,:) = [pathMatches.ROCAUC];
         matchPRAUC(c,:) = [pathMatches.PRAUC];
@@ -82,7 +82,7 @@ else
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache]);
+        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],false);
 
         matchROCAUC(c,:) = [pathMatches.ROCAUC];
         matchPRAUC(c,:) = [pathMatches.PRAUC];
