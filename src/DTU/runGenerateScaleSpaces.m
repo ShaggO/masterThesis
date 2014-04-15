@@ -10,11 +10,13 @@ pixelDiff = 1;
 
 scales = approxScales(sigmaRange,scaleBase);
 
-[imNumKey,liNumKey,imNumPaths,liNumPaths,pathLabels] = dtuPaths();
+[imNumKey,liNumKey,imNumPaths,liNumPaths,pathLabels] = dtuPaths('train');
 
-tic
-for setNum = 39:60
-    disp([timestamp() ' Set ' num2str(setNum) '/60'])
+load('paths')
+gcp;
+parfor setNum = 1:60
+    time = tic;
+    disp([timestamp(time) ' Set ' num2str(setNum) '/60'])
     for pathType = 0:6
         if pathType == 0
             imMesh = imNumKey;
@@ -24,15 +26,15 @@ for setNum = 39:60
         end
 
         for m = 1:numel(imMesh)
+            disp([timestamp(time) ' image: ' num2str(m) '/' numel(imMesh)]);
             imNum = imMesh(m);
             liNum = liMesh(m);
             I = loadDtuImage(setNum,imMesh(m),liMesh(m));
             I = colourTransform(im2single(I),colour);
             hash = num2str(imageHash(I(:)));
 
-            load('paths.mat')
-            sDir = [dtuResults '\scaleSpaces'];
-            sPath = [sDir '\' hash '.mat'];
+            sDir = [dtuResults '/scaleSpaces'];
+            sPath = [sDir '/' hash '.mat'];
 
             if ~exist(sDir,'dir')
                 mkdir(sDir)
