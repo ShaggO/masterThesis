@@ -18,7 +18,7 @@ end
 % attempt to load scale spaces
 hash = num2str(imageHash(I(:)));
 load('paths.mat')
-sPath = [dtuResults '\scaleSpaces\' hash '.mat'];
+sPath = [dtuResults '/scaleSpaces/' hash '.mat'];
 [loaded,file] = loadIfExist(sPath,'file');
 if loaded
     [b,idx] = ismember(round(100*scales),round(100*file.scales));

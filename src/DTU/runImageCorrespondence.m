@@ -39,5 +39,5 @@ method(end+1) = methodStruct( ...
    matchCache,{'co-'});
 
 totalTime = tic;
-[ROC,PR] = dtuTest(setNum,method,1:6,true,false);
+[ROC,PR] = dtuTest(setNum,method,1:2,true,false);
 totalTime = toc(totalTime)

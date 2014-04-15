@@ -22,25 +22,25 @@ for setNum = 1
         else
             [imMesh,liMesh] = meshgrid(imNumPaths{pathType},liNumPaths{pathType});
         end
-        
+
         for m = 1:numel(imMesh)
             imNum = imMesh(m);
             liNum = liMesh(m);
             I = imread(dtuImagePath(setNum,imMesh(m),liMesh(m)));
             I = colourTransform(im2single(I),colour);
             hash = num2str(imageHash(I(:)));
-            
+
             load('paths.mat')
-            sDir = [dtuResults '\scaleSpaces'];
-            sPath = [sDir '\' hash '.mat'];
-            
+            sDir = [dtuResults '/scaleSpaces'];
+            sPath = [sDir '/' hash '.mat'];
+
             if ~exist(sDir,'dir')
                 mkdir(sDir)
             end
-%             [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,chain,pixelDiff);
-%             save(sPath,'S','Isizes','scales','scaleBase','sigmaRange', ...
-%                 'colour','d','rescale','chain','pixelDiff', ...
-%                 'setNum','imNum','liNum')
+            [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,chain,pixelDiff);
+            save(sPath,'S','Isizes','scales','scaleBase','sigmaRange', ...
+                'colour','d','rescale','chain','pixelDiff', ...
+                'setNum','imNum','liNum')
         end
     end
 end
