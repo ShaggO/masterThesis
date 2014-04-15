@@ -152,7 +152,7 @@ switch lower(m.descriptor)
         addParameter(p,'gridType',bTypes{1},okArg(bTypes));
         addParameter(p,'gridSize',[1 1]);
         addParameter(p,'gridRadius',[3 3]);
-        addParameter(p,'centerFilter','box',okArg(fTypes));
+        addParameter(p,'centerFilter','box',okArg([fTypes {'none'}]));
         addParameter(p,'centerSigma',[Inf Inf]);
         addParameter(p,'cellFilter',fTypes{1},okArg(fTypes));
         addParameter(p,'cellSigma',[1 1]);

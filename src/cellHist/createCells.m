@@ -28,9 +28,6 @@ for i = 1:numel(uniquePsize)
     PiRound = round(Pi(:,1:2));
     centersi = Psize*centers;
     
-    % construct center filter
-    [fCenter,rCenter] = ndFilter(centerFilter,Psize*centerSigma);
-    
     % construct cell filter and window
     [fCell,rCell] = ndFilter(cellFilter,Psize*cellSigma);
     window = cellWindow(cellFilter,rCell);
@@ -47,14 +44,20 @@ for i = 1:numel(uniquePsize)
     validP(maski) = 1;
     
     % compute cell points and weights
-    pointsWindow = repmat(window,[1 1 nCenters nPi]);
-    pointsCenters = repmat(permute(centersi,[3 2 1]),[nWindow 1 1 nPi]);
-    pointsCentersR = repmat(permute(round(centersi),[3 2 1]),[nWindow 1 1 nPi]);
-    pointsPi = repmat(permute(Pi(:,1:2),[4 2 3 1]),[nWindow 1 nCenters]);
     pointsPiR = repmat(permute(round(Pi(:,1:2)),[4 2 3 1]),[nWindow 1 nCenters]);
-    pointsR = pointsWindow + pointsCentersR + pointsPiR;
-    Wdata{i} = fCell(pointsR-pointsCenters-pointsPi) .* ...
-        fCenter(pointsR-pointsPi);
+    pointsWindowR = repmat(repmat(window,[1 1 nCenters]) + ...
+        repmat(permute(round(centersi),[3 2 1]),[nWindow 1 1]),[1 1 1 nPi]);
+    pointsR = pointsWindowR + pointsPiR;
+    
+    pointsCenter = repmat(permute(round(Pi(:,1:2)) - Pi(:,1:2),[4 2 3 1]), ...
+        [nWindow 1 nCenters]) + pointsWindowR;
+    pointsCell = repmat(permute(centersi,[3 2 1]),[nWindow 1 1 nPi]);
+    Wdata{i} = fCell(pointsCenter-pointsCell);
+    
+    if ~strcmp(centerFilter,'none')
+        [fCenter,~] = ndFilter(centerFilter,Psize*centerSigma);
+        Wdata{i} = Wdata{i} .* fCenter(pointsCenter);
+    end
 
     % compute indices of cell points
     Cdata{i} = pointsR(:,2,:,:) + (pointsR(:,1,:,:)-1) .* ...
@@ -62,7 +65,6 @@ for i = 1:numel(uniquePsize)
         repmat(permute(idxScales(Pi(:,3),1),[4 2 3 1]),[nWindow 1 nCenters]);
     sizes(i,1:numel(size(Cdata{i}))) = size(Cdata{i});
     map(:,maski) = i;
-    
     
 %     % compute relative cell window indices
 %     idxWindow = window(:,1) * Isizes(Pi(:,3),1)' + ...
