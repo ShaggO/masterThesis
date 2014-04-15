@@ -9,7 +9,7 @@ function binC = createBinCenters(left, right, count, varargin)
 %   offset      Offset to shift the bin centers in either positive or negative direction. Should be less thant (right-left)/(2*count)
 
 p = inputParser;
-addOptional(p,'endpoints',boolean(zeros(size(left))),@islogical);
+addOptional(p,'endpoints',false(size(left)),@islogical);
 addOptional(p,'offset',zeros(size(left)),@(x) isnumeric(x));
 parse(p, varargin{:});
 endpoints = p.Results.endpoints;
