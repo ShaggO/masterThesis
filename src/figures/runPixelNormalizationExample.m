@@ -1,8 +1,8 @@
 clc, clear all, close all
 
-I1rgb = im2double(imread(dtuImagePath(1,25,28)));
+I1rgb = im2double(loadDtuImage(1,25,28));
 I1 = rgb2gray(I1rgb);
-I2rgb = im2double(imread(dtuImagePath(1,25,20)));
+I2rgb = im2double(loadDtuImage(1,25,20));
 I2 = rgb2gray(I2rgb);
 
 cutout = {500:899,500:1099};

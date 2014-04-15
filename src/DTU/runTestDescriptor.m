@@ -13,7 +13,7 @@ match.liNum = 1;
 
 [X,D] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc,mDir);
 
-I = imread(dtuImagePath(match.setNum,match.imNum,match.liNum));
+I = loadDtuImage(match.setNum,match.imNum,match.liNum);
 figure
 imshow(I)
 hold on

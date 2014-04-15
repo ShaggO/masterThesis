@@ -30,7 +30,7 @@ liNum = 1:19;
 liPathInds.x = 1:10;
 liPathInds.z = 11:20;
 
-imSize = size(imread(dtuImagePath(setNum(1),imNum(1),liNum(1))));
+imSize = size(loadDtuImage(setNum(1),imNum(1),liNum(1)));
 
 for s = setNum
     disp(['Set ' num2str(s) '/' num2str(numel(setNum))]);
@@ -40,7 +40,7 @@ for s = setNum
         % Load all light images for this position/imNum
         Ilight = zeros([imSize numel(liNum)]);
         for l = 1:liNum
-            Ilight(:,:,:,l) = imread(dtuImagePath(s,i,l,'raw'));
+            Ilight(:,:,:,l) = loadDtuImage(s,i,l,'raw');
         end
 
         fieldnames(liPathInds)'

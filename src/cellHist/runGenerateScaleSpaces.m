@@ -10,10 +10,10 @@ pixelDiff = 1;
 
 scales = approxScales(sigmaRange,scaleBase);
 
-[imNumKey,liNumKey,imNumPaths,liNumPaths,pathLabels] = dtuPaths();
+[imNumKey,liNumKey,imNumPaths,liNumPaths,pathLabels] = dtuPaths('train');
 
 tic
-for setNum = 1
+parfor setNum = 1:60
     disp([timestamp() ' Set ' num2str(setNum) '/' num2str(setNum(end))])
     for pathType = 0:6
         if pathType == 0
@@ -26,7 +26,7 @@ for setNum = 1
         for m = 1:numel(imMesh)
             imNum = imMesh(m);
             liNum = liMesh(m);
-            I = imread(dtuImagePath(setNum,imMesh(m),liMesh(m)));
+            I = loadDtuImage(setNum,imMesh(m),liMesh(m));
             I = colourTransform(im2single(I),colour);
             hash = num2str(imageHash(I(:)));
 

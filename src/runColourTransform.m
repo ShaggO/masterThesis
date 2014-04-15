@@ -1,6 +1,6 @@
 clc, clear all
 
-I = im2double(imread(dtuImagePath(1,1,'diffuse')));
+I = im2double(loadDtuImage(1,1,'diffuse'));
 J = colourTransform(I,'c-colour');
 r1 = [min(min(J(:,:,1))) max(max(J(:,:,1)))]
 r2 = [min(min(J(:,:,2))) max(max(J(:,:,2)))]

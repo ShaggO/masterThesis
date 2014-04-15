@@ -1,6 +1,6 @@
 clc, clear all
 
-I = rgb2gray(im2double(imread(dtuImagePath(1,1,'diffuse'))));
+I = rgb2gray(im2double(loadDtuImage(1,1,'diffuse')));
 sigma = 1:10;
 threshold = [0.085 0.1 linspace(0.1,0.01,8)];
 

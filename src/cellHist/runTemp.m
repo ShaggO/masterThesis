@@ -13,7 +13,7 @@ gridSpacing = 2*gridRadius / (gridSize(2)*2+1);
 cellSigma = cellSigma * gridSpacing/2;
 cellR = ceil(cellSigma * 3);
 
-I = imread(dtuImagePath(1,1,0));
+I = loadDtuImage(1,1,0);
 I = rgb2gray(im2single(I));
 d = kJetCoeffs(1);
 scales = [1 2];
