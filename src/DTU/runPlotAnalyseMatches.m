@@ -6,7 +6,7 @@ liNum = 24;
 
 peakThresholdDog = 6.5;
 peakThresholdHarris = 10^4;
-matchCache = 0;
+matchCache = 1;
 desSave = 1;
 
 %     'vl',{'method','MultiscaleHarris','peakthreshold',peakThresholdHarris}, ...
