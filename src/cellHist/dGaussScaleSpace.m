@@ -22,13 +22,26 @@ sPath = [dtuResults '/scaleSpaces/' hash '.mat'];
 [loaded,file] = loadIfExist(sPath,'file');
 if loaded
     [b,idx] = ismember(round(100*scales),round(100*file.scales));
-    if all(b) && rescale == file.rescale && all(ismember(d,file.d,'rows'))
+    if ~all(b)
+        disp('Incompatible scale space file. (all scales not present)')
+	disp('Needed:');
+	disp(scales);
+	disp('Present:');
+	disp(file.scales);
+    elseif rescale ~= file.rescale
+	disp('Incompatible scale space file. (rescale not equal)');
+	disp(['Input rescale: ' num2str(rescale) ', file rescale: ' num2str(file.rescale)]);
+    elseif ~all(ismember(d,file.d,'rows'))
+        disp('Incompatible scale space file. (all derivatives not present)');
+        disp('Needed:');
+        disp(d);
+        disp('Present:');
+        disp(file.d);
+    else
         disp('Loaded scale space file.')
         S = file.S(idx);
         Isizes = file.Isizes(idx,:);
         return
-    else
-        disp('Incompatible scale space file.')
     end
 end
 
