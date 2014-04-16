@@ -10,20 +10,23 @@ function optimal = optimizeParameter(setNum,method,parameter,values,iterations)
 
         disp([timestamp() ' Iteration: ' num2str(i) ' Values: ' nums2str(values)]);
         % Create methods
-        for v = 1:numel(values)
-            methodV(v) = modifyDescriptor(method,parameter,values(v));
+        for v = 1:size(values,1)
+            methodV(v) = modifyDescriptor(method,parameter,values(v,:));
         end
         % Perform dtuTest on defined methods and find optimal value
         [ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
         [optimalPRAUC optimalInd] = max(PRAUC);
-        optialROCAUC = ROCAUC(optimalInd);
-        optimal = values(optimalInd);
-        disp(['Optimal this iteration: ' num2str(optimal)]);
+        optimal = values(optimalInd,:);
+        disp(['Optimal this iteration: ' nums2str(optimal)]);
 
-        % 20% interval (10% in each direction) with same number
-        % of values equally distributed
-        r = (values(end)-values(1)) * 0.1;
-        values = optimal + linspace(-r,r,numel(values));
+        if iterations > 1
+            % 20% interval (10% in each direction) with same number
+            % of values equally distributed
+            r = (values(end,:)-values(1,:)) * 0.1;
+            for i = 1:size(r,2);
+                values(:,i) = optimal(i) + linspace(-r(i),r(i),size(values,1));
+            end
+        end
     end
     disp(['Final optimal value: ' num2str(optimal)]);
 end

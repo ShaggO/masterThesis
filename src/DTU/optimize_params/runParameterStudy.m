@@ -5,7 +5,6 @@ setNum = 1;
 
 % Default settings across optimization parameters
 peakThresholdDog = 6.5;
-peakThresholdDogFull = 5;
 peakThresholdHarris = 10^4;
 matchCache = true;
 detector = 'vl';
@@ -58,28 +57,30 @@ for grid = grids
         counter = counter + 1;
     end
 end
-%[ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
-%[optimalPRAUC, optimalInd] = max(PRAUC);
-%method = methodV(optimalInd);
-method = methodV(23);
+[ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
+[optimalPRAUC, optimalInd] = max(PRAUC);
+method = methodV(optimalInd);
+%method = methodV(23);
+
 [~,gTypeInd] = ismember('gridType',method.descriptorArgs(1:2:end));
 [~,gSizeInd] = ismember('gridSize',method.descriptorArgs(1:2:end));
 disp(['Optimal grid: ' method.descriptorArgs{gTypeInd*2}...
     ', size: ' nums2str(method.descriptorArgs{gSizeInd*2})]);
 
+
 % gridRadius: [2:40] (10 values)
-gridRadius = optimizeParameter(setNum,method,'gridRadius',linspace(2,40,8),2);
+gridRadius = optimizeParameter(setNum,method,'gridRadius',linspace(2,40,8)',2);
 % centerSigma [1/3:2]
-centerSigma = optimizeParameter(setNum,method,'centerSigma',linspace(1/3,2,8),2);
+centerSigma = optimizeParameter(setNum,method,'centerSigma',repmat(linspace(1/3,2,8)',[1 2]),2);
 % cellSigma [1/3:1/3:2], 3, 4
-cellSigma = optimizeParameter(setNum,method,'cellSigma',[1/3:1/3:2,3,4],2);
+cellSigma = optimizeParameter(setNum,method,'cellSigma',repmat([1/3:1/3:2,3,4]',[1 2]),2);
 % binSigma [0.5:0.5:4]
-binSigma = optimizeParameter(setNum,method,'binSigma',[0.5:0.5:4],2);
+binSigma = optimizeParameter(setNum,method,'binSigma',[0.5:0.5:4]',2);
 % binCount [4:16]
-binCount = optimizeParameter(setNum,method,'binCount',[4:16],1);
+binCount = optimizeParameter(setNum,method,'binCount',[4:16]',1);
 
 % normSigma pixel [1:10]
-normSigmaPixel = optimizeParameter(setNum,method,'normSigma',[1:10],1);
+normSigmaPixel = optimizeParameter(setNum,method,'normSigma',repmat([1:10]',[1 2]),1);
 % normSigma box [2,3] (HOG)
 method.normType = 'block';
-normSigmaBox = optimizeParameter(setNum,method,'normSigma',[2,3],1);
+normSigmaBox = optimizeParameter(setNum,method,'normSigma',repmat([2,3]',[1 2]),1);
