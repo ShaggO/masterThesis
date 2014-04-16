@@ -1,7 +1,7 @@
 clc, clear all
 
 setNum = 1;
-setNum = dtuSplitSets(10,2);
+setNum = dtuSplitSets(10,1);
 peakThresholdDog = 6.5;
 peakThresholdHarris = 10^4;
 

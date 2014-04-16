@@ -24,7 +24,9 @@ for s = setNum
             for m = 1:numel(mFunc)
                 mDir = [dtuResults '/' mName{m}];
                 n = n + 1;
-                disp([timestamp() ' Image ' num2str(n) '/' num2str(N)]);
+                if N > 1
+                    disp([timestamp() ' Image ' num2str(n) '/' num2str(N)]);
+                end
                 matchPath = [mDir '/matches_' dtuImageName(s,i,l)];
 
                 loaded = false;
