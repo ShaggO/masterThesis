@@ -20,6 +20,10 @@ desArgs = {...
     'scaleBase',2^(1/3),...
     'rescale',1,...
     'cache',1};
+method = methodStruct(...
+    detector, detectorArgs,...
+    descriptor, desArgs,...
+    matchCache,{'ro-'});
 
 [des.centerFilter,des.cellFilter,des.normFilter,des.binFilter] = deal('gaussian');
 
@@ -48,33 +52,34 @@ disp(['Total number of grid parameters to test: ' num2str(paramNum)]);
 counter = 1;
 for grid = grids
     for j = 1:size(grid.gridSize,1)
-        desArgsTemp = desArgs;
-        desArgsTemp(end+1:end+4) = {'gridType',grid.gridType,...
-                'gridSize',grid.gridSize(j,:)};
-        method(counter) = methodStruct(...
-                detector, detectorArgs,...
-                descriptor, desArgsTemp,matchCache,{'ro-'});
+        methodV(counter) = modifyDescriptor(method,...
+            'gridType',grid.gridType,...
+            'gridSize',grid.gridSize(j,:));
         counter = counter + 1;
     end
 end
-[ROCAUC, PRAUC] = dtuTest(setNum,method,1:6,false,true,'train');
-[optimalPRAUC, optimalInd] = max(PRAUC);
-method = method(optimalInd);
-disp(['Optimal grid: ' method.gridType ', size: ' nums2str(method.gridSize)]);
+%[ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
+%[optimalPRAUC, optimalInd] = max(PRAUC);
+%method = methodV(optimalInd);
+method = methodV(23);
+[~,gTypeInd] = ismember('gridType',method.descriptorArgs(1:2:end));
+[~,gSizeInd] = ismember('gridSize',method.descriptorArgs(1:2:end));
+disp(['Optimal grid: ' method.descriptorArgs{gTypeInd*2}...
+    ', size: ' nums2str(method.descriptorArgs{gSizeInd*2})]);
 
 % gridRadius: [2:40] (10 values)
-gridRadius = optimizeParameter(method,'gridRadius',linspace(2,40,8),2);
+gridRadius = optimizeParameter(setNum,method,'gridRadius',linspace(2,40,8),2);
 % centerSigma [1/3:2]
-centerSigma = optimizeParameter(method,'centerSigma',linspace(1/3,2,8),2);
+centerSigma = optimizeParameter(setNum,method,'centerSigma',linspace(1/3,2,8),2);
 % cellSigma [1/3:1/3:2], 3, 4
-cellSigma = optimizeParameter(method,'cellSigma',[1/3:1/3:2,3,4],2);
+cellSigma = optimizeParameter(setNum,method,'cellSigma',[1/3:1/3:2,3,4],2);
 % binSigma [0.5:0.5:4]
-binSigma = optimizeParameter(method,'binSigma',[0.5:0.5:4],2);
+binSigma = optimizeParameter(setNum,method,'binSigma',[0.5:0.5:4],2);
 % binCount [4:16]
-binCount = optimizeParameter(method,'binCount',[4:16],1);
+binCount = optimizeParameter(setNum,method,'binCount',[4:16],1);
 
 % normSigma pixel [1:10]
-normSigmaPixel = optimizeParameter(method,'normSigma',[1:10],1);
+normSigmaPixel = optimizeParameter(setNum,method,'normSigma',[1:10],1);
 % normSigma box [2,3] (HOG)
 method.normType = 'block';
-normSigmaBox = optimizeParameter(method,'normSigma',[2,3],1);
+normSigmaBox = optimizeParameter(setNum,method,'normSigma',[2,3],1);

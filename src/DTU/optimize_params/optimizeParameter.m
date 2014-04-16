@@ -1,17 +1,17 @@
-function optimal = optimizeParameter(method,parameter,values,iterations)
+function optimal = optimizeParameter(setNum,method,parameter,values,iterations)
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
     disp(['Optimizing parameter: ' parameter]);
     optimalInd = 0;
     optimalAUC = [-Inf -Inf];
+    tic;
 
     % Iterate
     for i = 1:iterations
 
         disp([timestamp() ' Iteration: ' num2str(i) ' Values: ' nums2str(values)]);
         % Create methods
-        for v = 1:numel(v)
-            methodV(v) = method;
-            methodV(v).(parameter) = v;
+        for v = 1:numel(values)
+            methodV(v) = modifyDescriptor(method,parameter,values(v));
         end
         % Perform dtuTest on defined methods and find optimal value
         [ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
