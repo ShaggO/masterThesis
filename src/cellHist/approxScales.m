@@ -4,6 +4,6 @@ function scales = approxScales(sigmaF,base)
 minLogScale = log(min(sigmaF))/log(base);
 maxLogScale = log(max(sigmaF))/log(base);
 
-scales = base .^ (round(minLogScale) : round(maxLogScale));
+scales = base .^ (max(round(minLogScale),0) : round(maxLogScale));
 
 end

@@ -22,7 +22,8 @@ P2 = match.coord;
 P1 = match.coordKey(match.matchIdx(:,1),:);
 
 correctDir = [dtuResults '/correctMatches'];
-correctPath = sprintf('%s/correct_%.3d-%.3d.mat',correctDir,KeyFrame,match.imNum);
+correctPath = sprintf('%s/correct%.2d_%.3d-%.3d.mat',correctDir, ...
+    match.setNum,KeyFrame,match.imNum);
 [loaded,file] = loadIfExist(correctPath,'file');
 if loaded
     [cached,idx] = ismember([P1 P2],file.pair,'rows');
