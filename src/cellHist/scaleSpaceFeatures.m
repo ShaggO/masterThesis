@@ -2,7 +2,10 @@ function P = scaleSpaceFeatures(F, scales, rescale)
 %SCALESPACEFEATURES Computes the scale space coordinates, index, and
 %relative size of given features
 
-P = zeros(size(F,1),4);
+if size(F,1) == 0
+    P = zeros(0,4);
+    return
+end
 
 % Find closest scale for each feature
 [~,P(:,3)] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
