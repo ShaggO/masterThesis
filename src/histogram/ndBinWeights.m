@@ -40,7 +40,7 @@ for i = 1:size(binC,1)
     rMask = all(d <= repmat(r,[nV 1]),2);
     dr = d(rMask,:);
     % Compute bin weights
-    B(rMask,i) = f(dr);
+    B(rMask,i) = wBin(i) * f(dr);
 end
 
 end

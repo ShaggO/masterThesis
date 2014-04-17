@@ -16,7 +16,7 @@ for i = 1:numel(M)
 
     V = f([X(:),Y(:)]);
     F = reshape(V,size(X));
-    Mnorm{i} = M{i} ./ imfilter(M{i},F,'conv','replicate');
+    Mnorm{i} = M{i} ./ (imfilter(M{i},F,'conv','replicate') + eps);
 end
 
 end
