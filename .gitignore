@@ -55,3 +55,6 @@ src/startup.m
 
 shell_scripts/
 src/runTestVarArrayOld.m
+src/runMoveHashes.m
+src/moveHashes.m
+src/imageHashOld.m
