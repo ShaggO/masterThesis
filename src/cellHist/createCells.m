@@ -17,7 +17,7 @@ uniquePsize = unique(P(:,4));
 validP = false([size(P,1) 1]);
 Cdata = cell(numel(uniquePsize),1);
 Wdata = cell(numel(uniquePsize),1);
-sizes = ones(numel(uniquePsize),3);
+sizes = ones(numel(uniquePsize),4);
 map = zeros(size(centers,1),size(P,1));
 for i = 1:numel(uniquePsize)
     % iterate over unique cell sizes

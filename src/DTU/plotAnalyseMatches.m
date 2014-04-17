@@ -10,7 +10,7 @@ load('paths');
 imArgin = {match.setNum, match.imNum, match.liNum};
 I = loadDtuImage(imArgin{:});
 imRes = load([dtuResults '/' mName '/descriptors_' dtuImageName(imArgin{:})]);
-keyRes = load([dtuResults '/' mName '/descriptors_' dtuImageName(match.setNum, 25, match.liNum)]);
+keyRes = load([dtuResults '/' mName '/descriptors_' dtuImageName(match.setNum, 25, 0)]);
 Ikey = loadDtuImage(match.setNum, 25, match.liNum);
 
 T = [0; sort(match.distRatio,'ascend')];
