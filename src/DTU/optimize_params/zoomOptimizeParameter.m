@@ -1,4 +1,4 @@
-function optimal = optimizeParameter(setNum,method,parameter,values,iterations)
+function optimal = zoomOptimizeParameter(setNum,method,parameter,values,iterations)
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
     disp(['Optimizing parameter: ' parameter]);
     optimalInd = 0;

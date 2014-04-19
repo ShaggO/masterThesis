@@ -3,7 +3,7 @@ disp('Optimization of parameters started');
 
 setNum = 1;
 
-% Default settings across optimization parameters
+%% Default settings across optimization parameters
 peakThresholdDog = 6.5;
 peakThresholdHarris = 10^4;
 matchCache = true;
@@ -28,59 +28,34 @@ method = methodStruct(...
 
 % Optimize the following parameters
 %% Grid optimization
-grids(1).gridType = 'square';
-grids(1).gridSize = [1:5;1:5]';
-grids(2).gridType = 'polar';
-grids(2).gridSize = [24 1;20 1;16 1;12 1;8 1;4 1;...
-                   12 2;8 2; 4 2;...
-                   8 3;6 3;4 3;...
-                   6 4;4 4];
-grids(3).gridType = 'concentric polar';
-grids(3).gridSize = [12 2; 8 2;4 2;...
-                     8 3;6 3;4 3;...
-                     6 4;4 4;...
-                     4 5;
-                     4 6];
+gridTypes = {};
+gridSizes = {};
+gridTypes(1:5) = {'square'};
+gridTypes(6:19) = {'polar'};
+gridTypes(20:29) = {'concentric polar'};
+gridSizes(1:5) = mat2cell([1:5;1:5]',ones(5,1),2);
+gridSizes(6:19) = mat2cell([24 1;20 1;16 1;12 1;8 1;4 1;12 2;8 2;4 2;...
+    8 3;6 3;4 3;6 4;4 4],ones(14,1),2);
+gridSizes(20:29) = mat2cell([12 2;8 2;4 2;8 3;6 3;4 3;6 4;4 4;4 5;4 6],...
+    ones(10,1),2);
 
-paramNum = 0;
-for i = 1:numel(grids)
-    paramNum = paramNum + size(grids(i).gridSize,1);
-end
-disp(['Total number of grid parameters to test: ' num2str(paramNum)]);
+disp(['Total number of grid parameters to test: ' num2str(numel(gridTypes))]);
 
-counter = 1;
-for grid = grids
-    for j = 1:size(grid.gridSize,1)
-        methodV(counter) = modifyDescriptor(method,...
-            'gridType',grid.gridType,...
-            'gridSize',grid.gridSize(j,:));
-        counter = counter + 1;
-    end
-end
-[ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
-[optimalPRAUC, optimalInd] = max(PRAUC);
-method = methodV(optimalInd);
-%method = methodV(23);
-
-[~,gTypeInd] = ismember('gridType',method.descriptorArgs(1:2:end));
-[~,gSizeInd] = ismember('gridSize',method.descriptorArgs(1:2:end));
-disp(['Optimal grid: ' method.descriptorArgs{gTypeInd*2}...
-    ', size: ' nums2str(method.descriptorArgs{gSizeInd*2})]);
-
+[method,optimal] = enumOptimizeParameter(setNum,method,'gridType',gridTypes,'gridSize',gridSizes);
 
 % gridRadius: [2:40] (10 values)
-gridRadius = optimizeParameter(setNum,method,'gridRadius',linspace(2,40,8)',2);
+gridRadius = zoomOptimizeParameter(setNum,method,'gridRadius',linspace(2,40,8)',2);
 % centerSigma [1/3:2]
-centerSigma = optimizeParameter(setNum,method,'centerSigma',repmat(linspace(1/3,2,8)',[1 2]),2);
+centerSigma = zoomOptimizeParameter(setNum,method,'centerSigma',repmat(linspace(1/3,2,8)',[1 2]),2);
 % cellSigma [1/3:1/3:2], 3, 4
-cellSigma = optimizeParameter(setNum,method,'cellSigma',repmat([1/3:1/3:2,3,4]',[1 2]),2);
+cellSigma = zoomOptimizeParameter(setNum,method,'cellSigma',repmat([1/3:1/3:2,3,4]',[1 2]),2);
 % binSigma [0.5:0.5:4]
-binSigma = optimizeParameter(setNum,method,'binSigma',[0.5:0.5:4]',2);
+binSigma = zoomOptimizeParameter(setNum,method,'binSigma',[0.5:0.5:4]',2);
 % binCount [4:16]
-binCount = optimizeParameter(setNum,method,'binCount',[4:16]',1);
+binCount = zoomOptimizeParameter(setNum,method,'binCount',[4:16]',1);
 
 % normSigma pixel [1:10]
-normSigmaPixel = optimizeParameter(setNum,method,'normSigma',repmat([1:10]',[1 2]),1);
+normSigmaPixel = zoomOptimizeParameter(setNum,method,'normSigma',repmat([1:10]',[1 2]),1);
 % normSigma box [2,3] (HOG)
 method.normType = 'block';
-normSigmaBox = optimizeParameter(setNum,method,'normSigma',repmat([2,3]',[1 2]),1);
+normSigmaBox = zoomOptimizeParameter(setNum,method,'normSigma',repmat([2,3]',[1 2]),1);
