@@ -15,6 +15,12 @@ for i = 1:numel(LS)
             V{i} = 2/pi*atan2(-L.xx-L.yy,sqrt(4*L.xy.^2+(L.xx-L.yy).^2));
         case 'C'
             V{i} = sqrt(L.xx.^2 + 2*L.xy.^2 + L.yy.^2);
+        case 'Theta-S'
+            V{i} = cat(3,atan2(L.y,L.x), ...
+                2/pi*atan2(-L.xx-L.yy,sqrt(4*L.xy.^2+(L.xx-L.yy).^2)));
+        case 'M*C'
+            V{i} = sqrt((L.x).^2 + (L.y).^2) .* ...
+                sqrt(L.xx.^2 + 2*L.xy.^2 + L.yy.^2);
         case 'l'
             V{i} = atan(s*(L.xx+L.yy) ./ sqrt(4*(L.x.^2 + L.y.^2) + ...
                 s^2 .* ((L.xx-L.yy).^2) + 4*L.xy.^2));

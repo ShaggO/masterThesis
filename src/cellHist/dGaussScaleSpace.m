@@ -1,4 +1,4 @@
-function [S,Isizes] = dGaussScaleSpace(I, d, scales, rescale, chain, pixelDiff)
+function [L,Isizes] = dGaussScaleSpace(I, d, scales, rescale, chain, pixelDiff)
 %SCALESPACE Gaussian derivative scale space
 % Input:
 %   I           image
@@ -39,7 +39,7 @@ if loaded
         disp(file.d);
     else
         disp('Loaded scale space file.')
-        S = file.S(idx);
+        L = file.S(idx);
         Isizes = file.Isizes(idx,:);
         return
     end
@@ -57,7 +57,7 @@ end
 % Initialize structure of derivatives
 temp = {cell(numel(scales),1)};
 structArgs = interweave(fd,repmat(temp,[size(d,1) 1]));
-S = struct(structArgs{:});
+L = struct(structArgs{:});
 Isizes = zeros([numel(scales) 2]);
 
 if chain
@@ -74,12 +74,12 @@ if chain
             for i = 1:size(d,1)
                 dI = imfilter(I,-d2d(d(i,1),d(i,2)),'conv');
                 if rescale > 0
-                    S(j).(fd{i}) = imresize(dI,rescale/scales(j));
+                    L(j).(fd{i}) = imresize(dI,rescale/scales(j));
                 else
-                    S(j).(fd{i}) = dI;
+                    L(j).(fd{i}) = dI;
                 end
             end
-            Isizes(j,:) = size(S(j).(fd{1}));
+            Isizes(j,:) = size(L(j).(fd{1}));
         end
     else
         % derive gauss filters and chain gausses iteratively
@@ -96,11 +96,11 @@ if chain
                 hsize = 2*ceil(3*s)+1;
                 Ii = imfilter(Ii,dGauss2d(m,n,hsize,s),'conv');
                 if rescale > 0
-                    S(j).(fd{i}) = imresize(Ii,rescale/scales(j));
+                    L(j).(fd{i}) = imresize(Ii,rescale/scales(j));
                 else
-                    S(j).(fd{i}) = Ii;
+                    L(j).(fd{i}) = Ii;
                 end
-                Isizes(j,:) = size(S(j).(fd{1}));
+                Isizes(j,:) = size(L(j).(fd{1}));
             end
         end
     end
@@ -109,13 +109,13 @@ else
     for j = 1:numel(scales)
         hsize = 2*ceil(3*scales(j))+1;
         for i = 1:size(d,1)
-            S(j).(fd{i}) = imfilter(I,dGauss2d(d(i,1),d(i,2),hsize,scales(j)), ...
+            L(j).(fd{i}) = imfilter(I,dGauss2d(d(i,1),d(i,2),hsize,scales(j)), ...
                 'conv');
             if rescale > 0
-                S(j).(fd{i}) = imresize(S(j).(fd{i}),rescale/scales(j));
+                L(j).(fd{i}) = imresize(L(j).(fd{i}),rescale/scales(j));
             end
         end
-        Isizes(j,:) = size(S(j).(fd{1}));
+        Isizes(j,:) = size(L(j).(fd{1}));
     end
 end
 

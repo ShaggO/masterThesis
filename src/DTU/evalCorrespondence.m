@@ -71,7 +71,7 @@ correct = match.CorrectMatch;
 save(correctPath,'pair','correct')
 
 [match.ROC, match.PR] = analyseMatches(match);
-match.ROCAUC = ROCarea(match.ROC');
-match.PRAUC = 1 - ROCarea(fliplr(match.PR)');
+match.ROCAUC = ROCarea(match.ROC','roc');
+match.PRAUC = ROCarea(match.PR','pr');
 
 end

@@ -1,10 +1,22 @@
-function V = cells2vector(C)
+function V = cells2vector(C,dims)
 %CELLS2VECTOR Converts a cell array of arrays to a 1-dimensional array
+% Input:
+%   C       Cell array of arrays
+%   dims    Number of dimensions of output
 
-V = zeros(0,1);
+if nargin < 2
+    dims = 1;
+end
+
+V = [];
 for i = 1:numel(C)
-    V = [V; C{i}(:)];
+    if dims == 1
+        V = [V; C{i}(:)];
+    else
+        sizeCi = num2cell(size(C{i}));
+        reshapeArgs = sizeCi(2:dims);
+        V = [V; reshape(C{i},[],reshapeArgs{:})];
+    end
 end
 
 end
-

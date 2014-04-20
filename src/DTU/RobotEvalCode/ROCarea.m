@@ -7,7 +7,19 @@
 % Dec. 2011
 %
 %function Area=ROCarea(ROC)
-function Area=ROCarea(ROC)
+function Area=ROCarea(ROC,type)
+
+if nargin < 2
+    type = 'roc';
+end
+
+switch type
+    case 'roc'
+        ROC = [ROC [1; 1]];
+    case 'pr'
+        ROC = flipud(ROC);
+        ROC(2,:) = 1 - ROC(2,:);
+end
 
 Area=0;
 for i=2:size(ROC,2),

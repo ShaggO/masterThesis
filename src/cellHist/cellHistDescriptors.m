@@ -53,8 +53,7 @@ switch contentType
         return
     case 'go-si'
         dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
-        vFunc = @(L,s) [diffStructure('Theta',L,s) ...
-            diffStructure('S',L,s)];
+        vFunc = @(L,s) diffStructure('Theta-S',L,s);
         left = [-pi -1];
         right = [pi 1];
         binCArgin = {};
@@ -99,7 +98,7 @@ switch magnitudeType
         mFunc = @(L,s) diffStructure('C',L,s);
     case 'm-c'
         dMagnitude = [1 0; 0 1; 2 0; 1 1; 0 2];
-        mFunc = @(L,s) diffStructure('M',L,s) .* diffStructure('C',L,s);
+        mFunc = @(L,s) diffStructure('M*C',L,s);
     case 'j2'
         dMagnitude = [1 0; 0 1; 2 0; 1 1; 0 2];
         mFunc = @(L,s) diffStructure('j2',L,s);
@@ -116,9 +115,9 @@ end
 % compute scale space images
 d = union(dContent,dMagnitude,'rows');
 scales = approxScales(F(:,3),scaleBase);
-[S,Isizes] = dGaussScaleSpace(I,d,scales,rescale);
-V = vFunc(S,scales);
-M = mFunc(S,scales);
+[L,Isizes] = dGaussScaleSpace(I,d,scales,rescale);
+V = vFunc(L,scales);
+M = mFunc(L,scales);
 
 % Pixel-wise normalization of magnitudes
 if strcmp(normType,'pixel')
@@ -130,7 +129,9 @@ if strcmp(normType,'pixel')
     M = pixelNormalization(M,normFilter,normSigma);
 end
 
-V = cells2vector(V);
+Vdims = size(V{1},3);
+V = cellfun(@(v) {reshape(v,[],Vdims)},V);
+V = cells2vector(V,Vdims);
 M = cells2vector(M);
 
 % create cells
@@ -173,7 +174,7 @@ elseif strcmp(normType,'block')
 end
 
 % Reshape and normalize descriptors to unit vectors
-D = reshape(H,[binCount*size(C.map,1) size(C.map,2)])';
+D = reshape(H,[prod(binCount)*size(C.map,1) size(C.map,2)])';
 D = D ./ repmat(sum(D,2),[1 size(D,2)]);
 
 end

@@ -51,17 +51,24 @@ classdef varArray<handle
 %         end
         
         % Get data part i
-        function [x,mask] = partData(obj,i)
-            x = obj.data{i};
+        function [data,mask] = partData(obj,i)
+            data = obj.data{i};
             mask = obj.map == i;
         end
         
-%         % Get data of a specific size
-%         function [x,mask] = sizeData(obj,sz)
-%             [~,i] = ismember(sz,obj.sizes);
-%             [x,mask] = partData(obj,i);
-%         end
+        % Lookup data values from map indices
+        function x = lookup(obj,varargin)
+            mapIdx = reshape(1:numel(obj.map),size(obj.map));
+            mapIdx = mapIdx(varargin{:}); mapIdx = mapIdx(:);
+            i = obj.map(mapIdx);
+            assert(all(i-i(1) == 0),'All indices must have the same size.')
+            [D,mask] = obj.partData(i(1));
+            dataIdx = zeros(size(mask));
+            dataIdx(mask) = 1:sum(mask(:));
+            x = D(dataIdx(mapIdx(:)),:);
+        end
         
+        % Convert to vector
         function V = vector(obj)
             V = cells2vector(obj.data);
         end
