@@ -1,34 +1,78 @@
-function [P, d] = cellWindow(type, r, rCenter)
+function [P, minP, maxP, Ppol] = cellWindow(type, r, rCenter)
 %CELLWINDOW Computes coordinate offsets of a cell window of some type and
 %radius
 
-r = ceil(r);
 switch type
-    case 'gaussian'        
-        [X,Y] = meshgrid(-r(1):r(1),-r(2):r(2));
-        mask = sqrt((X/r(1)).^2 + (Y/r(2)).^2) <= 1;
+    case 'gaussian'
+        r = ceil(r);
+        uniqueR = unique(r,'rows');
+        
+        Pdata = cell(size(uniqueR,1),1);
+        sizes = ones(size(uniqueR,1),3);
+        map = zeros(size(uniqueR,1),1);
+        minP = zeros(size(r,1),2);
+        maxP = minP;
+        for i = 1:size(uniqueR,1)
+            ri = uniqueR(i,:);
+            rMaski = ismember(r,ri,'rows');
+            nwi = sum(rMaski);
+            [X,Y] = meshgrid(-ri(1):ri(1),-ri(2):ri(2));
+            mask = sqrt((X/ri(1)).^2 + (Y/ri(2)).^2) <= 1;
+            Pi = [X(mask) Y(mask)];
+            Pdata{i} = repmat(Pi,[1 1 nwi]);
+            sizes(i,1:ndims(Pdata{i})) = size(Pdata{i});
+            map(rMaski) = i;
+            minP(rMaski,:) = repmat(min(Pi,[],1),[nwi 1]);
+            maxP(rMaski,:) = repmat(max(Pi,[],1),[nwi 1]);
+        end
+        P = varArray.newFull(Pdata,sizes,map);
     case 'triangle'
+        r = ceil(r);
         [X,Y] = meshgrid(-r(1):r(1),-r(2):r(2));
         mask = abs(X/r(1)) + abs(Y/r(2)) <= 1;
+        P = [X(mask) Y(mask)];
     case 'box'
+        r = ceil(r);
+        [X,Y] = meshgrid(-r(1):r(1),-r(2):r(2));
         mask = ':';
+        P = [X(mask) Y(mask)];
     case 'polar'
-        assert(r(1)*rCenter(2) == r(2)*rCenter(1), ...
-            'r and rCenter must have same relative dimensions.')
-        assert(~any(r == 0),'r must be nonzero')
-        [X,Y] = meshgrid(0:rCenter(1)+r(1),0:rCenter(2)+r(2));
-        if all(rCenter == 0)
-            d = 1 * abs(sqrt((X/r(1)).^2 + (Y/r(2)).^2));
-        else
-            d = rCenter(1)/r(1) * abs(sqrt((X/rCenter(1)).^2 + (Y/rCenter(2)).^2) - 1);
+        rBox = max(r(:,2) + rCenter(:,2));
+        [X,Y] = meshgrid(-rBox:rBox,-rBox:rBox);
+        [Theta,Rho] = cart2pol(X,Y);
+        
+        Theta = repmat(Theta,[1 1 size(r,1)]);
+        Rho = repmat(Rho,[1 1 size(r,1)]);
+        rTheta = repmat(permute(r(:,1),[2 3 1]),size(X));
+        rRho = repmat(permute(r(:,2),[2 3 1]),size(X));
+        rCenterTheta = repmat(permute(rCenter(:,1),[2 3 1]),size(X));
+        rCenterRho = repmat(permute(rCenter(:,2),[2 3 1]),size(X));
+        
+        dTheta = abs(Theta-rCenterTheta);
+        dTheta = min(dTheta,2*pi-dTheta);
+        dRho = abs(Rho-rCenterRho);
+        wMask = sqrt((dTheta./rTheta).^2 + (dRho./rRho).^2) <= 1;
+        nMask = squeeze(sum(sum(wMask,1),2));
+        uniqueN = unique(nMask);
+        
+        Pdata = cell(numel(uniqueN),1);
+        PpolData = cell(numel(uniqueN),1);
+        sizes = ones(numel(uniqueN),3);
+        map = zeros(numel(nMask),1);
+        for i = 1:numel(uniqueN)
+            ni = uniqueN(i);
+            nMaski = ni == nMask;
+            nwi = sum(nMaski);
+            wMaski = wMask(:,:,nMaski);
+            Pdata{i} = [reshape(multIdx(repmat(X,[1 1 nwi]),wMaski),ni,1,nwi) ...
+                reshape(multIdx(repmat(Y,[1 1 nwi]),wMaski),ni,1,nwi)];
+            PpolData{i} = [reshape(multIdx(repmat(Theta,[1 1 nwi]),wMaski),ni,1,nwi) ...
+                reshape(multIdx(repmat(Rho,[1 1 nwi]),wMaski),ni,1,nwi)];
+            sizes(i,1:ndims(Pdata{i})) = size(Pdata{i});
+            map(nMaski) = i;
         end
-        mask = d <= 1;
-        d = d(mask);
-        % todo: calculate angles
+        P = varArray.newFull(Pdata,sizes,map);
+        Ppol = varArray.newFull(PpolData,sizes,map);
 end
-
-P = [X(mask) Y(mask)];
-% P = repmat(P,[1 1 size(centers,1)]) + ...
-%     repmat(permute(centers,[3 2 1]),[size(P,1) 1]);
 
 end

@@ -1,5 +1,6 @@
 TODO:
 
+- Framework for concatenation of descriptors
 - Investigate choices in approxScales
 - Support for complex cell grid layouts: cells at different scales and other cell filter types
 - Support for rotationally invariant descriptors

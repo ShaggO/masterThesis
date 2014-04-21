@@ -1,0 +1,14 @@
+Noter til det 10. møde med Kim og Sune d. 22. april
+
+- Vi har brugt en masse tid på optimering, caching, parallelisering, debugging, tilegnelse af gammel MATLAB version
+
+- Sidste gang havde vi eksperimenteret med nogle metodevalg men ikke kørt på meget data. Det har vi nu:
+go > l > b > a
+
+- Polar Gaussian cellefiltre
+
+- Feedback på figurer
+
+- Detaljegrad på beskrivelse af DTU datasættet. Hvilken figur til light paths? Alle bruger forskellige, modstridende med hinanden.
+
+- Hvordan skal vi normalisere histogrammer når vi bruger center filter

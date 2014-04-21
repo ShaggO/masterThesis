@@ -23,6 +23,13 @@ function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
 %   binSigma        Variance of bin filter
 %   binCount        Number of bins
 
+% check if 0 features
+if size(F,1) == 0
+    X = zeros(0,2);
+    D = [];
+    return
+end
+
 % set variables depending on type of histogram content
 switch contentType
     case 'go'
@@ -129,9 +136,8 @@ if strcmp(normType,'pixel')
     M = pixelNormalization(M,normFilter,normSigma);
 end
 
-Vdims = size(V{1},3);
-V = cellfun(@(v) {reshape(v,[],Vdims)},V);
-V = cells2vector(V,Vdims);
+V = cellfun(@(v) {reshape(v,[],numel(binCount))},V);
+V = cells2vector(V,numel(binCount));
 M = cells2vector(M);
 
 % create cells
@@ -139,6 +145,20 @@ P = scaleSpaceFeatures(F,scales,rescale);
 [C,Wcell,validP] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
     centerFilter,centerSigma,cellFilter,cellSigma);
 X = F(validP,1:2);
+
+% % draw cells
+% Iw = zeros(sum(prod(Isizes,2)),1);
+% for i = 1:numel(C.data)
+%     for j = 1:size(C.data{i},3)
+%         for k = 1:size(C.data{i},4)
+%             Iw(C.data{i}(:,:,j,k)) = max(Iw(C.data{i}(:,:,j,k)), ...
+%                 Wcell.data{i}(:,:,j,k));
+%         end
+%     end
+% end
+% Iw = varArray.newVector(Iw,Isizes,C.map);
+% figure
+% imshow(imresize(I,Isizes(3,:)).*Iw.data{3},[])
 
 % compute histogram variables
 [binF, binR] = ndFilter(binFilter,binSigma);

@@ -4,7 +4,7 @@ setNum = 1;
 imNum = 57;
 liNum = 0;
 
-peakThresholdDog = 5;
+peakThresholdDog = 6.5;
 peakThresholdDogFull = 5;
 peakThresholdHarris = 10^4;
 
