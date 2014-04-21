@@ -2,9 +2,8 @@
 \begin{document}
 
 \appendix
-\section*{Appendix}
-\section{Image transformations} \label{apx:image_transformations}
-\subsection{Rotation}
+\chapter{Image transformations} \label{apx:image_transformations}
+\section{Rotation}
 
 Let $\widetilde{L}$ be the blurred image $L$ rotated around some point $\mathbf{x}$ by angle $\theta$. That is, we rotate the original coordinate system axes $\mathbf{e}_x, \mathbf{e}_y$ by multiplying by a rotation matrix $\mathbf{R}$:
 %
@@ -40,7 +39,7 @@ L_{ij} &= \nabla_{\mathbf{e}_i} (\nabla_{\mathbf{e}_j} L) \\
 &= -\frac12 \sin 2\theta (L_{xx} - L_{yy}) + \cos 2\theta L_{xy}
 \end{align}
 %
-\subsubsection{Gradient orientation}
+\subsection{Gradient orientation}
 %
 First we show an intermediate result using a common tangent identity:
 %
@@ -60,7 +59,7 @@ We use this to compute $\widetilde{\Theta}$:
 &= \Atan{\frac{L_y}{L_x}} - \theta = \Theta - \theta
 \end{align}
 %
-\subsubsection{Gradient magnitude}
+\subsection{Gradient magnitude}
 %
 \begin{align}
 \widetilde{M} &= \sigma^2 \sqrt{\widetilde{L}_x^2 + \widetilde{L}_y^2} \\
@@ -68,7 +67,7 @@ We use this to compute $\widetilde{\Theta}$:
 &= \sigma^2 \sqrt{L_x^2 + L_y^2} = M
 \end{align}
 %
-\subsubsection{Shape index}
+\subsection{Shape index}
 %
 Define $S_n = -L_{xx} - L_{yy}$ and $S_d = 4 L_{xy}^2 + (L_{xx} - L_{yy})^2$ such that $\widetilde{S} = \frac{2}{\pi} \Atan{S_n/\sqrt{S_d}}$, and equivalently for $\widetilde{S}_n,\widetilde{S}_d$. We show that $\widetilde{S}_n = S_n$ and $\widetilde{S}_d = S_d$:
 %
@@ -87,7 +86,7 @@ Define $S_n = -L_{xx} - L_{yy}$ and $S_d = 4 L_{xy}^2 + (L_{xx} - L_{yy})^2$ suc
 %
 And thus $\widetilde{S} = S$.
 %
-\subsubsection{Curvedness}
+\subsection{Curvedness}
 %
 \begin{align}
 \widetilde{L}_{xx}^2 + \widetilde{L}_{yy}^2
@@ -106,7 +105,7 @@ and thus
 \widetilde{C} &= \frac12 \sigma^2 \sqrt{\widetilde{L}_{xx}^2 + 2 \widetilde{L}_{xy}^2 + \widetilde{L}_{yy}^2} = C
 \end{align}
 %
-\subsection{Illumination}
+\section{Illumination}
 %
 Affine illumination model:
 %
