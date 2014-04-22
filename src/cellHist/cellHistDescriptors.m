@@ -1,7 +1,8 @@
 function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
     scaleBase,rescale,gridType,gridSize,gridRadius,...
     centerFilter,centerSigma,cellFilter,cellSigma,...
-    normType,normFilter,normSigma,binFilter,binSigma,binCount)
+    normType,normFilter,normSigma,binFilter,binSigma,binCount,...
+    cellNormStrategy)
 % GETGHISTDESCRIPTORS Customizable descriptor based on cells of gradient
 % histograms.
 %
@@ -142,8 +143,8 @@ M = cells2vector(M);
 
 % create cells
 P = scaleSpaceFeatures(F,scales,rescale);
-[C,Wcell,validP] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
-    centerFilter,centerSigma,cellFilter,cellSigma);
+[validP,C,Wcell,Wcenter] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
+    centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy);
 X = F(validP,1:2);
 
 % % draw cells
@@ -184,9 +185,14 @@ for i = 1:size(C.sizes,1)
 end
 
 % Histogram normalization
-if strcmp(normType,'cell') || strcmp(normType,'pixel')
+if (strcmp(normType,'cell') || strcmp(normType,'pixel')) && ...
+        any(cellNormStrategy == 1:3)
     % Normalize each histogram of each vector
     H = H ./ repmat(sum(H,1),[nBin 1]);
+    if any(cellNormStrategy == 2:3)
+        % Weights on cells based on cell center distance
+        H = H .* repmat(Wcenter',[nBin 1 size(C.map,2)]);
+    end
 elseif strcmp(normType,'block')
     % Block normalization
     localOffsets = createCellOffsets(gridType,gridSize,gridSpacing,true);

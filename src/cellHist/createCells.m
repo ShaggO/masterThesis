@@ -1,11 +1,16 @@
-function [C,W,validP] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
-    centerFilter,centerSigma,cellFilter,cellSigma)
+function [validP,C,Wcell,Wcenter] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
+    centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy)
 % Output:
-%   C       1-dim. varArray with constant dims [c,f]
 %   validP  mask of features fully within image borders
+%   C       1-dim. varArray with constant dims [c,f]
+%   W       weights on pixels within cells
+%   Wcenter weights on cell centers
 
 centers = createCellOffsets(gridType,gridSize,gridSpacing);
 nCenters = size(centers,1);
+
+fCenter = ndFilter(centerFilter,centerSigma);
+Wcenter = fCenter(centers);
 
 % offsets for each scale image
 idxScales = [0; cumsum(prod(Isizes,2))];
@@ -61,7 +66,7 @@ for i = 1:numel(uniquePsize)
         pointsCell = repmat(permute(centersj,[3 2 1]),[nWindowsj 1 1 nPi]);
         Wdata{k} = fCell(pointsCenter-pointsCell);
         
-        if ~strcmp(centerFilter,'none')
+        if ~strcmp(centerFilter,'none') && any(cellNormStrategy == 0:2)
             [fCenter,~] = ndFilter(centerFilter,Psize*centerSigma);
             Wdata{k} = Wdata{k} .* fCenter(pointsCenter);
         end
@@ -70,7 +75,7 @@ for i = 1:numel(uniquePsize)
         Cdata{k} = pointsR(:,2,:,:) + (pointsR(:,1,:,:)-1) .* ...
             repmat(permute(Isizes(Pi(:,3),1),[4 2 3 1]),[nWindowsj 1 nCentersj]) + ...
             repmat(permute(idxScales(Pi(:,3),1),[4 2 3 1]),[nWindowsj 1 nCentersj]);
-        sizes(k,1:numel(size(Cdata{k}))) = size(Cdata{k});
+        sizes(k,1:4) = [size(Cdata{k}) ones(1,4-numel(size(Cdata{k})))];
         map(maskj,maski) = k;
     end
     
@@ -96,6 +101,6 @@ end
 
 map = map(:,validP);
 C = varArray.newFull(Cdata,sizes,map);
-W = varArray.newFull(Wdata,sizes,map);
+Wcell = varArray.newFull(Wdata,sizes,map);
 
 end

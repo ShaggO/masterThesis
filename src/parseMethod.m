@@ -166,14 +166,17 @@ switch lower(m.descriptor)
         addParameter(p,'binFilter',fTypes{1},okArg(fTypes));
         addParameter(p,'binSigma',1);
         addParameter(p,'binCount',8);
+        addParameter(p,'cellNormStrategy',3);
         r = parseResults(p,m.descriptorArgs);
 
-        if strcmp(r.normType,'cell') || strcmp(r.normType,'none')
+        if (strcmp(r.normType,'cell') || strcmp(r.normType,'none')) && ...
+                any(r.cellNormStrategy == 0:1)
             r.normFilter = fTypes{1};
             r.normSigma = [3 3];
             normString = r.normType;
         else
-            normString = [r.normType '-' r.normFilter '-' nums2str(r.normSigma)];
+            normString = [r.normType '-' r.normFilter '-' ...
+                nums2str(r.normSigma) '-' num2str(r.cellNormStrategy)];
         end
 
         desName = sprintf(['cellhist' repmat('-%s',[1 16])],...
@@ -196,7 +199,8 @@ switch lower(m.descriptor)
         desFunc = @(I,F) cellHistDescriptors(I,F,r.contentType,r.magnitudeType,...
             r.scaleBase,r.rescale,r.gridType,r.gridSize,r.gridRadius,...
             r.centerFilter,r.centerSigma,r.cellFilter,r.cellSigma,...
-            r.normType,r.normFilter,r.normSigma,r.binFilter,r.binSigma,r.binCount);
+            r.normType,r.normFilter,r.normSigma,r.binFilter,r.binSigma,r.binCount,...
+            r.cellNormStrategy);
     otherwise
         error('Unrecognized descriptor!')
 end

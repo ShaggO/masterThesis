@@ -4,6 +4,8 @@ Noter til det 10. møde med Kim og Sune d. 22. april
 
 - Sidste gang havde vi eksperimenteret med nogle metodevalg men ikke kørt på meget data. Det har vi nu:
 go > l > b > a
+go j2 er omkring ligeså godt som l j2
+pixel normalisering giver 0.7% bedre (5% std.)
 
 - Polar Gaussian cellefiltre
 
@@ -12,3 +14,8 @@ go > l > b > a
 - Detaljegrad på beskrivelse af DTU datasættet. Hvilken figur til light paths? Alle bruger forskellige, modstridende med hinanden.
 
 - Hvordan skal vi normalisere histogrammer når vi bruger center filter
+
+- Kunne man skalere alle detection sigmaer med en faktor?
+
+
+dtu kode: filtrere dårlige punkter væk? pruning?

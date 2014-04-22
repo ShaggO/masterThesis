@@ -14,7 +14,9 @@ function optimal = zoomOptimizeParameter(setNum,method,parameter,values,iteratio
             methodV(v) = modifyDescriptor(method,parameter,values(v,:));
         end
         % Perform dtuTest on defined methods and find optimal value
-        [ROCAUC, PRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
+        [matchROCAUC, matchPRAUC] = dtuTest(setNum,methodV,1:6,false,true,'train');
+        ROCAUC = mean(matchROCAUC,1);
+        PRAUC = mean(matchPRAUC,1);
         [optimalPRAUC optimalInd] = max(PRAUC);
         optimal = values(optimalInd,:);
         disp(['Optimal this iteration: ' nums2str(optimal)]);

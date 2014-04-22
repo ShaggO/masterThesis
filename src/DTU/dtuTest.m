@@ -1,4 +1,4 @@
-function [meanROCAUC, meanPRAUC] = dtuTest(setNum,method,pathTypes,display,runInParallel,testType)
+function [matchROCAUC, matchPRAUC] = dtuTest(setNum,method,pathTypes,display,runInParallel,testType)
 %DTUTEST Evaluates given methods by the image correspondence problem on the
 % DTU dataset. Plots the average ROC AUC and PR AUC over given image sets
 % for each method.
@@ -89,9 +89,9 @@ else
     end
 end
 
-% Compute means of all images for each method
-meanROCAUC = mean(matchROCAUC,1);
-meanPRAUC = mean(matchPRAUC,1);
+% % Compute means of all images for each method
+% meanROCAUC = mean(matchROCAUC,1);
+% meanPRAUC = mean(matchPRAUC,1);
 
 % Compute means for showing results
 plotROCAUC = cell(numel(method),numel(imNum));

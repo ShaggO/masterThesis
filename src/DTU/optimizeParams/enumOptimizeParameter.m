@@ -18,7 +18,9 @@ for i = 1:numel(parameters)
 end
 
 % Compute performance of each method and find optimal
-[ROCAUC, PRAUC] = dtuTest(setNum, paramMethods, 1:6, false, true, 'train');
+[matchROCAUC, matchPRAUC] = dtuTest(setNum, paramMethods, 1:6, false, true, 'train');
+ROCAUC = mean(matchROCAUC,1);
+PRAUC = mean(matchPRAUC,1);
 [optimalPRAUC,optimal] = max(PRAUC);
 method = paramMethods(optimal);
 

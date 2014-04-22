@@ -69,8 +69,8 @@ classdef varArray<handle
         end
         
         % Convert to vector
-        function V = vector(obj)
-            V = cells2vector(obj.data);
+        function V = vector(obj,varargin)
+            V = cells2vector(obj.data,varargin{:});
         end
     end
     
