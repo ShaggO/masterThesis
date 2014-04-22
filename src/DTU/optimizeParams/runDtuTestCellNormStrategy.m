@@ -50,3 +50,6 @@ meanROC = mean(ROCset,1)
 stdROC = std(ROCset,0,1)
 meanPR = mean(PRset,1)
 stdPR = std(PRset,0,1)
+
+load('paths')
+save([dtuResults '/resultsCellNormStrategy.mat'])
