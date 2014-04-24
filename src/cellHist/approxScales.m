@@ -1,9 +1,12 @@
-function scales = approxScales(sigmaF,base)
+function scales = approxScales(sigmaF,base,offset)
 %APPROXSCALES Approximate detected scales / clamp to scales defined by the scale base
 
 minLogScale = log(min(sigmaF))/log(base);
 maxLogScale = log(max(sigmaF))/log(base);
 
-scales = base .^ ((max(round(minLogScale),0) : max(round(maxLogScale),0)));
+minLogScaleR = offset + max(round(minLogScale - offset - 10^-6),-1);
+maxLogScaleR = offset + max(round(maxLogScale - offset + 10^-6),-1);
+
+scales = base .^ (minLogScaleR : maxLogScaleR);
 
 end

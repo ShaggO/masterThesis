@@ -1,6 +1,7 @@
 clc, clear all
 
 scaleBase = 2^(1/3);
+scaleOffset = 0.5;
 sigmaRange = [1 256];
 colour = 'gray';
 d = kJetCoeffs(2);
@@ -8,7 +9,7 @@ rescale = 1/2;
 chain = 1;
 pixelDiff = 1;
 
-scales = approxScales(sigmaRange,scaleBase);
+scales = approxScales(sigmaRange,scaleBase,scaleOffset);
 
 [imNumKey,liNumKey,imNumPaths,liNumPaths,pathLabels] = dtuPaths('train');
 
@@ -40,9 +41,11 @@ parfor setNum = 1:60
                 mkdir(sDir)
             end
             [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,chain,pixelDiff);
-            parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,'scaleBase',scaleBase,...
-                'sigmaRange',sigmaRange,'colour',colour,'d',d,'rescale',rescale,'chain',...
-                chain,'pixelDiff',pixelDiff,'setNum',setNum,'imNum',imNum,'liNum',liNum);
+            parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,...
+                'scaleBase',scaleBase,'scaleOffset',scaleOffset,...
+                'sigmaRange',sigmaRange,'colour',colour,'d',d,...
+                'rescale',rescale,'chain',chain,'pixelDiff',pixelDiff,...
+                'setNum',setNum,'imNum',imNum,'liNum',liNum);
         end
     end
 end
