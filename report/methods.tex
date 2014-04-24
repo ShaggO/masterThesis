@@ -3,13 +3,13 @@
 
 \chapter{Methods}
 
-\subsection{Detectors}
+\section{Detectors}
 
-\subsubsection{Scale invariance}
+\subsection{Scale invariance}
 
-\subsection{Descriptors}
+\section{Descriptors}
 
-\subsubsection{SIFT}
+\subsection{SIFT}
 
 Gradients of an image are often used to describe the region around interest points, since they describe the changes in intensities in the image plane.
 The \emph{scale-invariant feature transform} (SIFT) descriptor
@@ -26,7 +26,7 @@ $4 \times 4$ cells each consisting of $4 \times 4$ pixels, with 8 histogram
 bins for each cell. This results in a dimensionality of $4 \times 4 \times 8 =
 128$.
 
-\subsubsection{PCA-SIFT}
+\subsection{PCA-SIFT}
 
 \emph{PCA-SIFT} \cite{ke2004pca} is also based on combining oriented gradients
 within a region, but instead of dividing the feature into cell histograms
@@ -39,7 +39,7 @@ PCA-SIFT describes a single patch of $41 \times 41$ pixels. When computing
 the gradients it gives gradient dimensionality of $2\times39\times39 = 3042$,
 which is reduced by PCA to 36 dimensions.
 
-\subsubsection{GLOH}
+\subsection{GLOH}
 
 The \emph{gradient location and orientation histogram} (GLOH) descriptor
 \cite{mikolajczyk2005performance} is an extension of the SIFT descriptor.
@@ -53,7 +53,7 @@ orientations are divided into 16 bins giving a histogram of $16 \times 17
 = 272$ bins. This is reduced to 128 dimensions by using the 128 largest
 eigenvectors from PCA on a training dataset.
 
-\subsubsection{DAISY}
+\subsection{DAISY}
 
 The \emph{DAISY} descriptor \cite{tola2008fast} is a descriptor originally
 developed for dense wide-baseline matching, and it is therefore developed
@@ -70,7 +70,7 @@ experiments with the actual layout of the daisy formation have been examined
 in \cite{winder2009picking}, in which the DAISY descriptor is claimed to perform
 better than SIFT when used on the image correspondence problem.
 
-\subsubsection{HOG}
+\subsection{HOG}
 
 The \emph{Histograms of Oriented Gradient} (HOG) descriptor is another
 alternative to SIFT proposed in \cite{dalal2005histograms} for pedestrian
@@ -96,7 +96,7 @@ Furthermore parts models using the HOG descriptor have been developed
 \cite{felzenszwalb2008discriminatively} in order to improve upon the accuracy
 of object detection.
 
-\subsubsection{BIF-columns}
+\subsection{BIF-columns}
 
 Another approach to descriptor design is to use higher order differential
 information.
@@ -115,7 +115,7 @@ are combined into a BIF-column, and a histogram over all $6^4 = 1296$ possible
 BIF-columns is computed. The 1296-dimensional descriptors are used for texture
 classification.
 
-\subsubsection{Jet descriptor}
+\subsection{Jet descriptor}
 
 \cite{larsen2012jet} have had success using local 4-jets. Their
 $\mathcal{J}_4$-grid2 descriptor is computed from local 4-jets at four points
@@ -125,7 +125,7 @@ Euclidean distance as a distance measure. The descriptor was evaluated against
 state of the art on the image correspondence problem and performed favourably,
 despite the simplicity of the descriptor.
 
-\subsubsection{Galaxy descriptor}
+\subsection{Galaxy descriptor}
 
 Another recent higher order descriptor is the galaxy descriptor by Pedersen
 et al.\cite{pedersen2013shape}, which is used to predict star-formation
@@ -134,19 +134,19 @@ of gradient orientation as well as shape index, which is a simple 1D
 representation of second order differential information. The histograms are
 computed over a single region at eight scale levels.
 
-\subsection{Matching strategies}
+\section{Matching strategies}
 \label{sec:matching_strategies}
 
 Thresholding, best-thresholding, ratio-thresholding.
 
-\subsection{Performance measures}
+\section{Performance measures}
 \label{sec:performance_measures}
 
 ROC, AUC, recall, 1-precision
 \emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for matching of higher order differential information descriptors.
 
 
-\subsection{Invariants and robustness}
+\section{Invariants and robustness}
 When describing interest points and their local regions in real world images we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any of these transformations applied, in which case we have a better chance of recognizing the interest point in other images. In this section we will go through a list of possible transformations that we wish for our descriptor to be invariant to.
 
 \todo{Add comment to robustness}
@@ -166,12 +166,12 @@ $C$ & $C$ & $a C$ \\
 \caption{The transformation of various measures by rotation and illumination. The derivations are included in \cref{apx:image_transformations}}.
 \end{table}
 
-\subsubsection{Translation}
+\subsection{Translation}
 The first transformation that we describe is translation. Translation occurs when images are taken from different positions and hence the interest points are translated in the image plane. Translation invariance is often achieved by combining a descriptor with an interest point detector which tells the descriptor where the interest points are located spatially in the image. Another approach is to use a sliding window technique in which a detection window is moved around the image trying to find a suitable matching position as in \cite{felzenszwalb2008discriminatively}. Translation invariance is almost always desired.
 
 \todo{Add something about robustness against small translation errors}
 
-\subsubsection{Rotation}
+\subsection{Rotation}
 Rotation naturally occurs when either the camera or the object in question is rotated. Like the translation invariance we often get rotation invariance by combining the descriptor with an interest points detector. The detector often estimates the direction of the interest point based on the direction of the gradient in the interest point, and hence it outputs both translation and rotation invariant points to compute descriptors for. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed. More general descriptors such as SIFT are however rotational invariant
 
 \todo{Show invariance of shape index}
@@ -223,9 +223,9 @@ d^2 &= 4(\widetilde{L}_{xy})^2 + (\widetilde{L}_{xx} - \widetilde{L}_{yy})^2 \\
 And thus $\widetilde{S}(x,y,\sigma) = S(x,y,\sigma)$.
 %
 
-\subsubsection{Reflection}
+\subsection{Reflection}
 
-\subsubsection{Illumination}
+\subsection{Illumination}
 Affine illumination model:
 \begin{align}
   \widetilde{I}(x) &= a I(x)  + b \\
@@ -251,17 +251,17 @@ When normalizing k-jet with L2-norm:
 
 By using a small sigma for calculating the derivatives in the jet, we only use a small spatial area for the calculations which minimizes the risk of crossing a shadow edge. By combining multiple jets or shape indices into histograms we are able to calculate a descriptor across a shadow edge but still maintaining illumination invariance.
 
-\subsubsection{Scale}
+\subsection{Scale}
 Noget med scalespace \cite{griffin1997scale}.
 
-\subsubsection{Perspective}
+\subsection{Perspective}
 noget med ?
 
-\subsection{Calculating derivatives}
+\section{Calculating derivatives}
 How to calculate n'th order n-dimensional derivatives of Gaussian.
 No covariance in our equations (no skewed Gaussians)
 
-\subsection{Histograms}
+\section{Histograms}
 
 Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over areas. Traditionally histograms have been constructed using hard boundaries between bins and with hard boundaries between the histograms of a descriptor such as \citet{lowe2004distinctive} does it in SIFT.\mycomment[MSN]{Should we explain SIFT's approach further?}
 
@@ -286,7 +286,7 @@ Input variables when creating a histogram: inner scale $\sigma$, bin-width $\bet
 
 
 
-\subsubsection{Gaussian filter}
+\subsection{Gaussian filter}
 
 The 1-dimensional Gaussian filter with variance $\sigma$ is defined as:
 %
@@ -338,7 +338,8 @@ With this definition we disallow arbitrary covariances as it does not make sense
 \right)
 \end{align}
 %
-\subsection{Descriptor}
+%
+\section{Descriptor}
 %
 \begin{itemize}
 \item Choose scales based on detected scales: closest powers of 2. Compute x and y-derivative images, and rescale them accordingly.
@@ -447,25 +448,38 @@ polar
     \label{fig:pixelNormalizationExample}
 \end{figure}
 %
-\subsection{Performance evaluation}
+\subsection{Histogram normalization}
+
+- No cell normalization -> Center (cell)
+
+0. Center (pixels) -> no normalization
+1. Center (pixels) -> cell normalization
+2. Center (pixels) -> Cell normalization -> Center (cell)
+3. Cell normalization -> Center (cell)
+
+Center (cell)
+
+
+
+\section{Performance evaluation}
 %
-%\subsection{Sliding window}
+%\section{Sliding window}
 %
-%\subsection{Spatial pooling schemes}
+%\section{Spatial pooling schemes}
 %
-%\subsection{Normalization (local)}
+%\section{Normalization (local)}
 %
-%\subsection{Rotational invariance}
+%\section{Rotational invariance}
 %
-%\subsection{Histograms}
+%\section{Histograms}
 %
-%\subsection{PCA}
+%\section{PCA}
 %
-%\subsection{Gradient orientation}
+%\section{Gradient orientation}
 %
-%\subsection{$k$-Jets}
+%\section{$k$-Jets}
 %
-%\subsection{Shape index}
+%\section{Shape index}
 
 \subbibliography
 
