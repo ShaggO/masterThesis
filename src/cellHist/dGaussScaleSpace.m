@@ -72,7 +72,11 @@ if chain
             hsize = 2*ceil(3*s)+1;
             I = imfilter(I,dGauss2d(0,0,hsize,s),'conv');
             for i = 1:size(d,1)
-                dI = imfilter(I,-d2d(d(i,1),d(i,2)),'conv');
+                if all(d(i,:) == 0)
+                    dI = I;
+                else
+                    dI = imfilter(I,-d2d(d(i,1),d(i,2)),'conv');
+                end
                 if rescale > 0
                     L(j).(fd{i}) = imresize(dI,rescale/scales(j));
                 else

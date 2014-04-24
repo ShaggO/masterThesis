@@ -44,12 +44,8 @@ totalTime = tic;
 [ROC,PR] = dtuTest(setNum,method,1:6,true,false,'train')
 totalTime = toc(totalTime)
 
-ROCset = squeeze(mean(reshape(ROC,[],numel(setNum),numel(method)),1));
-PRset = squeeze(mean(reshape(PR,[],numel(setNum),numel(method)),1));
-meanROC = mean(ROCset,1)
-stdROC = std(ROCset,0,1)
-meanPR = mean(PRset,1)
-stdPR = std(PRset,0,1)
+[meanROC, stdROC] = computeMeanAuc(ROC,numel(setNum),numel(method))
+[meanPR, stdPR] = computeMeanAuc(PR,numel(setNum),numel(method))
 
 load('paths')
 save([dtuResults '/resultsCellNormStrategy.mat'])
