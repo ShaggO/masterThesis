@@ -147,7 +147,7 @@ P = scaleSpaceFeatures(F,scales,rescale);
     centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy);
 X = F(validP,1:2);
 
-% % draw cells
+% % draw cells (for debugging)
 % Iw = zeros(sum(prod(Isizes,2)),1);
 % for i = 1:numel(C.data)
 %     for j = 1:size(C.data{i},3)
@@ -159,7 +159,7 @@ X = F(validP,1:2);
 % end
 % Iw = varArray.newVector(Iw,Isizes,C.map);
 % figure
-% imshow(imresize(I,Isizes(3,:)).*Iw.data{3},[])
+% imshow(max(imresize(I,Isizes(2,:)),5*Iw.data{2}),[])
 
 % compute histogram variables
 [binF, binR] = ndFilter(binFilter,binSigma);

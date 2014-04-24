@@ -32,7 +32,7 @@ for i = 1:numel(uniquePsize)
     PiRound = round(Pi(:,1:2));
     centersi = Psize*centers;
     
-    % construct cell filter and window
+    % construct cell filter and windows
     [fCell,rCell] = ndFilter(cellFilter,Psize*cellSigma);
     rCell = repmat(rCell,[nCenters 1]);
     [windows,minWindows,maxWindows] = cellWindow(cellFilter,rCell);
