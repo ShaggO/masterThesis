@@ -2,6 +2,8 @@
 \begin{document}
 \chapter{Image correspondence}
 
+inconsistencies and estimation of 3D points
+
 \section{Dataset}
 The dataset we are using for training and evaluation of our descriptor is called the DTU Robot 3D dataset \cite{aanaes2010recall}. It concists of images of objects taken in a black box illuminated using 19 fixed positioned LED lights. In total there are 60 scenes with varying objects. \citet{aanaes2010ground} classify the scenes as shown in \Cref{tbl:dtu_scene_classifications}.
 
@@ -24,7 +26,6 @@ See \citet{aanaes2010ground} for more information about the dataset and the gene
 \Cref{fig:light_example} show 6 of the different light images for scene 4 at camera position 60. \Cref{fig:light_example_02,fig:light_example_17,fig:light_example_08} show the images taken with individual LED lighting (numbers 2, 17, and 8 respectively), and \Cref{fig:light_example_00} shows the diffuse light image. We here notice the significant difference in cast shadows using the three LEDs individually compared to the diffuse light image. The diffuse light image is however quite dark compared to the LED 8 light image, which could potentially cause problems in some scenes generating too few interest points. Such an issue could however be handled by adapting detection thresholds.
 \Cref{fig:light_example_28,fig:light_example_20} show the left- and rightmost positions of the X light path. By comparing these to their LED counterparts (\subref{fig:light_example_02} and \subref{fig:light_example_17} respectively) we see that the cast shadows are less significant therefore looking more natural.
 \Cref{fig:viewpoint_example} shows 4 different camera positions for scene 4 including the keyframe (position 25).
-\mycomment[MSN]{Should we write a notice about errorneous cast shadows (001-01\_03), and what else for viewpoint example?}
 %
 \begin{figure}[ht]
 	\centering
@@ -110,6 +111,33 @@ See \citet{aanaes2010ground} for more information about the dataset and the gene
 	\label{tbl:dtu_scene_classifications}
 \end{table}
 %
+
+\subsection{Pitfalls and deficiencies}
+The DTU Robot 3D dataset is built to test computer vision systems' ability to cope with viewpoint changes, scaling, light changes, and to a certain extend occlusions as well. Since all images are captured with the same camera tilt, no rotation of objects occurs and hence we adhere from persuing rotational invariance.
+
+Compare with other datasets traditionally used: Good amount of viewpoints, not as natural images as other sets, no rotation. Well structured approach to changes in viewpoints and scale
+
+\Cref{fig:dtu_problems} shows the problems we have found within the DTU Robot 3D dataset, which we will go through here.
+
+The artificial diffuse light is, as mentioned in the previous section, created by combining images captured under individual LED lighting. This is not optimal as some of the images are visually suffering from the spatial layout of the LED lights. \Cref{fig:dtu_problems_diffuse} shows image 20 (arc 1) from set 2 of the dataset. The diffuse light problem is clearly visible in the cast shadows seen on the 1st and 3rd book in the stack of lying books. Ideally these shadows would form either a smoothed or a single hard shadow edge instead of a set of gradually fading hard edges.
+
+The automatic capturing of images using a robot arm combined with the individual LED lighting has the side-effect of the robot arm casting shadows in some of the images. This is seen when using the 3rd LED light and having captured the scenes from the far left of arc 1. \Cref{fig:dtu_problems_robot} shows an example of a cast shadow originating from the robot arm. This is however only a problem with one of the 19 LED light images and hence the effect on the final test images is minimal.
+%
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.49\textwidth}
+		\includegraphics[width=\textwidth]{img/diffuse_light_problem.png}
+		\caption{Diffuse lighting in set 2, image 20, with shadow artifacts}
+		\label{fig:dtu_problems_diffuse}
+	\end{subfigure}
+	\begin{subfigure}{0.49\textwidth}
+		\includegraphics[width=\textwidth]{img/robot_arm_shadow.png}
+		\caption{Robot arm shadow in set 4, image 7, LED light 3}
+		\label{fig:dtu_problems_robot}
+	\end{subfigure}
+	\caption{Examples of problematic images in the DTU Robot 3D dataset}
+	\label{fig:dtu_problems}
+\end{figure}
 \section{Experiments}
 
 
@@ -121,6 +149,9 @@ Test: 10 fold cross validation
 
 \section{Evaluation}
 
+Confusion matrix
+ROC AUC definition
+PR AUC definition
 
 \subbibliography
 
