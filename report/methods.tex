@@ -172,83 +172,16 @@ The first transformation that we describe is translation. Translation occurs whe
 \todo{Add something about robustness against small translation errors}
 
 \subsection{Rotation}
-Rotation naturally occurs when either the camera or the object in question is rotated. Like the translation invariance we often get rotation invariance by combining the descriptor with an interest points detector. The detector often estimates the direction of the interest point based on the direction of the gradient in the interest point, and hence it outputs both translation and rotation invariant points to compute descriptors for. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed. More general descriptors such as SIFT are however rotational invariant
+Rotation naturally occurs when either the camera or the object in question is rotated. Like the translation invariance we often get rotation invariance by combining the descriptor with an interest points detector. The detector often estimates the direction of the interest point based on the direction of the gradient in the interest point, and hence it outputs both translation and rotation invariant points to compute descriptors for. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed. More general descriptors such as SIFT are however rotational invariant.
 
-\todo{Show invariance of shape index}
-
-\todo{Write up formulas for coordinates in the original image plane and the rotated plane}
-
-Let $\widetilde{L}$ be the blurred image $L$ rotated around some point $\mathbf{x}$. 
-\begin{align}
-\nabla^2 L_{ij} &= \nabla_{\mathbf{e}_i} (\nabla_{\mathbf{e}_j} L) \\
-\nabla^2 \widetilde{L}_{ij} &= \nabla_{\mathbf{Re}_i} (\nabla_{\mathbf{Re}_j} L) \\
-\mathbf{R} &= \begin{bmatrix}
-\cos \theta & -\sin \theta \\
-\sin \theta & \cos \theta
-\end{bmatrix} \\
-\mathbf{Re}_x &= \begin{bmatrix}
-\cos \theta \\ \sin \theta
-\end{bmatrix} \\
-\mathbf{Re}_y &= \begin{bmatrix}
--\sin \theta \\ \cos \theta
-\end{bmatrix} \\
-\nabla^2 \widetilde{L}_{ij}
-&= \nabla_{\mathbf{Re}_i} \left( (\mathbf{Re}_j)^T \nabla L \right) \\
-&= (\mathbf{Re}_j)^T \nabla^2 L (\mathbf{Re}_i) \\
-\widetilde{L}_{xx} &= \cos^2 \theta L_{xx} + 2 \cos \theta \sin \theta L_{xy} + \sin^2 \theta L_{yy} \\
-\widetilde{L}_{yy} &= \sin^2 \theta L_{xx} - 2 \cos \theta \sin \theta L_{xy} + \cos^2 \theta L_{yy} \\
-\widetilde{L}_{xy} &= -\cos \theta \sin \theta L_{xx} + (\cos^2 \theta - \sin^2 \theta) L_{xy} + \cos \theta \sin \theta L_{yy}
-\end{align}
-%
-Numerator $n$:
-%
-\begin{align}
-n &= - \widetilde{L}_{xx} - \widetilde{L}_{yy} \\
-&= -(\cos^2 \theta + \sin^2 \theta)  L_{xx} - (\cos^2 \theta + \sin^2 \theta) L_{yy} \\
-&= -L_{xx} - L_{yy}
-\end{align}
-%
-Denominator $d$ (inside square root):
-%
-\begin{align}
-4(\widetilde{L}_{xy})^2 &= 4(-\cos \theta \sin \theta L_{xx} + (\cos^2 \theta - \sin^2 \theta) L_{xy} + \cos \theta \sin \theta L_{yy})^2 \\
-&= (- \sin 2\theta (L_{xx} - L_{yy}) + 2 \cos 2\theta L_{xy})^2 \\
-(\widetilde{L}_{xx} - \widetilde{L}_{yy})^2 &= ((\cos^2 \theta - \sin^2 \theta) L_{xx} + 4 \cos \theta \sin \theta L_{xy} + (\sin^2 \theta - \cos^2 \theta) L_{yy})^2 \\
-&= (\cos 2\theta (L_{xx} - L_{yy}) + 2 \sin 2\theta L_{xy})^2 \\
-d^2 &= 4(\widetilde{L}_{xy})^2 + (\widetilde{L}_{xx} - \widetilde{L}_{yy})^2 \\
-&= (\sin^2 2\theta - \cos^2 2\theta) (L_{xx} - L_{yy})^2 + 4 (\cos^2 2\theta + \sin^2 2\theta) L_{xy}^2 \\
-&= 4 L_{xy}^2 + (L_{xx} - L_{yy})^2
-\end{align}
+Refer to \cref{apx:rotation} for all rotations, \cref{apx:rotation_go,apx:rotation_m,apx:rotation_si,apx:rotation_c} for gradient orientation, gradient magnitude, shape index, and curvedness.
 %
 And thus $\widetilde{S}(x,y,\sigma) = S(x,y,\sigma)$.
 %
-
 \subsection{Reflection}
 
 \subsection{Illumination}
-Affine illumination model:
-\begin{align}
-  \widetilde{I}(x) &= a I(x)  + b \\
-  \frac{\Diff{n} a I(x)}{\Diff x^n} &= a \frac{\Diff{n}I}{ x^n} \\
-  S(x,y,\sigma) &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + (L_{xx} - L_{yy})^2}}} \\
-  \widetilde{S}(x,y,\sigma) &= \frac{2}{\pi} \Atan{\frac{-a L_{xx} - a L_{yy}}{\sqrt{4(aL_{xy})^2 + (aL_{xx} - aL_{yy})^2}}} \\
-  &= \frac{2}{\pi} \Atan{\frac{a (-L_{xx} - L_{yy})}{\sqrt{a^2 \left(4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2 \right)}}} \\
-  &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2}}} \\
-\end{align}
-
-
-When normalizing k-jet with L2-norm:
-\begin{align}
-  \mathcal{J}_k &= \left( \mset{L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
-  \widetilde{\mathcal{J}}_k &=\left( \mset{a L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
-  \left \| \widetilde{\mathcal{J}}_k \right \|_2 &= \sqrt{\sum_{0 < n+m \leq k} (a L_{x^n y^m})^2} \\
-      &= \sqrt{a^2\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
-      &= a\sqrt{\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
-      &= a \left \| \mathcal{J}_k \right \|_2 \\
-  \frac{\widetilde{\mathcal{J}}_k}{\left \| \widetilde{\mathcal{J}}_k \right \|_2} &=
-      \frac{\mathcal{J}_k}{\left \| \mathcal{J}_k \right \|_2}
-\end{align}
-
+Reference \Cref{apx:illumination} for $\Theta,~M,~S$, and $C$.
 By using a small sigma for calculating the derivatives in the jet, we only use a small spatial area for the calculations which minimizes the risk of crossing a shadow edge. By combining multiple jets or shape indices into histograms we are able to calculate a descriptor across a shadow edge but still maintaining illumination invariance.
 
 \subsection{Scale}
