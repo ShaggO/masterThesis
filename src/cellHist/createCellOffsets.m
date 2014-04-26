@@ -8,21 +8,21 @@ switch type
         c = [meshX(:) meshY(:)];
     case 'polar'
         r = d * ((1:n(2))-1/2);
-        a = 2*pi/n(1) * (1:n(1));
+        a = 2*pi/n(1) * (1:n(1)) + pi/n(1);
         [meshR,meshA] = meshgrid(r,a);
         meshX = cos(meshA) .* meshR;
         meshY = sin(meshA) .* meshR;
         c = [meshX(:) meshY(:)];
     case 'polar central'
         r = d * (1:n(2));
-        a = 2*pi/n(1) * (1:n(1));
+        a = 2*pi/n(1) * (1:n(1)) + pi/n(1);
         [meshR,meshA] = meshgrid(r,a);
         meshX = cos(meshA) .* meshR;
         meshY = sin(meshA) .* meshR;
         c = [0 0; meshX(:) meshY(:)];
     case 'concentric polar'
         r = d * (1:n(2));
-        a = 2*pi/n(1) * (1:n(1));
+        a = 2*pi/n(1) * (1:n(1)) + pi/n(1);
         [meshR,meshA] = meshgrid(r,a);
         meshA(:,2:2:end) = meshA(:,2:2:end) + pi/n(1);
         meshX = cos(meshA) .* meshR;
@@ -30,7 +30,7 @@ switch type
         c = [meshX(:) meshY(:)];
     case 'concentric polar central'
         r = d * ((1:n(2))-1/2);
-        a = 2*pi/n(1) * (1:n(1));
+        a = 2*pi/n(1) * (1:n(1)) + pi/n(1);
         [meshR,meshA] = meshgrid(r,a);
         meshA(:,2:2:end) = meshA(:,2:2:end) + pi/n(1);
         meshX = cos(meshA) .* meshR;
