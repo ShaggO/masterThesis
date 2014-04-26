@@ -7,11 +7,9 @@ switch type
     case 'gaussian'
         f = @(d)gaussFilter(sigma,d);
         r = 3*sigma;
-
     case 'box'
         f = @(d)boxFilter(sigma,d);
         r = sigma;
-
     case 'triangle'
         f = @(d)triangleFilter(sigma,d);
         r = 2*sigma;

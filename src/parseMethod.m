@@ -146,8 +146,11 @@ switch lower(m.descriptor)
         desName = ['cvtblock-' r.colour '-' num2str(r.BlockSize)];
         desFunc = @(I,F) cvtDescriptor(I,F,'block','BlockSize',r.BlockSize);
     case 'cellhist'
-        bTypes = {'square','polar','concentric polar'};
+        bTypes = {'square','polar','polar central', ...
+            'concentric polar','concentric polar central'};
         fTypes = {'gaussian','triangle','box'};
+        fTypesCenter = [fTypes {'none'}];
+        fTypesCell = [fTypes {'polar gaussian'}];
         nTypes = {'cell','block','pixel','none'};
         addParameter(p,'contentType','go');
         addParameter(p,'magnitudeType','m');
@@ -157,9 +160,9 @@ switch lower(m.descriptor)
         addParameter(p,'gridType',bTypes{1},okArg(bTypes));
         addParameter(p,'gridSize',[1 1]);
         addParameter(p,'gridRadius',[3 3]);
-        addParameter(p,'centerFilter','box',okArg([fTypes {'none'}]));
+        addParameter(p,'centerFilter','box',okArg(fTypesCenter));
         addParameter(p,'centerSigma',[Inf Inf]);
-        addParameter(p,'cellFilter',fTypes{1},okArg(fTypes));
+        addParameter(p,'cellFilter',fTypes{1},okArg(fTypesCell));
         addParameter(p,'cellSigma',[1 1]);
         addParameter(p,'normType',nTypes{1},okArg(nTypes));
         addParameter(p,'normFilter',fTypes{1},okArg(fTypes));

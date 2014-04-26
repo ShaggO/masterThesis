@@ -1,16 +1,18 @@
-function [validP,C,Wcell,Wcenter] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
+function [validP,C,Wcell,Wcen] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
     centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy)
 % Output:
 %   validP  mask of features fully within image borders
 %   C       1-dim. varArray with constant dims [c,f]
-%   W       weights on pixels within cells
+%   Wcell   weights on pixels within cells
 %   Wcenter weights on cell centers
 
-centers = createCellOffsets(gridType,gridSize,gridSpacing);
-nCenters = size(centers,1);
+[cen,cenPol] = createCellOffsets(gridType,gridSize,gridSpacing);
+nCen = size(cen,1);
 
-fCenter = ndFilter(centerFilter,centerSigma);
-Wcenter = fCenter(centers);
+fCen = ndFilter(centerFilter,centerSigma);
+Wcen = fCen(cen);
+
+polarCells = strcmp(cellFilter,'polar gaussian');
 
 % offsets for each scale image
 idxScales = [0; cumsum(prod(Isizes,2))];
@@ -30,16 +32,26 @@ for i = 1:numel(uniquePsize)
     Pi = P(maski,:);
     nPi = size(Pi,1);
     PiRound = round(Pi(:,1:2));
-    centersi = Psize*centers;
+    ceni = Psize*cen;
+    cenPoli = repmat([1 Psize],[nCen 1]) .* cenPol;
     
     % construct cell filter and windows
-    [fCell,rCell] = ndFilter(cellFilter,Psize*cellSigma);
-    rCell = repmat(rCell,[nCenters 1]);
-    [windows,minWindows,maxWindows] = cellWindow(cellFilter,rCell);
+    if polarCells
+        [fCell,rCell] = ndFilter(cellFilter(7:end),[1 Psize].*cellSigma);
+        rCell = repmat(1.*rCell,[nCen 1]);
+        [win,minWin,maxWin,~] = cellWindow(cellFilter,rCell,...
+            repmat([1 1],[size(cenPoli,1) 1]) .* cenPoli);
+        minContrib = minWin;
+        maxContrib = maxWin;
+    else
+        [fCell,rCell] = ndFilter(cellFilter,Psize*cellSigma);
+        rCell = repmat(rCell,[nCen 1]);
+        [win,minWin,maxWin] = cellWindow(cellFilter,rCell);
+        minContrib = min(minWin + Psize*cen,[],1);
+        maxContrib = max(maxWin + Psize*cen,[],1);
+    end
     
     % filter points too close to edge
-    minContrib = min(minWindows + Psize*centers,[],1);
-    maxContrib = max(maxWindows + Psize*centers,[],1);
     validPi = all(PiRound + repmat(minContrib,[nPi 1]) >= 1 & ...
         PiRound + repmat(maxContrib,[nPi 1]) <= Isizes(Pi(:,3),2:-1:1),2);
     maski(maski) = validPi;
@@ -47,34 +59,51 @@ for i = 1:numel(uniquePsize)
     nPi = size(Pi,1);
     validP(maski) = 1;
     
-    for j = 1:numel(windows.data)
+    for j = 1:numel(win.data)
         k = k + 1;
-        windowsj = windows.data{j};
-        nWindowsj = size(windowsj,1);
-        maskj = windows.map == j;
-        centersj = centersi(maskj,:);
-        nCentersj = size(centersj,1);
+        winj = win.data{j};
+        nWinj = size(winj,1);
+        maskj = win.map == j;
+        cenj = ceni(maskj,:);
+        nCenj = size(cenj,1);
         
         % compute cell points and weights
-        pointsPiR = repmat(permute(round(Pi(:,1:2)),[4 2 3 1]),[nWindowsj 1 nCentersj]);
-        pointsWindowR = repmat(windowsj + ...
-            repmat(permute(round(centersj),[3 2 1]),[nWindowsj 1 1]),[1 1 1 nPi]);
+        pointsPiR = repmat(permute(round(Pi(:,1:2)),[4 2 3 1]),[nWinj 1 nCenj]);
+        if polarCells
+            pointsWindowR = repmat(winj,[1 1 1 nPi]);
+            pointsCenter = repmat(permute(round(Pi(:,1:2)) - Pi(:,1:2),[4 2 3 1]), ...
+                [nWinj 1 nCenj]) + pointsWindowR;
+            cenPolj = cenPoli(maskj,:);
+            [theta,rho] = cart2pol(pointsCenter(:,1,:,:),pointsCenter(:,2,:,:));
+            pointsCenterPol = [theta rho];
+%             pointsCellPol = pointsCenterPol - ...
+%                 repmat(permute(cenPolj,[3 2 1]),[nWinj 1 1 nPi]);
+%             pointsCellPol(:,1,:,:) = abs(pointsCellPol(:,1,:,:));
+%             pointsCellPol(:,1,:,:) = min(pointsCellPol(:,1,:,:), ...
+%                 2*pi - pointsCellPol(:,1,:,:));
+%             Wdata{k} = fCell(pointsCellPol);
+            Wdata{k} = polarDiffFunction(fCell,pointsCenterPol, ...
+                repmat(permute(cenPolj,[3 2 1]),[nWinj 1 1 nPi]),1);
+        else
+            pointsWindowR = repmat(winj + ...
+                repmat(permute(round(cenj),[3 2 1]),[nWinj 1 1]),[1 1 1 nPi]);
+            pointsCenter = repmat(permute(round(Pi(:,1:2)) - Pi(:,1:2),[4 2 3 1]), ...
+                [nWinj 1 nCenj]) + pointsWindowR;
+            pointsCell = pointsCenter - ...
+                repmat(permute(cenj,[3 2 1]),[nWinj 1 1 nPi]);
+            Wdata{k} = fCell(pointsCell);
+        end
         pointsR = pointsWindowR + pointsPiR;
         
-        pointsCenter = repmat(permute(round(Pi(:,1:2)) - Pi(:,1:2),[4 2 3 1]), ...
-            [nWindowsj 1 nCentersj]) + pointsWindowR;
-        pointsCell = repmat(permute(centersj,[3 2 1]),[nWindowsj 1 1 nPi]);
-        Wdata{k} = fCell(pointsCenter-pointsCell);
-        
         if ~strcmp(centerFilter,'none') && any(cellNormStrategy == 0:2)
-            [fCenter,~] = ndFilter(centerFilter,Psize*centerSigma);
-            Wdata{k} = Wdata{k} .* fCenter(pointsCenter);
+            [fCen,~] = ndFilter(centerFilter,Psize*centerSigma);
+            Wdata{k} = Wdata{k} .* fCen(pointsCenter);
         end
         
         % compute indices of cell points
         Cdata{k} = pointsR(:,2,:,:) + (pointsR(:,1,:,:)-1) .* ...
-            repmat(permute(Isizes(Pi(:,3),1),[4 2 3 1]),[nWindowsj 1 nCentersj]) + ...
-            repmat(permute(idxScales(Pi(:,3),1),[4 2 3 1]),[nWindowsj 1 nCentersj]);
+            repmat(permute(Isizes(Pi(:,3),1),[4 2 3 1]),[nWinj 1 nCenj]) + ...
+            repmat(permute(idxScales(Pi(:,3),1),[4 2 3 1]),[nWinj 1 nCenj]);
         sizes(k,1:4) = [size(Cdata{k}) ones(1,4-numel(size(Cdata{k})))];
         map(maskj,maski) = k;
     end

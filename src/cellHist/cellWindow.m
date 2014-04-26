@@ -36,9 +36,11 @@ switch type
         [X,Y] = meshgrid(-r(1):r(1),-r(2):r(2));
         mask = ':';
         P = [X(mask) Y(mask)];
-    case 'polar'
-        rBox = max(r(:,2) + rCenter(:,2));
+    case 'polar gaussian'
+        rBox = ceil(max(r(:,2) + rCenter(:,2)));
         [X,Y] = meshgrid(-rBox:rBox,-rBox:rBox);
+        minP = -[rBox rBox];
+        maxP = [rBox rBox];
         [Theta,Rho] = cart2pol(X,Y);
         
         Theta = repmat(Theta,[1 1 size(r,1)]);
@@ -48,10 +50,15 @@ switch type
         rCenterTheta = repmat(permute(rCenter(:,1),[2 3 1]),size(X));
         rCenterRho = repmat(permute(rCenter(:,2),[2 3 1]),size(X));
         
-        dTheta = abs(Theta-rCenterTheta);
-        dTheta = min(dTheta,2*pi-dTheta);
-        dRho = abs(Rho-rCenterRho);
-        wMask = sqrt((dTheta./rTheta).^2 + (dRho./rRho).^2) <= 1;
+%         % old code for computing window masks
+%         dTheta = abs(Theta-rCenterTheta);
+%         dTheta = min(dTheta,2*pi-dTheta);
+%         dTheta(Rho == 0) = 0;
+%         dRho = abs(Rho-rCenterRho);
+%         wMask(:) = f([dTheta(:) dRho(:)]) <= 1;
+        f = @(D) sqrt((D(:,1)./rTheta(:)).^2 + (D(:,2)./rRho(:)).^2);
+        wMask = false(size(Theta));
+        wMask(:) = polarDiffFunction(f,[Theta(:) Rho(:)],[rCenterTheta(:) rCenterRho(:)],0) <= 1;
         nMask = squeeze(sum(sum(wMask,1),2));
         uniqueN = unique(nMask);
         
