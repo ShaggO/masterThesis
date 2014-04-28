@@ -147,21 +147,21 @@ P = scaleSpaceFeatures(F,scales,rescale);
     centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy);
 X = F(validP,1:2);
 
-% draw cells (for debugging)
-Iw = zeros(sum(prod(Isizes,2)),1);
-for i = 1:numel(C.data)
-    for j = 1:size(C.data{i},3)
-        for k = 1:size(C.data{i},4)
-            Iw(C.data{i}(:,:,j,k)) = max(Iw(C.data{i}(:,:,j,k)), ...
-                Wcell.data{i}(:,:,j,k));
-%             Iw(C.data{i}(:,:,j,k)) = 1;
-        end
-    end
-end
-Iw = varArray.newVector(Iw,Isizes,C.map);
-figure
-% imshow(max(imresize(I,Isizes(2,:)),5*Iw.data{2}),[])
-imshow(Iw.data{2},[])
+% % draw cells (for debugging)
+% Iw = zeros(sum(prod(Isizes,2)),1);
+% for i = 1:numel(C.data)
+%     for j = 1:size(C.data{i},3)
+%         for k = 1:size(C.data{i},4)
+%             Iw(C.data{i}(:,:,j,k)) = max(Iw(C.data{i}(:,:,j,k)), ...
+%                 Wcell.data{i}(:,:,j,k));
+% %             Iw(C.data{i}(:,:,j,k)) = 1;
+%         end
+%     end
+% end
+% Iw = varArray.newVector(Iw,Isizes,C.map);
+% figure
+% % imshow(max(imresize(I,Isizes(2,:)),5*Iw.data{2}),[])
+% imshow(Iw.data{2},[])
 
 % compute histogram variables
 [binF, binR] = ndFilter(binFilter,binSigma);
