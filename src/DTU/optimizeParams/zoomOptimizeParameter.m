@@ -4,12 +4,15 @@ function [method, optimalV] = zoomOptimizeParameter(setNum,method,parameter,valu
 pathTypes = 1:6;
 runInParallel = true;
 
+minV = values(1,:);
+maxV = values(end,:);
+
 disp(['Optimizing parameter: ' parameter]);
 
 % Iterate
 for i = 1:iterations
     
-    disp([timestamp() ' Iteration: ' num2str(i) ' Values: ' nums2str(values)]);
+    disp([timestamp() ' Iteration ' num2str(i) ', values: ' nums2str(values)]);
     % Create methods
     for v = 1:size(values,1)
         methodV(v) = modifyDescriptor(method,parameter,values(v,:));
@@ -28,17 +31,19 @@ for i = 1:iterations
     if ~exist(optDir,'dir')
         mkdir(optDir);
     end
-    save([optDir '/zoomOptimize_' parameter '_iteration-' num2str(i)]);
+    save([optDir '/zoomOptimize_' datestr(now) '_' parameter '_iteration-' num2str(i)]);
     
     if i < iterations
         % 20% interval (10% in each direction) with same number
         % of values equally distributed
         r = (values(end,:)-values(1,:)) * 0.1;
+        
         for j = 1:size(r,2);
-            values(:,j) = optimalV(j) + linspace(-r(j),r(j),size(values,1));
+            values(:,j) = min(max(optimalV(j),minV(j)+r(j)),maxV(j)-r(j)) + ...
+                linspace(-r(j),r(j),size(values,1));
         end
     end
 end
-disp(['Final optimal value: ' num2str(optimalV)]);
+disp(['Final optimal value: ' nums2str(optimalV)]);
 
 end
