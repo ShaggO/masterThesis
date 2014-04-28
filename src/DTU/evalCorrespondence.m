@@ -43,7 +43,7 @@ if numel(unknownIdx) > 0
     end
     
     [loaded,strL] = loadIfExist(strLightPath,'file');
-    if loaded && all(ismember({'Grid3D','Pts'},fieldnames(det)))
+    if loaded && all(ismember({'Grid3D','Pts'},fieldnames(strL)))
         Grid3D = strL.Grid3D;
         Pts = strL.Pts;
     else
