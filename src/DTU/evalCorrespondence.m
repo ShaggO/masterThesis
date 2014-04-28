@@ -25,7 +25,7 @@ correctDir = [dtuResults '/correctMatches'];
 correctPath = sprintf('%s/correct%.2d_%.3d-%.3d.mat',correctDir, ...
     match.setNum,KeyFrame,match.imNum);
 [loaded,file] = loadIfExist(correctPath,'file');
-if loaded
+if loaded && all(ismember({'pair','correct'},fieldnames(file)))
     [cached,idx] = ismember([P1 P2],file.pair,'rows');
     match.CorrectMatch(cached) = file.correct(idx(cached));
     unknownIdx = find(~cached)';
@@ -43,7 +43,7 @@ if numel(unknownIdx) > 0
     end
     
     [loaded,strL] = loadIfExist(strLightPath,'file');
-    if loaded
+    if loaded && all(ismember({'Grid3D','Pts'},fieldnames(det)))
         Grid3D = strL.Grid3D;
         Pts = strL.Pts;
     else

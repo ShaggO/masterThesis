@@ -39,7 +39,7 @@ for s = setNum
                 if matchCache(m)
                     [loaded,matchLoad] = loadIfExist(matchPath,'file');
                 end
-                if loaded
+                if loaded && ismember('match',fieldnames(matchLoad))
                     disp('Matches loaded');
                     match = matchLoad.match;
                 else

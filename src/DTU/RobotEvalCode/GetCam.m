@@ -20,7 +20,7 @@ camDir = [dtuResults '/cameraMatrix'];
 camPath = sprintf('%s/cam%.3d.mat',camDir,nCam);
 [loaded,file] = loadIfExist(camPath,'file');
 
-if loaded
+if loaded && ismember('Cam',fieldnames(file))
     Cam = file.Cam;
 else
     load(dtuCalibrationFile);
