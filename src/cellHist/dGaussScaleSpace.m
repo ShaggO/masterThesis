@@ -24,13 +24,13 @@ if loaded
     [b,idx] = ismember(round(100*scales),round(100*file.scales));
     if ~all(b)
         disp('Incompatible scale space file. (all scales not present)')
-	disp('Needed:');
-	disp(scales);
-	disp('Present:');
-	disp(file.scales);
+    	disp('Needed:');
+    	disp(scales);
+    	disp('Present:');
+    	disp(file.scales);
     elseif rescale ~= file.rescale
-	disp('Incompatible scale space file. (rescale not equal)');
-	disp(['Input rescale: ' num2str(rescale) ', file rescale: ' num2str(file.rescale)]);
+    	disp('Incompatible scale space file. (rescale not equal)');
+    	disp(['Input rescale: ' num2str(rescale) ', file rescale: ' num2str(file.rescale)]);
     elseif ~all(ismember(d,file.d,'rows'))
         disp('Incompatible scale space file. (all derivatives not present)');
         disp('Needed:');
@@ -131,4 +131,3 @@ end
 % end
 
 end
-
