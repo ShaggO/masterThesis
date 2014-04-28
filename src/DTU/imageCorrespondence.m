@@ -25,7 +25,13 @@ for s = setNum
                 mDir = [dtuResults '/' mName{m}];
                 n = n + 1;
                 if N > 1
-                    disp([timestamp() ' Image ' num2str(n) '/' num2str(N)]);
+                    if all([numel(setNum) numel(imNum) numel(liNum)] == 1)
+                        disp([timestamp() ' Method ' num2str(n) '/' num2str(N)]);
+                    elseif numel(mFunc) == 1
+                        disp([timestamp() ' Image ' num2str(n) '/' num2str(N)]);
+                    else
+                        disp([timestamp() ' Iteration ' num2str(n) '/' num2str(N)]);
+                    end
                 end
                 matchPath = [mDir '/matches_' dtuImageName(s,i,l)];
 

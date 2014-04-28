@@ -62,7 +62,7 @@ if runInParallel
     % Run in parallel
     parfor c = 1:imgNum % Run all methods on each requested image
         tic;
-        disp([timestamp(time) ' Image: ' num2str(c) ' (' num2str(imgNum) ' images in total)']);
+        disp([timestamp(time) ' Image ' num2str(c) ' (' num2str(imgNum) ' images in total)']);
         idx = idx2spil(c,:);
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 
@@ -76,7 +76,7 @@ else
     % Run sequentially
     for c = 1:imgNum % Run on each method and each chosen image path (pathType)
         tic;
-        disp([timestamp(time) ' Image: ' num2str(c) '/' num2str(imgNum)]);
+        disp([timestamp(time) ' Image ' num2str(c) '/' num2str(imgNum)]);
 
         idx = idx2spil(c,:);
         [s,i,l] = deal(idx(1),idx(3),idx(4));

@@ -4,6 +4,9 @@ function [method,optimal] = enumOptimizeParameter(setNum, method, varargin)
 assert(numel(varargin) >= 2,'Specify at least one parameter,value pair');
 assert(mod(numel(varargin),2) == 0,'Wrong formatting of (param,value) pairs');
 
+pathTypes = 1:6;
+runInParallel = true;
+
 parameters = varargin(1:2:end);
 values = varargin(2:2:end);
 
@@ -18,11 +21,19 @@ for i = 1:numel(parameters)
 end
 
 % Compute performance of each method and find optimal
-[matchROCAUC, matchPRAUC] = dtuTest(setNum, paramMethods, 1:6, false, true, 'train');
+[matchROCAUC, matchPRAUC] = dtuTest(setNum,paramMethods,pathTypes,false,runInParallel,'train');
 ROCAUC = mean(matchROCAUC,1);
-PRAUC = mean(matchPRAUC,1);
+PRAUC = mean(matchPRAUC,1)
 [optimalPRAUC,optimal] = max(PRAUC);
 method = paramMethods(optimal);
+
+load paths;
+optDir = [dtuResults '/optimize'];
+if ~exist(optDir,'dir')
+    mkdir(optDir);
+end
+name = interweave(parameters,repmat({'-'},1,numel(parameters)-1));
+save([optDir '/enumOptimize_' [name{:}]]);
 
 % Display results
 for p = 1:numel(parameters)

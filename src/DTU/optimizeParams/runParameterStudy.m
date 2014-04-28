@@ -30,18 +30,33 @@ method = methodStruct(...
 %% Grid optimization
 gridTypes = {};
 gridSizes = {};
+cellFilters = {};
+
 gridTypes(1:5) = {'square'};
-gridTypes(6:19) = {'polar'};
-gridTypes(20:29) = {'concentric polar'};
 gridSizes(1:5) = mat2cell([1:5;1:5]',ones(5,1),2);
+
+gridTypes(6:19) = {'polar'};
 gridSizes(6:19) = mat2cell([24 1;20 1;16 1;12 1;8 1;4 1;12 2;8 2;4 2;...
     8 3;6 3;4 3;6 4;4 4],ones(14,1),2);
+
+gridTypes(20:29) = {'concentric polar'};
 gridSizes(20:29) = mat2cell([12 2;8 2;4 2;8 3;6 3;4 3;6 4;4 4;4 5;4 6],...
     ones(10,1),2);
 
+gridTypes(30:43) = {'polar central'};
+gridSizes(30:43) = gridSizes(6:19);
+
+gridTypes(44:53) = {'concentric polar central'};
+gridSizes(44:53) = gridSizes(20:29);
+
+cellFilters(1:53) = {'gaussian'};
+cellFilters(54:101) = {'polar gaussian'};
+gridTypes(54:101) = gridTypes(6:53);
+gridSizes(54:101) = gridSizes(6:53);
+
 disp(['Total number of grid parameters to test: ' num2str(numel(gridTypes))]);
 
-[method,optimal] = enumOptimizeParameter(setNum,method,'gridType',gridTypes,'gridSize',gridSizes);
+[method,optimal] = enumOptimizeParameter(setNum,method,'gridType',gridTypes,'gridSize',gridSizes,'cellFilter',cellFilters);
 
 % gridRadius: [2:40] (10 values)
 gridRadius = zoomOptimizeParameter(setNum,method,'gridRadius',linspace(2,40,8)',2);
