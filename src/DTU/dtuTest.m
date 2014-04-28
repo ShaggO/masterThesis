@@ -77,7 +77,6 @@ else
     for c = 1:imgNum % Run on each method and each chosen image path (pathType)
         tic;
         disp([timestamp(time) ' Image ' num2str(c) '/' num2str(imgNum)]);
-
         idx = idx2spil(c,:);
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 

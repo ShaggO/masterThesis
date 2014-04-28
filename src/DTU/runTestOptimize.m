@@ -35,7 +35,7 @@ totalTime = tic;
 
 %% Grid optimization
 gs = [24 1;20 1;16 1;12 1;8 1;4 1;12 2;8 2;4 2; ...
-    8 3;6 3;4 3;6 4;4 4];
+    8 3;6 3;4 3;6 4;4 4;4 5;4 6];
 gsNormal = gs(gs(:,2) < 5,:);
 nNormal = size(gsNormal,1);
 gsConcen = gs(gs(:,2) > 1,:); 
