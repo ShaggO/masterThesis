@@ -52,9 +52,10 @@ src/DTU/reconstructions
 src/octave-workspace
 src/DTU/runCreatePathMat.m
 src/startup.m
-
-shell_scripts/
 src/runTestVarArrayOld.m
 src/runMoveHashes.m
 src/moveHashes.m
 src/imageHashOld.m
+shell_scripts/
+data
+src/DTU/data.lnk

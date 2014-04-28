@@ -14,7 +14,6 @@ function B = ndBinWeights(V,binC,f,r,varargin)
 
 nV = size(V,1);
 nBins = size(binC,1);
-dims = size(V,2);
 
 p = inputParser;
 addOptional(p, 'wBin', ones(size(binC,1),1), @isnumeric);
