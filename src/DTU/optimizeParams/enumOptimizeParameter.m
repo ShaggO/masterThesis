@@ -33,9 +33,10 @@ if ~exist(optDir,'dir')
     mkdir(optDir);
 end
 name = interweave(parameters,repmat({'-'},1,numel(parameters)-1));
-save([optDir '/enumOptimize_' [name{:}]]);
+save([optDir '/enumOptimize_' datestr(now) '_' [name{:}]]);
 
 % Display results
+diary optimizeParameter.out
 for p = 1:numel(parameters)
     param = parameters{p};
     switch class(values{p}{optimal})
@@ -46,5 +47,6 @@ for p = 1:numel(parameters)
     end
     disp(['Optimal ' param ': ' optimalStr]);
 end
+diary off
 
 end

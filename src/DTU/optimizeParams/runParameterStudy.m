@@ -1,4 +1,5 @@
 clear all; clc;
+diary optimizeParameter.out
 disp('Optimization of parameters started');
 
 setNum = dtuSplitSets(10,1);
@@ -36,7 +37,7 @@ gsNorm = gs(gs(:,2) < 5 & gs(:,2) > 1,:);
 nNorm = size(gsNorm,1);
 gsNormCen = gs(gs(:,2) < 5,:);
 nNormCen = size(gsNormCen,1);
-gsConc = gs(gs(:,2) > 1,:); 
+gsConc = gs(gs(:,2) > 1,:);
 nConc = size(gsConc,1);
 
 gridTypes = {};
@@ -61,6 +62,7 @@ gridTypes(n+(1:n)) = gridTypes(1:n);
 gridSizes(n+(1:n)) = gridSizes(1:n);
 
 disp(['Total number of grid parameters to test: ' num2str(numel(gridTypes))]);
+diary off
 
 %% Optimize the following parameters
 for i = 1:3

@@ -6,10 +6,15 @@ if nargin < 2
 end
 
 vars = [];
+lockName = [fPath '.lockFile'];
 
 loaded = false;
 if exist(fPath,type)
     try
+        % Perform busy waiting, could possibly be changed using a timer
+        while exist(lockName,'file')
+            continue
+        end
         vars = load(fPath);
         loaded = true;
     catch err

@@ -7,12 +7,13 @@ runInParallel = true;
 minV = values(1,:);
 maxV = values(end,:);
 
+diary optimizeParameter.out
 disp(['Optimizing parameter: ' parameter]);
 
 % Iterate
 for i = 1:iterations
-    
     disp([timestamp() ' Iteration ' num2str(i) ', values: ' nums2str(values)]);
+    diary off
     % Create methods
     for v = 1:size(values,1)
         methodV(v) = modifyDescriptor(method,parameter,values(v,:));
@@ -24,26 +25,31 @@ for i = 1:iterations
     [optimalPRAUC,optimalInd] = max(PRAUC);
     optimalV = values(optimalInd,:);
     method = methodV(optimalInd);
+
+    diary optimizeParameter.out
     disp(['Optimal this iteration: ' nums2str(optimalV)]);
-    
+    diary off
+
     load paths;
     optDir = [dtuResults '/optimize'];
     if ~exist(optDir,'dir')
         mkdir(optDir);
     end
     save([optDir '/zoomOptimize_' datestr(now) '_' parameter '_iteration-' num2str(i)]);
-    
+
     if i < iterations
         % 20% interval (10% in each direction) with same number
         % of values equally distributed
         r = (values(end,:)-values(1,:)) * 0.1;
-        
+
         for j = 1:size(r,2);
             values(:,j) = min(max(optimalV(j),minV(j)+r(j)),maxV(j)-r(j)) + ...
                 linspace(-r(j),r(j),size(values,1));
         end
     end
 end
+diary optimizeParameter.out
 disp(['Final optimal value: ' nums2str(optimalV)]);
+diary off
 
 end
