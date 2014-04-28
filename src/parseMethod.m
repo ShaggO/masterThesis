@@ -250,7 +250,7 @@ if desCache
     [loaded, des] = loadIfExist(desPath,'file');
 end
 
-if loaded
+if loaded && any(strcmp(fieldnames(des),'X')) && any(strcmp(fieldnames(des),'D'))
     X = des.X;
     D = des.D;
     disp(['Loaded ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
@@ -262,7 +262,7 @@ else
         if detCache
             [loaded, det] = loadIfExist(detPath,'file');
         end
-        if loaded
+        if loaded && any(strcmp(fieldnames(det),'F'))
             F = det.F;
             disp(['Loaded ' num2str(size(F,1)) ' features.']);
         else
