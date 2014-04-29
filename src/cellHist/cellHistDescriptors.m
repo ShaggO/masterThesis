@@ -177,20 +177,21 @@ B(maskC,:) = ndBinWeights(V(maskC,:),binC,binF,binR, ...
     'period',period,'wBin',wRenorm) .* repmat(M(maskC),[1 nBin]);
 
 % compute histograms
-H = zeros([nBin size(C.map)]);
+H = zeros([size(C.map) nBin]);
 for i = 1:size(C.sizes,1)
     [Ci,maskPart] = C.partData(i);
     Bi = reshape(B(Ci(:),:),[C.sizes(i,:) nBin]) .* ...
         repmat(Wcell.partData(i),[1 1 1 1 nBin]);
-    Di = permute(sum(Bi,1),[5 2 3 4 1]);
-    H(repmat(maskPart,[nBin 1])) = Di(:);
+    Di = sum(Bi,1);
+    H(repmat(maskPart,[1 1 nBin])) = Di(:);
 end
+H = permute(H,[3 1 2]);
 
 % Histogram normalization
 if (strcmp(normType,'cell') || strcmp(normType,'pixel')) && ...
         any(cellNormStrategy == 1:3)
     % Normalize each histogram of each vector
-    H = H ./ repmat(sum(H,1),[nBin 1]);
+    H = H ./ repmat(sum(H,1) + eps,[nBin 1]);
     if any(cellNormStrategy == 2:3)
         % Weights on cells based on cell center distance
         H = H .* repmat(Wcenter',[nBin 1 size(C.map,2)]);
@@ -203,6 +204,7 @@ end
 
 % Reshape and normalize descriptors to unit vectors
 D = reshape(H,[prod(binCount)*size(C.map,1) size(C.map,2)])';
-D = D ./ repmat(sum(D,2),[1 size(D,2)]);
+
+D = D ./ repmat(sum(D,2) + eps,[1 size(D,2)]);
 
 end
