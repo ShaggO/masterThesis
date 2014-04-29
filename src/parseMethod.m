@@ -271,7 +271,7 @@ else
             if ~exist(detDir,'dir')
                 mkdir(detDir);
             end
-            save(detPath,'F',F);
+            save(detPath,'F');
             disp(['Detected ' num2str(size(F,1)) ' features.']);
         end
 
@@ -285,7 +285,7 @@ else
         mkdir(desDir);
     end
     if desSave
-        save(desPath,'X',X,'D',D);
+        save(desPath,'X','D');
     end
 
     disp(['Computed ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])
