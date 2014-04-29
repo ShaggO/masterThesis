@@ -38,7 +38,7 @@ for i = 1:iterations
     if ~exist(optDir,'dir')
         mkdir(optDir);
     end
-    save([optDir '/zoomOptimize_' datestr(now) '_' parameter '_iteration-' num2str(i)]);
+    save([optDir '/zoomOptimize_' strrep(datestr(now),':','-') '_' parameter '_iteration-' num2str(i)]);
 
     if i < iterations
         % 20% interval (10% in each direction) with same number

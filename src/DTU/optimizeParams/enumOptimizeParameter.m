@@ -33,7 +33,7 @@ if ~exist(optDir,'dir')
     mkdir(optDir);
 end
 name = interweave(parameters,repmat({'-'},1,numel(parameters)-1));
-save([optDir '/enumOptimize_' datestr(now) '_' [name{:}]]);
+save([optDir '/enumOptimize_' strrep(datestr(now),':','-') '_' [name{:}]]);
 
 % Display results
 diary optimizeParameter.out

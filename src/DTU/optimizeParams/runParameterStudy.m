@@ -64,8 +64,13 @@ gridSizes(n+(1:n)) = gridSizes(1:n);
 disp(['Total number of grid parameters to test: ' num2str(numel(gridTypes))]);
 diary off
 
+startTime = tic;
+
 %% Optimize the following parameters
 for i = 1:3
+    diary optimizeParameter.out
+    disp([timestamp(startTime) ' Iteration ' num2str(i)]);
+    diary off
     method = enumOptimizeParameter(setNum,method,'gridType',gridTypes,'gridSize',gridSizes,'cellFilter',cellFilters);
     method = zoomOptimizeParameter(setNum,method,'gridRadius',[2.5:2.5:20 30 40]',2);
     method = zoomOptimizeParameter(setNum,method,'centerSigma',repmat([1/3:1/3:2,3,4]',[1 2]),2);
@@ -74,3 +79,6 @@ for i = 1:3
     method = zoomOptimizeParameter(setNum,method,'binCount',[4:16]',1);
     method = zoomOptimizeParameter(setNum,method,'normSigma',repmat([1:10]',[1 2]),1);
 end
+diary optimizeParameter.out
+totalTime = timestamp(startTime)
+diary off
