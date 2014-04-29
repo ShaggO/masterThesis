@@ -15,7 +15,7 @@ diary off
 % Iterate
 for i = 1:iterations
     diary optimizeParameter.out
-    disp([timestamp() ' Iteration ' num2str(i) ', values: ' nums2str(values)]);
+    disp(['Iteration ' num2str(i) ', values: ' nums2str(values)]);
     diary off
     % Create methods
     for v = 1:size(values,1)
@@ -24,14 +24,14 @@ for i = 1:iterations
     % Perform dtuTest on defined methods and find optimal value
     [matchROCAUC, matchPRAUC] = dtuTest(setNum,methodV,pathTypes,false,runInParallel,'train');
     ROCAUC = mean(matchROCAUC,1);
-    PRAUC = mean(matchPRAUC,1);
+    PRAUC = mean(matchPRAUC,1)
     [optimalPRAUC,optimalInd] = max(PRAUC);
     optimalV = values(optimalInd,:);
     method = methodV(optimalInd);
 
     diary optimizeParameter.out
     disp(['Optimal this iteration: ' nums2str(optimalV)]);
-    disp(['optimal PRAUC: ' num2str(optimalPRAUC)]);
+    disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
     diary off
 
     load paths;
