@@ -46,6 +46,7 @@ for p = 1:numel(parameters)
             optimalStr = nums2str(values{p}{optimal});
     end
     disp(['Optimal ' param ': ' optimalStr]);
+    disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
 end
 diary off
 

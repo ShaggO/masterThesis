@@ -9,9 +9,11 @@ maxV = values(end,:);
 
 diary optimizeParameter.out
 disp(['Optimizing parameter: ' parameter]);
+diary off
 
 % Iterate
 for i = 1:iterations
+    diary optimizeParameter.out
     disp([timestamp() ' Iteration ' num2str(i) ', values: ' nums2str(values)]);
     diary off
     % Create methods
@@ -28,6 +30,7 @@ for i = 1:iterations
 
     diary optimizeParameter.out
     disp(['Optimal this iteration: ' nums2str(optimalV)]);
+    disp(['optimal PRAUC: ' num2str(optimalPRAUC)]);
     diary off
 
     load paths;
