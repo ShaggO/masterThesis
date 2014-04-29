@@ -6,6 +6,7 @@ runInParallel = true;
 
 minV = values(1,:);
 maxV = values(end,:);
+numV = size(values,1);
 
 diary optimizeParameter.out
 disp(['Optimizing parameter: ' parameter]);
@@ -47,7 +48,11 @@ for i = 1:iterations
 
         for j = 1:size(r,2);
             values(:,j) = min(max(optimalV(j),minV(j)+r(j)),maxV(j)-r(j)) + ...
-                linspace(-r(j),r(j),size(values,1));
+                linspace(-r(j),r(j),numV);
+        end
+        % Add current optimal if not present
+        if ~ismember(optimalV,values,'rows')
+            values = [values; optimalV];
         end
     end
 end
