@@ -5,7 +5,7 @@ function [P, minP, maxP, Ppol] = cellWindow(type, r, rCenter)
 switch type
     case 'gaussian'
         r = ceil(r);
-        uniqueR = unique(r,'rows');
+        uniqueR = unique(r,'rows','stable');
         
         Pdata = cell(size(uniqueR,1),1);
         sizes = ones(size(uniqueR,1),3);
@@ -56,11 +56,11 @@ switch type
 %         dTheta(Rho == 0) = 0;
 %         dRho = abs(Rho-rCenterRho);
 %         wMask(:) = f([dTheta(:) dRho(:)]) <= 1;
-        f = @(D) sqrt((D(:,1)./rTheta(:)).^2 + (D(:,2)./rRho(:)).^2);
+        f = @(D) sqrt((D(:,1)./(rTheta(:)+eps)).^2 + (D(:,2)./(rRho(:)+eps)).^2);
         wMask = false(size(Theta));
         wMask(:) = polarDiffFunction(f,[Theta(:) Rho(:)],[rCenterTheta(:) rCenterRho(:)],0) <= 1;
         nMask = squeeze(sum(sum(wMask,1),2));
-        uniqueN = unique(nMask);
+        uniqueN = unique(nMask,'stable');
         
         Pdata = cell(numel(uniqueN),1);
         PpolData = cell(numel(uniqueN),1);

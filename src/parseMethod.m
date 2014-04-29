@@ -75,6 +75,12 @@ switch lower(m.detector)
         detName = sprintf('dog-%s-%s-%s', ...
             num2str(r.sigma),num2str(r.k),num2str(r.threshold));
         detFunc = @(I) dogBlobDetector(I,r.sigma,r.k,r.threshold);
+    case 'debug'
+        r = parseResults(p,m.detectorArgs);
+        detName = 'debug';
+%         detFunc = @(I) [];
+        detFunc = @(I) [200 200 1];
+%         detFunc = @(I) [200 200 1; 400 400 1];
     case ''
         r.cache = false;
         detName = '';

@@ -9,8 +9,12 @@ function [validP,C,Wcell,Wcen] = createCells(Isizes,P,gridType,gridSize,gridSpac
 [cen,cenPol] = createCellOffsets(gridType,gridSize,gridSpacing);
 nCen = size(cen,1);
 
-fCen = ndFilter(centerFilter,centerSigma);
-Wcen = fCen(cen);
+if strcmp(centerFilter,'none')
+    Wcen = ones(nCen,1);
+else
+    fCen = ndFilter(centerFilter,centerSigma);
+    Wcen = fCen(cen);
+end
 
 polarCells = strcmp(cellFilter,'polar gaussian');
 
@@ -18,7 +22,7 @@ polarCells = strcmp(cellFilter,'polar gaussian');
 idxScales = [0; cumsum(prod(Isizes,2))];
 
 % iterate over each cell size
-uniquePsize = unique(P(:,4));
+uniquePsize = unique(P(:,4),'stable');
 validP = false([size(P,1) 1]);
 % Cdata = cell(numel(uniquePsize),1);
 % Wdata = cell(numel(uniquePsize),1);
@@ -93,7 +97,8 @@ for i = 1:numel(uniquePsize)
                 repmat(permute(cenj,[3 2 1]),[nWinj 1 1 nPi]);
             Wdata{k} = fCell(pointsCell);
         end
-        pointsR = pointsWindowR + pointsPiR;
+        Wdata{k} = Wdata{k} ./ repmat(sum(Wdata{k},1) + eps,[nWinj 1]);
+%         sum(Wdata{k},1)
         
         if ~strcmp(centerFilter,'none') && any(cellNormStrategy == 0:2)
             [fCen,~] = ndFilter(centerFilter,Psize*centerSigma);
@@ -101,6 +106,7 @@ for i = 1:numel(uniquePsize)
         end
         
         % compute indices of cell points
+        pointsR = pointsWindowR + pointsPiR;
         Cdata{k} = pointsR(:,2,:,:) + (pointsR(:,1,:,:)-1) .* ...
             repmat(permute(Isizes(Pi(:,3),1),[4 2 3 1]),[nWinj 1 nCenj]) + ...
             repmat(permute(idxScales(Pi(:,3),1),[4 2 3 1]),[nWinj 1 nCenj]);
