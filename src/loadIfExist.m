@@ -6,20 +6,20 @@ if nargin < 2
 end
 
 vars = [];
-lockName = [fPath '.lockFile'];
+%fPathFinished = [fPath '.finished'];
 
 loaded = false;
-if exist(fPath,type)
+if exist(fPath,type) %&& exist(fPathFinished,'file')
     try
-        % Perform busy waiting, could possibly be changed using a timer
-        while exist(lockName,'file')
-            continue
-        end
         vars = load(fPath);
         loaded = true;
     catch err
         disp(['Load failed (' err.message ') Creating new file instead']);
     end
+else
+    disp('File does not exist');
+    loaded = false;
+    vars = {};
 end
 
 end

@@ -271,10 +271,10 @@ else
             if ~exist(detDir,'dir')
                 mkdir(detDir);
             end
-            save(detPath,'F');
+            save(detPath,'F',F);
             disp(['Detected ' num2str(size(F,1)) ' features.']);
         end
-        
+
         assert(size(F,1) <= 10000, 'Too many features.')
 
         [X,D] = desFunc(I,F);
@@ -285,7 +285,7 @@ else
         mkdir(desDir);
     end
     if desSave
-        save(desPath,'X','D');
+        save(desPath,'X',X,'D',D);
     end
 
     disp(['Computed ' num2str(size(D,1)) ' ' num2str(size(D,2)) '-dimensional descriptors.'])

@@ -1,17 +1,17 @@
 function [] = parSave(path,varargin)
 %PARSAVE Summary of this function goes here
 
-for i = 1:2:numel(varargin)
-    eval(sprintf('%s = varargin{%d};',varargin{i},i+1));
-end
-lockName = [path '.lockFile']
+% Create lock file
+pathFinished = [path '.finished'];
 
-lockId = fopen(lockName,'w');
-fwrite(lockId,'');
+% Create lock
+for i = 1:2:numel(varargin)
+    eval(sprintf('%s = varargin{%i};',varargin{i},i+1));
+end
+
 % Output to desired file
 save(path,varargin{1:2:numel(varargin)});
 % Close lock file and delete it
-fclose(lockId);
-delete(lockName);
+%fclose(fopen(pathFinished,'w'));
 
 end
