@@ -27,7 +27,7 @@ for s = setNum
 end
 
 load('paths');
-load([dtuResults '/resultsCellNormStrategy.mat']);
+load([dtuResults '/resultsCellNormStrategy2.mat']);
 PRmeans = zeros(numel(pathTypes),numel(method));
 ROCmeans = zeros(numel(pathTypes),numel(method));
 PRstd = PRmeans;
