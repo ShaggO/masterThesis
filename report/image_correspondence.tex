@@ -2,10 +2,45 @@
 \begin{document}
 \chapter{Image correspondence}
 
+In this chapter we will explain the image correspondence problem and the application of our descriptor to the problem.
+
+The image correspondence problem is the problem of matching features from two images $A$ and $B$ (of the same object) to one another. A match should ideally indicate that the two matching features correspond to the same physical point or object. Two images of the same object are however only rarely taken under similar light conditions, from the same position, and with the same viewpoint, tilt, rotation, zoom, and focus, and hence the captured images will differ based on these variables. By using an interest point detector in combination with a descriptor we are able to find interest points to match in $A$ and $B$, describe each interest point, and compare these descriptions across images to get an estimation of matching points.
+
 inconsistencies and estimation of 3D points
+
+\section{Matching strategies}
+\label{sec:matching_strategies}
+
+The matching performance depends on the matching strategy. \citet{mikolajczyk2005performance} described the following three matching strategies that are used when solving the image correspondence problem:
+Simple \emph{thresholding} compares each descriptor in image $A$ with each descriptor in image $B$. Any two descriptors having a distance to one another below a threshold $t$ are classified as matches. This gives a one-to-many relation where each descriptor in $A$ can be matched to potentially all descriptors in $B$.
+For a descriptor from $A$, \emph{Best-thresholding} finds the best matching descriptor from $B$. If the distance is below a threshold $t$, it is a match. Otherwise the descriptor from $A$ has no match. 
+\emph{ratio-thresholding}
+\citet{dahl2011finding}
+
+\section{Performance measures}
+\label{sec:performance_measures}
+
+confusion matrix
+
+$FPR = FP / (FP + TN)$
+$TPR = TP / (TP + FN)$
+$OMP = FP / (FP + TP)$
+
+$ROC = FPR,TPR$
+$PR = OMP,TPR$
+
+ROC, AUC, recall, 1-precision
+\emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for matching of higher order differential information descriptors.
 
 \section{Dataset}
 The dataset we are using for training and evaluation of our descriptor is called the DTU Robot 3D dataset \cite{aanaes2010recall} (from now on called the DTU dataset). It concists of images of objects taken in a black box illuminated using 19 fixed positioned LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes as shown in \Cref{tbl:dtu_scene_classifications}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/CameraPosb.pdf}
+	\caption{Overview of camera positions from \cite{aanaes2010recall}}
+	\label{fig:dtu_overview}
+\end{figure}
 
 \begin{figure}
 	\centering
@@ -37,7 +72,7 @@ Given a light position $L_{\boldsymbol{x}}$ in the spatial domain of the LED pos
 	L_{x} = \sum_{i = 1}^{19} G(\boldsymbol{x} - \boldsymbol{x}_i,\sigma) I_{i}
 \end{align}
 In order to get a somewhat general measurement for the robustness against light variations there are light paths generated for the following four image positions: 12 (arc 1), 25 (arc 1), 60 (linear path), and 87 (arc 2).
-See \citet{aanaes2010ground} for more information about the dataset and the generated light paths.
+See \citet{aanaes2010recall,aanaes2010ground} for more information about the dataset and the generated light paths.
 
 
 \Cref{fig:light_example} show 6 of the different light images for scene 4 at camera position 60. \Cref{fig:light_example_02,fig:light_example_17,fig:light_example_08} show the images taken with individual LED lighting (numbers 2, 17, and 8 respectively), and \Cref{fig:light_example_00} shows the diffuse light image. We here notice the significant difference in cast shadows using the three LEDs individually compared to the diffuse light image. The diffuse light image is however quite dark compared to the LED 8 light image, which could potentially cause problems in some scenes generating too few interest points. Such an issue could however be handled by adapting detection thresholds.
@@ -156,20 +191,17 @@ The automatic capturing of images using a robot arm combined with the individual
 	\label{fig:dtu_problems}
 \end{figure}
 \section{Experiments}
-
-
+%
 \section{Parameter study}
 
 
 
 Test: 10 fold cross validation
+%
+\section{Evaluation / results}
+%
 
-\section{Evaluation}
-
-Confusion matrix
-ROC AUC definition
-PR AUC definition
-
+%
 \subbibliography
 
 \end{document}

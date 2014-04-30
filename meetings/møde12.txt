@@ -1,0 +1,27 @@
+1. Normaliseringsresultater
+
+2. Parameterstudieresultater
+- Debugging ind i helvede! og dejlige race conditions!
+- Relativt hurtigt (11 timer-ish hvis det ikke crasher), kan kun køre det på 1 maskine ad gangen
+
+3. runDrawCellWeights - visning af polar Gaussian
+3a. diskussion/verifikation af cell weight normalisering
+
+4. DTU problemer med belysning 3 - mange billeder med skygge (venstre side af arc 1)
+
+5. Email om viewpoints (DTU robot)
+
+6. Scale offset + 0.5
+
+7. Rapport status:
+	Image correspondence: Nogenlunde med (datasæt, indledning, matching strategi)
+	Proposed descriptor: Påbegyndt
+	Sender noget i næste uge
+
+8. Kommende uge: Rapport! Resultater!
+	Vil gerne være godt med mht. rapporten før det næste indledes
+
+9. Kør rigtigt 6-fold cross validation: træn på 5, test på 1.
+    - Gem folderne!
+
+10. Office grid: specificer antal kerner
