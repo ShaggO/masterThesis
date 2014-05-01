@@ -17,9 +17,10 @@ if nargin < 6
     testType = 'test';
 end
 
+setNum = reshape(setNum,1,[]);
+pathTypes = reshape(pathTypes,1,[]);
 [imNumKey,~,imNum,liNum,pathLabels] = dtuPaths(testType);
 
-% Compute matches
 tic
 % Number of images in each set
 imgNum = sum(cellfun(@numel,imNum(pathTypes)) .* ...

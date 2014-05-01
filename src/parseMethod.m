@@ -153,7 +153,8 @@ switch lower(m.descriptor)
         desFunc = @(I,F) cvtDescriptor(I,F,'block','BlockSize',r.BlockSize);
     case 'cellhist'
         bTypes = {'square','polar','polar central', ...
-            'concentric polar','concentric polar central'};
+            'concentric polar','concentric polar central', ...
+            'log-polar','concentric log-polar'};
         fTypes = {'gaussian','triangle','box'};
         fTypesCenter = [fTypes {'none'}];
         fTypesCell = [fTypes {'polar gaussian'}];

@@ -116,16 +116,16 @@ switch magnitudeType
 end
 
 % scale parameters according to definitions and rescale factor
-[gridSpacing,centerSigma,cellSigma,binSigma,normSigma] = ...
-    scaleParameters(rescale,gridType,gridSize,gridRadius,centerSigma,...
+[gridRadius,centerSigma,cellSigma,binSigma,normSigma] = ...
+    scaleParameters(rescale,gridSize,gridRadius,centerSigma,...
     cellFilter,cellSigma,binSigma,binCount,normType,normSigma,left,right);
 
 % compute scale space images
 d = union(dContent,dMagnitude,'rows');
 scales = approxScales(F(:,3),scaleBase,scaleOffset);
 [L,Isizes] = dGaussScaleSpace(I,d,scales,rescale);
-V = vFunc(L,scales);
-M = mFunc(L,scales);
+Vscales = vFunc(L,scales);
+Mscales = mFunc(L,scales);
 
 % Pixel-wise normalization of magnitudes
 if strcmp(normType,'pixel')
@@ -134,34 +134,21 @@ if strcmp(normType,'pixel')
     else
         normSigma = scales' * normSigma;
     end
-    M = pixelNormalization(M,normFilter,normSigma);
+    MscalesNorm = pixelNormalization(Mscales,normFilter,normSigma);
+else
+    MscalesNorm = Mscales;
 end
 
-V = cellfun(@(v) {reshape(v,[],numel(binCount))},V);
+% Convert value/magnitude cell arrays to concatenated arrays
+V = cellfun(@(v) {reshape(v,[],numel(binCount))},Vscales);
 V = cells2vector(V,numel(binCount));
-M = cells2vector(M);
+M = cells2vector(MscalesNorm);
 
 % create cells
 P = scaleSpaceFeatures(F,scales,rescale);
-[validP,C,Wcell,Wcenter] = createCells(Isizes,P,gridType,gridSize,gridSpacing,...
+[validP,C,Wcell,Wcenter] = createCells(Isizes,P,gridType,gridSize,gridRadius,...
     centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy);
 X = F(validP,1:2);
-
-% % draw cells (for debugging)
-% Iw = zeros(sum(prod(Isizes,2)),1);
-% for i = 1:numel(C.data)
-%     for j = 1:size(C.data{i},3)
-%         for k = 1:size(C.data{i},4)
-%             Iw(C.data{i}(:,:,j,k)) = max(Iw(C.data{i}(:,:,j,k)), ...
-%                 Wcell.data{i}(:,:,j,k));
-% %             Iw(C.data{i}(:,:,j,k)) = 1;
-%         end
-%     end
-% end
-% Iw = varArray.newVector(Iw,Isizes,C.map);
-% figure
-% % imshow(max(imresize(I,Isizes(2,:)),5*Iw.data{2}),[])
-% imshow(Iw.data{2},[])
 
 % compute histogram variables
 [binF, binR] = ndFilter(binFilter,binSigma);
@@ -191,20 +178,39 @@ H = permute(H,[3 1 2]);
 if (strcmp(normType,'cell') || strcmp(normType,'pixel')) && ...
         any(cellNormStrategy == 1:3)
     % Normalize each histogram of each vector
-    H = H ./ repmat(sum(H,1) + eps,[nBin 1]);
+    Hnorm = H ./ repmat(sum(H,1) + eps,[nBin 1]);
     if any(cellNormStrategy == 2:3)
         % Weights on cells based on cell center distance
-        H = H .* repmat(Wcenter',[nBin 1 size(C.map,2)]);
+        Hnorm = Hnorm .* repmat(Wcenter',[nBin 1 size(C.map,2)]);
     end
-elseif strcmp(normType,'block')
-    % Block normalization
-    localOffsets = createCellOffsets(gridType,gridSize,gridSpacing,true);
-    H = blockNormalization(H,cellOffsets,localOffsets,normFilter,normSigma);
+% elseif strcmp(normType,'block')
+%     % Block normalization
+%     localOffsets = createCellOffsets(gridType,gridSize,gridSpacing,true);
+%     Hnorm = blockNormalization(H,cellOffsets,localOffsets,normFilter,normSigma);
+else
+    Hnorm = H;
 end
 
 % Reshape and normalize descriptors to unit vectors
-D = reshape(H,[prod(binCount)*size(C.map,1) size(C.map,2)])';
-
+D = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
 D = D ./ repmat(sum(D,2) + eps,[1 size(D,2)]);
+
+% save('cellHistExample')
+
+% % draw cells (for debugging)
+% Iw = zeros(sum(prod(Isizes,2)),1);
+% for i = 1:numel(C.data)
+%     for j = 1:size(C.data{i},3)
+%         for k = 1:size(C.data{i},4)
+%             Iw(C.data{i}(:,:,j,k)) = max(Iw(C.data{i}(:,:,j,k)), ...
+%                 Wcell.data{i}(:,:,j,k));
+% %             Iw(C.data{i}(:,:,j,k)) = 1;
+%         end
+%     end
+% end
+% Iw = varArray.newVector(Iw,Isizes,C.map);
+% figure
+% % imshow(max(imresize(I,Isizes(2,:)),5*Iw.data{2}),[])
+% imshow(Iw.data{2},[])
 
 end

@@ -8,8 +8,8 @@ end
 
 sets = 60;
 
-rng(1)
+rng(1,'combRecursive');
 S = reshape(randperm(sets),[sets/n n]);
-S = S(:,k)';
+S = S(:,k);
 
 end

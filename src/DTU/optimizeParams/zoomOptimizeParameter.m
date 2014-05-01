@@ -1,4 +1,4 @@
-function [method, optimalV] = zoomOptimizeParameter(setNum,method,parameter,values,iterations)
+function [method, optimalV] = zoomOptimizeParameter(setNum,method,parameter,values,varargin)
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
 
 pathTypes = 1:6;
@@ -6,18 +6,18 @@ runInParallel = true;
 
 minV = values(1,:);
 maxV = values(end,:);
-numV = size(values,1);
 
 diary optimizeParameter.out
 disp(['Optimizing parameter: ' parameter]);
 diary off
 
 % Iterate
-for i = 1:iterations
+for i = 1:numel(varargin)+1
     diary optimizeParameter.out
     disp(['Iteration ' num2str(i) ', values: ' nums2str(values)]);
     diary off
     % Create methods
+    clear methodV
     for v = 1:size(values,1)
         methodV(v) = modifyDescriptor(method,parameter,values(v,:));
     end
@@ -41,18 +41,13 @@ for i = 1:iterations
     end
     save([optDir '/zoomOptimize_' strrep(datestr(now),':','-') '_' parameter '_iteration-' num2str(i)]);
 
-    if i < iterations
-        % 20% interval (10% in each direction) with same number
-        % of values equally distributed
-        r = (values(end,:)-values(1,:)) * 0.1;
+    if i <= numel(varargin)
+        r = varargin{i};
 
+        values = zeros(size(r));
         for j = 1:size(r,2);
-            values(:,j) = min(max(optimalV(j),minV(j)+r(j)),maxV(j)-r(j)) + ...
-                linspace(-r(j),r(j),numV);
-        end
-        % Add current optimal if not present
-        if ~ismember(optimalV,values,'rows')
-            values = [values; optimalV];
+            values(:,j) = min(max(optimalV(j),minV(j)-min(r(:,j))), ...
+                maxV(j)-max(r(:,j))) + r(:,j);
         end
     end
 end

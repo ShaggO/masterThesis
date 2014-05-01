@@ -4,7 +4,7 @@ function [method,optimal] = enumOptimizeParameter(setNum, method, varargin)
 assert(numel(varargin) >= 2,'Specify at least one parameter,value pair');
 assert(mod(numel(varargin),2) == 0,'Wrong formatting of (param,value) pairs');
 
-pathTypes = 1:6;
+pathTypes = 1;
 runInParallel = true;
 
 parameters = varargin(1:2:end);
