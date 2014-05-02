@@ -159,8 +159,9 @@ switch lower(m.descriptor)
         fTypesCenter = [fTypes {'none'}];
         fTypesCell = [fTypes {'polar gaussian'}];
         nTypes = {'cell','block','pixel','none'};
+        magnitudeTypes = {'m','c','j2','m-c','1'};
         addParameter(p,'contentType','go');
-        addParameter(p,'magnitudeType','m');
+        addParameter(p,'magnitudeType','m',okArg(magnitudeTypes));
         addParameter(p,'scaleBase',2^(1/3));
         addParameter(p,'scaleOffset',0.5);
         addParameter(p,'rescale',1);
