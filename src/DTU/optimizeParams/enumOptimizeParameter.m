@@ -1,4 +1,4 @@
-function [method,optimal] = enumOptimizeParameter(setNum, method, varargin)
+function [method,optimal] = enumOptimizeParameter(setNum, method, diaryFile, varargin)
 % ENUMOPTIMIZEPARAMETER Optimize enumerated sets of parameters
 
 assert(numel(varargin) >= 2,'Specify at least one parameter,value pair');
@@ -36,7 +36,7 @@ name = interweave(parameters,repmat({'-'},1,numel(parameters)-1));
 save([optDir '/enumOptimize_' strrep(datestr(now),':','-') '_' [name{:}]]);
 
 % Display results
-diary optimizeParameter.out
+diary(diaryFile)
 for p = 1:numel(parameters)
     param = parameters{p};
     switch class(values{p}{optimal})

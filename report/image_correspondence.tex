@@ -12,35 +12,52 @@ inconsistencies and estimation of 3D points
 \label{sec:matching_strategies}
 
 The matching performance depends on the matching strategy. \citet{mikolajczyk2005performance} described the following three matching strategies that are used when solving the image correspondence problem:
-Simple \emph{thresholding} compares each descriptor in image $A$ with each descriptor in image $B$. Any two descriptors having a distance to one another below a threshold $t$ are classified as matches. This gives a one-to-many relation where each descriptor in $A$ can be matched to potentially all descriptors in $B$.
-For a descriptor from $A$, \emph{Best-thresholding} finds the best matching descriptor from $B$. If the distance is below a threshold $t$, it is a match. Otherwise the descriptor from $A$ has no match. 
-\emph{ratio-thresholding}
-\citet{dahl2011finding}
+Simple \emph{thresholding} compares each descriptor in image $A$ with each descriptor in image $B$. Any two descriptors having a distance to one another below a threshold $t$ are classified as matches. \emph{Best-thresholding} finds the best the best matching descriptor in $B$ for each descriptor in $A$. If the distance is below a threshold $t$, it is a match (positive), and otherwise it is rejected (negative). \emph{Ratio-thresholding} finds the two best matching descriptors in $B$ for each descriptor in $A$. If the ratio between the two distances to the descriptor in $A$ is above a threshold $t$, it is a match. Otherwise the match is rejected.
+
+We choose the ratio-thresholding strategy since this is the one used in previous image correspondence evaluations \cite{mikolajczyk2005performance,dahl2011finding,larsen2012jet}. Furthermore this matching strategy is more general since it uses the ratio between the distance to the two best matching features instead of the absolute values. The two following cases give a good rationale for choosing this matching strategy: If two descriptors are good matches they will be very similar, and hence the matching strategy cannot choose one over the other since it will be very small variations in the image that decide the outcome of the matching. If no descriptors give a good match, the two best matches will have a large distance to the descriptor in question, and hence there will be a high probability that they will have distances close to one another.
+
+\section{Similarity measure}
+\label{sec:similarity_measure}
+The ratio-thresholding matching strategy needs a similarity measure in order to measure the distance between two descriptors. The Euclidean distance is widely used as similarity measure in the litterature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance}. \citet{larsen2012in} however evaluated the following different similarity measures: $L_1$ distance, Euclidean distance, $\chi^2$ distance, Kullback-Leibler divergence, and Jensen-Shannon divergence and found no notable difference in performance for his locally orderless-based descriptor.
+\todo{Add comments on similarity measures}
 
 \section{Performance measures}
 \label{sec:performance_measures}
 
+Having established the matching strategy and similarity measure, we will now describe two performance measures, which we will use for evaluation of our descriptor as well as competing descriptors.
+
+\citet{dahl2011finding}
+
 confusion matrix
+\begin{table}
+	\centering
+	\bgroup
+	\def\arraystretch{1.5}
+	\begin{tabular}{|l|c|c|}
+		\cline{2-3}
+		\multicolumn{1}{c|}{} & Condition positive & Condition negative \\ \hline
+		Assigned positive & \cellcolor{green!25}Positive True & \cellcolor{red!25} False Negative  \\ \hline
+		Assigned negative & \cellcolor{red!25} False Positive & \cellcolor{green!25} True Negative \\ \hline
+	\end{tabular}
+	\egroup
+	\caption{Confusion matrix for postive/negative classification}
+	\label{tbl:confusion_matrix}
+\end{table}
+\begin{align}
+FPR &= \frac{FP}{FP + TN} \\
+TPR &= \frac{TP}{TP + FN} \\
+OMP &= \frac{FP}{FP + TP}
+\end{align}
 
-$FPR = FP / (FP + TN)$
-$TPR = TP / (TP + FN)$
-$OMP = FP / (FP + TP)$
+ROC = FPR,TPR
+PR = OMP,TPR
 
-$ROC = FPR,TPR$
-$PR = OMP,TPR$
 
 ROC, AUC, recall, 1-precision
 \emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for matching of higher order differential information descriptors.
 
 \section{Dataset}
 The dataset we are using for training and evaluation of our descriptor is called the DTU Robot 3D dataset \cite{aanaes2010recall} (from now on called the DTU dataset). It concists of images of objects taken in a black box illuminated using 19 fixed positioned LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes as shown in \Cref{tbl:dtu_scene_classifications}.
-
-\begin{figure}
-	\centering
-	\includegraphics[width=0.8\textwidth]{img/CameraPosb.pdf}
-	\caption{Overview of camera positions from \cite{aanaes2010recall}}
-	\label{fig:dtu_overview}
-\end{figure}
 
 \begin{figure}
 	\centering
@@ -60,7 +77,14 @@ The dataset we are using for training and evaluation of our descriptor is called
 	\label{fig:dtu_examples}
 \end{figure}
 
-The camera is positioned around each scene using an industrial robot arm, which has automaticly captured each scene from 119 positions. These positions are defined from a fixed frontal view varying the viewpoint $\theta$ in three arcs at different distance $d$ to the scene. Arc 1 has $d = \SI{0.5}{\meter}$ to the scene and $\theta$ spans $\SI{\pm40}{\degree}$, arc 2 has $d = \SI{0.65}{\meter}$ and $\theta$ spans $\SI{\pm25}{\degree}$, and arc 3 has $d = \SI{0.8}{\meter}$ and $\theta$ spans $\SI{\pm20}{\degree}$. Furthermore a linear path is captured by moving the camera away from the scene, which corresponds to zooming or scaling the scene. This is done at $\theta = \SI{0}{\degree}$ and $d$ spans $[\SI{0.5}{\meter};\SI{0.8}{\meter} ]$. At each of the 119 camera positions 19 individual images $I_i$ are taken with each of the LED lights $i,~\text{for}~i = 1,\hdots,19$ turned on. Using the given camera positions we get four camera paths: three arc paths and one linear path.
+The camera is positioned around each scene using an industrial robot arm, which has automaticly captured each scene from 119 positions. These positions are defined from a fixed frontal view varying the viewpoint $\theta$ in three arcs at different distance $d$ to the scene. Arc 1 has $d = \SI{0.5}{\meter}$ to the scene and $\theta$ spans $\SI{\pm40}{\degree}$, arc 2 has $d = \SI{0.65}{\meter}$ and $\theta$ spans $\SI{\pm25}{\degree}$, and arc 3 has $d = \SI{0.8}{\meter}$ and $\theta$ spans $\SI{\pm20}{\degree}$. Furthermore a linear path is captured by moving the camera away from the scene, which corresponds to zooming or scaling the scene. This is done at $\theta = \SI{0}{\degree}$ and $d$ spans $[\SI{0.5}{\meter};\SI{0.8}{\meter} ]$. At each of the 119 camera positions 19 individual images $I_i$ are taken with each of the LED lights $i,~\text{for}~i = 1,\hdots,19$ turned on. Using the given camera positions we get four camera paths: three arc paths and one linear path. \Cref{fig:dtu_overview} shows an overview of the four camera paths just described.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/CameraPosb.pdf}
+	\caption{Overview of camera positions and paths in the DTU dataset. The figure originates from \cite{aanaes2010recall}.}
+	\label{fig:dtu_overview}
+\end{figure}
 
 The choice of capturing the scenes with individual LED lights created images with a high amount of casting shadows. \citet{larsen2012jet} created as set\footnote{dataset available at http://roboimagedata.imm.dtu.dk/data/condensed.tar.gz} of artificial diffuse and light paths from the individual LED images which we now briefly explain. The artificial diffuse light images are created from the individual lightings in order to only evaluate the performance of our descriptor under viewpoint changes and to get more natural images. These diffuse images are created by averaging over the individual light images for each camera position:
 \begin{align}
@@ -192,16 +216,17 @@ The automatic capturing of images using a robot arm combined with the individual
 \end{figure}
 \section{Experiments}
 %
+%
 \section{Parameter study}
 
 
 
-Test: 10 fold cross validation
+Test: 6 fold cross validation.
+Tune on 5 folds, test on 1.
 %
 \section{Evaluation / results}
 %
 
 %
 \subbibliography
-
 \end{document}
