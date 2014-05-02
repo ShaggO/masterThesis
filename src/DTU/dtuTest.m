@@ -17,6 +17,8 @@ if nargin < 6
     testType = 'test';
 end
 
+desSave = true;
+
 setNum = reshape(setNum,1,[]);
 pathTypes = reshape(pathTypes,1,[]);
 [imNumKey,~,imNum,liNum,pathLabels] = dtuPaths(testType);
@@ -68,7 +70,7 @@ if runInParallel
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],false);
+        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],desSave);
 
         matchROCAUC(c,:) = [pathMatches.ROCAUC];
         matchPRAUC(c,:) = [pathMatches.PRAUC];
@@ -82,7 +84,7 @@ else
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],false);
+        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],desSave);
 
         matchROCAUC(c,:) = [pathMatches.ROCAUC];
         matchPRAUC(c,:) = [pathMatches.PRAUC];

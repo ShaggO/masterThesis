@@ -2,7 +2,7 @@ function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
     scaleBase,scaleOffset,rescale,gridType,gridSize,gridRadius,...
     centerFilter,centerSigma,cellFilter,cellSigma,...
     normType,normFilter,normSigma,binFilter,binSigma,binCount,...
-    cellNormStrategy)
+    cellNormStrategy,binStrategy)
 % GETGHISTDESCRIPTORS Customizable descriptor based on cells of gradient
 % histograms.
 %
@@ -38,14 +38,24 @@ switch contentType
         vFunc = @(L,s) diffStructure('Theta',L,s);
         left = -pi;
         right = pi;
-        binCArgin = {};
+        switch binStrategy
+            case 0
+                binCArgin = {};
+            case 1
+                binCArgin = {'offset',-pi/binCount};
+        end
         period = 2*pi;
     case 'si'
         dContent = [2 0; 1 1; 0 2];
         vFunc = @(L,s) diffStructure('S',L,s);
         left = -1;
         right = 1;
-        binCArgin = {};
+        switch binStrategy
+            case 0
+                binCArgin = {};
+            case 1
+                binCArgin = {'endpoints',true};
+        end
         period = 0;
     case 'go,si'
         assert(strcmp(magnitudeType,'m,c'));

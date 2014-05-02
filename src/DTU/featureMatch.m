@@ -13,7 +13,7 @@ function [matchIdx, dists] = featureMatch(D1, D2)
 
 dists = zeros(size(D1,1),size(D2,1));
 for i = 1:size(D1,1)
-    dists(i,:) = sum(abs(D2 - repmat(D1(i,:),[size(D2,1) 1])),2);
+    dists(i,:) = sum((D2 - repmat(D1(i,:),[size(D2,1) 1])) .^ 2,2);
 end
 
 [dists, matchIdx] = sort(dists,2);
@@ -29,5 +29,7 @@ switch size(dists,2)
         dists = dists(:,1:2);
         matchIdx = matchIdx(:,1:2);
 end
+
+dists = sqrt(dists);
 
 end

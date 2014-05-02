@@ -1,7 +1,77 @@
 \documentclass[thesis.tex]{subfiles}
+\def\x{\mathbf{x}}
+\def\p{\mathbf{p}}
+\def\c{\mathbf{c}}
 \begin{document}
-
 \chapter{Proposed descriptor}
+%
+Our proposed descriptor consists of weighted smooth histograms computed at several \textit{cells} arranged in a grid. We define the cell histogram $H_j$ as
+%
+\begin{align}
+H_j(f_i) = \int F(\x) P (\x) A_j (\x) B(f_i, \x; f) \,\text{d} \x
+\end{align}
+%
+where
+%
+\begin{itemize}
+\item[] $f_i$ is a bin center,
+\item[] $f$ is a value function defining the bin domain,
+\item[] $F$ is a magnitude function,
+\item[] $P$ is a center aperture function,
+\item[] $A_j$ is a cell aperture function, and
+\item[] $B$ is a binning aperture function.
+\end{itemize}
+%
+Note that this definition is similar to the galaxy descriptor \cite{pedersen2013shape}, except we consider several histograms with their own aperture functions $A_j$ and add the additional center aperture function $P$. The descriptor $D$ is constructed by concatenating all $n$ bin values of all $m$ cell histograms:
+%
+\begin{align}
+D = \Bigl( \left(H_1(f_1) \cdots H_1(f_n)\right) \cdots (H_m(f_1) \cdots H_m(f_n)) \Bigr)
+\end{align}
+%
+The five functions above can be seen as the components that make up our descriptor, and we consider different choices for each.
+%
+\section{Value and magnitude functions}
+%
+The choice of value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. The by far most common choice in literature is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function. Another choice is to use shape index $S$ weighted by curvedness $C$.
+
+TODO: scale spaces, pixel normalization
+%
+\section{Center aperture function}
+%
+The purpose of the center aperture function $P$ is to weight points closer to the interest point higher, since they are of greater importance to the local structure. We define it as a Gaussian function
+%
+\begin{align}
+P(\x) = G(\x - \p; \boldsymbol{\sigma})
+\end{align}
+%
+where $\p$ is the interest point.
+%
+\section{Cell aperture function}
+%
+Similarly to $P$, the purpose of the cell aperture functions $A_j$ is to weight points closer to cell center higher for each cell histogram. We define it as a Gaussian function
+%
+\begin{align}
+A_j(\x) = G(\x - \c_j; \boldsymbol{\sigma})
+\end{align}
+%
+where $\c_j$ is the cell center for cell $j$.
+
+TODO: grid layouts
+%
+\section{Binning aperture function}
+%
+The binning aperture function decides the shape of the smooth histograms that make up our descriptor. We define it as a Gaussian function
+%
+\begin{align}
+B(f_i, \x; f) = G(f(\x) - f_i; \sigma)
+\end{align}
+%
+\section{Example}
+%
+In order to visualize the construction of our descriptor, we will show an example of the whole process. We start by extracting interest points of an image with a DoG detector...
+%
+\section{Notes}
+%
 % Example scene 47!
 %
 \begin{enumerate}
