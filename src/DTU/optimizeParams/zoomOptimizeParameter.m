@@ -1,4 +1,4 @@
-function [method, optimalV] = zoomOptimizeParameter(setNum,method,parameter,values,varargin)
+function [method, optimalV] = zoomOptimizeParameter(setNum,method,diaryFile,parameter,values,varargin)
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
 
 pathTypes = 1:6;
@@ -7,13 +7,13 @@ runInParallel = true;
 minV = values(1,:);
 maxV = values(end,:);
 
-diary optimizeParameter.out
+diary(diaryFile)
 disp(['Optimizing parameter: ' parameter]);
 diary off
 
 % Iterate
 for i = 1:numel(varargin)+1
-    diary optimizeParameter.out
+    diary(diaryFile)
     disp(['Iteration ' num2str(i) ', values: ' nums2str(values)]);
     diary off
     % Create methods
@@ -29,7 +29,7 @@ for i = 1:numel(varargin)+1
     optimalV = values(optimalInd,:);
     method = methodV(optimalInd);
 
-    diary optimizeParameter.out
+    diary(diaryFile)
     disp(['Optimal this iteration: ' nums2str(optimalV)]);
     disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
     diary off
@@ -51,7 +51,7 @@ for i = 1:numel(varargin)+1
         end
     end
 end
-diary optimizeParameter.out
+diary(diaryFile)
 disp(['Final optimal value: ' nums2str(optimalV)]);
 diary off
 
