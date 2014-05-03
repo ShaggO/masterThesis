@@ -1,7 +1,7 @@
 clear all; clc;
-diaryFile = 'optimizeParameterSi.out';
+diaryFile = 'optimizeParameterGo.out';
 diary(diaryFile)
-disp('Optimization of parameters started.');
+disp('Optimization of parameters for GO started.');
 
 % leave out 1st sixth
 setNum = dtuSplitSets(6,2:6);
