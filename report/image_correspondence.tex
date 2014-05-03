@@ -1,12 +1,21 @@
 \documentclass[thesis.tex]{subfiles}
+\newcommand\TPR{\mathit{TPR}}
+\newcommand\FPR{\mathit{FPR}}
+\newcommand\OMP{\mathit{1-P}}
+\newcommand\TP{\mathit{TP}}
+\newcommand\FP{\mathit{FP}}
+\newcommand\TN{\mathit{TN}}
+\newcommand\FN{\mathit{FN}}
+\newcommand\ROC{ROC}
+\newcommand\PR{PR}
 \begin{document}
 \chapter{Image correspondence}
 
 In this chapter we will explain the image correspondence problem and the application of our descriptor to the problem.
 
-The image correspondence problem is the problem of matching features from two images $A$ and $B$ (of the same object) to one another. A match should ideally indicate that the two matching features correspond to the same physical point or object. Two images of the same object are however only rarely taken under similar light conditions, from the same position, and with the same viewpoint, tilt, rotation, zoom, and focus, and hence the captured images will differ based on these variables. By using an interest point detector in combination with a descriptor we are able to find interest points to match in $A$ and $B$, describe each interest point, and compare these descriptions across images to get an estimation of matching points.
+The image correspondence problem is the problem of matching features from two images $A$ and $B$ (of the same object) to one another. A match should ideally indicate that the two matching features correspond to the same physical point or object. Two images of the same object are however only rarely taken under similar light conditions, from the same position, and with the same viewpoint, tilt, rotation, zoom, and focus, and hence the captured images will differ based on these variables. By using an interest point detector in combination with a descriptor we are able to find interest points to match in $A$ and $B$, describe each interest point using a descriptor algorithm, and compare these descriptors across the two images to get an estimation of matching/non-matching points.
 
-inconsistencies and estimation of 3D points
+NOTE: inconsistencies and estimation of 3D points
 
 \section{Matching strategies}
 \label{sec:matching_strategies}
@@ -20,15 +29,28 @@ We choose the ratio-thresholding strategy since this is the one used in previous
 \label{sec:similarity_measure}
 The ratio-thresholding matching strategy needs a similarity measure in order to measure the distance between two descriptors. The Euclidean distance is widely used as similarity measure in the litterature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance}. \citet{larsen2012in} however evaluated the following different similarity measures: $L_1$ distance, Euclidean distance, $\chi^2$ distance, Kullback-Leibler divergence, and Jensen-Shannon divergence and found no notable difference in performance for his locally orderless-based descriptor.
 \todo{Add comments on similarity measures}
+NOTE: We use $L_2$-distance (Euclidean), which is slightly better than $L_1$
 
 \section{Performance measures}
 \label{sec:performance_measures}
 
-Having established the matching strategy and similarity measure, we will now describe two performance measures, which we will use for evaluation of our descriptor as well as competing descriptors.
+Having established the matching strategy and similarity measure, we now describe the two performance measures which we use for evaluation of our descriptor as well as competing descriptors.
 
-\citet{dahl2011finding}
+Assume that we have detected interest points and described these using a descriptor algorithm for each of the two images $A$ and $B$. We now wish to compute the performance of the descriptor algorithm utilized.
+ Since we are classifying the matches as either positives or negatives (binary classification), we base our performance measure on the confusion matrix shown in \Cref{tbl:confusion_matrix}. Using a ground truth (or golden standard), which tells us if two points in the two images in question indeed correspond to one another, we are able to classify each match result into one of the four cells of the confusion matrix. From the four outcomes we define the following three measurements: \emph{recall} ($\TPR$),\emph{fall-out} ($\FPR$), and \emph{1-precision} ($\OMP$) as shown in \Cref{eq:fpr,eq:tpr,eq:omp} respectively.
+\begin{align}
+	\label{eq:fpr}
+	\FPR &= \frac{\FP}{\FP + \TN} \\
+	\label{eq:tpr}
+	\TPR &= \frac{\TP}{\TP + \FN} \\
+	\label{eq:omp}
+	\OMP &= \frac{\FP}{\FP + \TP}
+\end{align}
+Where $\TP,\FP,\TN,~\text{and} \FN$ are the number of matches placed in each of the four cells of the confusion matrix.
+From these three measurements we further derive the two performance measures: Receiver operating characteristic (\ROC), which is the recall vs. fall-out, and \PR \todo{Come up with name for recall vs. fall-out} recall vs. 1-precision.
 
-confusion matrix
+Recall that the ratio-threshold strategy relies on a threshold $t$ in order to decide whether the match in question is positive or negative. In other words the performance depends on the $t$ chosen. By varying $t$ and obtaining the measurements $\FPR,\TPR,$ and $\OMP$, we are able to calculate \ROC\ and \PR\ which we plot as curves. Integrating each of the two curves give us the area under the curve (AUC) for both \ROC\ and \PR. These two measures are our final performance measures that we will use for evaluating performance of a descriptor on the image correspondence problem
+
 \begin{table}
 	\centering
 	\bgroup
@@ -36,24 +58,21 @@ confusion matrix
 	\begin{tabular}{|l|c|c|}
 		\cline{2-3}
 		\multicolumn{1}{c|}{} & Condition positive & Condition negative \\ \hline
-		Assigned positive & \cellcolor{green!25}Positive True & \cellcolor{red!25} False Negative  \\ \hline
-		Assigned negative & \cellcolor{red!25} False Positive & \cellcolor{green!25} True Negative \\ \hline
+		Assigned positive & \cellcolor{green!25}True Positive (TP) & \cellcolor{red!25}False Negative (FN)  \\ \hline
+		Assigned negative & \cellcolor{red!25}False Positive (FP) & \cellcolor{green!25}True Negative (TN) \\ \hline
 	\end{tabular}
 	\egroup
 	\caption{Confusion matrix for postive/negative classification}
 	\label{tbl:confusion_matrix}
 \end{table}
-\begin{align}
-FPR &= \frac{FP}{FP + TN} \\
-TPR &= \frac{TP}{TP + FN} \\
-OMP &= \frac{FP}{FP + TP}
-\end{align}
-
-ROC = FPR,TPR
-PR = OMP,TPR
 
 
-ROC, AUC, recall, 1-precision
+NOTES:
+
+\citet{dahl2011finding} \\
+ROC = FPR,TPR \\
+PR = OMP,TPR \\
+
 \emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for matching of higher order differential information descriptors.
 
 \section{Dataset}
