@@ -4,13 +4,15 @@ if nargin < 4
     color = 'k';
 end
 
-if size(x,1) < size(x,2)
+if size(x,2) > 1
     x = x';
 end
-if size(y,1) < size(y,2)
+if size(y,2) > 1
     y = y';
 end
-if size(r,1) < size(r,2)
+if numel(r) == 1
+    r = repmat(r,numel(x),1);
+elseif size(r,1) < size(r,2)
     r = r';
 end
 positions = [x-r y-r 2*r 2*r];
