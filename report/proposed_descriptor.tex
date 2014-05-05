@@ -32,13 +32,13 @@ The five functions above can be seen as the components that make up our descript
 %
 \section{Value and magnitude functions}
 %
-The choice of value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. The by far most common choice in literature is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function. Another choice is to use shape index $S$ weighted by curvedness $C$.
+The choice of value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. The by far most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function (possibly post-processed). Another choice \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$.
 
 TODO: scale spaces, pixel normalization
 %
 \section{Center aperture function}
 %
-The purpose of the center aperture function $P$ is to weight points closer to the interest point higher, since they are of greater importance to the local structure. We define it as a Gaussian function
+The purpose of the center aperture function $P$ is to weight points closer to the detected interest point higher, since they are of greater importance to the local structure. We define it as a Gaussian function
 %
 \begin{align}
 P(\x) = G(\x - \p; \boldsymbol{\sigma})
@@ -60,6 +60,7 @@ TODO: grid layouts
 %
 \section{Binning aperture function}
 %
+\todo{Add reference to section about smooth hisograms/LOI}
 The binning aperture function decides the shape of the smooth histograms that make up our descriptor. We define it as a Gaussian function
 %
 \begin{align}
