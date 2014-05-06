@@ -63,3 +63,4 @@ src/cellHistExample.mat
 src/DTU/optimizeParams/L1norm.mat
 src/DTU/optimizeParams/L2norm.mat
 src/DTU/optimizeParams/enumOptimize_02-May-2014 05-36-47_gridType-gridSize-cellFilter.mat
+src/figureTools/export_fig/.ignore/ghostscript.txt

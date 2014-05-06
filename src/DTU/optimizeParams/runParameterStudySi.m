@@ -20,40 +20,39 @@ method = methodStruct( ...
    'rescale',1/2,...
    'gridType','concentric polar',...
    'gridSize',[12 2],...
-   'gridRadius',10,...
+   'gridRadius',11.5,...
    'centerFilter','gaussian',...
-   'centerSigma',[1.5 1.5],...
+   'centerSigma',[2 2],...
    'cellFilter','polar gaussian',...
-   'cellSigma',[1 1],...
+   'cellSigma',[0.9 0.9],...
    'normType','pixel',...
-   'normSigma',[2 2],...
-   'binSigma',1.2,...
+   'normSigma',[2.6 2.6],...
+   'binSigma',1.9,...
    'binCount',9,...
    'cellNormStrategy',0},...
    matchCache,{'co-'});
 
 %% Grid optimization
-gs = [24 1; 20 1; 16 1; 12 1; 8 1; ...
-    12 2; 10 2; 8 2; 6 2; ...
+gs = [12 2; 10 2; 8 2; 6 2; ...
     8 3; 6 3; 6 4];
 n = size(gs,1);
-gsRings = gs(gs(:,2) > 1,:);
-nRings = size(gsRings,1);
+gsLog = gs(gs(:,2) < 3,:);
+nLog = size(gsLog,1);
 
 gridTypes = {};
 gridSizes = {};
 cellFilters = {};
 
 % polar grid, polar gaussian filter
-idx = numel(gridTypes) + (1:nRings);
+idx = numel(gridTypes) + (1:n);
 gridTypes(idx) = {'polar'};
-gridSizes(idx) = mat2cell(gsRings,ones(nRings,1),2);
+gridSizes(idx) = mat2cell(gs,ones(n,1),2);
 cellFilters(idx) = {'polar gaussian'};
 
 % concentric polar grid, polar gaussian filter
-idx = numel(gridTypes) + (1:nRings);
+idx = numel(gridTypes) + (1:n);
 gridTypes(idx) = {'concentric polar'};
-gridSizes(idx) = mat2cell(gsRings,ones(nRings,1),2);
+gridSizes(idx) = mat2cell(gs,ones(n,1),2);
 cellFilters(idx) = {'polar gaussian'};
 
 % polar central grid, polar gaussian filter
@@ -63,21 +62,21 @@ gridSizes(idx) = mat2cell(gs,ones(n,1),2);
 cellFilters(idx) = {'polar gaussian'};
 
 % concentric polar central grid, polar gaussian filter
-idx = numel(gridTypes) + (1:nRings);
-gridTypes(idx) = {'concentric polar central'};
-gridSizes(idx) = mat2cell(gsRings,ones(nRings,1),2);
-cellFilters(idx) = {'polar gaussian'};
-
-% log-polar grid, polar gaussian filter
 idx = numel(gridTypes) + (1:n);
-gridTypes(idx) = {'log-polar'};
+gridTypes(idx) = {'concentric polar central'};
 gridSizes(idx) = mat2cell(gs,ones(n,1),2);
 cellFilters(idx) = {'polar gaussian'};
 
 % log-polar grid, gaussian filter
-idx = numel(gridTypes) + (1:n);
+idx = numel(gridTypes) + (1:nLog);
 gridTypes(idx) = {'log-polar'};
-gridSizes(idx) = mat2cell(gs,ones(n,1),2);
+gridSizes(idx) = mat2cell(gsLog,ones(nLog,1),2);
+cellFilters(idx) = {'gaussian'};
+
+% concentric log-polar grid, gaussian filter
+idx = numel(gridTypes) + (1:nLog);
+gridTypes(idx) = {'concentric log-polar'};
+gridSizes(idx) = mat2cell(gsLog,ones(nLog,1),2);
 cellFilters(idx) = {'gaussian'};
 
 disp(['Total number of grid parameters to test: ' num2str(numel(gridTypes))]);
@@ -93,7 +92,7 @@ for i = 1:iters
     diary off
     method = enumOptimizeParameter(setNum,method,diaryFile,'gridType',gridTypes,'gridSize',gridSizes,'cellFilter',cellFilters);
     method = zoomOptimizeParameter(setNum,method,diaryFile,'gridRadius', ...
-        (2.5:2.5:20)',(-1:0.5:1)');
+        (5:2.5:20)',(-1:0.5:1)');
     method = modifyDescriptor(method,'centerFilter','gaussian');
     method = zoomOptimizeParameter(setNum,method,diaryFile,'centerSigma', ...
         repmat((0.5:0.5:2)',[1 2]),repmat((-0.2:0.1:0.2)',[1 2]));

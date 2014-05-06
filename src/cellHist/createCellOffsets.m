@@ -4,10 +4,11 @@ function [c, cPol, cellSize] = createCellOffsets(type,gn,gr)
 t = pi/gn(1);
 switch type
     case 'square'
-        d = 2*gr ./ (gn-1);
-        [meshX,meshY] = meshgrid(-gr(1):d(1):gr(1),-gr(2):d(2):gr(2));
+        d = 2*gr ./ gn;
+        r = (gn-1)/2;
+        [meshX,meshY] = meshgrid(d(1)*(-r(1):r(1)),d(2)*(-r(2):r(2)));
         c = [meshX(:) meshY(:)];
-        cellSize = ones(size(c,1),1);
+        cellSize = ones(size(c,1),1) / (gn(2));
     case 'polar'
         a = 2*t * (1:gn(1)) + t;
         d = gr * ((1:gn(2))-1/2) / gn(2);
@@ -15,17 +16,17 @@ switch type
         cellSize = ones(size(c,1),1) / (2*gn(2));
     case 'polar central'
         a = 2*t * (1:gn(1)) + t;
-        d = gr * (1:gn(2)) / gn(2);
+        d = gr * (1:gn(2)) / (gn(2)+1/2);
         c = [0 0; polarGrid(a,d,0)];
         cellSize = ones(size(c,1),1) / (2*gn(2)+1);
     case 'concentric polar'
         a = 2*t * (1:gn(1)) + t;
-        d = gr * (1:gn(2)) / gn(2);
+        d = gr * ((1:gn(2))-1/2) / gn(2);
         c = polarGrid(a,d,t);
         cellSize = ones(size(c,1),1) / (2*gn(2));
     case 'concentric polar central'
         a = 2*t * (1:gn(1)) + t;
-        d = gr * ((1:gn(2))-1/2) / gn(2);
+        d = gr * (1:gn(2)) / (gn(2)+1/2);
         c = [0 0; polarGrid(a,d,t)];
         cellSize = ones(size(c,1),1) / (2*gn(2)+1);
     case 'log-polar'
