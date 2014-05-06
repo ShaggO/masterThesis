@@ -1,7 +1,11 @@
-function [] = drawCircle(x,y,r,color)
+function [] = drawCircle(x,y,r,color,native)
 
 if nargin < 4
     color = 'k';
+end
+
+if nargin < 5
+    native = true;
 end
 
 if size(x,2) > 1
@@ -16,14 +20,19 @@ elseif size(r,1) < size(r,2)
     r = r';
 end
 positions = [x-r y-r 2*r 2*r];
-for i = 1:numel(x)
-    rectangle('position',positions(i,:),'curvature',[1 1],'edgecolor',color)
-end
 
-% Step through the angles manually
-%theta = (0:2*pi/360:2*pi)';
-%x = repmat(r,[numel(theta) 1]) .* repmat(cos(theta),[1 size(x,2)]) + repmat(x,[numel(theta) 1]);
-%y = repmat(r,[numel(theta) 1]) .* repmat(sin(theta),[1 size(x,2)]) + repmat(y,[numel(theta) 1]);
-%plot(x,y,['-' color]);
-
+% Use native implementation
+if native
+    for i = 1:numel(x)
+        hold on;
+        rectangle('position',positions(i,:),'curvature',[1 1],'edgecolor',color);
+    end
+else
+    % Step through the angles manually
+    theta = (0:2*pi/360:2*pi)';
+    for i = 1:numel(x)
+        xi = repmat(r(i),[numel(theta) 1]) .* repmat(cos(theta),[1 size(x,2)]) + repmat(x(i),[numel(theta) 1]);
+        yi = repmat(r(i),[numel(theta) 1]) .* repmat(sin(theta),[1 size(x,2)]) + repmat(y(i),[numel(theta) 1]);
+        plot(xi,yi,['-' color]);
+    end
 end
