@@ -1,7 +1,7 @@
 clc, clear all
 
-gridType = 'polar';
-gridSize = [6 4];
+gridType = 'concentric polar central';
+gridSize = [8 3];
 gridRadius = 50;
 cellSigma = [50 50];
 % cellSigma = [pi/gridSize(1) gridSpacing/2];
