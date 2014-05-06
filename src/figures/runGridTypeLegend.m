@@ -5,7 +5,7 @@ hold on
 plot(0,0,'rx')
 plot(0,0,'k-')
 plot(0,0,'g-')
-plot(0,0,'b-')
+plot(0,0,'b--')
 
 h=legend(gca,'Cell centers','Cell SD','Detection scale','Grid radius', ...
     'Orientation','horizontal');
