@@ -132,6 +132,7 @@ end
 
 % compute scale space images
 d = union(dContent,dMagnitude,'rows');
+d = [0 0; d];
 scales = approxScales(F(:,3),scaleBase,scaleOffset);
 [L,Isizes] = dGaussScaleSpace(I,d,scales,rescale);
 Vscales = vFunc(L,scales);
@@ -205,7 +206,7 @@ end
 D = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
 D = D ./ repmat(sum(D,2) + eps,[1 size(D,2)]);
 
-% save('cellHistExample')
+save('cellHistExample')
 
 % % draw cells (for debugging)
 % Iw = zeros(sum(prod(Isizes,2)),1);
