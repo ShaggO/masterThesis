@@ -49,6 +49,7 @@ where $\p$ is the interest point.
 \section{Cell aperture function}
 %
 Similarly to $P$, the purpose of the cell aperture functions $A_j$ is to weight points closer to cell center higher for each cell histogram. We define it as a Gaussian function
+
 %
 \begin{align}
 A_j(\x) = G(\x - \c_j; \boldsymbol{\sigma})
@@ -56,7 +57,53 @@ A_j(\x) = G(\x - \c_j; \boldsymbol{\sigma})
 %
 where $\c_j$ is the cell center for cell $j$.
 
-TODO: grid layouts
+The cell aperture function is defined for all cells in the feature. Having defined both $P$ and $A_j$ we are now able to define the \emph{grid layouts} that define the cell offsets for each feature.
+\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: Polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions while the two log-polar grids both use cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 circles. The two ``central'' grids are furthermore having a single central cell (hence the name).
+
+All these layouts are defined relative to the \emph{grid radius}, which is defined as a constrant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that the standard deviations of the outer-most cells in the feature touch the grid radius. Each ring of cells is split equally into $n$
+
+See \Cref{apx:grid_layouts} for more information on how to compute the grid layout positions.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/gridType_legend.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/gridType_polar_polar_gaussian.pdf}
+		\caption{Polar}
+		\label{fig:gridType_ppg}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/gridType_polar_central_polar_gaussian.pdf}
+		\caption{Polar central}
+		\label{fig:gridType_pcpg}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/gridType_log-polar.pdf}
+		\caption{Log-polar}
+		\label{fig:gridType_lp}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_polar_gaussian.pdf}
+		\caption{Concentric polar}
+		\label{fig:gridType_cppg}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_central_polar_gaussian.pdf}
+		\caption{Concentric polar central}
+		\label{fig:gridType_cpcpg}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/gridType_concentric_log-polar.pdf}
+		\caption{Concentric log-polar}
+		\label{fig:gridType_clp}
+	\end{subfigure}
+	\caption{Examples of grid layouts showing cell centers, cell standard deviations, detection scales, and grid radii. The grid size is chosen to be $[8 2]$ (8 cells in each of 2 rings) and the grid radius is set to 10 times detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use cartesian Gaussian aperture cell functions.}
+	\label{fig:gridType}
+\end{figure}
+
+Irregular SIFT \cite{cui2009scale}
 %
 \section{Binning aperture function}
 %

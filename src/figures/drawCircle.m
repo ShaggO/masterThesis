@@ -1,4 +1,4 @@
-function [] = drawCircle(x,y,r,color,native)
+function [] = drawCircle(x,y,r,color,native,varargin)
 
 if nargin < 4
     color = 'k';
@@ -6,6 +6,9 @@ end
 
 if nargin < 5
     native = true;
+end
+if nargin < 6
+    varargin = {};
 end
 
 if size(x,2) > 1
@@ -25,7 +28,7 @@ positions = [x-r y-r 2*r 2*r];
 if native
     for i = 1:numel(x)
         hold on;
-        rectangle('position',positions(i,:),'curvature',[1 1],'edgecolor',color);
+        rectangle('position',positions(i,:),'curvature',[1 1],'edgecolor',color,varargin{:});
     end
 else
     % Step through the angles manually
@@ -33,6 +36,6 @@ else
     for i = 1:numel(x)
         xi = repmat(r(i),[numel(theta) 1]) .* repmat(cos(theta),[1 size(x,2)]) + repmat(x(i),[numel(theta) 1]);
         yi = repmat(r(i),[numel(theta) 1]) .* repmat(sin(theta),[1 size(x,2)]) + repmat(y(i),[numel(theta) 1]);
-        plot(xi,yi,['-' color]);
+        plot(xi,yi,['-' color],varargin{:});
     end
 end
