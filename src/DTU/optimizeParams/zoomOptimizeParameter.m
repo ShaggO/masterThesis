@@ -1,4 +1,4 @@
-function [method, optimalV] = zoomOptimizeParameter(setNum,method,diaryFile,parameter,values,varargin)
+function [methodBest, optimalV] = zoomOptimizeParameter(setNum,method,diaryFile,parameter,values,varargin)
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
 
 pathTypes = 1:6;
@@ -6,6 +6,7 @@ runInParallel = true;
 
 minV = values(1,:);
 maxV = values(end,:);
+methodBest = method;
 
 diary(diaryFile)
 disp(['Optimizing parameter: ' parameter]);
@@ -19,7 +20,10 @@ for i = 1:numel(varargin)+1
     % Create methods
     clear methodV
     for v = 1:size(values,1)
-        methodV(v) = modifyDescriptor(method,parameter,values(v,:));
+        methodV(v) = modifyDescriptor(methodBest,parameter,values(v,:));
+    end
+    if i == numel(varargin)+1 % add original method to last iteration
+        methodV = [methodV method];
     end
     % Perform dtuTest on defined methods and find optimal value
     [matchROCAUC, matchPRAUC] = dtuTest(setNum,methodV,pathTypes,false,runInParallel,'train');
@@ -27,7 +31,7 @@ for i = 1:numel(varargin)+1
     PRAUC = mean(matchPRAUC,1)
     [optimalPRAUC,optimalInd] = max(PRAUC);
     optimalV = values(optimalInd,:);
-    method = methodV(optimalInd);
+    methodBest = methodV(optimalInd);
 
     diary(diaryFile)
     disp(['Optimal this iteration: ' nums2str(optimalV)]);
@@ -52,7 +56,7 @@ for i = 1:numel(varargin)+1
     end
 end
 diary(diaryFile)
-disp(['Final optimal value: ' nums2str(optimalV)]);
+disp(['Final optimal value: ' nums2str(optimalV) sprintf('\n')]);
 diary off
 
 end

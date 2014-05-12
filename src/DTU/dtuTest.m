@@ -17,7 +17,7 @@ if nargin < 6
     testType = 'test';
 end
 
-desSave = true;
+desSave = false;
 
 setNum = reshape(setNum,1,[]);
 pathTypes = reshape(pathTypes,1,[]);
