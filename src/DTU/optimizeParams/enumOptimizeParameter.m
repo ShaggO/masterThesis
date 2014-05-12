@@ -4,7 +4,7 @@ function [method,optimal] = enumOptimizeParameter(setNum, method, diaryFile, var
 assert(numel(varargin) >= 2,'Specify at least one parameter,value pair');
 assert(mod(numel(varargin),2) == 0,'Wrong formatting of (param,value) pairs');
 
-pathTypes = 1;
+pathTypes = 1:6;
 runInParallel = true;
 
 parameters = varargin(1:2:end);
@@ -47,7 +47,7 @@ for p = 1:numel(parameters)
     end
     disp(['Optimal ' param ': ' optimalStr]);
 end
-disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
+disp(['Optimal PRAUC: ' num2str(optimalPRAUC) sprintf('\n')]);
 diary off
 
 end

@@ -116,7 +116,16 @@ B(f_i, \x; f) = G(f(\x) - f_i; \sigma)
 %
 \section{Example}
 %
-In order to visualize the construction of our descriptor, we will show an example of the whole process. We start by extracting interest points of an image with a DoG detector...
+In order to visualize the construction of our descriptor, we will show an example of the whole process. We start by extracting interest points of an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}
+%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/cellHistDetector.pdf}
+    \caption{Interest points (in green) found by a multiscale DoG detector on an example image. The size of the circles illustrates the detection scale of each point. $529$ points are detected in total.}
+    \label{fig:cellHistDetector}
+\end{figure}
+%
+The next step is to construct the scale space images.
 %
 \begin{figure}[H]
     \centering
