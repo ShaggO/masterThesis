@@ -184,6 +184,7 @@ How to calculate n'th order n-dimensional derivatives of Gaussian.
 No covariance in our equations (no skewed Gaussians)
 
 \section{Histograms}
+\label{sec:histograms}
 
 Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over areas. Traditionally histograms have been constructed using hard boundaries between bins and with hard boundaries between the histograms of a descriptor such as \citet{lowe2004distinctive} does it in SIFT.\mycomment[MSN]{Should we explain SIFT's approach further?}
 
@@ -207,8 +208,8 @@ Spatial weighting on each cell (magnitudes) possible as well as on the entire de
 Input variables when creating a histogram: inner scale $\sigma$, bin-width $\beta$, outer scale/size of ROI $\alpha$ according to \citet{koenderink1999structure}.
 
 
-
 \subsection{Gaussian filter}
+\label{sec:histograms_gaussian_filter}
 
 The 1-dimensional Gaussian filter with variance $\sigma$ is defined as:
 %
