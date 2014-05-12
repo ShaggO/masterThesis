@@ -35,6 +35,12 @@ The five functions above can be seen as the components that make up our descript
 The choice of value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. The by far most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function (possibly post-processed). Another choice \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$.
 
 TODO: scale spaces, pixel normalization
+
+The pixel normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
+%
+\begin{align}
+F_\text{norm}(\p) = \frac{F(\p)}{\int F(\x) G(\x - \p; \boldsymbol{\sigma}) \,\text{d} \x}
+\end{align}
 %
 \section{Center aperture function}
 %
@@ -57,14 +63,11 @@ A_j(\x) = G(\x - \c_j; \boldsymbol{\sigma})
 %
 where $\c_j$ is the cell center for cell $j$.
 
-The cell aperture function is defined for all cells in the feature. Having defined both $P$ and $A_j$ we are now able to define the \emph{grid layouts} that define the cell centers $\boldsymbol{c}_j$ for each feature.
-\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: Polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into cartesian coordinates afterwards. The two log-polar grids both use cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 circles. The two ``central'' grids are furthermore having a single central cell (hence the name).
+The cell aperture function is defined for all cells in the feature. Having defined both $P$ and $A_j$ we are now able to define the \emph{grid layouts} that define the cell offsets for each feature.
+\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: Polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions while the two log-polar grids both use cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 circles. The two ``central'' grids are furthermore having a single central cell (hence the name).
 
-All these layouts are defined relative to the \emph{grid radius}, which is defined as a constrant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that by default the standard deviations of the outer-most cells in the feature touch the grid radius. Each ring concists of $n$ cells dividing the ring equally in the angular direction. Furthermore the following holds for each of the specific layouts:
+All these layouts are defined relative to the \emph{grid radius}, which is defined as a constrant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that the standard deviations of the outer-most cells in the feature touch the grid radius. Each ring of cells is split equally into $n$
 
-For log-polar layouts the radial span of each ring is defined such that the standard deviation of a cell touches the standard deviations of the neighbouring rings and neighbouring angles by default. This results in different default cell sigmas for the normal and concentric log-polar grid layouts since the concentric log-polar grid layout can pack the cells more densely without overlapping cells as seen in \Cref{fig:gridType_lp,fig:gridType_clp}.
-
-For polar layouts the radial span is divided equally between the rings. The polar central layouts are furthermore having a central cell of half the radial span of the rings. The polar Gaussian cell aperture function combined with postioning of the cell centers $\boldsymbol{c}_j$ are shown in \Cref{fig:gridType_p,fig:gridType_pc,fig:gridType_cp,fig:gridType_cpc}. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance} and Irregular SIFT \cite{cui2009scale} layouts.
 See \Cref{apx:grid_layouts} for more information on how to compute the grid layout positions.
 
 \begin{figure}
@@ -75,12 +78,12 @@ See \Cref{apx:grid_layouts} for more information on how to compute the grid layo
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_polar_gaussian.pdf}
 		\caption{Polar}
-		\label{fig:gridType_p}
+		\label{fig:gridType_ppg}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_central_polar_gaussian.pdf}
 		\caption{Polar central}
-		\label{fig:gridType_pc}
+		\label{fig:gridType_pcpg}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_log-polar.pdf}
@@ -90,12 +93,12 @@ See \Cref{apx:grid_layouts} for more information on how to compute the grid layo
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_polar_gaussian.pdf}
 		\caption{Concentric polar}
-		\label{fig:gridType_cp}
+		\label{fig:gridType_cppg}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_central_polar_gaussian.pdf}
 		\caption{Concentric polar central}
-		\label{fig:gridType_cpc}
+		\label{fig:gridType_cpcpg}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_log-polar.pdf}
@@ -158,22 +161,24 @@ From the blurred and downsampled images we apply derivative filters in order to 
     	\caption{Normalized pixel magnitude images}
     	\label{fig:cellHistScaleSpacesMnorm}
 	\end{subfigure}
-	\caption{}
+	\caption{Images \subref{fig:cellHistScaleSpacesV} and \subref{fig:cellHistScaleSpacesM} show gradient orientation and magnitude images computed at various scales. Image \subref{fig:cellHistScaleSpacesMnorm} shows the pixel normalized magnitude images, where the magnitudes are relative to a small local area.}
 	\label{fig:cellHistScaleSpacesVM}
 \end{figure}
 
 \begin{figure}[tb]
-    \centering
-    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin01.pdf}
-    \caption{}
-    \label{fig:cellHistScaleSpacesBin01}
-\end{figure}
-
-\begin{figure}[tb]
-    \centering
-    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin07.pdf}
-    \caption{}
-    \label{fig:cellHistScaleSpacesBin07}
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin01.pdf}
+    	\caption{Bin $1$ of $12$}
+    	\label{fig:cellHistScaleSpacesBin01}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin07.pdf}
+    	\caption{Bin $7$ of $12$}
+    	\label{fig:cellHistScaleSpacesBin07}
+	\end{subfigure}
+	\caption{Bin value images for two of the histogram bins. Images \subref{fig:cellHistScaleSpacesBin01} and \subref{fig:cellHistScaleSpacesBin07} correspond to the opposite bin centers $\Theta = -165^\circ$ and $\Theta = 15^\circ$, and we see that opposite sides of the beer cans are given the greatest bin values for each image.}
+	\label{fig:cellHistScaleSpacesBins}
 \end{figure}
 
 \begin{figure}[tb]

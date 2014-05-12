@@ -5,7 +5,7 @@ I1 = rgb2gray(I1rgb);
 I2rgb = im2double(loadDtuImage(1,25,20));
 I2 = rgb2gray(I2rgb);
 
-cutout = {500:899,500:1099};
+cutout = {520:899,500:1099};
 
 S1 = dGaussScaleSpace(I1,kJetCoeffs(2),1,1);
 S2 = dGaussScaleSpace(I2,kJetCoeffs(2),1,1);
