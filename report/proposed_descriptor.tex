@@ -119,60 +119,62 @@ B(f_i, \x; f) = G(f(\x) - f_i; \sigma)
 %
 \section{Example}
 %
-In order to visualize the construction of our descriptor, we will show an example of the whole process. We start by extracting interest points of an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}
-%
-\begin{figure}[H]
+In order to visualize the construction of our descriptor, we will show an example of the whole process. As value and magnitude functions we choose the standard gradient orientation with gradient magnitude. We start by extracting interest points of an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
+
+\begin{figure}[tb]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistDetector.pdf}
     \caption{Interest points (in green) found by a multiscale DoG detector on an example image. The size of the circles illustrates the detection scale of each point. $529$ points are detected in total.}
     \label{fig:cellHistDetector}
 \end{figure}
-%
-The next step is to construct the scale space images.
-%
-\begin{figure}[H]
+
+The next step is to construct the scale space images. For each scale we smooth the original image with a Gaussian filter and downsample it by cubic interpolation. Both operations are done according to the respective scales, which results in all features having the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove the points close enough to the edge that their cells would span outside the images. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images and belonging features.
+
+\begin{figure}[tb]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesP.pdf}
     \caption{}
     \label{fig:cellHistScaleSpacesP}
 \end{figure}
-%
-\begin{figure}[H]
+
+From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed to compute gradient orientation and magnitude. These images are shown in \Cref{fig:cellHistScaleSpacesV,fig:cellHistScaleSpacesM}.
+
+\begin{figure}[tb]
     \centering
-    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesV.pdf}
-    \caption{}
-    \label{fig:cellHistScaleSpacesV}
+    \begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesV.pdf}
+    	\caption{Gradient orientation images}
+    	\label{fig:cellHistScaleSpacesV}
+	\end{subfigure}
+    \begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesM.pdf}
+    	\caption{Gradient magnitude images}
+    	\label{fig:cellHistScaleSpacesM}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesMnorm.pdf}
+    	\caption{Normalized pixel magnitude images}
+    	\label{fig:cellHistScaleSpacesMnorm}
+	\end{subfigure}
+	\caption{}
+	\label{fig:cellHistScaleSpacesVM}
 \end{figure}
-%
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesM.pdf}
-    \caption{}
-    \label{fig:cellHistScaleSpacesM}
-\end{figure}
-%
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesMnorm.pdf}
-    \caption{}
-    \label{fig:cellHistScaleSpacesMnorm}
-\end{figure}
-%
-\begin{figure}[H]
+
+\begin{figure}[tb]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin01.pdf}
     \caption{}
     \label{fig:cellHistScaleSpacesBin01}
 \end{figure}
-%
-\begin{figure}[H]
+
+\begin{figure}[tb]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin07.pdf}
     \caption{}
     \label{fig:cellHistScaleSpacesBin07}
 \end{figure}
-%
-\begin{figure}[H]
+
+\begin{figure}[tb]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesSpatialWeights.pdf}
     \caption{}
@@ -205,42 +207,7 @@ The next step is to construct the scale space images.
 \item Concatenate cell histograms into feature vectors and normalize
 \end{enumerate}
 %
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/cellLayoutSquare.png}
-        \caption{}
-        \label{fig:cellLayoutSquare}
-    \end{subfigure}
-	\begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/cellLayoutSquareCenter.png}
-        \caption{}
-        \label{fig:cellLayoutSquareCenter}
-    \end{subfigure}
-	\begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/cellLayoutPolar.png}
-        \caption{}
-        \label{fig:cellLayoutPolar}
-    \end{subfigure}
-	\begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/cellLayoutPolarCenter.png}
-        \caption{}
-        \label{fig:cellLayoutPolarCenter}
-    \end{subfigure}
-	\begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/cellLayoutConcentricPolar.png}
-        \caption{}
-        \label{fig:cellLayoutConcentricPolar}
-    \end{subfigure}
-	\begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/cellLayoutConcentricPolarCenter.png}
-        \caption{}
-        \label{fig:cellLayoutConcentricPolarCenter}
-    \end{subfigure}
-    \caption{}
-\end{figure}
-%
-\begin{figure}[H]
+\begin{figure}[tb]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \includegraphics[width=\textwidth]{img/pixelNormalizationExample1.png}
