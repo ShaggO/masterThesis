@@ -57,11 +57,14 @@ A_j(\x) = G(\x - \c_j; \boldsymbol{\sigma})
 %
 where $\c_j$ is the cell center for cell $j$.
 
-The cell aperture function is defined for all cells in the feature. Having defined both $P$ and $A_j$ we are now able to define the \emph{grid layouts} that define the cell offsets for each feature.
-\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: Polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions while the two log-polar grids both use cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 circles. The two ``central'' grids are furthermore having a single central cell (hence the name).
+The cell aperture function is defined for all cells in the feature. Having defined both $P$ and $A_j$ we are now able to define the \emph{grid layouts} that define the cell centers $\boldsymbol{c}_j$ for each feature.
+\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: Polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into cartesian coordinates afterwards. The two log-polar grids both use cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 circles. The two ``central'' grids are furthermore having a single central cell (hence the name).
 
-All these layouts are defined relative to the \emph{grid radius}, which is defined as a constrant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that the standard deviations of the outer-most cells in the feature touch the grid radius. Each ring of cells is split equally into $n$
+All these layouts are defined relative to the \emph{grid radius}, which is defined as a constrant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that by default the standard deviations of the outer-most cells in the feature touch the grid radius. Each ring concists of $n$ cells dividing the ring equally in the angular direction. Furthermore the following holds for each of the specific layouts:
 
+For log-polar layouts the radial span of each ring is defined such that the standard deviation of a cell touches the standard deviations of the neighbouring rings and neighbouring angles by default. This results in different default cell sigmas for the normal and concentric log-polar grid layouts since the concentric log-polar grid layout can pack the cells more densely without overlapping cells as seen in \Cref{fig:gridType_lp,fig:gridType_clp}.
+
+For polar layouts the radial span is divided equally between the rings. The polar central layouts are furthermore having a central cell of half the radial span of the rings. The polar Gaussian cell aperture function combined with postioning of the cell centers $\boldsymbol{c}_j$ are shown in \Cref{fig:gridType_p,fig:gridType_pc,fig:gridType_cp,fig:gridType_cpc}. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance} and Irregular SIFT \cite{cui2009scale} layouts.
 See \Cref{apx:grid_layouts} for more information on how to compute the grid layout positions.
 
 \begin{figure}
@@ -72,12 +75,12 @@ See \Cref{apx:grid_layouts} for more information on how to compute the grid layo
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_polar_gaussian.pdf}
 		\caption{Polar}
-		\label{fig:gridType_ppg}
+		\label{fig:gridType_p}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_central_polar_gaussian.pdf}
 		\caption{Polar central}
-		\label{fig:gridType_pcpg}
+		\label{fig:gridType_pc}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_log-polar.pdf}
@@ -87,12 +90,12 @@ See \Cref{apx:grid_layouts} for more information on how to compute the grid layo
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_polar_gaussian.pdf}
 		\caption{Concentric polar}
-		\label{fig:gridType_cppg}
+		\label{fig:gridType_cp}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_central_polar_gaussian.pdf}
 		\caption{Concentric polar central}
-		\label{fig:gridType_cpcpg}
+		\label{fig:gridType_cpc}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_log-polar.pdf}
