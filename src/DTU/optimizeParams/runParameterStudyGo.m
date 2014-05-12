@@ -1,5 +1,5 @@
 clear all; clc;
-diaryFile = 'optimizeParameterGo.out';
+diaryFile = ['optimizeParameterGo_' strrep(datestr(now),':','-') '.out'];
 diary(diaryFile)
 disp('Optimization of parameters for GO started.');
 
@@ -93,15 +93,15 @@ for i = 1:iters
     diary(diaryFile)
     disp([timestamp(startTime) ' Optimizing grid layout (iteration ' num2str(i) '/' num2str(iters) '):']);
     diary off
+    method = enumOptimizeParameter(setNumTrain,method,diaryFile,'gridType',gridTypes,'gridSize',gridSizes,'cellFilter',cellFilters);
+    method = zoomOptimizeParameter(setNumTrain,method,diaryFile,'gridRadius', ...
+        (5:2.5:20)',(-1:0.5:1)');
     method = modifyDescriptor(method,'centerFilter','gaussian');
     method = zoomOptimizeParameter(setNumTrain,method,diaryFile,'centerSigma', ...
         repmat((0.5:0.5:2)',[1 2]),repmat((-0.2:0.1:0.2)',[1 2]));
     method = enumOptimizeParameter(setNumTrain,method,diaryFile,'centerFilter',{'gaussian','none'});
     method = zoomOptimizeParameter(setNumTrain,method,diaryFile,'cellSigma', ...
         repmat((0.5:0.5:2)',[1 2]),repmat((-0.2:0.1:0.2)',[1 2]));
-    method = enumOptimizeParameter(setNumTrain,method,diaryFile,'gridType',gridTypes,'gridSize',gridSizes,'cellFilter',cellFilters);
-    method = zoomOptimizeParameter(setNumTrain,method,diaryFile,'gridRadius', ...
-        (5:2.5:20)',(-1:0.5:1)');
 end
 diary(diaryFile)
 disp([timestamp(startTime) ' Optimizing other parameters: ']);
