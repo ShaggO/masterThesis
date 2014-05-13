@@ -2,6 +2,8 @@
 \def\x{\mathbf{x}}
 \def\p{\mathbf{p}}
 \def\c{\mathbf{c}}
+\def\sigmacellj{\boldsymbol{\sigma}_{\text{cell},j}}
+\def\sigmacenter{\boldsymbol{\sigma}_\text{center}}
 \begin{document}
 \chapter{Proposed descriptor}
 %
@@ -33,44 +35,97 @@ The five functions above can be seen as the components that make up our descript
 \section{Value and magnitude functions}
 %
 The choice of value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. The by far most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function (possibly post-processed). Another choice \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$.
+\todo{Finish definition of value and magnitude functions when results are here}
 
-TODO: scale spaces, pixel normalization
+We wish to make our descriptor scale invariant, and hence we wish to compute the descriptor in the scale space of each detected interest point by computing a scale space pyramid of both value and magnitude images. These scales are usually defined to be $2^n$ for $n = l,\hdots,h$, where $l$ is the lowest exponent and $h$ is the highest exponent needed to encapsulate all interest point scales. In this case each octave divides the dimensions of the image by 2.
 
+State of the art detectors are however using $m$ subscale precision, which we accomodate by calculating the scales to be $\left(2^{\nicefrac{1}{m}}\right)^n = 2^{\nicefrac{n}{m}}$, and $l$ and $h$ are equally modified to encapsulate all interest point scales. This likewise means that each time $n$ is increased, the dimensions of the image is divided by $2^{\nicefrac{1}{m}}$.
+
+Furthermore it should be noted, that we modify this definition slightly when combining the descriptor with a DoG detector. The DoG detector computes interest points at subscale precision. Given the nature of the DoG detector computing interest points from the difference of two Gaussian scale space images, the detected scales will be in between our previously described set of scale spaces. This is simply handlet by defining the scale spaces to be calculated by $2^{\nicefrac{(n+0.5)}{m}}$ giving us a better approximation of interest point scales for this particular detector. The $l$ and $h$ variables are similarly modified to encapsulate all detected scales.
+
+We now have a set of scales for which we calculate the corresponding value and magnitude scale spaces as described in \Cref{sec:derivativesAndScaleSpaces}. The values and magnitudes for each detected interest point can then be found by lookup in the closest computed scale space image. Before making this lookup, we will pre-process the magnitude scale space images to be robust to illumination changes.
+
+In \Cref{sec:illumination} we described the problem of handling illumination in images and it's possible solutions. The block-normalization scheme from the HOG descriptor \cite{dalal2005histograms} is a way of locally (in blocks of $2\times2$ cells) estimating the affine coefficient $a$ when having assumed an affine illumination model. We wish to make this estimation even more local by estimating $a$ on a pixel-level. We propose a normalization scheme called pixel normalization, which we apply to the magnitude function $F(\x)$.
 The pixel normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
 %
 \begin{align}
 F_\text{norm}(\p) = \frac{F(\p)}{\int F(\x) G(\x - \p; \boldsymbol{\sigma}) \,\text{d} \x}
 \end{align}
 %
-\section{Center aperture function}
+Having applied the pixel normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
+\Cref{fig:pixelNormalizationExample} shows two examples of image containing shadows (\Cref{fig:pixelNormalizationExample1,fig:pixelNormalizationExample2}), their gradient magnitudes (\Cref{fig:pixelNormalizationExample3,fig:pixelNormalizationExample4}), their pixel normalized magnitudes with $\sigma_\text{norm} = 2$ (\Cref{fig:pixelNormalizationExample5,fig:pixelNormalizationExample6}), and their pixel normalized magnitudes with $\sigma_\text{norm} = 10$ (\Cref{fig:pixelNormalizationExample7,fig:pixelNormalizationExample8}). These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images the shadows have a dampening effect on the gradient magnitude. By using a small $\sigma_\text{norm}$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\sigma_\text{norm}$, the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well.
 %
-The purpose of the center aperture function $P$ is to weight points closer to the detected interest point higher, since they are of greater importance to the local structure. We define it as a Gaussian function
+Another technique for local illumination handling is normalization of each cell histogram, which can be done instead of or alongside pixel normalization. This was used succesfully in the DAISY descriptor \cite{tola2008fast}. We have tried various strategies but none were able to beat pixel normalization through preliminary tests and hence we have omitted to pursue these strategies further.
 %
-\begin{align}
-P(\x) = G(\x - \p; \boldsymbol{\sigma})
-\end{align}
-%
-where $\p$ is the interest point.
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{img/pixelNormalizationExample1.png}
+        \caption{}
+        \label{fig:pixelNormalizationExample1}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{img/pixelNormalizationExample2.png}
+        \caption{}
+        \label{fig:pixelNormalizationExample2}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{img/pixelNormalizationExample3.png}
+        \caption{}
+        \label{fig:pixelNormalizationExample3}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{img/pixelNormalizationExample4.png}
+        \caption{}
+        \label{fig:pixelNormalizationExample4}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{img/pixelNormalizationExample5.png}
+        \caption{}
+        \label{fig:pixelNormalizationExample5}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{img/pixelNormalizationExample6.png}
+        \caption{}
+        \label{fig:pixelNormalizationExample6}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{img/pixelNormalizationExample7.png}
+        \caption{}
+        \label{fig:pixelNormalizationExample7}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{img/pixelNormalizationExample8.png}
+        \caption{}
+        \label{fig:pixelNormalizationExample8}
+    \end{subfigure}
+    \caption{Images \subref{fig:pixelNormalizationExample1} and \subref{fig:pixelNormalizationExample2} show cut-outs of an image with leftmost and rightmost artificial lighting, respectively. Images \subref{fig:pixelNormalizationExample3} and \subref{fig:pixelNormalizationExample4} show gradient magnitudes of these images. Images \subref{fig:pixelNormalizationExample5} and \subref{fig:pixelNormalizationExample6} show pixel normalized magnitudes for $\sigma_\text{norm} = 2$. Images \subref{fig:pixelNormalizationExample7} and \subref{fig:pixelNormalizationExample8} show pixel normalized magnitudes for $\sigma_\text{norm} = 10$.}
+    \label{fig:pixelNormalizationExample}
+\end{figure}
 %
 \section{Cell aperture function}
 %
 Similarly to $P$, the purpose of the cell aperture functions $A_j$ is to weight points closer to cell center higher for each cell histogram. We define it as a Gaussian function
-
 %
 \begin{align}
-A_j(\x) = G(\x - \c_j; \boldsymbol{\sigma})
+A_j(\x) = G(\x - \c_j; \sigmacellj)
 \end{align}
 %
-where $\c_j$ is the cell center for cell $j$.
+where $\c_j$ is the cell center for cell $j$ and $\sigmacellj$ is the standard deviation of cell $j$.
 
-The cell aperture function is defined for all cells in the feature. Having defined both $P$ and $A_j$ we are now able to define the \emph{grid layouts} that define the cell offsets for each feature.
-\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: Polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions while the two log-polar grids both use cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 circles. The two ``central'' grids are furthermore having a single central cell (hence the name).
+The cell aperture function is defined for all cells in the feature. Having defined $A_j$ we are now able to define the \emph{grid layouts} that define the cell centers $\boldsymbol{c}_j$ for each feature.
+\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: Polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into cartesian coordinates afterwards. The two log-polar grids both use cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 circles. The two ``central'' grids are furthermore having a single central cell (hence the name).
 
-All these layouts are defined relative to the \emph{grid radius}, which is defined as a constrant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that the standard deviations of the outer-most cells in the feature touch the grid radius. Each ring of cells is split equally into $n$
+All these layouts are defined relative to the \emph{grid radius}, which is defined as a constrant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that by default the standard deviations of the outer-most cells in the feature touch the grid radius. Each ring concists of $n$ cells dividing the ring equally in the angular direction. Furthermore the following holds for each of the specific layouts:
 
-See \Cref{apx:grid_layouts} for more information on how to compute the grid layout positions.
+For log-polar layouts the radial span of each ring is defined such that the standard deviation $\sigmacellj$ of a cell $j$ touches the standard deviations of the neighbouring rings and neighbouring angles by default. This results in different default cell sigmas for the normal and concentric log-polar grid layouts since the concentric log-polar grid layout can pack the cells more densely without overlapping cells as seen in \Cref{fig:gridTypeLp,fig:gridTypeClp}.
 
-\begin{figure}
+For polar layouts the radial span is divided equally between the rings. The polar central layouts are furthermore having a central cell of half the radial span of the rings. The polar Gaussian cell aperture function combined with postioning of the cell centers $\c_j$ are shown in \Cref{fig:gridTypeP,fig:gridTypePc,fig:gridTypeCp,fig:gridTypeCpc}. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance} and Irregular SIFT \cite{cui2009scale} layouts.
+See \Cref{apx:gridLayouts} for more information on how to compute the grid layout positions.
+
+As mentioned in the descriptions above, the grids are defined with default cell sigmas. All these cell sigmas can be scaled both up and down to allow for additional or less overlap between the cells. This will however not change the positioning of the cell centers $\c_j$.
+
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_legend.pdf}
@@ -78,36 +133,46 @@ See \Cref{apx:grid_layouts} for more information on how to compute the grid layo
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_polar_gaussian.pdf}
 		\caption{Polar}
-		\label{fig:gridType_ppg}
+		\label{fig:gridTypeP}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_central_polar_gaussian.pdf}
 		\caption{Polar central}
-		\label{fig:gridType_pcpg}
+		\label{fig:gridTypePc}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_log-polar.pdf}
 		\caption{Log-polar}
-		\label{fig:gridType_lp}
+		\label{fig:gridTypeLp}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_polar_gaussian.pdf}
 		\caption{Concentric polar}
-		\label{fig:gridType_cppg}
+		\label{fig:gridTypeCp}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_central_polar_gaussian.pdf}
 		\caption{Concentric polar central}
-		\label{fig:gridType_cpcpg}
+		\label{fig:gridTypeCpc}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_log-polar.pdf}
 		\caption{Concentric log-polar}
-		\label{fig:gridType_clp}
+		\label{fig:gridTypeClp}
 	\end{subfigure}
 	\caption{Examples of grid layouts showing cell centers, cell standard deviations, detection scales, and grid radii. The grid size is chosen to be $[8 2]$ (8 cells in each of 2 rings) and the grid radius is set to 10 times detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use cartesian Gaussian aperture cell functions.}
 	\label{fig:gridType}
 \end{figure}
+%
+\section{Center aperture function}
+%
+The purpose of the center aperture function $P$ is to weight points closer to the detected interest point higher, since they are of greater importance to the local structure. We define it as a Gaussian function
+%
+\begin{align}
+P(\x) = G(\x - \p; \sigmacenter)
+\end{align}
+%
+where $\p$ is the interest point and $\sigmacenter$ is the standard deviation of the center aperture function. The $\sigmacenter$ is by default equal to the grid radius but can be scaled both up and down to achieve the best performance. The center aperture function is inspired by SIFT \cite{lowe2004distinctive} which similarly uses a center aperture function. This is however pre-defined to have a $\sigma$ 1.5 times its square-grid width and height.
 %
 \section{Binning aperture function}
 %
@@ -118,12 +183,16 @@ As mentioned in the introduction to the proposed descriptor, we use smooth histo
 
 For our proposed descriptor value function $f$ is either the gradient orientation or the shape index. The number $n_\text{bins}$ of bin centers $f_i$ for $i = 1,\hdots,n_\text{bins}$ is variable and hence we need to define the bin centers as a function of $n_\text{bins}$. Given an interval $[a,b]$, we define the bin centers $f_i$
 \begin{align}
-	\label{eq:bin_centers}
+	\label{eq:binCenters}
 	f_i &= a + \frac{b-a}{n_\text{bins}} \left(i - \frac{1}{2} \right)
 \end{align}
 which corresponds to splitting the interval into $n_\text{bins}$ equally sized parts and placing the bin centers $f_i$ in each of the $n_\text{bins}$ centers of these parts.
 
-The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:bin_centers} their areas will integrate to different values. This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{sec:histograms_gaussian_filter}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area and hence we choose to omit re-normalization when computing the gradient orientation to save computations.
+The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:binCenters} their areas will integrate to different values. This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{sec:histogramsGaussianFilter}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area and hence we choose to omit re-normalization when computing the gradient orientation to save computations.
+%
+\subsection{Histogram normalization}
+Once the entire descriptor histogram $D$ is constructed, we normalize the entire descriptor using the $L_2$-norm like SIFT \cite{lowe2004distinctive}. This could cause problems when dealing with occluded interest points and hence other strategies could be persued. We have however not chosen to do so.\todo{Decide whether to persue other strategies or not}
+
 %
 \section{Example}
 %
@@ -132,7 +201,7 @@ In order to visualize the construction of our descriptor, we will show an exampl
 
 The next step is to construct the scale space images. For each scale we smooth the original image with a Gaussian filter and downsample it by cubic interpolation. Both operations are done according to the respective scales, which results in all features having the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove the points close enough to the edge that their cells would span outside the images. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images and belonging features.
 
-\begin{figure}[tb]
+\begin{figure}[p]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistDetector.pdf}
     \caption{Interest points (in green) found by a multiscale DoG detector on an example image. The size of the circles illustrates the detection scale of each point. $529$ points are detected in total.}
@@ -144,19 +213,19 @@ The next step is to construct the scale space images. For each scale we smooth t
 
 From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed to compute gradient orientation and magnitude. These images are shown in \Cref{fig:cellHistScaleSpacesV,fig:cellHistScaleSpacesM}.
 
-\begin{figure}[tb]
+\begin{figure}[p]
     \centering
-    \begin{subfigure}[t]{\textwidth}
+    \begin{subfigure}[t]{0.97\textwidth}
 		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesV.pdf}
     	\caption{Gradient orientation images}
     	\label{fig:cellHistScaleSpacesV}
 	\end{subfigure}
-    \begin{subfigure}[t]{\textwidth}
+    \begin{subfigure}[t]{0.97\textwidth}
 		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesM.pdf}
     	\caption{Gradient magnitude images}
     	\label{fig:cellHistScaleSpacesM}
 	\end{subfigure}
-	\begin{subfigure}[t]{\textwidth}
+	\begin{subfigure}[t]{0.97\textwidth}
 		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesMnorm.pdf}
     	\caption{Normalized pixel magnitude images}
     	\label{fig:cellHistScaleSpacesMnorm}
@@ -165,7 +234,7 @@ From the blurred and downsampled images we apply derivative filters in order to 
 	\label{fig:cellHistScaleSpacesVM}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}[p]
 	\centering
 	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin01.pdf}
@@ -214,64 +283,6 @@ From the blurred and downsampled images we apply derivative filters in order to 
 \item Concatenate cell histograms into feature vectors and normalize
 \end{enumerate}
 %
-\begin{figure}[tb]
-    \centering
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/pixelNormalizationExample1.png}
-        \caption{}
-        \label{fig:pixelNormalizationExample1}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/pixelNormalizationExample2.png}
-        \caption{}
-        \label{fig:pixelNormalizationExample2}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/pixelNormalizationExample3.png}
-        \caption{}
-        \label{fig:pixelNormalizationExample3}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/pixelNormalizationExample4.png}
-        \caption{}
-        \label{fig:pixelNormalizationExample4}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/pixelNormalizationExample5.png}
-        \caption{}
-        \label{fig:pixelNormalizationExample5}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/pixelNormalizationExample6.png}
-        \caption{}
-        \label{fig:pixelNormalizationExample6}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/pixelNormalizationExample7.png}
-        \caption{}
-        \label{fig:pixelNormalizationExample7}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{img/pixelNormalizationExample8.png}
-        \caption{}
-        \label{fig:pixelNormalizationExample8}
-    \end{subfigure}
-    \caption{Images \subref{fig:pixelNormalizationExample1} and \subref{fig:pixelNormalizationExample2} show cut-outs of an image with leftmost and rightmost artificial lighting, respectively. Images \subref{fig:pixelNormalizationExample3} and \subref{fig:pixelNormalizationExample4} show gradient magnitudes of these images. Images \subref{fig:pixelNormalizationExample5} and \subref{fig:pixelNormalizationExample6} show pixel normalized magnitudes for $\sigma_\text{norm} = 2$. Images \subref{fig:pixelNormalizationExample7} and \subref{fig:pixelNormalizationExample8} show pixel normalized magnitudes for $\sigma_\text{norm} = 10$.}
-    \label{fig:pixelNormalizationExample}
-\end{figure}
-%
-\subsection{Histogram normalization}
-
-- No cell normalization -> Center (cell)
-
-0. Center (pixels) -> no normalization
-1. Center (pixels) -> cell normalization
-2. Center (pixels) -> Cell normalization -> Center (cell)
-3. Cell normalization -> Center (cell)
-
-Center (cell)
-
-
 \subbibliography
 
 \end{document}
