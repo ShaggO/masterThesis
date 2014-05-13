@@ -13,7 +13,7 @@
 
 In this chapter we explain the image correspondence problem and the application of our descriptor to solve the problem.
 
-The image correspondence problem is the problem of matching features from two images $A$ and $B$ (of the same object) to one another. A match should ideally indicate that the two matching features correspond to the same physical point or object. Two images of the same object are however only rarely taken under similar light conditions, from the same position, and with the same viewpoint, tilt, rotation, zoom, and focus, and hence the captured images will differ based on these variables. By using an interest point detector in combination with a descriptor we are able to find interest points to match in $A$ and $B$, describe each interest point using a descriptor algorithm, and compare these descriptors across the two images to get an estimate of matching/non-matching points.
+The image correspondence problem is the problem of matching features across two images $A$ and $B$ of the same object. A match should ideally indicate that the two features correspond to the same physical point or object. The two images of the object can be captured under different lighting conditions, taken from different positions, and have varying tilt, rotation, zoom, and focus; hence the images will differ based on these variables. By using an interest point detector in combination with a descriptor, we are able to find interest points in $A$ and $B$, describe each interest point with a descriptor algorithm, and compare these descriptors across the two images by a given similarity measure to estimate whether the points match.
 
 NOTE: inconsistencies and estimation of 3D points
 
@@ -21,23 +21,20 @@ NOTE: inconsistencies and estimation of 3D points
 \label{sec:matching_strategies}
 
 The matching performance depends on the matching strategy. \citet{mikolajczyk2005performance} described the following three matching strategies that are used when solving the image correspondence problem:
-Simple \emph{thresholding} compares each descriptor in image $A$ with each descriptor in image $B$. Any two descriptors having a distance to one another below a threshold $t$ are classified as matches (positive). \emph{Best-thresholding} finds the best matching descriptor in $B$ for each descriptor in $A$. If the distance is below a threshold $t$, it is a match (positive), and otherwise it is rejected (negative). \emph{Ratio-thresholding} finds the two best matching descriptors in $B$ for each descriptor in $A$. If the ratio between the two distances to the descriptor in $A$ is above a threshold $t$, it is a match (positive). Otherwise the match is rejected (negative).
+Simple \emph{thresholding} compares each descriptor in image $A$ with each descriptor in image $B$. Any two descriptors having a mutual distance below a threshold $t$ are classified as matches (positive). \emph{Best-thresholding} finds the best matching descriptor in $B$ for each descriptor in $A$. If the distance is below a threshold $t$, it is a match (positive), and otherwise it is rejected (negative). \emph{Ratio-thresholding} finds the two best matching descriptors in $B$ for each descriptor in $A$. If the ratio between the two distances to the descriptor in $A$ is above a threshold $t$, it is a match (positive). Otherwise the match is rejected (negative).
 
-We choose the ratio-thresholding strategy since this is the one used in previous image correspondence evaluations \cite{mikolajczyk2005performance,dahl2011finding,larsen2012jet}. Furthermore this matching strategy is more general since it uses the ratio between the distance to the two best matching features instead of the absolute values. The two following cases give a good rationale for choosing this matching strategy: If two descriptors are good matches they will be very similar, and hence the matching strategy cannot choose one over the other since it will be very small variations in the image that decide the outcome of the matching. If no descriptors give a good match, the two best matches will have a large distance to the descriptor in question, and hence there will be a high probability that they will have distances close to one another.
+We choose the ratio-thresholding strategy since this is the one favoured in previous image correspondence evaluations \cite{mikolajczyk2005performance,dahl2011finding,larsen2012jet}. Additionally this matching strategy is more general since it uses the ratio between the distance to the two best matching features instead of the absolute values. The two following cases give a good rationale for choosing this matching strategy: If two descriptors are good matches they will be very similar, and hence the matching strategy cannot choose one over the other since it will be very small variations in the image that decide the outcome of the matching. If no descriptors give a good match, the two best matches will have a large distance to the descriptor in question, and hence there will be a high probability that they will have similar distances.
 
 \section{Similarity measure}
 \label{sec:similarity_measure}
-The ratio-thresholding matching strategy needs a similarity measure in order to compute the distance between two descriptors. The Euclidean distance is widely used as similarity measure in the litterature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance}. \citet{larsen2012in} however evaluated the following different similarity measures: $L_1$ distance, Euclidean distance, $\chi^2$ distance, Kullback-Leibler divergence, and Jensen-Shannon divergence and found no notable difference in performance for his locally orderless-based descriptor.
-\todo{Add comments on similarity measures}
-NOTE: We use $L_2$-distance (Euclidean), which is slightly better than $L_1$
+We need a similarity measure in order to compute the distance between two descriptors. The Euclidean distance is widely used as similarity measure in the literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance}. \citet{larsen2012in} evaluated the following different similarity measures: $L_1$ distance, Euclidean distance, $\chi^2$ distance, Kullback-Leibler divergence, and Jensen-Shannon divergence, and he found no notable difference in performance for his locally orderless-based descriptor. Based on this and some preliminary tests of our descriptor, where Euclidean distance ($L_2$) slightly outperformed $L_1$-distance, we choose to use Euclidean distance.
 
 \section{Performance measures}
 \label{sec:performance_measures}
 
 Having established the matching strategy and similarity measure, we now describe the two performance measures which we use for evaluation of descriptor algorithms.
 
-Assume that we have detected interest points and described these using a descriptor algorithm for each of the two images $A$ and $B$. We now wish to compute the performance of the descriptor algorithm utilized.
- Since we are classifying the matches as either positives or negatives (binary classification), we base our performance measure on the confusion matrix shown in \Cref{tbl:confusion_matrix}. Using a ground truth (or golden standard), which tells us if two points in the two images in question indeed correspond to one another, we are able to classify each match result into one of the four cells of the confusion matrix. From the four outcomes we define the following three measurements: \emph{recall} ($\TPR$),\emph{fall-out} ($\FPR$), and \emph{1-precision} ($\OMP$) as shown in \Cref{eq:fpr,eq:tpr,eq:omp} respectively.
+Assume that we have computed the descriptor distances, found the two best matching descriptors in $B$ for each descriptor in $A$ and computed their distance ratio. We now wish to compute the performance of the descriptor algorithm utilized. By choosing a threshold $t$, we are able to classify the matches as either positives or negatives (binary classification). We base our performance measure on the confusion matrix shown in \Cref{tbl:confusion_matrix}. Using a ground truth (or golden standard), which tells us if two points in the two images in question indeed correspond to one another, we are able to classify each match result into one of the four cells of the confusion matrix. From the four outcomes we define the following three measurements: \emph{recall} ($\TPR$), \emph{fall-out} ($\FPR$), and \emph{1-precision} ($\OMP$) as shown in \Cref{eq:fpr,eq:tpr,eq:omp} respectively.
 \begin{align}
 	\label{eq:fpr}
 	\FPR &= \frac{\FP}{\FP + \TN} \\
@@ -46,13 +43,13 @@ Assume that we have detected interest points and described these using a descrip
 	\label{eq:omp}
 	\OMP &= \frac{\FP}{\FP + \TP}
 \end{align}
-Where $\TP,\FP,\TN,~\text{and} \FN$ are the number of matches placed in each of the four cells of the confusion matrix.
-From these three measurements we further derive the two performance measures: Receiver operating characteristic (\ROC), which is the recall vs. fall-out, and \PR \todo{Come up with name for recall vs. fall-out}, which is recall vs. 1-precision.
+Where $\TP,\FP,\TN,~\text{and}~\FN$ are the number of matches placed in each of the four cells of the confusion matrix.
 
-Recall that the ratio-threshold strategy relies on a threshold $t$ in order to decide whether a match is positive or negative. In other words the performance depends on the $t$ chosen. By varying $t$ and obtaining the measurements $\FPR,\TPR,$ and $\OMP$, we are able to calculate \ROC\ and \PR\ for the given $t$ and plot these as curves. Integrating each of the two curves give us the area under the curve (AUC) for both \ROC\ and \PR. These two measures are our final performance measures that we will use for evaluating performance of a descriptor on the image correspondence problem. The approach is similar to that of \citet{dahl2011finding} except we do it for both \ROC\ and \PR.
+As mentioned above, the threshold $t$ is required in order to classify the matches. In order to get a performance measure independent of the choice of $t$, we vary $t$ across all unique ratios and obtain the measurements $\FPR,\TPR,$ and $\OMP$.
 
+From these three measurements we draw the \ROC-curve and the \PR-curve defined as recall vs. fall-out and recall vs. 1-precision respectively. Integrating these curves gives us the area under the curve (AUC) for \ROC\ or \PR, where a high AUC means that our descriptor is good at separating the matches that correspond to one another from those that don't. These two measures are our final performance measures that we will use for evaluating performance of a descriptor on the image correspondence problem. The approach is similar to that of \citet{winder2009picking,dahl2011finding}.
 
-\begin{table}
+\begin{table}[tb]
 	\centering
 	\bgroup
 	\def\arraystretch{1.5}
@@ -67,31 +64,53 @@ Recall that the ratio-threshold strategy relies on a threshold $t$ in order to d
 	\label{tbl:confusion_matrix}
 \end{table}
 
-NOTE: Mention something about
-\emph{Stability based similarity measure} (SBSM) \cite{balmashnova2008novel} for matching of higher order differential information descriptors.
-
 \section{Dataset}
-The dataset we are using for training and evaluation of our descriptor is called the DTU Robot 3D dataset \cite{aanaes2010recall} (from now on called the DTU dataset). It concists of images of objects taken in a black box illuminated using 19 fixed positioned LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes as shown in \Cref{tbl:dtu_scene_classifications}.
+The dataset we are using for training and evaluation of our descriptor is called the DTU Robot 3D dataset \cite{aanaes2010recall} (from now on called the DTU dataset). It consists of images of objects taken in a black box with varying illumination using 19 fixed position LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes into categories as shown in \Cref{tbl:dtu_scene_classifications}.
 
 \begin{figure}
 	\centering
-	\begin{subfigure}{0.4\textwidth}
+	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/dtu_example_1.png}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\hfill
+	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/dtu_example_2.png}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\par\medskip
+	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/dtu_example_3.png}
 	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
+	\hfill
+	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/dtu_example_4.png}
 	\end{subfigure}
 	\caption{Examples of scenes from the DTU dataset}
 	\label{fig:dtu_examples}
 \end{figure}
 
-The camera is positioned around each scene using an industrial robot arm, which has automaticly captured each scene from 119 positions. These positions are defined from a fixed frontal view varying the viewpoint $\theta$ in three arcs at different distance $d$ to the scene. Arc 1 has $d = \SI{0.5}{\meter}$ to the scene and $\theta$ spans $\SI{\pm40}{\degree}$, arc 2 has $d = \SI{0.65}{\meter}$ and $\theta$ spans $\SI{\pm25}{\degree}$, and arc 3 has $d = \SI{0.8}{\meter}$ and $\theta$ spans $\SI{\pm20}{\degree}$. Furthermore a linear path is captured by moving the camera away from the scene, which corresponds to zooming or scaling the scene. This is done at $\theta = \SI{0}{\degree}$ and $d$ spans $[\SI{0.5}{\meter};\SI{0.8}{\meter} ]$. At each of the 119 camera positions 19 individual images $I_i$ are taken with each of the LED lights $i,~\text{for}~i = 1,\hdots,19$ turned on. Using the given camera positions we get four camera paths: three arc paths and one linear path. \Cref{fig:dtu_overview} shows an overview of the four camera paths just described. When computing the performance across the paths we wish to solve the image correspondence problem for matching each image in each path with the \emph{keyframe} image (middle position on arc 1), since this gives us the performance when varying the viewangle and scale in a structured manner.
+\begin{table}
+	\centering
+	\begin{tabular}{l l r}
+		\toprule
+		Class & Scene numbers & Total \\
+		\midrule
+		House					& 1, 4, 8, 31, 32, 49, 50, 55				& 8 \\
+		Books					& 2, 11, 20, 21								& 4 \\
+		Fabric					& 5, 6, 45, 46, 47, 48						& 6 \\
+		Greens					& 23, 24, 25, 26, 27, 51, 52, 53, 54, 56	& 10 \\
+		Beer  					& 15, 16									& 2 \\
+		Teddy Bears 			& 9, 10, 43, 44								& 4 \\
+		Building Materials 		& 33, 34, 35, 36, 37						& 5 \\
+		Decorative Items (Art) 	& 38, 39, 40, 41, 42						& 5 \\
+		Groceries 				& 12, 28, 29, 30							& 4 \\
+		Twigs and Leaves 		& 17, 57, 58, 59, 60 						& 5 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Scene object classifications from \cite[Table 1]{aanaes2010ground}}
+	\label{tbl:dtu_scene_classifications}
+\end{table}
+
+The camera is positioned around each scene using an industrial robot arm, which has automatically captured each scene from 119 positions. These positions are defined from a fixed frontal view varying the viewpoint $\theta$ in three arcs at different distance $d$ to the scene. Arc 1 has $d = \SI{0.5}{\meter}$ to the scene and $\theta$ spans $\SI{\pm40}{\degree}$, arc 2 has $d = \SI{0.65}{\meter}$ and $\theta$ spans $\SI{\pm25}{\degree}$, and arc 3 has $d = \SI{0.8}{\meter}$ and $\theta$ spans $\SI{\pm20}{\degree}$. Furthermore a linear path is captured by moving the camera away from the scene, which corresponds to zooming or scaling the scene. This is done at $\theta = \SI{0}{\degree}$ and $d$ spans $[\SI{0.5}{\meter};\SI{0.8}{\meter} ]$. At each of the 119 camera positions 19 individual images $I_i$ are taken with each of the LED lights $i,~\text{for}~i = 1,\hdots,19$ turned on. Using the given camera positions we get four camera paths: three arc paths and one linear path. \Cref{fig:dtu_overview} shows an overview of the four camera paths just described. When computing the performance across the paths we wish to solve the image correspondence problem for matching each image in each path with the \emph{keyframe} image (middle position on arc 1), since this gives us the performance when varying the viewing angle and scale in a structured manner.
 
 \begin{figure}
 	\centering
@@ -100,18 +119,17 @@ The camera is positioned around each scene using an industrial robot arm, which 
 	\label{fig:dtu_overview}
 \end{figure}
 
-The choice of capturing the scenes with individual LED lights created images with a high amount of casting shadows. \citet{larsen2012jet} created as set\footnote{dataset available at http://roboimagedata.imm.dtu.dk/data/condensed.tar.gz} of artificial diffuse and light paths from the individual LED images which we now briefly explain. The artificial diffuse light images are created from the individual lightings in order to only evaluate the performance of our descriptor under viewpoint changes and to get more natural images. These diffuse images are created by averaging over the individual light images for each camera position:
+The choice of capturing the scenes with individual LED lights created images with a high amount of casting shadows. \citet{larsen2012jet} created a set\footnote{dataset available at http://roboimagedata.imm.dtu.dk/data/condensed.tar.gz} of artificial diffuse and light paths from the individual LED images which we now briefly explain. The artificial diffuse light images are created from the individual lightings in order to only evaluate the performance of our descriptor under viewpoint changes and to get more natural images. These diffuse images are created by averaging over the individual light images for each camera position:
 \begin{align}
 	I_{\text{diffuse}} = \frac{1}{19} \sum_{i = 1}^{19} I_{i}
 \end{align}
-Since the dataset concist individual LED images, one is able to construct images simulating two light source paths going from right to left and back to front respectively.
+Since the dataset consists of individual LED images, one is able to construct images simulating two light source paths going from right to left and back to front respectively.
 Given a light position $L_{\boldsymbol{x}}$ in the spatial domain of the LED positions, the image $I_{\boldsymbol{x}}$ is constructed by weighting each LED image by the Gaussian of the distance to $L_{\boldsymbol{x}}$:
 \begin{align}
 	L_{x} = \sum_{i = 1}^{19} G(\boldsymbol{x} - \boldsymbol{x}_i,\sigma) I_{i}
 \end{align}
 In order to get a somewhat general measurement for the robustness against light variations there are light paths generated for the following four image positions: 12 (arc 1), 25 (arc 1), 60 (linear path), and 87 (arc 2).
 See \citet{aanaes2010recall,aanaes2010ground} for more information about the dataset and the generated light paths.
-
 
 \Cref{fig:light_example} show 6 of the different light images for scene 4 at camera position 60. \Cref{fig:light_example_02,fig:light_example_17,fig:light_example_08} show the images taken with individual LED lighting (numbers 2, 17, and 8 respectively), and \Cref{fig:light_example_00} shows the diffuse light image. We here notice the significant difference in cast shadows using the three LEDs individually compared to the diffuse light image. The diffuse light image is however quite dark compared to the LED 8 light image, which could potentially cause problems in some scenes generating too few interest points. Such an issue could however be handled by adapting detection thresholds.
 \Cref{fig:light_example_28,fig:light_example_20} show the left- and rightmost positions of the X light path. By comparing these to their LED counterparts (\subref{fig:light_example_02} and \subref{fig:light_example_17} respectively) we see that the cast shadows are less significant therefore looking more natural.
@@ -179,33 +197,11 @@ See \citet{aanaes2010recall,aanaes2010ground} for more information about the dat
 	\label{fig:viewpoint_example}
 \end{figure}
 %
-\begin{table}
-	\centering
-	\begin{tabular}{l l r}
-		\toprule
-		Class & Scene numbers & Total \\
-		\midrule
-		House					& 1, 4, 8, 31, 32, 49, 50, 55				& 8 \\
-		Books					& 2, 11, 20, 21								& 4 \\
-		Fabric					& 5, 6, 45, 46, 47, 48						& 6 \\
-		Greens					& 23, 24, 25, 26, 27, 51, 52, 53, 54, 56	& 10 \\
-		Beer  					& 15, 16									& 2 \\
-		Teddy Bears 			& 9, 10, 43, 44								& 4 \\
-		Building Materials 		& 33, 34, 35, 36, 37						& 5 \\
-		Decorative Items (Art) 	& 38, 39, 40, 41, 42						& 5 \\
-		Groceries 				& 12, 28, 29, 30							& 4 \\
-		Twigs and Leaves 		& 17, 57, 58, 59, 60 						& 5 \\
-		\bottomrule
-	\end{tabular}
-	\caption{Scene object classifications from \cite[Table 1]{aanaes2010ground}}
-	\label{tbl:dtu_scene_classifications}
-\end{table}
-%
 
 \subsection{Pitfalls and deficiencies}
-The DTU dataset is built to test computer vision systems' ability to cope with viewpoint changes, scaling, light changes, and to a certain extend occlusions as well. Since all images are captured with the same camera tilt, no rotation of objects occurs and hence we adhere from persuing rotational invariance.
+The DTU dataset is built to test the ability of computer vision systems to cope with viewpoint changes, scaling, light changes, and to a certain extent occlusions as well. Since all images are captured with the same camera tilt, no rotation of objects occurs and hence we refrain from pursuing rotational invariance.
 
-Compare with other datasets traditionally used: Good amount of viewpoints, not as natural images as other sets, no rotation. Well structured approach to changes in viewpoints and scale
+NOTE: Compare with other datasets traditionally used: Good amount of viewpoints, not as natural images as other sets, no rotation. Well structured approach to changes in viewpoints and scale
 
 \Cref{fig:dtu_problems} shows the problems we have found within the DTU dataset, which we will go through here.
 
