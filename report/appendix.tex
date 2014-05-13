@@ -3,11 +3,14 @@
 
 \appendix
 \chapter{Image transformations} \label{apx:image_transformations}
+
+This appendix chapter computes the effect of certain image transformations on various differential structure functions.
+
 \section{Rotation} \label{apx:rotation}
 
 Let $\widetilde{L}$ be the blurred image $L$ rotated around some point $\mathbf{x}$ by angle $\theta$. That is, we rotate the original coordinate system axes $\mathbf{e}_x, \mathbf{e}_y$ by multiplying by a rotation matrix $\mathbf{R}$:
 %
-\begin{align}
+\begin{align*}
 \mathbf{R} &= \begin{bmatrix}
 \cos \theta & -\sin \theta \\
 \sin \theta & \cos \theta
@@ -18,11 +21,11 @@ Let $\widetilde{L}$ be the blurred image $L$ rotated around some point $\mathbf{
 \mathbf{Re}_y &= \begin{bmatrix}
 -\sin \theta \\ \cos \theta
 \end{bmatrix}
-\end{align}
+\end{align*}
 %
 Now the first and second order derivatives can be computed by directional derivatives along the coordinate system axes:
 %
-\begin{align}
+\begin{align*}
 L_i &= \nabla_{\mathbf{e}_i} L \\
 \widetilde{L}_i &= \nabla_{\mathbf{Re}_i} L = (\mathbf{Re}_i)^T \nabla L \\
 \widetilde{L}_x &= \cos \theta L_x + \sin \theta L_y \\
@@ -37,41 +40,41 @@ L_{ij} &= \nabla_{\mathbf{e}_i} (\nabla_{\mathbf{e}_j} L) \\
 &= \sin^2 \theta L_{xx} + \cos^2 \theta L_{yy} - \sin 2\theta L_{xy} \\
 \widetilde{L}_{xy} &= -\cos \theta \sin \theta L_{xx} + (\cos^2 \theta - \sin^2 \theta) L_{xy} + \cos \theta \sin \theta L_{yy} \\
 &= -\frac12 \sin 2\theta (L_{xx} - L_{yy}) + \cos 2\theta L_{xy}
-\end{align}
+\end{align*}
 %
 \subsection{Gradient orientation} \label{apx:rotation_go}
 %
 First we show an intermediate result using a common tangent identity:
 %
-\begin{align}
+\begin{align*}
 \tan \left( \Atan{\frac{L_y}{L_x}} - \theta \right)
 &= \frac{\tan \left( \Atan{\frac{L_y}{L_x}} \right) - \tan \theta}{1 + \tan \left( \Atan{\frac{L_y}{L_x}} \right) \tan \theta} \\
 &= \frac{\frac{L_y}{L_x} - \frac{\sin \theta}{\cos \theta}}{1 + \frac{L_y}{L_x} \frac{\sin \theta}{\cos \theta}} \\
 &= \frac{\left(\frac{-\sin \theta L_x + \cos \theta L_y}{L_x \cos \theta}\right)}{\left(\frac{\cos \theta L_x + \sin \theta L_y}{L_x \cos \theta}\right)} \\
 &= \frac{-\sin \theta L_x + \cos \theta L_y}{\cos \theta L_x + \sin \theta L_y}
-\end{align}
+\end{align*}
 %
 We use this to compute $\widetilde{\Theta}$:
 %
-\begin{align}
+\begin{align*}
 \widetilde{\Theta} &= \Atan{\frac{\widetilde{L}_y}{\widetilde{L}_x}} \\
 &= \Atan{\frac{-\sin \theta L_x + \cos \theta L_y}{\cos \theta L_x + \sin \theta L_y}} \\
 &= \Atan{\frac{L_y}{L_x}} - \theta = \Theta - \theta
-\end{align}
+\end{align*}
 %
 \subsection{Gradient magnitude} \label{apx:rotation_m}
 %
-\begin{align}
+\begin{align*}
 \widetilde{M} &= \sigma^2 \sqrt{\widetilde{L}_x^2 + \widetilde{L}_y^2} \\
 &= \sigma^2 \sqrt{(\cos \theta L_x + \sin \theta L_y)^2 + (-\sin \theta L_x + \cos \theta L_y)^2} \\
 &= \sigma^2 \sqrt{L_x^2 + L_y^2} = M
-\end{align}
+\end{align*}
 %
 \subsection{Shape index} \label{apx:rotation_si}
 %
 Define $S_n = -L_{xx} - L_{yy}$ and $S_d = 4 L_{xy}^2 + (L_{xx} - L_{yy})^2$ such that $\widetilde{S} = \frac{2}{\pi} \Atan{S_n/\sqrt{S_d}}$, and equivalently for $\widetilde{S}_n,\widetilde{S}_d$. We show that $\widetilde{S}_n = S_n$ and $\widetilde{S}_d = S_d$:
 %
-\begin{align}
+\begin{align*}
 \widetilde{S}_n &= - \widetilde{L}_{xx} - \widetilde{L}_{yy} \\
 &= -(\cos^2 \theta + \sin^2 \theta)  L_{xx} - (\cos^2 \theta + \sin^2 \theta) L_{yy} \\
 &= -L_{xx} - L_{yy} = S_n \\
@@ -82,13 +85,13 @@ Define $S_n = -L_{xx} - L_{yy}$ and $S_d = 4 L_{xy}^2 + (L_{xx} - L_{yy})^2$ suc
 \widetilde{S}_d &= 4\widetilde{L}_{xy}^2 + (\widetilde{L}_{xx} - \widetilde{L}_{yy})^2 \\
 &= (\sin^2 2\theta - \cos^2 2\theta) (L_{xx} - L_{yy})^2 + 4 (\cos^2 2\theta + \sin^2 2\theta) L_{xy}^2 \\
 &= 4 L_{xy}^2 + (L_{xx} - L_{yy})^2 = S_d
-\end{align}
+\end{align*}
 %
 And thus $\widetilde{S} = S$.
 %
 \subsection{Curvedness} \label{apx:rotation_c}
 %
-\begin{align}
+\begin{align*}
 \widetilde{L}_{xx}^2 + \widetilde{L}_{yy}^2
 &= (\cos^4 \theta + \sin^4 \theta) (L_{xx}^2 + L_{yy}^2) + 2 \sin^2 2\theta L_{xy}^2 \\ &\qquad + \sin^2 2\theta L_{xx} L_{yy} + \sin 4\theta (L_{xx} - L_{yy}) L_{xy} \\
 2 \widetilde{L}_{xy}^2 &= \frac12 \sin^2 2\theta (L_{xx} - L_{yy})^2 + 2 \cos^2 2\theta L_{xy}^2 - \sin 4\theta (L_{xx} - L_{yy}) L_{xy} \\
@@ -97,19 +100,19 @@ And thus $\widetilde{S} = S$.
 &= (\cos^4 \theta + \sin^4 \theta) (L_{xx}^2 + L_{yy}^2) + \frac12 \sin^2 2\theta (L_{xx}^2 + L_{yy}^2) + 2 L_{xy} \\
 &= (\cos^2 \theta + \sin^2 \theta)^2 (L_{xx}^2 + L_{yy}^2) + 2 L_{xy} \\
 &= L_{xx}^2 + L_{yy}^2 + 2 L_{xy}
-\end{align}
+\end{align*}
 %
 and thus
 %
-\begin{align}
+\begin{align*}
 \widetilde{C} &= \frac12 \sigma^2 \sqrt{\widetilde{L}_{xx}^2 + 2 \widetilde{L}_{xy}^2 + \widetilde{L}_{yy}^2} = C
-\end{align}
+\end{align*}
 %
 \section{Illumination} \label{apx:illumination}
 %
 Affine illumination model:
 %
-\begin{align}
+\begin{align*}
   \widetilde{I} &= a I  + b \\
   \widetilde{L}_{x^m y^n} &= a L_{x^m y^n}, \quad m+n > 0 \\
   \widetilde{\theta} &= \Atan{\frac{a L_y}{a L_x}} = \Atan{\frac{L_y}{L_x}} = \theta \\
@@ -119,11 +122,11 @@ Affine illumination model:
   &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4L_{xy}^2 + \left(L_{xx} - L_{yy} \right)^2}}} = S \\
   \widetilde{C} &= \frac12 \sigma^2 \sqrt{(a L_{xx})^2 + 2 (a L_{xy})^2 + (a L_{yy})^2} \\
   &= \frac12 \sigma^2 a \sqrt{L_{xx}^2 + 2 L_{xy}^2 + L_{yy}^2} = a C
-\end{align}
+\end{align*}
 %
 When normalizing k-jet with L2-norm:
 %
-\begin{align}
+\begin{align*}
   \mathcal{J}_k &= \left( \mset{L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
   \widetilde{\mathcal{J}}_k &=\left( \mset{a L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
   \left \| \widetilde{\mathcal{J}}_k \right \|_2 &= \sqrt{\sum_{0 < n+m \leq k} (a L_{x^n y^m})^2} \\
@@ -132,12 +135,76 @@ When normalizing k-jet with L2-norm:
       &= a \left \| \mathcal{J}_k \right \|_2 \\
   \frac{\widetilde{\mathcal{J}}_k}{\left \| \widetilde{\mathcal{J}}_k \right \|_2} &=
       \frac{\mathcal{J}_k}{\left \| \mathcal{J}_k \right \|_2}
-\end{align}
+\end{align*}
 
-\chapter{Grid layout details}
+\chapter{Grid layouts}
 \label{apx:grid_layouts}
-\todo{Write up proofs for grid layouts}
-
-%\subbibliography
+%
+This appendix chapter describes the construction of our log-polar grid layouts shown in \Cref{fig:gridType}. They consist of a central cell as well as a constant number of Gaussian cells in each of a number of rings, where the cells' standard deviations (referred to as radii) are tangent to each other and thus non-overlapping. We define $r_i$ to be the radius of a cell in ring $i$, and $d_i$ to be its distance from the origin.
+%
+\section{Log-polar grids}
+%
+We consider two tangent cells from neighbouring rings in the log-polar grid, which will be sufficient to construct the whole grid:
+%
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/gridLayoutDerivationNormal.pdf}
+   	\caption{Log-polar grid layout.}
+  	\label{fig:gridLayoutDerivationNormal}
+\end{figure}
+\noindent
+%
+First we compute the relation between $r_i$ and $d_i$. As we have a right-angled triangle, we can use the sine definition:
+%
+\begin{align}
+\sin \theta = \frac{r_i}{d_i}
+\label{eq:radiusDistanceRelation}
+\end{align}
+%
+Note that this linear dependence holds for any ring $i$. Thus with how the grid is defined, the only thing left is to compute the relation between two neighbouring rings, which we can write as the constant $k$ such that $r_{i+1} = k r_i$ and $d_{i+1} = k d_i$. We compute $k$:
+%
+\begin{align*}
+d_2 = k d_1 &= d_1 + r_1 + r_2 = d_1 + d_1 \sin \theta + k d_1 \sin \theta \quad\Rightarrow \\
+k - k \sin \theta &= 1 + \sin \theta \quad\Rightarrow \\
+k &= \frac{1 + \sin \theta}{1 - \sin \theta}
+\end{align*}
+%
+Now the whole log-polar grid can be constructed. A circle is added to the middle as the central cell, and the whole grid is rescaled according to the desired radius.
+%
+\section{Concentric log-polar grids}
+%
+We again consider two tangent cells from neighbouring rings, this time offset by the angle $\theta$, causing a different layout:
+%
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/gridLayoutDerivationConcentric.pdf}
+    \caption{Concentric log-polar grid layout.}
+    \label{fig:gridLayoutDerivationNormal}
+\end{figure}
+\noindent
+%
+Note that \Cref{eq:radiusDistanceRelation} still holds for this grid. The constant $k$ however is more complicated to compute. First note that the supplementary angle to $\alpha$ together with $\theta$ and $\beta$ must add up to $180^\circ$, so $\alpha = \theta + \beta$. We use the sine definition with two of the right-angled triangles:
+%
+\begin{align}
+\sin (\theta + \beta) &= \frac{r_2}{r_1 + r_2} \nonumber \\
+\sin \beta &= \frac{r_1}{r_1 + r_2} \label{eq:kFromBeta}
+\end{align}
+%
+Added together this gives
+%
+\begin{align*}
+\sin (\theta + \beta) + \sin \beta = \frac{r_1 + r_2}{r_1 + r_2} = 1
+\end{align*}
+%
+which is sufficient to calculate $\beta$ by symbolic computation, but the result is quite ugly. Then $k$ can be computed from \Cref{eq:kFromBeta}:
+%
+\begin{align*}
+\sin \beta &= \frac{1}{1 + k} \quad\Rightarrow \\
+k &= \frac{1}{\sin \beta} - 1
+\end{align*}
+%
+Now the whole concentric log-polar grid can be constructed alike the ordinary log-polar grid.
+%
+\subbibliography
 
 \end{document}
