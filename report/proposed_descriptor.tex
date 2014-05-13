@@ -10,6 +10,7 @@
 Our proposed descriptor consists of weighted smooth histograms computed at several \textit{cells} arranged in a grid. We define the cell histogram $H_j$ as
 %
 \begin{align}
+\label{eq:proposed_histogram}
 H_j(f_i) = \int F(\x) P (\x) A_j (\x) B(f_i, \x; f) \,\text{d} \x
 \end{align}
 %
@@ -27,12 +28,14 @@ where
 Note that this definition is similar to the galaxy descriptor \cite{pedersen2013shape}, except we consider several histograms with their own aperture functions $A_j$ and add the additional center aperture function $P$. The descriptor $D$ is constructed by concatenating all $n$ bin values of all $m$ cell histograms:
 %
 \begin{align}
+\label{eq:proposed_descriptor}
 D = \Bigl( \left(H_1(f_1) \cdots H_1(f_n)\right) \cdots (H_m(f_1) \cdots H_m(f_n)) \Bigr)
 \end{align}
 %
 The five functions above can be seen as the components that make up our descriptor, and we consider different choices for each.
 %
 \section{Value and magnitude functions}
+\label{sec:valueMagnitudeFunctions}
 %
 The choice of value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. The by far most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function (possibly post-processed). Another choice \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$.
 \todo{Finish definition of value and magnitude functions when results are here}
@@ -191,7 +194,7 @@ which corresponds to splitting the interval into $n_\text{bins}$ equally sized p
 The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:binCenters} their areas will integrate to different values. This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{sec:histogramsGaussianFilter}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area and hence we choose to omit re-normalization when computing the gradient orientation to save computations.
 %
 \subsection{Histogram normalization}
-Once the entire descriptor histogram $D$ is constructed, we normalize the entire descriptor using the $L_2$-norm like SIFT \cite{lowe2004distinctive}. This could cause problems when dealing with occluded interest points and hence other strategies could be persued. We have however not chosen to do so.\todo{Decide whether to persue other strategies or not}
+Once the entire descriptor $D$ (\Cref{eq:proposed_descriptor}) is constructed from the cell histograms $H_j$ (\Cref{eq:proposed_histogram}), we normalize $D$ by using the $L_2$-norm like SIFT \cite{lowe2004distinctive}. This could cause problems when dealing with occluded interest points and hence other strategies could be persued. We have however not chosen to do so.\todo{Decide whether to persue other strategies or not}
 
 %
 \section{Example}
@@ -199,7 +202,7 @@ Once the entire descriptor histogram $D$ is constructed, we normalize the entire
 In order to visualize the construction of our descriptor, we will show an example of the whole process. As value and magnitude functions we choose the standard gradient orientation with gradient magnitude. We start by extracting interest points of an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
 
 
-The next step is to construct the scale space images. For each scale we smooth the original image with a Gaussian filter and downsample it by cubic interpolation. Both operations are done according to the respective scales, which results in all features having the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove the points close enough to the edge that their cells would span outside the images. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images and belonging features.
+The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} by using the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which results in all features having the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points too close to the edge, such that their cells would span outside the images. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images and belonging features.
 
 \begin{figure}[p]
     \centering
@@ -207,11 +210,13 @@ The next step is to construct the scale space images. For each scale we smooth t
     \caption{Interest points (in green) found by a multiscale DoG detector on an example image. The size of the circles illustrates the detection scale of each point. $529$ points are detected in total.}
     \label{fig:cellHistDetector}
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesP.pdf}
-    \caption{}
+    \caption{The smoothed and downsampled images at various scales with their corresponding kept interest points (green) and removed interest points (red).}
     \label{fig:cellHistScaleSpacesP}
 \end{figure}
 
-From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed to compute gradient orientation and magnitude. These images are shown in \Cref{fig:cellHistScaleSpacesV,fig:cellHistScaleSpacesM}.
+From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed to compute gradient orientation and magnitude. These images are shown in \Cref{fig:cellHistScaleSpacesV,fig:cellHistScaleSpacesM}. The magnitude image is then pre-processed by computing the pixel normalized magnitudes as shown in \Cref{fig:cellHistScaleSpacesMnorm} before being used as weights for the cell histograms. \Cref{fig:cellHistScaleSpacesBins} shows bin 1 (\Cref{fig:cellHistScaleSpacesBin01}) and 7 (\Cref{fig:cellHistScaleSpacesBin07}) of the 12 histogram bins with each pixel weighted by its pixel normalized magnitude. The cells are ignored in these two images. The images clearly show their corresponding parts of the beer can structures as well as some background noise.
+
+In order to save computations, the support radius of the Gaussian cell aperture filters is defined to be $3 \sigmacellj$. This allows us to compute the histogram binnig aperture function once for each pixel in any cell and simply look up the value when needed in a cell. \Cref{fig:cellHistScaleSpacesSpatialWeights} shows
 
 \begin{figure}[p]
     \centering
@@ -253,35 +258,35 @@ From the blurred and downsampled images we apply derivative filters in order to 
 \begin{figure}[tb]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesSpatialWeights.pdf}
-    \caption{}
+    \caption{Product of cell and center weights. When cells overlap, the maximum weight is shown. The yellow borders indicate the scope of the cells needed to compute the histogram values.}
     \label{fig:cellHistScaleSpacesSpatialWeights}
 \end{figure}
 %
-\section{Notes}
+%\section{Notes}
 %
 % Example scene 47!
 %
-\begin{enumerate}
+%\begin{enumerate}
 %\item Calculate absolute parameters
 %\item Approximate scales needed
-\item Example of detector output
-\item Create scale spaces (approx scales included)
-	Implementation: Chain/direct, Gaussian/finite difference
-	Figures: Examples of scale space images and their corresponding features
-\item Calculate content (gradient orientation, shape index) and magnitudes (gradient magnitude $M$, curvedness $C$)
-	Figures: Go, si examples
-\item Optional: Pixel normalization of magnitudes
-	Figures: Already produced
-\item Create cell indices (in scalespaces), remove interest points too close to the edge, compute cell and center weights
-	Figures: Removed points, maybe some way of displaying weights
-\item Extract magnitudes and values for all image positions inside any cell window
-	Figures: intersection and union of cells
-\item Compute bin weights and renormalize based on bin area and periodicity
-	Figures: 
-\item Compute histogram for each cell by multiplying the bin weights, cell weights, magnitudes, and center weights.
-\item Optional: Normalize each cell histogram
-\item Concatenate cell histograms into feature vectors and normalize
-\end{enumerate}
+%\item Example of detector output
+%\item Create scale spaces (approx scales included)
+%	Implementation: Chain/direct, Gaussian/finite difference
+%	Figures: Examples of scale space images and their corresponding features
+%\item Calculate content (gradient orientation, shape index) and magnitudes (gradient magnitude $M$, curvedness $C$)
+%	Figures: Go, si examples
+%\item Optional: Pixel normalization of magnitudes
+%	Figures: Already produced
+%\item Create cell indices (in scalespaces), remove interest points too close to the edge, compute cell and center weights
+%	Figures: Removed points, maybe some way of displaying weights
+%\item Extract magnitudes and values for all image positions inside any cell window
+%	Figures: intersection and union of cells
+%\item Compute bin weights and renormalize based on bin area and periodicity
+%	Figures: 
+%\item Compute histogram for each cell by multiplying the bin weights, cell weights, magnitudes, and center weights.
+%\item Optional: Normalize each cell histogram
+%\item Concatenate cell histograms into feature vectors and normalize
+%\end{enumerate}
 %
 \subbibliography
 
