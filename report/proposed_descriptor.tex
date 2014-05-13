@@ -214,10 +214,8 @@ The next step is to construct the scale space images as described in \Cref{sec:v
     \label{fig:cellHistScaleSpacesP}
 \end{figure}
 
-From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed to compute gradient orientation and magnitude. These images are shown in \Cref{fig:cellHistScaleSpacesV,fig:cellHistScaleSpacesM}. The magnitude image is then pre-processed by computing the pixel normalized magnitudes as shown in \Cref{fig:cellHistScaleSpacesMnorm} before being used as weights for the cell histograms. \Cref{fig:cellHistScaleSpacesBins} shows bin 1 (\Cref{fig:cellHistScaleSpacesBin01}) and 7 (\Cref{fig:cellHistScaleSpacesBin07}) of the 12 histogram bins with each pixel weighted by its pixel normalized magnitude. The cells are ignored in these two images. The images clearly show their corresponding parts of the beer can structures as well as some background noise.
-
-In order to save computations, the support radius of the Gaussian cell aperture filters is defined to be $3 \sigmacellj$. This allows us to compute the histogram binnig aperture function once for each pixel in any cell and simply look up the value when needed in a cell. \Cref{fig:cellHistScaleSpacesSpatialWeights} shows
-
+From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed to compute gradient orientation and magnitude. These images are shown in \Cref{fig:cellHistScaleSpacesV,fig:cellHistScaleSpacesM}. The magnitude image is then pre-processed by computing the pixel normalized magnitudes as shown in \Cref{fig:cellHistScaleSpacesMnorm} before being used as weights for the cell histograms.
+%
 \begin{figure}[p]
     \centering
     \begin{subfigure}[t]{0.97\textwidth}
@@ -238,7 +236,18 @@ In order to save computations, the support radius of the Gaussian cell aperture 
 	\caption{Images \subref{fig:cellHistScaleSpacesV} and \subref{fig:cellHistScaleSpacesM} show gradient orientation and magnitude images computed at various scales. Image \subref{fig:cellHistScaleSpacesMnorm} shows the pixel normalized magnitude images, where the magnitudes are relative to a small local area.}
 	\label{fig:cellHistScaleSpacesVM}
 \end{figure}
-
+%
+In order to save computations, the support radius of the Gaussian cell aperture filters is defined to be $3 \sigmacellj$. This allows us to compute the histogram binnig aperture function once for each pixel in any cell and simply look up the value when needed in a cell. \Cref{fig:cellHistScaleSpacesSpatialWeights} shows the product of the cell and center weights for various scales and their interest points. The yellow borders indicate the areas for which the Gaussian cell aperture filters are computed before making any lookups.
+%
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesSpatialWeights.pdf}
+    \caption{Product of cell and center weights. When cells overlap, the maximum weight is shown. The yellow borders indicate the scope of the cells needed to compute the histogram values.}
+    \label{fig:cellHistScaleSpacesSpatialWeights}
+\end{figure}
+%
+\Cref{fig:cellHistScaleSpacesBins} shows bin 1 (\Cref{fig:cellHistScaleSpacesBin01}) and 7 (\Cref{fig:cellHistScaleSpacesBin07}) of the 12 histogram bins with each pixel weighted by its pixel normalized magnitude. The cells and their support radius are ignored and hence the bins are computed for the entire image for each of these two example images. The images clearly show their corresponding parts of the beer can structures as well as some background noise.
+%
 \begin{figure}[p]
 	\centering
 	\begin{subfigure}[t]{\textwidth}
@@ -254,13 +263,7 @@ In order to save computations, the support radius of the Gaussian cell aperture 
 	\caption{Bin value images for two of the histogram bins. Images \subref{fig:cellHistScaleSpacesBin01} and \subref{fig:cellHistScaleSpacesBin07} correspond to the opposite bin centers $\Theta = -165^\circ$ and $\Theta = 15^\circ$, and we see that opposite sides of the beer cans are given the greatest bin values for each image.}
 	\label{fig:cellHistScaleSpacesBins}
 \end{figure}
-
-\begin{figure}[tb]
-    \centering
-    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesSpatialWeights.pdf}
-    \caption{Product of cell and center weights. When cells overlap, the maximum weight is shown. The yellow borders indicate the scope of the cells needed to compute the histogram values.}
-    \label{fig:cellHistScaleSpacesSpatialWeights}
-\end{figure}
+%
 %
 %\section{Notes}
 %
