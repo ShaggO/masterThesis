@@ -1,12 +1,12 @@
-function Isize = visualizeScaleSpaces(S,scales,range,P,validP,outline)
+function visualizeScaleSpaces(S,scales,range,cmap,cbLabel,P,validP,outline)
 %VISUALIZESCALESPACES Summary of this function goes here
 %   Detailed explanation goes here
 
-if nargin < 5
+if nargin < 6
     P = zeros(0,4);
     validP = zeros(0,1);
 end
-if nargin < 7
+if nargin < 8
     outline = false;
 end
 
@@ -30,13 +30,15 @@ for i = 1:numel(S)
     Ialpha(offset(i,1)+(1:h(i)-1),offset(i,2)+(1:w(i)-1)) = false;
 end
 
-imshow(I,range);
-% set(h, 'AlphaData', ~Ialpha)
+colorMapImshow(I,cmap,range,Ialpha,cbLabel);
+% imshow(I,range);
+% set(hdl, 'AlphaData', ~Ialpha)
 hold on
-[X,Y] = find(Ialpha);
-for i = 1:numel(X)
-    rectangle('position',[Y(i)-1/2,X(i)-1/2,1,1],'facecolor','w','edgecolor','w')
-end
+% rectangle('position',[1/2,1/2,1/2,1/2],'facecolor','w','edgecolor','w')
+% [X,Y] = find(Ialpha);
+% for i = 1:numel(X)
+%     rectangle('position',[Y(i)-0.6,X(i)-0.6,1.2,1.2],'facecolor','w','edgecolor','none')
+% end
 if outline
     [X,Y] = find(bwperim(I > 0) & ~Ialpha);
     plot(Y,X,'y.','markersize',2)

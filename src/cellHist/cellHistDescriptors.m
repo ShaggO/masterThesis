@@ -125,6 +125,8 @@ switch magnitudeType
         mFunc = @(L,s) diffStructure('1',L,s);
 end
 
+saveVars = false;
+
 % scale parameters according to definitions and rescale factor
 [gridRadius,centerSigma,cellSigma,binSigma,normSigma] = ...
     scaleParameters(rescale,gridSize,gridRadius,centerSigma,...
@@ -132,7 +134,10 @@ end
 
 % compute scale space images
 d = union(dContent,dMagnitude,'rows');
-% d = [0 0; d];
+if saveVars
+    % if we save scale space figure data, generate raw smoothed images
+    d = [0 0; d];
+end
 scales = approxScales(F(:,3),scaleBase,scaleOffset);
 [L,Isizes] = dGaussScaleSpace(I,d,scales,rescale);
 Vscales = vFunc(L,scales);
@@ -168,8 +173,13 @@ nBin = size(binC,1);
 wRenorm = renormWeights(binFilter,binSigma,left,right,period > 0,binC);
 
 % compute bin and magnitude weights (at cell mask points only)
-maskC = false(size(V,1),1);
-maskC(C.vector) = true;
+if saveVars
+    % if we save scale space figure data, compute bins for all points
+    maskC = ':';
+else
+    maskC = false(size(V,1),1);
+    maskC(C.vector) = true;
+end
 B = zeros(size(V,1),nBin);
 B(maskC,:) = ndBinWeights(V(maskC,:),binC,binF,binR, ...
     'period',period,'wBin',wRenorm) .* repmat(M(maskC),[1 nBin]);
@@ -206,22 +216,8 @@ end
 D = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
 D = D ./ repmat(sum(D,2) + eps,[1 size(D,2)]);
 
-% save('cellHistExample')
-
-% % draw cells (for debugging)
-% Iw = zeros(sum(prod(Isizes,2)),1);
-% for i = 1:numel(C.data)
-%     for j = 1:size(C.data{i},3)
-%         for k = 1:size(C.data{i},4)
-%             Iw(C.data{i}(:,:,j,k)) = max(Iw(C.data{i}(:,:,j,k)), ...
-%                 Wcell.data{i}(:,:,j,k));
-% %             Iw(C.data{i}(:,:,j,k)) = 1;
-%         end
-%     end
-% end
-% Iw = varArray.newVector(Iw,Isizes,C.map);
-% figure
-% % imshow(max(imresize(I,Isizes(2,:)),5*Iw.data{2}),[])
-% imshow(Iw.data{2},[])
+if saveVars
+    save('cellHistExample')
+end
 
 end
