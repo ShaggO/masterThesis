@@ -7,7 +7,7 @@
 \begin{document}
 \chapter{Proposed descriptor}
 %
-Our proposed descriptor consists of weighted smooth histograms computed at several \textit{cells} arranged in a grid. We define the cell histogram $H_j$ as
+Our proposed descriptor consists of weighted smooth histograms computed for several \textit{cells} arranged in a grid. We define the cell histogram $H_j$ as
 %
 \begin{align}
 \label{eq:proposed_histogram}
@@ -40,13 +40,15 @@ The five functions above can be seen as the components that make up our descript
 The choice of value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. The by far most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function (possibly post-processed). Another choice \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$.
 \todo{Finish definition of value and magnitude functions when results are here}
 
-We wish to make our descriptor scale invariant, and hence we wish to compute the descriptor in the scale space of each detected interest point by computing a scale space pyramid of both value and magnitude images. These scales are usually defined to be $2^n$ for $n = l,\hdots,h$, where $l$ is the lowest exponent and $h$ is the highest exponent needed to encapsulate all interest point scales. In this case each octave divides the dimensions of the image by 2.
+We wish to make our descriptor scale invariant, and hence we wish to compute the descriptor according to the detection scale of each interest point. This is achieved by computing a scale space pyramid of both value and magnitude images. These scales are usually defined to be $2^n$ for $n = l,\hdots,h$, where $l$ is the lowest exponent and $h$ is the highest exponent needed to encapsulate all interest point scales. In this case each octave divides the dimensions of the image by 2.
 
 State of the art detectors are however using $m$ subscale precision, which we accomodate by calculating the scales to be $\left(2^{\nicefrac{1}{m}}\right)^n = 2^{\nicefrac{n}{m}}$, and $l$ and $h$ are equally modified to encapsulate all interest point scales. This likewise means that each time $n$ is increased, the dimensions of the image is divided by $2^{\nicefrac{1}{m}}$.
 
 Furthermore it should be noted, that we modify this definition slightly when combining the descriptor with a DoG detector. The DoG detector computes interest points at subscale precision. Given the nature of the DoG detector computing interest points from the difference of two Gaussian scale space images, the detected scales will be in between our previously described set of scale spaces. This is simply handlet by defining the scale spaces to be calculated by $2^{\nicefrac{(n+0.5)}{m}}$ giving us a better approximation of interest point scales for this particular detector. The $l$ and $h$ variables are similarly modified to encapsulate all detected scales.
 
 We now have a set of scales for which we calculate the corresponding value and magnitude scale spaces as described in \Cref{sec:derivativesAndScaleSpaces}. The values and magnitudes for each detected interest point can then be found by lookup in the closest computed scale space image. Before making this lookup, we will pre-process the magnitude scale space images to be robust to illumination changes.
+
+\subsection{Local magnitude normalization}
 
 In \Cref{sec:illumination} we described the problem of handling illumination in images and it's possible solutions. The block-normalization scheme from the HOG descriptor \cite{dalal2005histograms} is a way of locally (in blocks of $2\times2$ cells) estimating the affine coefficient $a$ when having assumed an affine illumination model. We wish to make this estimation even more local by estimating $a$ on a pixel-level. We propose a normalization scheme called pixel normalization, which we apply to the magnitude function $F(\x)$.
 The pixel normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
@@ -56,8 +58,8 @@ F_\text{norm}(\p) = \frac{F(\p)}{\int F(\x) G(\x - \p; \boldsymbol{\sigma}) \,\t
 \end{align}
 %
 Having applied the pixel normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
-\Cref{fig:pixelNormalizationExample} shows two examples of image containing shadows (\Cref{fig:pixelNormalizationExample1,fig:pixelNormalizationExample2}), their gradient magnitudes (\Cref{fig:pixelNormalizationExample3,fig:pixelNormalizationExample4}), their pixel normalized magnitudes with $\sigma_\text{norm} = 2$ (\Cref{fig:pixelNormalizationExample5,fig:pixelNormalizationExample6}), and their pixel normalized magnitudes with $\sigma_\text{norm} = 10$ (\Cref{fig:pixelNormalizationExample7,fig:pixelNormalizationExample8}). These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images the shadows have a dampening effect on the gradient magnitude. By using a small $\sigma_\text{norm}$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\sigma_\text{norm}$, the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well.
-%
+\Cref{fig:pixelNormalizationExample} shows two examples of image containing shadows, their gradient magnitudes, their pixel normalized magnitudes with $\sigma_\text{norm} = 2$, and their pixel normalized magnitudes with $\sigma_\text{norm} = 10$. These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images the shadows have a dampening effect on the gradient magnitude. By using a small $\sigma_\text{norm}$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\sigma_\text{norm}$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well.
+
 Another technique for local illumination handling is normalization of each cell histogram, which can be done instead of or alongside pixel normalization. This was used succesfully in the DAISY descriptor \cite{tola2008fast}. We have tried various strategies but none were able to beat pixel normalization through preliminary tests and hence we have omitted to pursue these strategies further.
 %
 \begin{figure}[p]
@@ -201,13 +203,12 @@ Once the entire descriptor $D$ (\Cref{eq:proposed_descriptor}) is constructed fr
 %
 In order to visualize the construction of our descriptor, we will show an example of the whole process. As value and magnitude functions we choose the standard gradient orientation with gradient magnitude. We start by extracting interest points of an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
 
-
 The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} by using the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which results in all features having the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points too close to the edge, such that their cells would span outside the images. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images and belonging features.
 
 \begin{figure}[p]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistDetector.pdf}
-    \caption{Interest points (in green) found by a multiscale DoG detector on an example image. The size of the circles illustrates the detection scale of each point. $529$ points are detected in total.}
+    \caption{Interest points (green) found by a multi-scale DoG detector on an example image. The size of the circles illustrates the detection scale of each point. $529$ points are detected in total.}
     \label{fig:cellHistDetector}
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesP.pdf}
     \caption{The smoothed and downsampled images at various scales with their corresponding kept interest points (green) and removed interest points (red).}
@@ -247,11 +248,11 @@ In order to save computations, the support radius of the Gaussian cell aperture 
     	\label{fig:cellHistScaleSpacesBin01}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin07.pdf}
-    	\caption{Bin $7$ of $12$}
-    	\label{fig:cellHistScaleSpacesBin07}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesBin05.pdf}
+    	\caption{Bin $5$ of $12$}
+    	\label{fig:cellHistScaleSpacesBin05}
 	\end{subfigure}
-	\caption{Bin value images for two of the histogram bins. Images \subref{fig:cellHistScaleSpacesBin01} and \subref{fig:cellHistScaleSpacesBin07} correspond to the opposite bin centers $\Theta = -165^\circ$ and $\Theta = 15^\circ$, and we see that opposite sides of the beer cans are given the greatest bin values for each image.}
+	\caption{Bin value images for two of the histogram bins. Images \subref{fig:cellHistScaleSpacesBin01} and \subref{fig:cellHistScaleSpacesBin05} correspond to the opposite bin centers $\Theta = -165^\circ$ and $\Theta = 15^\circ$, and we see that opposite sides of the beer cans are given the greatest bin values for each image.}
 	\label{fig:cellHistScaleSpacesBins}
 \end{figure}
 
