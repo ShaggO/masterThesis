@@ -1,4 +1,4 @@
-function colorMapImshow(I,map,range,border)
+function colorMapImshow(I,map,range,border,cbLabel)
 % COLORMAPIMSHOW Show image with colormap and colorbar allowing white areas (border)
 if nargin < 3 || isempty(range)
     range = [min(I(:)) max(I(:))];
@@ -12,6 +12,7 @@ h = imshow(I,range);
 hold on;
 colormap(map);
 b = colorbar;
+ylabel(b,cbLabel)
 cbfreeze(b,'on');
 delete(h);
 colormap(gray(size(map,1)));
