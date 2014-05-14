@@ -15,8 +15,6 @@ In this chapter we explain the image correspondence problem and the application 
 
 The image correspondence problem is the problem of matching features across two images $A$ and $B$ of the same object. A match should ideally indicate that the two features correspond to the same physical point or object. The two images of the object can be captured under different lighting conditions, taken from different positions, and have varying tilt, rotation, zoom, and focus; hence the images will differ based on these variables. By using an interest point detector in combination with a descriptor, we are able to find interest points in $A$ and $B$, describe each interest point with a descriptor algorithm, and compare these descriptors across the two images by a given similarity measure to estimate whether the points match.
 
-NOTE: inconsistencies and estimation of 3D points
-
 \section{Matching strategies}
 \label{sec:matching_strategies}
 
@@ -65,9 +63,9 @@ From these three measurements we draw the \ROC-curve and the \PR-curve defined a
 \end{table}
 
 \section{Dataset}
-The dataset we are using for training and evaluation of our descriptor is called the DTU Robot 3D dataset \cite{aanaes2010recall} (from now on called the DTU dataset). It consists of images of objects taken in a black box with varying illumination using 19 fixed position LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes into categories as shown in \Cref{tbl:dtu_scene_classifications}.
+The dataset we use for training and evaluation of our descriptor is called the DTU Robot 3D dataset \cite{aanaes2010recall} (from now on called the DTU dataset). It consists of images of objects taken in a black box with varying illumination using 19 fixed position LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes into categories as shown in \Cref{tbl:dtu_scene_classifications}.
 
-\begin{figure}
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/dtu_example_1.png}
@@ -88,7 +86,7 @@ The dataset we are using for training and evaluation of our descriptor is called
 	\label{fig:dtu_examples}
 \end{figure}
 
-\begin{table}
+\begin{table}[tb]
 	\centering
 	\begin{tabular}{l l r}
 		\toprule
@@ -112,7 +110,7 @@ The dataset we are using for training and evaluation of our descriptor is called
 
 The camera is positioned around each scene using an industrial robot arm, which has automatically captured each scene from 119 positions. These positions are defined from a fixed frontal view varying the viewpoint $\theta$ in three arcs at different distance $d$ to the scene. Arc 1 has $d = \SI{0.5}{\meter}$ to the scene and $\theta$ spans $\SI{\pm40}{\degree}$, arc 2 has $d = \SI{0.65}{\meter}$ and $\theta$ spans $\SI{\pm25}{\degree}$, and arc 3 has $d = \SI{0.8}{\meter}$ and $\theta$ spans $\SI{\pm20}{\degree}$. Furthermore a linear path is captured by moving the camera away from the scene, which corresponds to zooming or scaling the scene. This is done at $\theta = \SI{0}{\degree}$ and $d$ spans $[\SI{0.5}{\meter};\SI{0.8}{\meter} ]$. At each of the 119 camera positions 19 individual images $I_i$ are taken with each of the LED lights $i,~\text{for}~i = 1,\hdots,19$ turned on. Using the given camera positions we get four camera paths: three arc paths and one linear path. \Cref{fig:dtu_overview} shows an overview of the four camera paths just described. When computing the performance across the paths we wish to solve the image correspondence problem for matching each image in each path with the \emph{keyframe} image (middle position on arc 1), since this gives us the performance when varying the viewing angle and scale in a structured manner.
 
-\begin{figure}
+\begin{figure}[tb]
 	\centering
 	\includegraphics[width=0.8\textwidth]{img/CameraPosb.pdf}
 	\caption{Overview of camera positions and paths in the DTU dataset. The figure originates from \cite{aanaes2010recall}.}
@@ -135,7 +133,7 @@ See \citet{aanaes2010recall,aanaes2010ground} for more information about the dat
 \Cref{fig:light_example_28,fig:light_example_20} show the left- and rightmost positions of the X light path. By comparing these to their LED counterparts (\subref{fig:light_example_02} and \subref{fig:light_example_17} respectively) we see that the cast shadows are less significant therefore looking more natural.
 \Cref{fig:viewpoint_example} shows 4 different camera positions for scene 4 including the keyframe (position 25)..
 %
-\begin{figure}
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img60_02.png}
@@ -171,7 +169,7 @@ See \citet{aanaes2010recall,aanaes2010ground} for more information about the dat
 	\label{fig:light_example}
 \end{figure}
 %
-\begin{figure}
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img12_00.png}
@@ -197,11 +195,11 @@ See \citet{aanaes2010recall,aanaes2010ground} for more information about the dat
 	\label{fig:viewpoint_example}
 \end{figure}
 %
-
+\subsection{Evaluation}
+In order to be able to classify matches between two images $A$ and $B$ as true or false, we need an evaluation method. In other words we need to compute/generate the match ground truth. The DTU dataset has been scanned using \emph{structured light} generating point clouds for the surfaces in each image. Using these points and the known camera positions for each image we are able to check if a matching of two points from $A$ and $B$ indeed correspond to 3D points close enough to one another to be true. Sometimes a matching is made for an image position with no corresponding 3D point. In this case no ground truth can be calculated and the matching is ignored in the performance evaluation. The details of the evaluation method are described by \citet{larsen2012in}.
+%
 \subsection{Pitfalls and deficiencies}
-The DTU dataset is built to test the ability of computer vision systems to cope with viewpoint changes, scaling, light changes, and to a certain extent occlusions as well. Since all images are captured with the same camera tilt, no rotation of objects occurs and hence we refrain from pursuing rotational invariance.
-
-NOTE: Compare with other datasets traditionally used: Good amount of viewpoints, not as natural images as other sets, no rotation. Well structured approach to changes in viewpoints and scale
+The DTU dataset is built to test the ability of computer vision systems to cope with viewpoint changes, scaling, light changes, and to a certain extent occlusions as well. Since all images are captured with the same camera tilt, no rotation of objects occurs and hence rotational invariance and robustness cannot be evaluated using this dataset.
 
 \Cref{fig:dtu_problems} shows the problems we have found within the DTU dataset, which we will go through here.
 
@@ -209,7 +207,7 @@ The artificial diffuse light is, as mentioned in the previous section, created b
 
 The automatic capturing of images using a robot arm combined with the individual LED lighting has the side-effect of the robot arm casting shadows in some of the images. This is seen when using the 3rd LED light and having captured the scenes from the far left of arc 1. \Cref{fig:dtu_problems_robot} shows an example of a cast shadow originating from the robot arm. This is however only a problem with one of the 19 LED light images and hence the effect on the final test images is minimal.
 %
-\begin{figure}
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/diffuse_light_problem.png}
@@ -224,6 +222,7 @@ The automatic capturing of images using a robot arm combined with the individual
 	\caption{Examples of problematic images in the DTU dataset}
 	\label{fig:dtu_problems}
 \end{figure}
+%
 \section{Experiments}
 %
 %
