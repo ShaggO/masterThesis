@@ -11,7 +11,7 @@ Our proposed descriptor consists of weighted smooth histograms computed for seve
 %
 \begin{align}
 \label{eq:proposed_histogram}
-H_j(f_i) = \int F(\x) P (\x) A_j (\x) B(f_i, \x; f) \,\text{d} \x
+H_j(f_i) = \int F(\x) A_j (\x) P (\x) B(f_i, \x; f) \,\text{d} \x
 \end{align}
 %
 where
@@ -20,8 +20,8 @@ where
 \item[] $f_i$ is a bin center,
 \item[] $f$ is a value function defining the bin domain,
 \item[] $F$ is a magnitude function,
-\item[] $P$ is a center aperture function,
-\item[] $A_j$ is a cell aperture function, and
+\item[] $A_j$ is a cell aperture function,
+\item[] $P$ is a center aperture function, and
 \item[] $B$ is a binning aperture function.
 \end{itemize}
 %
@@ -50,7 +50,7 @@ We now have a set of scales for which we calculate the corresponding value and m
 
 \subsection{Local magnitude normalization}
 
-In \Cref{sec:illumination} we described the problem of handling illumination in images and it's possible solutions. The block-normalization scheme from the HOG descriptor \cite{dalal2005histograms} is a way of locally (in blocks of $2\times2$ cells) estimating the affine coefficient $a$ when having assumed an affine illumination model. We wish to make this estimation even more local by estimating $a$ on a pixel-level. We propose a normalization scheme called pixel normalization, which we apply to the magnitude function $F(\x)$.
+In \Cref{sec:illumination} we described the problem of handling illumination in images and its possible solutions. The block-normalization scheme from the HOG descriptor \cite{dalal2005histograms} is a way of locally (in blocks of $2\times2$ cells) estimating the affine coefficient $a$ when having assumed an affine illumination model. We wish to make this estimation even more local by estimating $a$ on a pixel-level. We propose a normalization scheme called pixel normalization, which we apply to the magnitude function $F(\x)$.
 The pixel normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
 %
 \begin{align}
@@ -58,9 +58,9 @@ F_\text{norm}(\p) = \frac{F(\p)}{\int F(\x) G(\x - \p; \boldsymbol{\sigma}) \,\t
 \end{align}
 %
 Having applied the pixel normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
-\Cref{fig:pixelNormalizationExample} shows two examples of image containing shadows, their gradient magnitudes, their pixel normalized magnitudes with $\sigma_\text{norm} = 2$, and their pixel normalized magnitudes with $\sigma_\text{norm} = 10$. These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images the shadows have a dampening effect on the gradient magnitude. By using a small $\sigma_\text{norm}$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\sigma_\text{norm}$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well.
+\Cref{fig:pixelNormalizationExample} shows two examples of images containing shadows, their gradient magnitudes, their pixel normalized magnitudes with $\sigma_\text{norm} = 2$, and their pixel normalized magnitudes with $\sigma_\text{norm} = 10$. These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images, the shadows have a dampening effect on the gradient magnitude. By using a small $\sigma_\text{norm}$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\sigma_\text{norm}$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well.
 
-Another technique for local illumination handling is normalization of each cell histogram, which can be done instead of or alongside pixel normalization. This was used succesfully in the DAISY descriptor \cite{tola2008fast}. We have tried various strategies but none were able to beat pixel normalization through preliminary tests and hence we have omitted to pursue these strategies further.
+Another technique for local illumination handling is normalization of each cell histogram, which can be done instead of or alongside pixel normalization. This was used succesfully in the DAISY descriptor \cite{tola2008fast}. We have tried various strategies but none were able to beat pixel normalization through preliminary tests, and hence we have omitted to pursue these strategies further.
 %
 \begin{figure}[p]
     \centering
@@ -109,6 +109,7 @@ Another technique for local illumination handling is normalization of each cell 
 \end{figure}
 %
 \section{Cell aperture function}
+\label{sec:cellApertureFunction}
 %
 Similarly to $P$, the purpose of the cell aperture functions $A_j$ is to weight points closer to cell center higher for each cell histogram. We define it as a Gaussian function
 %
@@ -119,7 +120,7 @@ A_j(\x) = G(\x - \c_j; \sigmacellj)
 where $\c_j$ is the cell center for cell $j$ and $\sigmacellj$ is the standard deviation of cell $j$.
 
 The cell aperture function is defined for all cells in the feature. Having defined $A_j$ we are now able to define the \emph{grid layouts} that define the cell centers $\boldsymbol{c}_j$ for each feature.
-\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: Polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into cartesian coordinates afterwards. The two log-polar grids both use cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 circles. The two ``central'' grids are furthermore having a single central cell (hence the name).
+\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the Cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into Cartesian coordinates afterwards. The two log-polar grids both use Cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 rings. The two ``central'' and log-polar grids additionally have a single central cell.
 
 All these layouts are defined relative to the \emph{grid radius}, which is defined as a constrant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that by default the standard deviations of the outer-most cells in the feature touch the grid radius. Each ring concists of $n$ cells dividing the ring equally in the angular direction. Furthermore the following holds for each of the specific layouts:
 
@@ -165,11 +166,12 @@ As mentioned in the descriptions above, the grids are defined with default cell 
 		\caption{Concentric log-polar}
 		\label{fig:gridTypeClp}
 	\end{subfigure}
-	\caption{Examples of grid layouts showing cell centers, cell standard deviations, detection scales, and grid radii. The grid size is chosen to be $[8 2]$ (8 cells in each of 2 rings) and the grid radius is set to 10 times detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use cartesian Gaussian aperture cell functions.}
+	\caption{Examples of grid layouts showing cell centers, cell standard deviations, detection scales, and grid radii. The grid size is chosen to be $[8 2]$ (8 cells in each of 2 rings) and the grid radius is set to 10 times detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use Cartesian Gaussian aperture cell functions.}
 	\label{fig:gridType}
 \end{figure}
 %
 \section{Center aperture function}
+\label{sec:centerApertureFunction}
 %
 The purpose of the center aperture function $P$ is to weight points closer to the detected interest point higher, since they are of greater importance to the local structure. We define it as a Gaussian function
 %
@@ -201,23 +203,19 @@ Once the entire descriptor $D$ (\Cref{eq:proposed_descriptor}) is constructed fr
 %
 \section{Example}
 %
-In order to visualize the construction of our descriptor, we will show an example of the whole process. As value and magnitude functions we choose the standard gradient orientation with gradient magnitude. We start by extracting interest points of an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
+In order to visualize the construction of our descriptor, we will show an example of the whole process. As value and magnitude functions we choose the standard gradient orientation with gradient magnitude. We start by extracting interest points from an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
 
-The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} by using the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which results in all features having the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points too close to the edge, such that their cells would span outside the images. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images and belonging features.
+The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} based on the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which causes all features to have the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points that are too close to the edge, such that their cells would span outside the images. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images with their respective features.
 
 \begin{figure}[p]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistDetector.pdf}
-    \caption{Interest points (green) found by a multi-scale DoG detector on an example image. The size of the circles illustrates the detection scale of each point. $529$ points are detected in total.}
+    \caption{Interest points (green) found by a multi-scale DoG detector on an example image. The circle radii illustrate the detection scale of each point. $529$ points are detected in total.}
     \label{fig:cellHistDetector}
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesP.pdf}
     \caption{The smoothed and downsampled images at various scales with their corresponding kept interest points (green) and removed interest points (red).}
     \label{fig:cellHistScaleSpacesP}
 \end{figure}
-
-From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed to compute gradient orientation and magnitude. These images are shown in \Cref{fig:cellHistScaleSpacesV,fig:cellHistScaleSpacesM}. The magnitude image is then pre-processed by computing the pixel normalized magnitudes as shown in \Cref{fig:cellHistScaleSpacesMnorm} before being used as weights for the cell histograms. \Cref{fig:cellHistScaleSpacesBins} shows bin 1 (\Cref{fig:cellHistScaleSpacesBin01}) and 7 (\Cref{fig:cellHistScaleSpacesBin07}) of the 12 histogram bins with each pixel weighted by its pixel normalized magnitude. The cells are ignored in these two images. The images clearly show their corresponding parts of the beer can structures as well as some background noise.
-
-In order to save computations, the support radius of the Gaussian cell aperture filters is defined to be $3 \sigmacellj$. This allows us to compute the histogram binnig aperture function once for each pixel in any cell and simply look up the value when needed in a cell. \Cref{fig:cellHistScaleSpacesSpatialWeights} shows
 
 \begin{figure}[p]
     \centering
@@ -240,6 +238,21 @@ In order to save computations, the support radius of the Gaussian cell aperture 
 	\label{fig:cellHistScaleSpacesVM}
 \end{figure}
 
+From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed, which are used to compute gradient orientation and magnitude images. We then apply our pixel normalization scheme to the magnitudes. These images are shown in \Cref{fig:cellHistScaleSpacesVM}.
+
+We need to compute the cell and center weights for pixels in every cell according to the chosen grid layout parameters. In order to save computation time, we confine the support radius of the Gaussian cell aperture filters to $3 \sigmacellj$, ignoring pixels outside this distance to each cell center. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, though since many cells overlap we show the maximal weight for each pixel.
+
+The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and then simply look up the value when needed in a cell.
+
+Finally the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigure} illustrates one grid of these for a single feature. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor.
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesSpatialWeights.pdf}
+    \caption{Product of cell and center weights. When cells overlap, the maximal weight is shown. The yellow borders indicate the scope of pixels within the support radii of the cells. Only these are used to construct the cell histograms.}
+    \label{fig:cellHistScaleSpacesSpatialWeights}
+\end{figure}
+
 \begin{figure}[p]
 	\centering
 	\begin{subfigure}[t]{\textwidth}
@@ -258,9 +271,9 @@ In order to save computations, the support radius of the Gaussian cell aperture 
 
 \begin{figure}[tb]
     \centering
-    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesSpatialWeights.pdf}
-    \caption{Product of cell and center weights. When cells overlap, the maximum weight is shown. The yellow borders indicate the scope of the cells needed to compute the histogram values.}
-    \label{fig:cellHistScaleSpacesSpatialWeights}
+    \includegraphics[width=0.8\textwidth]{img/cellHistFigure.pdf}
+    \caption{The cell histograms for a single feature that make up our descriptor. For each cell center (yellow), the weighted histogram values (red) are drawn in the direction of the corresponding bin center orientations. We see that the cell histograms generally point towards larger intensities.}
+    \label{fig:cellHistFigure}
 \end{figure}
 %
 %\section{Notes}
