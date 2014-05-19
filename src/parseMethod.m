@@ -1,6 +1,7 @@
 function [mFunc, mName] = parseMethod(m)
 %PARSEMETHOD Parses a method struct into a combined detector and
-%descriptor function and unique name. We assume original RGB image inputs.
+%descriptor function and unique name. We assume normalized single RGB image
+%inputs.
 
 %% Parse detector arguments
 p = inputParser;
@@ -125,6 +126,18 @@ switch lower(m.descriptor)
             'NormThresh',r.NormThresh,...
             'Magnif',r.Magnif,...
             'WindowSize',r.WindowSize);
+    case 'full-hog'
+        addParameter(p,'CellSize',8)
+        addParameter(p,'Variant','UoCTTI')
+        addParameter(p,'NumOrientations',9)
+        r = parseResults(p,m.descriptorArgs);
+        desName = sprintf(['full-hog' repmat('-%s',[1 3])],...
+            num2str(r.CellSize),...
+            r.Variant,...
+            num2str(r.NumOrientations));
+        desFunc = @(I) fullHogDescriptor(I,r.CellSize,...
+            'Variant',r.Variant,...
+            'NumOrientations',r.NumOrientations);
     case 'k-jet'
         domains = {'auto','spatial','fourier'};
         addParameter(p,'k',1);

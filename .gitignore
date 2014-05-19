@@ -51,6 +51,8 @@ src/DTU/results600x800
 src/DTU/reconstructions
 src/octave-workspace
 src/DTU/runCreatePathMat.m
+src/runCreatePathMat.m
+src/paths.mat
 src/startup.m
 src/runTestVarArrayOld.m
 src/runMoveHashes.m
@@ -67,3 +69,4 @@ src/figureTools/export_fig/.ignore/ghostscript.txt
 src/figureTools/export_fig/.ignore/pdftops.txt
 src/rectangleTest.m
 src/runRectangle.m
+src/libsvm
