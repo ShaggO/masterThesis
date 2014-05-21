@@ -2,5 +2,4 @@ TODO:
 
 - Framework for concatenation of descriptors
 - Support for rotationally invariant descriptors
-- Report setion detailing an example of the construction of a descriptor from start to finish
-- Sliding window in place of detector
+- Investigate full-svm performance

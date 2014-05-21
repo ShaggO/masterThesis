@@ -76,6 +76,16 @@ switch lower(m.detector)
         detName = sprintf('dog-%s-%s-%s', ...
             num2str(r.sigma),num2str(r.k),num2str(r.threshold));
         detFunc = @(I) dogBlobDetector(I,r.sigma,r.k,r.threshold);
+    case 'grid'
+        % Points in regular grid
+        addParameter(p,'type','square')
+        addParameter(p,'scales',1)
+        addParameter(p,'gridRadius',10)
+        r = parseResults(p,m.detectorArgs);
+        
+        detName = sprintf('grid-%s-%s-%s', ...
+            r.type,nums2str(r.scales),num2str(r.gridRadius));
+        detFunc = @(I) gridDetector(size(I),r.type,r.scales,r.gridRadius);
     case 'debug'
         r = parseResults(p,m.detectorArgs);
         detName = 'debug';

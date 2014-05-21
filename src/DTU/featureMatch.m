@@ -18,7 +18,7 @@ end
 
 [dists, matchIdx] = sort(dists,2);
 
-switch size(dists,2)
+switch size(dists,2) % handle special cases of few features
     case 0
         dists = ones(0,2);
         matchIdx = ones(0,2);

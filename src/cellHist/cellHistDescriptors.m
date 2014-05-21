@@ -138,7 +138,7 @@ if saveVars
     % if we save scale space figure data, generate raw smoothed images
     d = [0 0; d];
 end
-scales = approxScales(F(:,3),scaleBase,scaleOffset);
+scales = approxScales(F(:,3:end),scaleBase,scaleOffset);
 [L,Isizes] = dGaussScaleSpace(I,d,scales,rescale);
 Vscales = vFunc(L,scales);
 Mscales = mFunc(L,scales);
@@ -212,9 +212,11 @@ else
     Hnorm = H;
 end
 
-% Reshape and normalize descriptors to unit vectors
-D = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
-D = D ./ repmat(sum(D,2) + eps,[1 size(D,2)]);
+if cellNormStrategy < 4
+    % Reshape and normalize descriptors to unit vectors
+    D = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
+    D = D ./ repmat(sum(D,2) + eps,[1 size(D,2)]);
+end
 
 if saveVars
     save('cellHistExample')

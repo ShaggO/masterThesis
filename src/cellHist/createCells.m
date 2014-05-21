@@ -95,7 +95,7 @@ for i = 1:numel(uniquePsize)
         Wdata{k} = Wdata{k} ./ repmat(sum(Wdata{k},1) + eps,[nWinj 1]);
 %         sum(Wdata{k},1)
         
-        if ~strcmp(centerFilter,'none') && any(cellNormStrategy == 0:2)
+        if ~strcmp(centerFilter,'none') && any(cellNormStrategy == [0:2 4])
             [fCen,~] = ndFilter(centerFilter,Psize*centerSigma);
             Wdata{k} = Wdata{k} .* fCen(pointsCenter);
         end

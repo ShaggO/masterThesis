@@ -9,7 +9,7 @@ for i = 1:numel(images)
     if i == 1
         D = zeros(numel(images),numel(Di));
     end
-    D(i,:) = Di;
+    D(i,:) = reshape(Di',1,[]);
 end
 
 end
