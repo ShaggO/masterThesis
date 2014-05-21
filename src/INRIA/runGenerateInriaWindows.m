@@ -1,5 +1,6 @@
 clc, clear all
 
+rng(1,'combRecursive');
 windowsPerImage = 10;
 load('paths')
 
