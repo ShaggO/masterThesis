@@ -212,9 +212,9 @@ else
     Hnorm = H;
 end
 
+D = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
 if cellNormStrategy < 4
     % Reshape and normalize descriptors to unit vectors
-    D = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
     D = D ./ repmat(sum(D,2) + eps,[1 size(D,2)]);
 end
 
