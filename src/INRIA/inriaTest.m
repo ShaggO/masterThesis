@@ -88,10 +88,10 @@ if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
 else
     trainTime = tic;
     svm = svmtrain(Ltrain,Dtrain,svmArgs);
-    trainTime = toc(trainTime);
+    trainTime = toc(trainTime)
     predictTime = tic;
     [Lsvm, acc, prob] = svmpredict(Ltest,Dtest,svm);
-    predictTime = toc(predictTime);
+    predictTime = toc(predictTime)
     
     if ~exist(desDir,'dir')
         mkdir(desDir);

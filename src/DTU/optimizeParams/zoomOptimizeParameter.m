@@ -8,6 +8,10 @@ minV = values(1,:);
 maxV = values(end,:);
 methodBest = method;
 
+% get original parameter value
+desArgsStruct = struct(method.descriptorArgs{:});
+origValue = desArgsStruct.(parameter);
+
 diary(diaryFile)
 disp(['Optimizing parameter: ' parameter]);
 diary off
@@ -19,11 +23,11 @@ for i = 1:numel(varargin)+1
     diary off
     % Create methods
     clear methodV
+    if i == numel(varargin)+1 % add original method to last iteration
+        values = [values; origValue];
+    end
     for v = 1:size(values,1)
         methodV(v) = modifyDescriptor(methodBest,parameter,values(v,:));
-    end
-    if i == numel(varargin)+1 % add original method to last iteration
-        methodV = [methodV method];
     end
     % Perform dtuTest on defined methods and find optimal value
     [matchROCAUC, matchPRAUC] = dtuTest(setNum,methodV,pathTypes,false,runInParallel,'train');
