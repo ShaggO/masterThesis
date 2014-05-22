@@ -1,4 +1,4 @@
-function [Lsvm, acc, P] = inriaTest(n,k,method,svmArgs,desSave)
+function [Lsvm, acc, prob] = inriaTest(n,k,method,svmArgs,desSave)
 
 if nargin < 7
     desSave = false;
@@ -20,7 +20,7 @@ if loaded && all(ismember(desVars,fieldnames(desLoad)))
     LposTrain = desLoad.LposTrain;
     DnegTrain = desLoad.DnegTrain;
     LnegTrain = desLoad.LnegTrain;
-    disp('Training descriptors loaded');
+    disp('Training descriptors loaded.');
 else
     DposTrain = inriaDescriptors(posTrain,mFunc);
     LposTrain = ones(numel(posTrain),1);
@@ -45,7 +45,7 @@ if isempty(k)
         LposTest = desLoad.LposTest;
         DnegTest = desLoad.DnegTest;
         LnegTest = desLoad.LnegTest;
-        disp('Testing descriptors loaded');
+        disp('Testing descriptors loaded.');
     else
         DposTest = inriaDescriptors(posTest,mFunc);
         LposTest = ones(numel(posTest),1);
@@ -60,20 +60,34 @@ if isempty(k)
         end
     end
     
+    % use original training/test data
     Dtrain = [DposTrain; DnegTrain];
     Ltrain = [LposTrain; LnegTrain];
     Dtest = [DposTest; DnegTest];
     Ltest = [LposTest; LnegTest];
 else
+    % split training data into training/validation
     [SposTrain, SnegTrain, SposTest, SnegTest] = inriaSplit(n,k);
     Dtrain = [DposTrain(SposTrain); DnegTrain(SnegTrain)];
-    Ltrain = [DposTrain(SposTrain); DnegTrain(SnegTrain)];
+    Ltrain = [LposTrain(SposTrain); LnegTrain(SnegTrain)];
     Dtest = [DposTrain(SposTest); DnegTrain(SnegTest)];
-    Ltest = [DposTrain(SposTest); DnegTrain(SnegTest)];
+    Ltest = [LposTrain(SposTest); LnegTrain(SnegTest)];
 end
 
 %% Train and test SVM
-svm = svmtrain(Ltrain,Dtrain,svmArgs);
-[Lsvm, acc, P] = svmpredict(Ltest,Dtest,svm);
+if isempty(k)
+    svmPath = [desDir '/svm_test_' svmArgs '.mat'];
+else
+    svmPath = [desDir '/svm_train-' num2str(k) 'of' num2str(n) '_' svmArgs '.mat'];
+end
+svmVars = {'svm','Lsvm','acc','prob'};
+[loaded,svmLoad] = loadIfExist(svmPath,'file');
+if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
+    disp('Loaded svm file.')
+    return
+else
+    svm = svmtrain(Ltrain,Dtrain,svmArgs);
+    [Lsvm, acc, prob] = svmpredict(Ltest,Dtest,svm);
+end
 
 end
