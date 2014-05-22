@@ -10,8 +10,8 @@ rng(1,'combRecursive');
 
 nPosTrain = 2416;
 nNegTrain = 12180;
-permPosTrain = randperm(nPosTrain);
-permNegTrain = randperm(nNegTrain);
+permPosTrain = randperm(nPosTrain)';
+permNegTrain = randperm(nNegTrain)';
 
 SposTest = [];
 SnegTest = [];
