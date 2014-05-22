@@ -5,7 +5,7 @@ clc, clear all
 %     'full-hog',{}, ...
 %     0,{'rx-'});
 
-svmArgs = '-h 0';
+svmArgs = '-h 0 -t 0';
 
 gridRadius = 3;
 method = methodStruct( ...
