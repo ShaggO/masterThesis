@@ -68,9 +68,9 @@ if isempty(k)
 else
     % split training data into training/validation
     [SposTrain, SnegTrain, SposTest, SnegTest] = inriaSplit(n,k);
-    Dtrain = [DposTrain(SposTrain); DnegTrain(SnegTrain)];
+    Dtrain = [DposTrain(SposTrain,:); DnegTrain(SnegTrain,:)];
     Ltrain = [LposTrain(SposTrain); LnegTrain(SnegTrain)];
-    Dtest = [DposTrain(SposTest); DnegTrain(SnegTest)];
+    Dtest = [DposTrain(SposTest,:); DnegTrain(SnegTest,:)];
     Ltest = [LposTrain(SposTest); LnegTrain(SnegTest)];
 end
 
