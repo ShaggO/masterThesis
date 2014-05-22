@@ -80,14 +80,23 @@ if isempty(k)
 else
     svmPath = [desDir '/svm_train-' num2str(k) 'of' num2str(n) '_' svmArgs '.mat'];
 end
-svmVars = {'svm','Lsvm','acc','prob'};
+svmVars = {'svm','Lsvm','acc','prob','trainTime','predictTime'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
     disp('Loaded svm file.')
     return
 else
+    trainTime = tic;
     svm = svmtrain(Ltrain,Dtrain,svmArgs);
+    trainTime = toc(trainTime);
+    predictTime = tic;
     [Lsvm, acc, prob] = svmpredict(Ltest,Dtest,svm);
+    predictTime = toc(predictTime);
+    
+    if ~exist(desDir,'dir')
+        mkdir(desDir);
+    end
+    save(svmPath,svmVars{:})
 end
 
 end
