@@ -5,6 +5,8 @@ clc, clear all
 %     'full-hog',{}, ...
 %     0,{'rx-'});
 
+svmArgs = '-h 0';
+
 gridRadius = 3;
 method = methodStruct( ...
     'grid',{'type','square','scales',1,'gridRadius',gridRadius}, ...
@@ -27,5 +29,5 @@ method = methodStruct( ...
    0,{'co-'});
 
 totalTime = tic;
-[Lsvm, acc, P] = inriaTest(method);
+[Lsvm, acc, P] = inriaTest(6,1,method,svmArgs);
 totalTime = toc(totalTime)

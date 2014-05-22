@@ -3,6 +3,8 @@ function [mFunc, mName] = parseMethod(m)
 %descriptor function and unique name. We assume normalized single RGB image
 %inputs.
 
+detSave = true;
+
 %% Parse detector arguments
 p = inputParser;
 addParameter(p,'cache',1);
@@ -86,6 +88,7 @@ switch lower(m.detector)
         detName = sprintf('grid-%s-%s-%s', ...
             r.type,nums2str(r.scales),num2str(r.gridRadius));
         detFunc = @(I) gridDetector(size(I),r.type,r.scales,r.gridRadius);
+        detSave = false;
     case 'debug'
         r = parseResults(p,m.detectorArgs);
         detName = 'debug';
@@ -250,7 +253,7 @@ desCache = r.cache;
 %% Combine names and functions
 mName = combineNames(detName,desName);
 mFunc = @(I,resDir,imName,desSave) methodFunc(I,resDir,imName,...
-        detName,desName,detFunc,desFunc,detCache,desCache,desSave);
+        detName,desName,detFunc,desFunc,detCache,desCache,detSave,desSave);
 
 end
 
@@ -272,7 +275,7 @@ end
 % Loading and saving of intermediate results is handled
 % in this function.
 function [X,D] = methodFunc(I,resDir,imName,detName,desName,...
-    detFunc,desFunc,detCache,desCache,desSave)
+    detFunc,desFunc,detCache,desCache,detSave,desSave)
 detDir = [resDir '/' detName];
 desDir = [resDir '/' combineNames(detName,desName)];
 detPath = [detDir '/features_' imName];
@@ -301,10 +304,13 @@ else
         else
             F = detFunc(rgb2gray(I));
 
-            if ~exist(detDir,'dir')
-                mkdir(detDir);
+            if detSave
+                if ~exist(detDir,'dir')
+                    mkdir(detDir);
+                end
+                save(detPath,'F');
             end
-            save(detPath,'F');
+            
             disp(['Detected ' num2str(size(F,1)) ' features.']);
         end
 
@@ -314,10 +320,10 @@ else
     end
     assert(~any(isnan(D(:))),'NaN present in descriptor.');
 
-    if ~exist(desDir,'dir')
-        mkdir(desDir);
-    end
     if desSave
+        if ~exist(desDir,'dir')
+            mkdir(desDir);
+        end
         save(desPath,'X','D');
     end
 
