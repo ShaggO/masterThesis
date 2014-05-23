@@ -1,17 +1,14 @@
 function [Lsvm, acc, prob] = inriaTest(n,k,method,svmArgs,desSave)
 
 if nargin < 5
-    desSave = false;
+    desSave = true;
 end
 
 load('paths')
-load([inriaDataSet '/inriaTrain'])
-load([inriaDataSet '/inriaTest'])
 
 [mFunc, mName] = parseMethod(method);
 desDir = [inriaResults '/' mName];
 
-%% Train and test SVM
 if isempty(k)
     svmPath = [desDir '/svm_test_' svmArgs '.mat'];
 else
@@ -25,6 +22,8 @@ if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
     acc = svmLoad.acc;
     prob = svmLoad.prob;
 else
+    load([inriaDataSet '/inriaTrain'])
+    load([inriaDataSet '/inriaTest'])
 
     %% Training descriptors
     desPath = [desDir '/Dtrain.mat'];
@@ -89,6 +88,7 @@ else
         Ltest = [LposTrain(SposTest); LnegTrain(SnegTest)];
     end
 
+    %% Train and test SVM
     trainTime = tic;
     svm = svmtrain(Ltrain,Dtrain,svmArgs);
     trainTime = toc(trainTime)
@@ -96,6 +96,7 @@ else
     [Lsvm, acc, prob] = svmpredict(Ltest,Dtest,svm);
     predictTime = toc(predictTime)
 
+    %% Evaluation measures
     [ROC,PR] = confusionMeasure(Ltest,prob);
     ROCAUC = ROCarea(ROC','roc');
     PRAUC = ROCarea(PR','pr');
@@ -107,4 +108,5 @@ else
 end
 
 plotInriaResults(svmPath);
+
 end
