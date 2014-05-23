@@ -1,4 +1,4 @@
-function [L,Isizes] = dGaussScaleSpace(I, d, scales, rescale, chain, pixelDiff)
+function [L,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth,chain,pixelDiff)
 %SCALESPACE Gaussian derivative scale space
 % Input:
 %   I           image
@@ -10,7 +10,7 @@ function [L,Isizes] = dGaussScaleSpace(I, d, scales, rescale, chain, pixelDiff)
 %   S           scale space images  [j].i[:,:]
 %   sizes       size of each image  [j,2]
 
-if nargin < 5
+if nargin < 6
     chain = 1;
     pixelDiff = 1;
 end
@@ -64,13 +64,15 @@ if chain
     if pixelDiff
         % chain gauss filters and derive by pixel differencing iteratively
         for j = 1:numel(scales)
-            if j == 1
-                s = scales(j);
-            else
-                s = sqrt(scales(j)^2 - scales(j-1)^2);
+            if smooth
+                if j == 1
+                    s = scales(j);
+                else
+                    s = sqrt(scales(j)^2 - scales(j-1)^2);
+                end
+                hsize = 2*ceil(3*s)+1;
+                I = imfilter(I,dGauss2d(0,0,hsize,s),'conv');
             end
-            hsize = 2*ceil(3*s)+1;
-            I = imfilter(I,dGauss2d(0,0,hsize,s),'conv');
             for i = 1:size(d,1)
                 if all(d(i,:) == 0)
                     dI = I;
