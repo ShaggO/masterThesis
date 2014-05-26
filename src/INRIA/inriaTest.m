@@ -90,7 +90,9 @@ else
 
     %% Train and test SVM
     trainTime = tic;
-    svm = svmtrain(Ltrain,Dtrain,svmArgs);
+    % -m cachesize (default 100)
+    % -h shrinking (default 1)
+    svm = svmtrain(Ltrain,Dtrain,[svmArgs ' -m 500 -h 0']);
     trainTime = toc(trainTime)
     predictTime = tic;
     [Lsvm, acc, prob] = svmpredict(Ltest,Dtest,svm);

@@ -134,16 +134,17 @@ As mentioned in the descriptions above, the grids are defined with default cell 
 For the grid layout examples in this section, we have simply chosen a grid size and a grid radius. These two variables are however having a major impact on the dimensionality and final outcome of the descriptor along with $\sigmacellj$, and hence these three parameters are tuned in our parameter studies in order to get the optimal descriptor layout and overlap.
 
 \begin{figure}[p]
+	\centering
 	\begin{subfigure}[t]{\textwidth}
 		\centering
 		\includegraphics[width=0.5\textwidth]{img/cellWindow_legend.pdf}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.47\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{img/cellWindow.pdf}
 		\caption{Gaussian}
 		\label{fig:cellWindow}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.47\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{img/cellWindowPolar.pdf}
 		\caption{Polar Gaussian}
 		\label{fig:cellWindowPolar}
@@ -155,32 +156,32 @@ For the grid layout examples in this section, we have simply chosen a grid size 
 		\centering
 		\includegraphics[width=\textwidth]{img/gridType_legend.pdf}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
+	\begin{subfigure}[t]{0.30\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_polar_gaussian.pdf}
 		\caption{Polar}
 		\label{fig:gridTypeP}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
+	\begin{subfigure}[t]{0.30\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_central_polar_gaussian.pdf}
 		\caption{Polar central}
 		\label{fig:gridTypePc}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
+	\begin{subfigure}[t]{0.30\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_log-polar.pdf}
 		\caption{Log-polar}
 		\label{fig:gridTypeLp}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
+	\begin{subfigure}[t]{0.30\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_polar_gaussian.pdf}
 		\caption{Concentric polar}
 		\label{fig:gridTypeCp}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
+	\begin{subfigure}[t]{0.30\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_central_polar_gaussian.pdf}
 		\caption{\footnotesize Concentric polar central}
 		\label{fig:gridTypeCpc}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
+	\begin{subfigure}[t]{0.30\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_log-polar.pdf}
 		\caption{Concentric log-polar}
 		\label{fig:gridTypeClp}
@@ -283,7 +284,7 @@ We need to compute the cell and center weights for pixels in every cell accordin
 The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and then simply look up the value when needed in a cell.
 
 
-Finally the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigure} illustrates one grid of these for a single feature. We see that there is a correspondence between the dominating orientations of the histograms and the gradient field of the underlying image. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor.
+Finally the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigureGoM} illustrates one grid of these for a single feature. We see that there is a correspondence between the dominating orientations of the histograms and the gradient field of the underlying image. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor.
 
 \begin{figure}[tb]
     \centering
@@ -312,14 +313,14 @@ Finally the four weights are multiplied in order to construct the cell histogram
     \centering
     \includegraphics[width=0.65\textwidth]{img/cellHistFigure.pdf}
     \caption{The cell histograms for a single feature that make up our descriptor. For each cell center (yellow), the weighted histogram values (red) are drawn in the direction of the corresponding bin center orientations. We see that the cell histograms generally point towards larger intensities.}
-    \label{fig:cellHistFigure}
+    \label{fig:cellHistFigureGoM}
 \end{figure}
 
 \begin{figure}[tb]
     \centering
     \includegraphics[width=0.65\textwidth]{img/cellHistFigureSi.pdf}
     \caption{The shape index cell histograms for a single feature.}
-    \label{fig:cellHistFigure}
+    \label{fig:cellHistFigureSiC}
 \end{figure}
 %
 %\section{Notes}
