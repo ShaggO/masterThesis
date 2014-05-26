@@ -6,6 +6,7 @@ sigmaRange = [1 256];
 colour = 'gray';
 d = kJetCoeffs(2);
 rescale = 1/2;
+smooth = true;
 chain = 1;
 pixelDiff = 1;
 
@@ -40,7 +41,7 @@ parfor setNum = 1:60
             if ~exist(sDir,'dir')
                 mkdir(sDir)
             end
-            [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,chain,pixelDiff);
+            [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth,chain,pixelDiff);
             parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,...
                 'scaleBase',scaleBase,'scaleOffset',scaleOffset,...
                 'sigmaRange',sigmaRange,'colour',colour,'d',d,...
