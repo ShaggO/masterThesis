@@ -49,5 +49,5 @@ gridRadius = 3;
 %   0,{'co-'});
 
 totalTime = tic;
-[Lsvm, acc, P] = inriaTest(6,[],method,svmArgs,true);
+[Lsvm, acc, P, svmPath] = inriaTest(6,[],method,svmArgs,true);
 totalTime = toc(totalTime)

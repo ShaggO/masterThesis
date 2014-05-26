@@ -35,11 +35,12 @@ drawAngle((p1(1)+q1(1))/2,(p1(2)+q1(2))/2,pi+t,pi+t+pi/2,1/25,angleArgs{:})
 drawAngle((p2(1)+q2(1))/2,(p2(2)+q2(2))/2,pi+t,pi+t+pi/2,1/25,angleArgs{:})
 drawAngle(0,0,0,t,1/(15*t),angleArgs{:})
 text(1/(2*15*t),-1/20,'\theta',textArgs{:})
-legend([hd1 hd2 hr1 hr2],'d_1','d_2','r_1','r_2',legendArgs{:})
+h = legend([hd1 hd2 hr1 hr2],'d_1','d_2','r_1','r_2',legendArgs{:});
+set(h,'color',[0.95 0.95 0.95]);
 axis equal off
 rectangle('Position',[-0.1 -0.5 2.35 1.3],'Curvature',[0 0],'EdgeColor','white');
 filePath = '../report/img/gridLayoutDerivationNormal.pdf';
-saveTightFigure(gcf,filePath);
+export_fig('-r300',filePath);
 open(filePath);
 
 figure
@@ -80,9 +81,10 @@ drawAngle(m2(1),m2(2),pi+t,pi+t+beta,1/(15*beta),angleArgs{:})
 text(m2(1)-1/(2*15*beta),m2(2)+1/20,'\beta',textArgs{:})
 drawAngle(p1(1),p1(2),0,t+beta,1/(15*(t+beta)),angleArgs{:})
 text(p1(1)+1/(2*15*(t+beta)),p1(2)-1/20,'\alpha',textArgs{:})
-legend([hd1 hd2 hr1 hr2],'d_1','d_2','r_1','r_2',legendArgs{:})
+h = legend([hd1 hd2 hr1 hr2],'d_1','d_2','r_1','r_2',legendArgs{:});
+set(h,'color',[0.95 0.95 0.95]);
 axis equal off
 rectangle('Position',[-0.1 -0.35 2.15 1.5],'Curvature',[0 0],'EdgeColor','white');
 filePath = '../report/img/gridLayoutDerivationConcentric.pdf';
-saveTightFigure(gcf,filePath);
+export_fig('-r300',filePath);
 open(filePath);

@@ -45,7 +45,7 @@ for i = 1:numel(C.data)
     Wpart = Wcell.data{i};
     for j = 1:size(Cpart,3)
         I = ones(Isizes(1,1:2)) * log(min(Wcell.vector));
-        I(Cpart(:,:,j)) = log(Wpart(:,:,j));
+        I(Cpart(:,:,j)) = log(zWpart(:,:,j));
         surf(I,'FaceAlpha',0.8,'EdgeColor','none');
     end
 end

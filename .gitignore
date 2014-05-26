@@ -71,3 +71,5 @@ src/rectangleTest.m
 src/runRectangle.m
 src/libsvm
 src/svmNoArgs.mat
+src/cellHistExampleGo.mat
+src/cellHistExampleSi.mat

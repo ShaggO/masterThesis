@@ -133,9 +133,26 @@ As mentioned in the descriptions above, the grids are defined with default cell 
 
 For the grid layout examples in this section, we have simply chosen a grid size and a grid radius. These two variables are however having a major impact on the dimensionality and final outcome of the descriptor along with $\sigmacellj$, and hence these three parameters are tuned in our parameter studies in order to get the optimal descriptor layout and overlap.
 
-\begin{figure}[tb]
-	\centering
+\begin{figure}[p]
 	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=0.5\textwidth]{img/cellWindow_legend.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.47\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{img/cellWindow.pdf}
+		\caption{Gaussian}
+		\label{fig:cellWindow}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.47\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{img/cellWindowPolar.pdf}
+		\caption{Polar Gaussian}
+		\label{fig:cellWindowPolar}
+	\end{subfigure}
+	\caption{The two types of Gaussian cell aperture functions plotted in 3-D. The black curves are placed 1 standard deviation $\sigma$ from the cell centers. The yellow curves are placed $3 \sigma$ from the cell centers and confine the regions used to calculate the cell histograms.}
+	\label{fig:gridWindow}
+	\vspace{2mm}
+	\begin{subfigure}[t]{\textwidth}
+		\centering
 		\includegraphics[width=\textwidth]{img/gridType_legend.pdf}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
@@ -160,7 +177,7 @@ For the grid layout examples in this section, we have simply chosen a grid size 
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_central_polar_gaussian.pdf}
-		\caption{Concentric polar central}
+		\caption{\footnotesize Concentric polar central}
 		\label{fig:gridTypeCpc}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.32\textwidth}
@@ -168,7 +185,7 @@ For the grid layout examples in this section, we have simply chosen a grid size 
 		\caption{Concentric log-polar}
 		\label{fig:gridTypeClp}
 	\end{subfigure}
-	\caption{Examples of grid layouts showing cell centers, cell 1 standard deviation curves, detection scales, and grid radii. The grid size is chosen to be $[8 2]$ (8 cells in each of 2 rings) and the grid radius is set to 10 times detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use Cartesian Gaussian aperture cell functions.}
+	\caption{Examples of grid layouts showing cell centers, cell 1 standard deviation curves, detection scales, and grid radii. The grid size is chosen to be $8 \times 2$ (8 cells in each of 2 rings) and the grid radius is set to 10 times detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use Cartesian Gaussian aperture cell functions.}
 	\label{fig:gridType}
 \end{figure}
 %
@@ -206,7 +223,7 @@ We have now covered all the functions needed in order to compute the $j$'th hist
 %
 In order to visualize the construction of our descriptor, we will show an example of the whole process. As value and magnitude functions we choose the standard gradient orientation with gradient magnitude. We start by extracting interest points from an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
 
-The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} based on the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which causes all features to have the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points that are too close to the edge, such that their cells would span outside the images. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images with their respective features.
+The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} based on the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which causes all features to have the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points that are too close to the edge: if any cell support radius (shown in \Cref{fig:gridWindow}) belonging to a feature would span outside the image border, we discard the feature. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images with their respective features, and which of these are discarded.
 
 \begin{figure}[p]
     \centering
@@ -237,6 +254,27 @@ The next step is to construct the scale space images as described in \Cref{sec:v
 	\end{subfigure}
 	\caption{Images \subref{fig:cellHistScaleSpacesV} and \subref{fig:cellHistScaleSpacesM} show gradient orientation and magnitude images computed at various scales. Image \subref{fig:cellHistScaleSpacesMnorm} shows the pixel normalized magnitude images, where the magnitudes are relative to a small local area.}
 	\label{fig:cellHistScaleSpacesVM}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.97\textwidth}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesS.pdf}
+    	\caption{Shape index images}
+    	\label{fig:cellHistScaleSpacesS}
+	\end{subfigure}
+    \begin{subfigure}[t]{0.97\textwidth}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesC.pdf}
+    	\caption{Curvature images}
+    	\label{fig:cellHistScaleSpacesC}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.97\textwidth}
+		\includegraphics[width=\textwidth]{img/cellHistScaleSpacesCnorm.pdf}
+    	\caption{Normalized curvature images}
+    	\label{fig:cellHistScaleSpacesCnorm}
+	\end{subfigure}
+	\caption{Images \subref{fig:cellHistScaleSpacesS} and \subref{fig:cellHistScaleSpacesC} show shape index and curvature images computed at various scales. Image \subref{fig:cellHistScaleSpacesCnorm} shows the pixel normalized curvature images, where the curvatures are relative to a small local area.}
+	\label{fig:cellHistScaleSpacesSC}
 \end{figure}
 
 From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed, which are used to compute gradient orientation and magnitude images. We then apply our pixel normalization scheme to the magnitudes. These images are shown in \Cref{fig:cellHistScaleSpacesVM}.
@@ -272,8 +310,15 @@ Finally the four weights are multiplied in order to construct the cell histogram
 
 \begin{figure}[tb]
     \centering
-    \includegraphics[width=0.8\textwidth]{img/cellHistFigure.pdf}
+    \includegraphics[width=0.65\textwidth]{img/cellHistFigure.pdf}
     \caption{The cell histograms for a single feature that make up our descriptor. For each cell center (yellow), the weighted histogram values (red) are drawn in the direction of the corresponding bin center orientations. We see that the cell histograms generally point towards larger intensities.}
+    \label{fig:cellHistFigure}
+\end{figure}
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=0.65\textwidth]{img/cellHistFigureSi.pdf}
+    \caption{The shape index cell histograms for a single feature.}
     \label{fig:cellHistFigure}
 \end{figure}
 %

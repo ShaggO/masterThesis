@@ -1,4 +1,4 @@
-function [Lsvm, acc, prob] = inriaTest(n,k,method,svmArgs,desSave)
+function [Lsvm, acc, prob, svmPath] = inriaTest(n,k,method,svmArgs,desSave)
 
 if nargin < 5
     desSave = true;

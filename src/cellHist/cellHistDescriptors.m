@@ -219,7 +219,7 @@ if cellNormStrategy < 4
 end
 
 if saveVars
-    save('cellHistExample')
+    save('cellHistExampleSi')
 end
 
 end
