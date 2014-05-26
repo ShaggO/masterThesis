@@ -5,6 +5,16 @@
 
 \section{Detectors}
 
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=\textwidth,clip=true,trim=0 200 0 220]{img/SIFT_dogspaces.pdf}
+	\caption{Reproduced DoG scalespace figure \cite[figure 1,pp. 95]{lowe2004distinctive}. Original caption: For each octave of scale space, the initial image is repeatedly convolved with Gaussians to produce the set of scale space images
+shown on the left. Adjacent Gaussian images are subtracted to produce the difference-of-Gaussian images on the right. After each octave, the
+Gaussian image is down-sampled by a factor of 2, and the process repeated.}
+	\label{fig:dogSpaces}
+\end{figure}
+
 \subsection{Scale invariance}
 
 \section{Descriptors}
@@ -140,7 +150,7 @@ computed over a single region at eight scale levels.
 \todo{Describe calculations of derivatives}
 Notes:
 \begin{enumerate}
-\item Derivatives using difference filters
+\item Derivatives using filters
 \item Derivatives using Gaussian filters
 \item Derivatives using iterative approach
 \end{enumerate}
