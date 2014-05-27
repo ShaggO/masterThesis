@@ -1,0 +1,5 @@
+Møde tirsdag d. 27. Maj 2014
+
+1. Shape index eksempel
+2. Feature rejeection by ensuring A->B og B->A. Kan ikke finde det i litteraturen
+3. Hvordan citerer man helt præcist figurer fra andre værker?
