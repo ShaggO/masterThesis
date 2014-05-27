@@ -1,5 +1,21 @@
 Møde tirsdag d. 27. Maj 2014
 
 1. Shape index eksempel
+  - Curvedness pixelnormalisering. Kig på støj
+  - Lav pile om til rene linjer.
+  - Generer en shape index linje med 5 shapes fra -1 til 1
+  - shape index, curvedness til polære koordinater
+  - H = [k1 0; 0 k2], I(x) = x^T H x
+
 2. Feature rejeection by ensuring A->B og B->A. Kan ikke finde det i litteraturen
+  - optisk flow
+  - Registrering: Invers konsistens
+  - Kullback leibler
+  - Jensen Shannon
+
 3. Hvordan citerer man helt præcist figurer fra andre værker?
+  - Behøver ikke original caption
+
+4. SVM Parameterstudie
+  - Forsøg med K-nn. Evt. parameterstudie på K-nn
+  - Korrigering af antal samples
