@@ -16,7 +16,11 @@ function [matchIdx, dists] = featureMatch(D1, D2)
 %    dists(i,:) = sum((D2 - repmat(D1(i,:),[size(D2,1) 1])) .^ 2,2);
 %end
 % Use built in function (utilizing a mex file)
-dists = pdist2(D1,D2,'euclidean');
+if size(D1,1) > 0 && size(D2,1) > 0
+    dists = pdist2(D1,D2,'euclidean');
+else
+    dists = zeros(size(D1,1),size(D2,1));
+end
 
 [dists, matchIdx] = sort(dists,2);
 
