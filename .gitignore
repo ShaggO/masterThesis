@@ -70,6 +70,7 @@ src/figureTools/export_fig/.ignore/pdftops.txt
 src/rectangleTest.m
 src/runRectangle.m
 src/libsvm
+src/liblinear
 src/svmNoArgs.mat
 src/cellHistExampleGo.mat
 src/cellHistExampleSi.mat
