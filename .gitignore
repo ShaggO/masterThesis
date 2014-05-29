@@ -76,3 +76,4 @@ src/cellHistExampleGo.mat
 src/cellHistExampleSi.mat
 src/inriaDatasetFigures.mat
 src/last_knn.mat
+src/figureTools/export_fig/.ignore/

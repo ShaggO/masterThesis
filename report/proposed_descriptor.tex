@@ -57,6 +57,8 @@ The pixel normalized magnitude at a point is defined as the magnitude relative t
 F_\text{norm}(\p) = \frac{F(\p)}{\int F(\x) G(\x - \p; \boldsymbol{\sigma}) \,\text{d} \x}
 \end{align}
 %
+The idea behind this scheme is that an image is locally affected by light changes according to the affine illumination model. In order to estimate $a$ on a pixel-level, we use intensity information from the surrounding pixels. Using a Gaussian filter we are able to weight the surrounding intensities based on their spatial distance to the pixel in question. The rationale for this is, that pixels close to one another has a higher probability of being affected by equal light conditions than pixels further away from one another. By dividing the pixel value by the sum of all these weighted intensities (estimation of $a$), we remove the affine coefficient from the pixel.
+
 Having applied the pixel normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
 \Cref{fig:pixelNormalizationExample} shows two examples of images containing shadows, their gradient magnitudes, their pixel normalized magnitudes with $\sigma_\text{norm} = 2$, and their pixel normalized magnitudes with $\sigma_\text{norm} = 10$. These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images, the shadows have a dampening effect on the gradient magnitude. By using a small $\sigma_\text{norm}$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\sigma_\text{norm}$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well. The choice of optimal $\sigma_\text{norm}$ is part of our parameter studies.
 
@@ -120,7 +122,7 @@ A_j(\x) = G(\x - \c_j; \sigmacellj)
 where $\c_j$ is the cell center for cell $j$ and $\sigmacellj$ is the standard deviation of cell $j$.
 
 The cell aperture function is defined for all cells in the feature. Having defined $A_j$ we are now able to define the \emph{grid layouts} that define the cell centers $\boldsymbol{c}_j$ for each feature.
-\Cref{fig:gridType} shows examples of the six different grid layouts that we propose: polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance}, Irregular SIFT \cite{cui2009scale}, and DAISY \cite{tola2008fast} layouts. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the Cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into Cartesian coordinates afterwards. The two log-polar grids both use Cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 rings. The two ``central'' and log-polar grids additionally have a single central cell.
+\mycomment[KSP]{Refs. to alternatives in the literature} \Cref{fig:gridType} shows examples of the six different grid layouts that we propose: polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance}, Irregular SIFT \cite{cui2009scale}, and DAISY \cite{tola2008fast} layouts. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the Cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into Cartesian coordinates afterwards. The two log-polar grids both use Cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 rings. The two ``central'' and log-polar grids additionally have a single central cell.
 
 All these layouts are defined relative to the \emph{grid radius}, which is defined as a constant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that by default the 1 standard deviation curves of the outer-most cells in the feature touch the grid radius. Each ring concists of $n$ cells dividing the ring equally in the angular direction. Furthermore the following holds for each of the specific layouts:
 
@@ -326,7 +328,10 @@ Finally the four weights are multiplied in order to construct the cell histogram
     	\includegraphics[width=\textwidth]{img/cellHistFigureSiExample.pdf}
 %   	\end{subfigure}
 %   	\begin{subfigure}[t]{0.1\textwidth}
-    	\includegraphics[width=0.1\textwidth]{img/cellHistFigureSiExample1.png}
+   	\end{subfigure}
+    \begin{subfigure}[t]{\textwidth}
+    \centering
+       	\includegraphics[width=0.1\textwidth]{img/cellHistFigureSiExample1.png}
     	\includegraphics[width=0.1\textwidth]{img/cellHistFigureSiExample2.png}
     	\includegraphics[width=0.1\textwidth]{img/cellHistFigureSiExample3.png}
     	\includegraphics[width=0.1\textwidth]{img/cellHistFigureSiExample4.png}
@@ -334,6 +339,8 @@ Finally the four weights are multiplied in order to construct the cell histogram
     	\includegraphics[width=0.1\textwidth]{img/cellHistFigureSiExample6.png}
     	\includegraphics[width=0.1\textwidth]{img/cellHistFigureSiExample7.png}
     	\includegraphics[width=0.1\textwidth]{img/cellHistFigureSiExample8.png}
+    	\caption{ok}
+    	\label{fig:cellHistFigureSiExample}
    	\end{subfigure}
    	\caption{The shape index cell histograms for a single feature.}
     \label{fig:cellHistFigureSiC}
