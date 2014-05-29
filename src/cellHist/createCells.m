@@ -6,12 +6,24 @@ function [validP,C,Wcell,Wcen,cen] = createCells(Isizes,P,gridType,gridSize,grid
 %   Wcell   weights on pixels within cells
 %   Wcenter weights on cell centers
 
-[cen,cenPol,cellSize] = createCellOffsets(gridType,gridSize,gridRadius);
-% cellSize(18:25) = 2;
+% scale cellSigma depending on if we use a window grid
+if any(strcmp(gridType,{'square window','triangle window'}))
+    cellSigma = gridSize * cellSigma;
+else
+    if any(strcmp(cellFilter,{'gaussian','triangle','box'}))
+        cellSigma = cellSigma .* gridRadius;
+    else % polar cell filter
+        assert(numel(gridRadius) == 1, ...
+            'Polar cell filters must be used with polar grids.')
+        cellSigma = cellSigma .* [pi/gridSize(1) gridRadius];
+    end
+end
+
+[cen,cenPol,cellSize] = createCellOffsets(gridType,gridSize,gridRadius,cellSigma);
 nCen = size(cen,1);
 
 if strcmp(centerFilter,'none')
-    Wcen = ones(nCen,1);
+    Wcen = ones(nCen,1,'single');
 else
     fCen = ndFilter(centerFilter,centerSigma);
     Wcen = fCen(cen);
@@ -55,9 +67,16 @@ for i = 1:numel(uniquePsize)
     validPi = all(PiRound + repmat(minContrib,[nPi 1]) >= 1 & ...
         PiRound + repmat(maxContrib,[nPi 1]) <= Isizes(Pi(:,3),2:-1:1),2);
     maski(maski) = validPi;
+%     PiOld = Pi;
     Pi = Pi(validPi,:);
     nPi = size(Pi,1);
     validP(maski) = 1;
+    
+%     figure
+%     hold on
+%     axis equal
+%     plot(PiOld(:,1),PiOld(:,2),'rx')
+%     plot(PiOld(validP,1),PiOld(validP,2),'bx')
     
     for j = 1:numel(win.data)
         k = k + 1;
@@ -77,7 +96,7 @@ for i = 1:numel(uniquePsize)
             [theta,rho] = cart2pol(pointsCenter(:,1,:,:),pointsCenter(:,2,:,:));
             pointsCellPol = [theta, rho ./ repmat(permute(cellSize(maskj),[3 2 1]), ...
                 [nWinj 1 1 nPi])];
-            pointsCenPol = repmat(permute(cenPolj ./ [ones(nCenj,1) cellSize(maskj)], ...
+            pointsCenPol = repmat(permute(cenPolj ./ [ones(nCenj,1,'single') cellSize(maskj)], ...
                 [3 2 1]),[nWinj 1 1 nPi]);
             Wdata{k} = polarDiffFunction(fCell,pointsCellPol, ...
                 pointsCenPol,true);
@@ -105,7 +124,7 @@ for i = 1:numel(uniquePsize)
         Cdata{k} = pointsR(:,2,:,:) + (pointsR(:,1,:,:)-1) .* ...
             repmat(permute(Isizes(Pi(:,3),1),[4 2 3 1]),[nWinj 1 nCenj]) + ...
             repmat(permute(idxScales(Pi(:,3),1),[4 2 3 1]),[nWinj 1 nCenj]);
-        sizes(k,1:4) = [size(Cdata{k}) ones(1,4-numel(size(Cdata{k})))];
+        sizes(k,1:4) = [size(Cdata{k}) ones(1,4-numel(size(Cdata{k})),'single')];
         map(maskj,maski) = k;
     end
 end

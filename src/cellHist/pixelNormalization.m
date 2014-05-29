@@ -8,7 +8,7 @@ function Mnorm = pixelNormalization(M,type,sigma)
 
 Mnorm = cell(size(M));
 for i = 1:numel(M)
-    [f,r] = ndFilter(type,sigma(i,:));
+    [f,r] = ndFilter(type,double(sigma(i,:)));
     rMin = floor(-r);
     rMax = ceil(r);
 

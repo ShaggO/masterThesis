@@ -10,13 +10,6 @@ if rescale > 0
     normSigma = rescale * normSigma;
 end
 
-if any(strcmp(cellFilter,{'gaussian','triangle','box'}))
-    cellSigma = cellSigma .* gridRadius;
-else % polar cell filter
-    assert(numel(gridRadius) == 1, ...
-        'Polar cell filters must be used with polar grids.')
-    cellSigma = cellSigma .* [pi/gridSize(1) gridRadius];
-end
 centerSigma = centerSigma .* gridRadius;
 binSigma = binSigma .* (right-left) ./ (2*binCount);
 if strcmp(normType,'block')

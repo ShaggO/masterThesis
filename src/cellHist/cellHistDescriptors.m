@@ -26,7 +26,7 @@ function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
 
 % check if 0 features
 if size(F,1) == 0
-    X = zeros(0,2);
+    X = zeros(0,2,'single');
     D = [];
     return
 end
@@ -57,18 +57,6 @@ switch contentType
                 binCArgin = {'endpoints',true};
         end
         period = 0;
-    case 'go,si'
-        assert(strcmp(magnitudeType,'m,c'));
-        [X,Dgo] = cellHistDescriptors(I,F,'go','m',scaleBase,rescale, ...
-            gridType,gridSize,gridRadius,centerFilter,centerSigma,...
-            cellFilter,cellSigma,normType,normFilter,normSigma,...
-            binFilter,binSigma(1),binCount(1));
-        [~,Dsi] = cellHistDescriptors(I,F,'si','c',scaleBase,rescale, ...
-            gridType,gridSize,gridRadius,centerFilter,centerSigma,...
-            cellFilter,cellSigma,normType,normFilter,normSigma,...
-            binFilter,binSigma(2),binCount(2));
-        D = [Dgo Dsi];
-        return
     case 'go-si'
         dContent = [1 0; 0 1; 2 0; 1 1; 0 2];
         vFunc = @(L,s) diffStructure('Theta-S',L,s);
@@ -126,11 +114,18 @@ switch magnitudeType
 end
 
 saveVars = false;
+windowGrid = any(strcmp(gridType,{'square window','triangle window'}));
 
 % scale parameters according to definitions and rescale factor
 [gridRadius,centerSigma,cellSigma,binSigma,normSigma] = ...
     scaleParameters(rescale,gridSize,gridRadius,centerSigma,...
     cellFilter,cellSigma,binSigma,binCount,normType,normSigma,left,right);
+
+% compute histogram variables
+[binF, binR] = ndFilter(binFilter,binSigma);
+binC = createBinCenters(left,right,binCount,binCArgin{:});
+nBin = size(binC,1);
+wRenorm = renormWeights(binFilter,binSigma,left,right,period > 0,binC);
 
 % compute scale space images
 d = union(dContent,dMagnitude,'rows');
@@ -160,66 +155,97 @@ V = cellfun(@(v) {reshape(v,[],numel(binCount))},Vscales);
 V = cells2vector(V,numel(binCount));
 M = cells2vector(MscalesNorm);
 
-% create cells
+% Compute bin values (everywhere)
+fullB = saveVars || windowGrid;
+if fullB
+    B = ndBinWeights(V,binC,binF,binR, ...
+        'period',period,'wBin',wRenorm) .* repmat(M,[1 nBin]);
+end
+
+% Create cell windows (indices, weights, valid points)
 P = scaleSpaceFeatures(F,scales,rescale);
-[validP,C,Wcell,Wcenter,cells] = createCells(Isizes,P,gridType,gridSize,gridRadius,...
-    centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy);
-X = F(validP,1:2);
-
-% compute histogram variables
-[binF, binR] = ndFilter(binFilter,binSigma);
-binC = createBinCenters(left,right,binCount,binCArgin{:});
-nBin = size(binC,1);
-wRenorm = renormWeights(binFilter,binSigma,left,right,period > 0,binC);
-
-% compute bin and magnitude weights (at cell mask points only)
-if saveVars
-    % if we save scale space figure data, compute bins for all points
-    maskC = ':';
-else
-    maskC = false(size(V,1),1);
-    maskC(C.vector) = true;
-end
-B = zeros(size(V,1),nBin);
-B(maskC,:) = ndBinWeights(V(maskC,:),binC,binF,binR, ...
-    'period',period,'wBin',wRenorm) .* repmat(M(maskC),[1 nBin]);
-
-% compute histograms
-H = zeros([size(C.map) nBin]);
-for i = 1:size(C.sizes,1)
-    [Ci,maskPart] = C.partData(i);
-    Bi = reshape(B(Ci(:),:),[C.sizes(i,:) nBin]) .* ...
-        repmat(Wcell.partData(i),[1 1 1 1 nBin]);
-    Di = sum(Bi,1);
-    H(repmat(maskPart,[1 1 nBin])) = Di(:);
-end
-H = permute(H,[3 1 2]);
-
-% Histogram normalization
-if (strcmp(normType,'cell') || strcmp(normType,'pixel')) && ...
-        any(cellNormStrategy == 1:3)
-    % Normalize each histogram of each vector
-    Hnorm = H ./ repmat(sum(H,1) + eps,[nBin 1]);
-    if any(cellNormStrategy == 2:3)
-        % Weights on cells based on cell center distance
-        Hnorm = Hnorm .* repmat(Wcenter',[nBin 1 size(C.map,2)]);
+Psplit = splitPoints(P,windowGrid);
+D = [];
+for s = 1:numel(Psplit)
+    [validP,C,Wcell,Wcenter,cells] = createCells(Isizes,Psplit{s},gridType,gridSize,gridRadius,...
+        centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy);
+    X = F(validP,1:2);
+    
+    % Compute bin values (at cell mask points only)
+    if ~fullB
+        maskC = false(size(V,1),1);
+        maskC(C.vector) = true;
+        B = zeros(size(V,1),nBin,'single');
+        B(maskC,:) = ndBinWeights(V(maskC,:),binC,binF,binR, ...
+            'period',period,'wBin',wRenorm) .* repmat(M(maskC),[1 nBin]);
     end
-% elseif strcmp(normType,'block')
-%     % Block normalization
-%     localOffsets = createCellOffsets(gridType,gridSize,gridSpacing,true);
-%     Hnorm = blockNormalization(H,cellOffsets,localOffsets,normFilter,normSigma);
-else
-    Hnorm = H;
-end
-
-D = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
-if cellNormStrategy < 4
-    % Reshape and normalize descriptors to unit vectors
-    D = D ./ repmat(sum(D,2) + eps,[1 size(D,2)]);
+    
+    % compute histograms
+    H = zeros([size(C.map) nBin],'single');
+    for i = 1:size(C.sizes,1)
+        if windowGrid
+            Di = zeros([1 C.sizes(i,2:end) nBin],'single');
+            for j = 1:nBin
+                Di(:,:,:,:,j) = sum(reshape(B(C.data{i}(:),j),C.sizes(i,:)) .* ...
+                    Wcell.data{i},1);
+            end
+        else
+            Bi = reshape(B(C.data{i}(:),:),[C.sizes(i,:) nBin]) .* ...
+                repmat(Wcell.data{i},[1 1 1 1 nBin]);
+            Di = sum(Bi,1);
+        end
+        
+        H(repmat(C.map == i,[1 1 nBin])) = Di(:);
+    end
+    H = permute(H,[3 1 2]);
+    
+    % Histogram normalization
+    if (strcmp(normType,'cell') || strcmp(normType,'pixel')) && ...
+            any(cellNormStrategy == 1:3)
+        % Normalize each histogram of each vector
+        Hnorm = H ./ repmat(sum(H,1) + eps,[nBin 1]);
+        if any(cellNormStrategy == 2:3)
+            % Weights on cells based on cell center distance
+            Hnorm = Hnorm .* repmat(Wcenter',[nBin 1 size(C.map,2)]);
+        end
+    else
+        Hnorm = H;
+    end
+    
+    Ds = reshape(Hnorm,[prod(binCount)*size(C.map,1) size(C.map,2)])';
+    if cellNormStrategy < 4
+        % Reshape and normalize descriptors to unit vectors
+        Ds = Ds ./ repmat(sum(Ds,2) + eps,[1 size(Ds,2)]);
+    end
+    
+    % concatenate descriptors for each split
+    D = [D; Ds];
 end
 
 if saveVars
-    save('cellHistExampleSi')
+    save('cellHistExample')
+end
+
+% Cdata = C.data;
+% WcellData = Wcell.data;
+% whos
+% memory
+
+end
+
+function Psplit = splitPoints(P,windowGrid)
+
+s = 500; % max points per split
+
+if windowGrid
+    n = 1:s:size(P,1);
+    Psplit = cell(numel(n),1);
+    for i = 1:numel(n)-1
+        Psplit{i} = P(n(i)+(0:s-1),:);
+    end
+    Psplit{end} = P(n(end):end,:);
+else
+    Psplit = {P};
 end
 
 end

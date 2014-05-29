@@ -3,13 +3,15 @@ function P = scaleSpaceFeatures(F, scales, rescale)
 %relative size of given features
 
 if size(F,1) == 0
-    P = zeros(0,4);
+    P = zeros(0,4,'single');
     return
 end
 
 % Find closest scale for each feature
-[~,P(:,3)] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
+[~,idx] = min(abs(repmat(log(scales),[size(F,1) 1]) - ...
     repmat(log(F(:,3)),[1 size(scales,2)])),[],2);
+P = zeros([numel(idx) 4],'single');
+P(:,3) = idx;
 Pscale = scales(P(:,3));
 
 if rescale > 0

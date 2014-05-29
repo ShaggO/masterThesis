@@ -9,7 +9,6 @@ FPR = zeros(numel(T),1);
 TPR = FPR;
 OMP = FPR;
 for i = 1:numel(T)
-
     t = T(i);
     Pos = prob > t;
     Neg = ~Pos;

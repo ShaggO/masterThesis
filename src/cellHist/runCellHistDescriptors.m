@@ -31,7 +31,7 @@ method = methodStruct( ...
    0,{'co-'});
 
 [mFunc, mName] = parseMethod(method);
-% profile off, profile on
+profile off, profile on
 tic
 
 [X,D] = dtuFeatures(setNum, imNum, liNum, mFunc, 1);
@@ -47,5 +47,5 @@ tic
 % imshow(D,[])
 
 toc
-% profile off
-% profile viewer
+profile off
+profile viewer
