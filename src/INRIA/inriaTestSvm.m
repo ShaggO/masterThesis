@@ -18,12 +18,16 @@ if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
 else
     diaryFile = [desDir '/inriaTestSvm_' strrep(datestr(now),':','-') '.out'];
     
+    % INRIA data wrapper
+    data = inriaData;
+    
     tic
     
     %% Initial training
-    [LposTrain,DposTrain] = inriaData(method,desSave,'posTrain');
+    [LposTrain,DposTrain] = data.getDescriptors(method,desSave,'posTrain');
     DposTrain = sparse(double(DposTrain));
-    [LnegTrainCutouts,DnegTrainCutouts] = inriaData(method,desSave,'negTrainCutouts');
+    [LnegTrainCutouts,DnegTrainCutouts] = ...
+        data.getDescriptors(method,desSave,'negTrainCutouts');
     DnegTrainCutouts = sparse(double(DnegTrainCutouts));
     svm = lineartrain([LposTrain; LnegTrainCutouts], ...
         [DposTrain; DnegTrainCutouts],svmArgs);
@@ -36,7 +40,8 @@ else
     DnegTrainHard = sparse(0,0);
     totalNegTrain = 0;
     for i = 1:nNegTrainFull
-        [LnegTrainFull,DnegTrainFull] = inriaData(method,desSave,'negTrainFull',i);
+        [LnegTrainFull,DnegTrainFull] = ...
+            data.getDescriptors(method,desSave,'negTrainFull',i);
         DnegTrainFull = sparse(double(DnegTrainFull));
         totalNegTrain = totalNegTrain + size(DnegTrainFull,1);
         
@@ -56,18 +61,19 @@ else
     diary off
     
     %% Test on positive test data
-    [LposTest,DposTest] = inriaData(method,desSave,'posTest');
+    [LposTest,DposTest] = data.getDescriptors(method,desSave,'posTest');
     DposTest = sparse(double(DposTest));
     [~,acc,probPos] = linearpredict(LposTest,DposTest,svm);
     diary(diaryFile)
-    disp([timestamp() ' Classified positive test data: ' num2str(acc) ' accuracy.'])
+    disp([timestamp() ' Classified positive test data: ' num2str(sum(probPos >= 0)/numel(probPos)) ' accuracy.'])
     diary off
     
     %% Test on negative test data
     probNeg = [];
     totalNegTest = 0;
     for i = 1:nNegTestFull
-        [LnegTestFull,DnegTestFull] = inriaData(method,desSave,'negTestFull',i);
+        [LnegTestFull,DnegTestFull] = ...
+            data.getDescriptors(method,desSave,'negTestFull',i);
         DnegTestFull = sparse(double(DnegTestFull));
         totalNegTest = totalNegTest + size(DnegTestFull,1);
         

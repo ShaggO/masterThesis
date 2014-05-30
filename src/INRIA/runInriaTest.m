@@ -40,7 +40,8 @@ method = methodStruct( ...
 
 profile off,profile on
 totalTime = tic;
-svmPath = inriaTestSvm(method,svmArgs,true);
+svmPath = inriaValidateSvm(6,1,method,svmArgs,true);
+% svmPath = inriaTestSvm(method,svmArgs,true);
 % [ROCAUC,knnPath] = inriaTestKnn(6,1,method,true,30);
 totalTime = toc(totalTime)
 profile off

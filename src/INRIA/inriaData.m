@@ -89,15 +89,15 @@ methods
                 L = -1;
         end
 
-        obj.loadCache(type);
-        images = obj.(type);
-
         desVars = {'D'};
         [loaded,desLoad] = loadIfExist(desPath,'file');
         if loaded && all(ismember(desVars,fieldnames(desLoad)))
             D = desLoad.D;
             disp([num2str(size(D,1)) ' descriptors loaded.']);
         else
+            obj.loadCache(type);
+            images = obj.(type);
+            
             if strcmp(index,'all')
                 D = inriaDescriptors(images,mFunc);
             else
