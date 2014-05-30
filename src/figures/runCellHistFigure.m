@@ -29,8 +29,8 @@ y = [zeros(size(binC)) H(:,1,n)]';
 plot(x,y,'r-','linewidth',2)
 xlabel('Shape index')
 xlabh = get(gca,'XLabel');
-set(xlabh,'Position',get(xlabh,'Position') - [0 0.00012 0])
-set(gca,'OuterPosition',get(gca,'OuterPosition') - [0 -0.07 0 0.07]);
+set(xlabh,'Position',get(xlabh,'Position') - [0 0.00023 0])
+set(gca,'OuterPosition',get(gca,'OuterPosition') - [0 -0.12 0 0.12]);
 ylabel('Bin value')
 set(gca,'box','off')
 hold on;
@@ -49,22 +49,22 @@ pos = get(axh,'position');
 
 x1 = pos(1);
 y1 = pos(2);
-dlta = (pos(3)-pos(1)) / length(xticks)*2;
-delta = pos(3)/numel(xticks);
+dlta = (pos(3)-pos(1)) / length(xticks)*2
+delta = pos(3)/numel(xticks)
 fhPos = get(figh,'position');
 aspect = fhPos(4) / fhPos(3);
 
 for i = 1:length(xticks)
-    text(xticks(1,i),-0.00016, num2str(xticks(1,i)),'HorizontalAlignment','center');
+    text(xticks(1,i),-0.00024, num2str(xticks(1,i)),'HorizontalAlignment','center');
 end
 
 I = shapeIndexImage(binC);
 for i = 1:length(xticks)
 %    fig('unit','inches','width',1,'height',1,'fontsize',8);
     pic = I{i};
-    xPos = delta*(i-1)+x1+delta/4*aspect;
+    xPos = delta*(i-1)+x1+dlta/32*aspect;
 
-    lblAx = axes('parent',figh,'PlotBoxAspectRatioMode','manual','PlotBoxAspectRatio',[1 1 1],'position',[xPos,y1-dlta/2-0.001,dlta/2*aspect,dlta/2]);
+    lblAx = axes('parent',figh,'PlotBoxAspectRatioMode','manual','PlotBoxAspectRatio',[1 1 1],'position',[xPos,y1-dlta*3/4-0.001,dlta*3/4*aspect,dlta*3/4]);
     imagesc(pic,'parent',lblAx);
     axis(lblAx,'off');
     colormap('gray');
