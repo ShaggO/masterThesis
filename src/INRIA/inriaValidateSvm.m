@@ -1,6 +1,6 @@
-function svmPath = inriaTestSvm(method,svmArgs,desSave)
+function svmPath = inriaValidateSvm(n,k,method,svmArgs,desSave)
 
-if nargin < 3
+if nargin < 5
     desSave = true;
 end
 
@@ -10,11 +10,18 @@ load([inriaDataSet '/inriaMetadata'])
 [~, mName] = parseMethod(method);
 desDir = [inriaResults '/' mName];
 
-svmPath = [desDir '/svm_test_' svmArgs '.mat'];
+if isempty(k)
+    svmPath = [desDir '/svm_test_' svmArgs '.mat'];
+else
+    svmPath = [desDir '/svm_train-' num2str(k) 'of' num2str(n) '_' svmArgs '.mat'];
+end
 svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
     disp('Loaded svm file.')
+    Lsvm = svmLoad.Lsvm;
+    acc = svmLoad.acc;
+    prob = svmLoad.prob;
 else
     diaryFile = [desDir '/inriaTestSvm_' strrep(datestr(now),':','-') '.out'];
     

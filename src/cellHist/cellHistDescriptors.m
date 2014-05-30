@@ -114,7 +114,8 @@ switch magnitudeType
 end
 
 saveVars = false;
-windowGrid = any(strcmp(gridType,{'square window','triangle window'}));
+windowGrid = any(strcmp(gridType,{'square window','triangle window'})) && ...
+    size(F,1) > 1;
 
 % scale parameters according to definitions and rescale factor
 [gridRadius,centerSigma,cellSigma,binSigma,normSigma] = ...

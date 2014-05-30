@@ -8,49 +8,102 @@ load('paths')
 relDir = '96X160H96/Train/pos';
 contents = dir([inriaDataSet '/' relDir]);
 n = numel(contents)-2;
-posTrain = struct('image',cell(n,1),'path',cell(n,1));
+images = struct('image',cell(n,1),'path',cell(n,1));
 for i = 1:n
     relPath = [relDir '/' contents(i+2).name];
     I = imread([inriaDataSet '/' relPath]);
-    posTrain(i).image = I(14:end-13,14:end-13,:);
-    posTrain(i).path = relPath;
+    images(i).image = I(14:end-13,14:end-13,:);
+    images(i).path = relPath;
 end
+nPosTrain = n;
+
+save([inriaDataSet '/inriaPosTrain'],'images')
 
 %% Positive test images
 relDir = '70X134H96/Test/pos';
 contents = dir([inriaDataSet '/' relDir]);
 n = numel(contents)-2;
-posTest = struct('image',cell(n,1),'path',cell(n,1));
+images = struct('image',cell(n,1),'path',cell(n,1));
 for i = 1:n
     relPath = [relDir '/' contents(i+2).name];
     I = imread([inriaDataSet '/' relPath]);
-    posTest(i).image = I;
-    posTest(i).path = relPath;
+    images(i).image = I;
+    images(i).path = relPath;
 end
+nPosTest = n;
 
-%% Negative training images
+save([inriaDataSet '/inriaPosTest'],'images')
+
+%% Negative training images (cutouts)
 relDir = 'Train/neg';
 contents = dir([inriaDataSet '/' relDir]);
 n = numel(contents)-2;
-negTrain = struct('image',cell(n,1),'path',cell(n,1));
+images = struct('image',cell(10,n),'path',cell(10,n));
 for i = 1:n
     relPath = [relDir '/' contents(i+2).name];
     I = imread([inriaDataSet '/' relPath]);
-    negTrain(i).image = I;
-    negTrain(i).path = relPath;
+    for j = 1:windowsPerImage
+        y = randi(size(I,1)-133);
+        x = randi(size(I,2)-69);
+        images(j,i).image = I(y+(0:133),x+(0:69),:);
+        images(j,i).path = relPath;
+    end
 end
+images = images(:);
+nNegTrainCutouts = n;
 
-%% Negative test images
+save([inriaDataSet '/inriaNegTrainCutouts'],'images')
+
+%% Negative test images (cutouts)
 relDir = 'Test/neg';
 contents = dir([inriaDataSet '/' relDir]);
 n = numel(contents)-2;
-negTest = struct('image',cell(n,1),'path',cell(n,1));
+images = struct('image',cell(10,n),'path',cell(10,n));
 for i = 1:n
     relPath = [relDir '/' contents(i+2).name];
     I = imread([inriaDataSet '/' relPath]);
-    negTest(i).image = I;
-    negTest(i).path = relPath;
+    for j = 1:windowsPerImage
+        y = randi(size(I,1)-133);
+        x = randi(size(I,2)-69);
+        images(j,i).image = I(y+(0:133),x+(0:69),:);
+        images(j,i).path = relPath;
+    end
 end
+images = images(:);
+nNegTestCutouts = n;
 
-save([inriaDataSet '/inriaTrainFull'],'posTrain','negTrain')
-save([inriaDataSet '/inriaTestFull'],'posTest','negTest')
+save([inriaDataSet '/inriaNegTestCutouts'],'images')
+
+%% Negative training images (full)
+relDir = 'Train/neg';
+contents = dir([inriaDataSet '/' relDir]);
+n = numel(contents)-2;
+images = struct('image',cell(n,1),'path',cell(n,1));
+for i = 1:n
+    relPath = [relDir '/' contents(i+2).name];
+    I = imread([inriaDataSet '/' relPath]);
+    images(i).image = I;
+    images(i).path = relPath;
+end
+nNegTrainFull = n;
+
+save([inriaDataSet '/inriaNegTrainFull'],'images')
+
+%% Negative test images (full)
+relDir = 'Test/neg';
+contents = dir([inriaDataSet '/' relDir]);
+n = numel(contents)-2;
+images = struct('image',cell(n,1),'path',cell(n,1));
+for i = 1:n
+    relPath = [relDir '/' contents(i+2).name];
+    I = imread([inriaDataSet '/' relPath]);
+    images(i).image = I;
+    images(i).path = relPath;
+end
+nNegTestFull = n;
+
+save([inriaDataSet '/inriaNegTestFull'],'images')
+
+%% Metadata
+
+save([inriaDataSet '/inriaMetadata'],'nPosTrain','nPosTest','nNegTrainCutouts','nNegTestCutouts','nNegTrainFull','nNegTestFull','windowsPerImage')
