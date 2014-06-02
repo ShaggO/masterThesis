@@ -1,5 +1,9 @@
 clc, clear all
 
+% Load INRIA image data object
+data = inriaData;
+data.loadCache('all');
+
 scaleBase = 2^(1/3);
 scaleOffset = 0;
 sigmaRange = [1 16];
@@ -13,9 +17,8 @@ pixelDiff = 1;
 scales = approxScales(sigmaRange,scaleBase,scaleOffset);
 
 load('paths')
-load([inriaDataSet '/inriaTrain']);
-load([inriaDataSet '/inriaTest']);
-images = [posTrain; negTrain; posTest; negTest];
+images = [data.posTrain; data.negTrainCutouts; data.negTrainFull; data.posTest; data.negTestCutouts; data.negTestFull];
+images = [data.negTrainFull; data.negTestFull];
 
 sDir = [dtuResults '/scaleSpaces'];
 if ~exist(sDir,'dir')
@@ -25,7 +28,7 @@ end
 before = numel(dir(sDir));
 tic
 
-for i = 1:numel(images)
+parfor i = 1:numel(images)
     img = images(i);
     if mod(i,100) == 0
         disp([timestamp() ' Image ' num2str(i) '/' num2str(numel(images))]);

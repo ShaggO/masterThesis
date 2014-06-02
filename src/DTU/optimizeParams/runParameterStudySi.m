@@ -2,15 +2,18 @@ clear all; clc;
 diaryFile = ['optimizeParameterSi_' strrep(datestr(now),':','-') '.out'];
 diary(diaryFile)
 disp('Optimization of parameters for SI started.');
+diary off
 
 % leave out one sixth as test, rest as train
 for split = 1:6
     splits = 1:6;
     setNumTrain = dtuSplitSets(6,splits(splits ~= split));
     setNumTest = dtuSplitSets(6,split);
+    diary(diaryFile)
     disp('--------');
     disp(['Split: ' num2str(split) ' of ' nums2str(splits)]);
     disp('--------');
+    diary off
 
     %% Default settings across optimization parameters
     peakThresholdDog = 6.5;
@@ -85,6 +88,7 @@ for split = 1:6
     gridSizes(idx) = mat2cell(gsLog,ones(nLog,1),2);
     cellFilters(idx) = {'gaussian'};
 
+    diary(diaryFile)
     disp(['Total number of grid parameters to test: ' num2str(numel(gridTypes))]);
     diary off
 
@@ -128,5 +132,5 @@ for split = 1:6
     if ~exist(optDir,'dir')
         mkdir(optDir);
     end
-    save([optDir '/parameterStudyGo_' num2str(split) '-of-' num2str(numel(splits))]);
+    save([optDir '/parameterStudySi_' num2str(split) '-of-' num2str(numel(splits))]);
 end
