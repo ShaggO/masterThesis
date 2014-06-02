@@ -122,42 +122,8 @@ for p = pathTypes
     plotPRAUC(:,p) = mat2cell(pr, ones(1, numel(method)));
 end
 
-
-% Display results
 if display
-    for k = pathTypes % Generate figure for each image path
-        if any(pathTypes == 1) && k == 1
-            before = find(imNum{k} < imNumKey,1,'last');
-        else
-            before = 0;
-        end
-        if numel(liNum{k}) > 1
-            x = liNum{k};
-        else
-            x = imNum{k};
-        end
+    displayOptimizeResults(plotROCAUC,plotPRAUC,pathTypes,testType,{method.plotParams},mName);
+end
 
-        figure('units','normalized','outerposition',[0 0 1 1]);
-        h = zeros(numel(method),1);
-        hold on;
-        for i = 1:numel(method)
-            plot(x(1:before),plotROCAUC{i,k}(1:before),method(i).plotParams{:});
-            h(i) = plot(x(before+1:end),plotROCAUC{i,k}(before+1:end),method(i).plotParams{:});
-        end
-        padding = (x(end)-x(1))/20;
-        axis([x(1)-padding x(end)+padding 0 1]);
-        title(['ROC AUC ' pathLabels{k} ]);
-        legend(h,mName,'location','southeast','interpreter','none');
-
-        figure('units','normalized','outerposition',[0 0 1 1]);
-        hold on;
-        for i = 1:numel(method)
-            plot(x(1:before),plotPRAUC{i,k}(1:before),method(i).plotParams{:});
-            h(i) = plot(x(before+1:end),plotPRAUC{i,k}(before+1:end),method(i).plotParams{:});
-        end
-        axis([x(1)-padding x(end)+padding 0 1]);
-        title(['PR AUC ' pathLabels{k} ]);
-        legend(h,mName,'location','southeast','interpreter','none');
-
-    end
 end
