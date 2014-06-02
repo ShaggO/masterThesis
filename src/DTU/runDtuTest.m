@@ -1,6 +1,6 @@
 clc, clear all
 
-setNum = 1;
+setNum = 1:60;
 % setNum = dtuSplitSets(6,1);
 peakThresholdDog = 6.5;
 peakThresholdHarris = 10^4;
@@ -60,7 +60,7 @@ matchCache = 1;
 
 profile off, profile on
 totalTime = tic;
-[ROC,PR] = dtuTest(setNum,method,1:2,true,false,'train')
+[ROC,PR] = dtuTest(setNum,method,1:6,false,false,'test')
 totalTime = toc(totalTime)
 profile off
 profile viewer

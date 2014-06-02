@@ -230,12 +230,37 @@ The automatic capturing of images using a robot arm combined with the individual
 \section{Parameter study}
 \label{sec:icParameterStudy}
 
+\pgfplotstableset{
+    create on use/index/.style={%
+        create col/assign/.code={%
+            \pgfmathtruncatemacro\entry{\pgfplotstablerow+1}%
+            \pgfkeyslet{/pgfplots/table/create col/next content}{\entry}
+        }
+    }
+}
+
+\pgfplotstabletranspose\loadeddata{../src/results/ICparamsGo.txt}
+
+\pgfplotstabletypeset[
+	col sep=comma,
+	string type,
+	columns={
+		gridType,
+		gridAngles,
+		gridRings,
+		gridRadius,
+		centerSigma,
+		cellSigma,
+		normSigma,
+		binSigma,
+		binCount
+	}]\loaderddata
 
 
 Test: 6 fold cross validation.
 Tune on 5 folds, test on 1.
 %
-\section{Evaluation / results}
+  
 %
 Notes:
 

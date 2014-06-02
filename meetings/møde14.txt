@@ -1,0 +1,17 @@
+Møde med Sune mandag d. 2. juni:
+
+Image correspondence
+1. DTU parameterstudie resultater
+2. Prøv med kombinationen af de to descriptors og farver.
+  - Parametervalg?
+3. Tabel over parametre og så tager vi den derfra
+4. Hvilke resultater skal i rapporten?
+  - Mellemresultater fra parameterstudiet?
+
+INRIA
+1. knn (~5 min.) vs. liblinear (lineær C-SVM, ~10 sek.)
+2. Object detection parameterstudie
+  - Prøv samme som image correspondence
+3. Hard training og sliding window (50 spacing, 1 skala => + ~460 ekstra hårde negativer)
+4. Vægtning med knn ved vi ikke? liblinear kan man sætte det
+  - Prøv PCA og tjek de første 20 komponenter
