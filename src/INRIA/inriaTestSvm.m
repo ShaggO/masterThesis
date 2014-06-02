@@ -29,8 +29,9 @@ else
     [LnegTrainCutouts,DnegTrainCutouts] = ...
         data.getDescriptors(method,desSave,'negTrainCutouts');
     DnegTrainCutouts = sparse(double(DnegTrainCutouts));
+    ratio = numel(LnegTrainCutouts) / numel(LposTrain);
     svm = lineartrain([LposTrain; LnegTrainCutouts], ...
-        [DposTrain; DnegTrainCutouts],svmArgs);
+        [DposTrain; DnegTrainCutouts],[svmArgs ' -w1 ' num2str(ratio)]);
     % svm = svmtrain(L,D,[svmArgs ' -m 500 -h 0']);
     diary(diaryFile)
     disp([timestamp() ' Initial training done.'])
@@ -54,8 +55,9 @@ else
     diary off
     
     %% Retraining with hard negatives
+    ratio = (numel(LnegTrainCutouts) + numel(LnegTrainHard)) / numel(LposTrain);
     svm = lineartrain([LposTrain; LnegTrainCutouts; LnegTrainHard], ...
-        [DposTrain; DnegTrainCutouts; DnegTrainHard],svmArgs);
+        [DposTrain; DnegTrainCutouts; DnegTrainHard],[svmArgs ' -w1 ' num2str(ratio)]);
     diary(diaryFile)
     disp([timestamp() ' Retraining done.'])
     diary off

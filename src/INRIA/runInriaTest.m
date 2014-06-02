@@ -5,14 +5,14 @@ windowSize = [134 70];
 % SVM arguments
 % -c cost of C-SVC (default 1)
 % -p epsilon (default 0.1)
-svmArgs = '-s 1 -c 0.01 -p 0.1 -w1 5';
+svmArgs = '-s 1 -c 0.01 -p 0.1';
 
 % method = methodStruct( ...
 %      '',{}, ...
 %      'full-hog',{}, ...
 %      0,{'rx
 method = methodStruct( ...
-     'window',{'type','square','scales',1,'spacing',50,'windowSize',windowSize}, ...
+     'window',{'type','square','scales',2^(1/3).^(0:6),'spacing',10,'windowSize',windowSize}, ...
      'hog',{}, ...
      0,{'rx-'});
 
@@ -40,8 +40,8 @@ method = methodStruct( ...
 
 profile off,profile on
 totalTime = tic;
-svmPath = inriaValidateSvm(6,1,method,svmArgs,true);
-% svmPath = inriaTestSvm(method,svmArgs,true);
+% svmPath = inriaValidateSvm(6,1,method,svmArgs,true);
+svmPath = inriaTestSvm(method,svmArgs,true);
 % [ROCAUC,knnPath] = inriaTestKnn(6,1,method,true,30);
 totalTime = toc(totalTime)
 profile off

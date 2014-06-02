@@ -36,7 +36,8 @@ else
     Ltest = [LposTrain(SposTest); LnegTrainCutouts(SnegTest)];
     
     %% Training
-    svm = lineartrain(Ltrain,Dtrain,svmArgs);
+    ratio = numel(SnegTrain) / numel(SposTrain);
+    svm = lineartrain(Ltrain,Dtrain,[svmArgs ' -w1 ' num2str(ratio)]);
     disp([timestamp() ' Training done.'])
     
     %% Test
