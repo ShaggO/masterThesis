@@ -17,17 +17,17 @@ function [matchIdx, dists] = featureMatch(D1, D2)
 %end
 % Use built in function (utilizing a mex file)
 if size(D1,1) > 0 && size(D2,1) > 0
-    dists = pdist2(D1,D2,'euclidean');
+    dists = pdist2(single(D1),single(D2),'euclidean');
 else
-    dists = zeros(size(D1,1),size(D2,1));
+    dists = zeros(size(D1,1),size(D2,1),'single');
 end
 
 [dists, matchIdx] = sort(dists,2);
 
 switch size(dists,2) % handle special cases of few features
     case 0
-        dists = ones(0,2);
-        matchIdx = ones(0,2);
+        dists = ones(0,2,'single');
+        matchIdx = ones(0,2,'single');
     case 1
         dists = [dists dists];
         matchIdx = [matchIdx matchIdx];

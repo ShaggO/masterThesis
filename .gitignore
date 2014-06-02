@@ -77,3 +77,5 @@ src/cellHistExampleSi.mat
 src/inriaDatasetFigures.mat
 src/last_knn.mat
 src/figureTools/export_fig/.ignore/
+src/DTU/optimizeParams/results140602/parameterStudyGo_*-of-6.mat
+src/DTU/optimizeParams/results140602/parameterStudySi_*-of-6.mat

@@ -1,7 +1,9 @@
 function [X,D] = fullSiftDescriptor(I,varargin)
 %SIFTDESCRIPTORS Wrapper function for vl_sift
 
-[X,D] = vl_sift(255*rgb2gray(I),varargin{:});
+I = 255*rgb2gray(I);
+
+[X,D] = vl_sift(I,varargin{:});
 X = X(1:2,:)';
 D = D';
 
