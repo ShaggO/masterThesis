@@ -9,20 +9,34 @@ for i = 1:splits
     siTable(i) = struct(si(i).method.descriptorArgs{:});
 end
 
-tables{1} = rmfield(goTable,{'colour','contentType','magnitudeType','rescale','centerFilter','cellFilter','normType','cellNormStrategy'});
-tables{2} = rmfield(siTable,{'colour','contentType','magnitudeType','rescale','centerFilter','cellFilter','normType','cellNormStrategy'});
+goTable(end+1) = goTable(end)
+siTable(end+1) = siTable(end)
 
-tables{1} = struct2table(goTable);
-tables{2} = struct2table(siTable);
+goTable = rmfield(goTable,{'colour','contentType','magnitudeType','rescale','centerFilter','cellFilter','normType','cellNormStrategy'});
+siTable = rmfield(siTable,{'colour','contentType','magnitudeType','rescale','centerFilter','cellFilter','normType','cellNormStrategy'});
+
+tables{1} = struct2table(goTable,'RowNames',cat(1,mat2cell(num2str((1:6)'),ones(1,6),1),{'chosen'}));
+tables{2} = struct2table(siTable,'RowNames',cat(1,mat2cell(num2str((1:6)'),ones(1,6),1),{'chosen'}));
 
 for i = 1:numel(tables)
-    tables{i}.gridAngles = tables{i}.gridSize(:,1);
-    tables{i}.gridRings = tables{i}.gridSize(:,2);
-    tables{i}.gridSize = [];
+    tables{i}.gridType = cellfun(@(x) regexprep(x,'(.)(\w+)(\s*)','${upper($1)}'),tables{i}.gridType,'uniformoutput',false);
+    tables{i}.gridSize = cellfun(@(x) ['$' num2str(x(1)) ' \times ' num2str(x(2)) '$'],mat2cell(tables{i}.gridSize,ones(1,7),2),'uniformoutput',false)
+    tables{i}.gridSize{end} = ['$\mathbf{' tables{i}.gridSize{end}(2:end-1) '}$'];
     tables{i}.centerSigma = tables{i}.centerSigma(:,1);
     tables{i}.cellSigma = tables{i}.cellSigma(:,1);
     tables{i}.normSigma = tables{i}.normSigma(:,1);
 end
 
-writetable(tables{1},'results/ICparamsGo.txt','Delimiter',',');
-writetable(tables{2},'results/ICparamsSi.txt','Delimiter',',');
+% Choose additional parameters manually
+tables{2}.gridRadius(end) = 13.5;
+tables{1}.centerSigma(end) = 1.6;
+tables{2}.centerSigma(end) = 2;
+tables{2}.cellSigma(end) = 1.1;
+tables{1}.binSigma(end) = 1.3;
+tables{1}.binCount(end) = 14;
+
+tables{1}
+tables{2}
+
+writetable(tables{1},'results/ICparamsGo.txt','Delimiter',',','WriteRowNames',true);
+writetable(tables{2},'results/ICparamsSi.txt','Delimiter',',','WriteRowNames',true);

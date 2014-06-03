@@ -8,6 +8,7 @@
 \newcommand\FN{\mathit{FN}}
 \newcommand\ROC{ROC}
 \newcommand\PR{PR}
+
 \begin{document}
 \chapter{Image correspondence}
 
@@ -229,32 +230,65 @@ The automatic capturing of images using a robot arm combined with the individual
 %
 \section{Parameter study}
 \label{sec:icParameterStudy}
-
+\begin{table}
+\centering
 \pgfplotstableset{
-    create on use/index/.style={%
-        create col/assign/.code={%
-            \pgfmathtruncatemacro\entry{\pgfplotstablerow+1}%
-            \pgfkeyslet{/pgfplots/table/create col/next content}{\entry}
-        }
+    highlight/.append style={
+        postproc cell content/.append code={
+                \pgfkeysalso{@cell content=\textbf{##1}}%
+        },
     }
 }
-
-\pgfplotstabletranspose\loadeddata{../src/results/ICparamsGo.txt}
-
+\pgfplotstableread[col sep=comma]{../src/results/ICparamsGo.txt}\loadedtable
+\pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
 \pgfplotstabletypeset[
-	col sep=comma,
 	string type,
-	columns={
-		gridType,
-		gridAngles,
-		gridRings,
-		gridRadius,
-		centerSigma,
-		cellSigma,
-		normSigma,
-		binSigma,
-		binCount
-	}]\loaderddata
+	every head row/.style={
+		before row={%
+			 {} & \multicolumn{6}{c|}{Splits} & {} \\
+			},
+		after row={\hline}
+	},
+%	every last row/.style={after row=\hline},
+    columns/colnames/.style={
+        string type,
+        column name={Variable},
+        column type={l|}
+    },
+    every last column/.append style={
+    	column type={|c},
+    	highlight
+    },
+    col sep=comma
+]\loadedtable
+\caption{Parameter study optimal parameters from 6-fold cross validation using gradient orientation as bin value and gradient magnitude as magnitude type}
+\label{fig:ICparamsGo}
+
+\pgfplotstableread[col sep=comma]{../src/results/ICparamsSi.txt}\loadedtable
+\pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
+\pgfplotstabletypeset[
+	string type,
+	every head row/.style={
+		before row={%
+			 {} & \multicolumn{6}{c|}{Splits} & {} \\
+			},
+		after row={\hline}
+	},
+%	every last row/.style={after row=\hline},
+    columns/colnames/.style={
+        string type,
+        column name={Variable},
+        column type={l|}
+    },
+    every last column/.append style={
+    	column type={|c},
+    	highlight
+    },
+    col sep=comma
+]\loadedtable
+\caption{Parameter study optimal parameters from 6-fold cross validation using shape index as bin value and curvedness as magnitude type}
+\label{fig:ICparamsSi}
+\end{table}
 
 
 Test: 6 fold cross validation.
