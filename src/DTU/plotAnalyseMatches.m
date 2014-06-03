@@ -28,18 +28,18 @@ while true
     hold off
     title(['ROC-curve, AUC = ' num2str(match.ROCAUC)])
     xlabel('FPR')
-    ylabel('recall (TPR)')
+    ylabel('Recall (TPR)')
     axis image
     axis([0 1 0 1])
 
     prAxis = subplot(2,2,2);
-    plot(match.PR(:,1),match.PR(:,2),'r-','linewidth',2)
+    plot(match.PR(:,2),1-match.PR(:,1),'r-','linewidth',2)
     hold on
-    plot(match.PR(idx,1),match.PR(idx,2),'kx','linewidth',2,'markersize',15)
+    plot(match.PR(idx,2),1-match.PR(idx,1),'kx','linewidth',2,'markersize',15)
     hold off
     title(['PR-curve, AUC = ' num2str(match.PRAUC)])
-    xlabel('1-precision')
-    ylabel('recall (TPR)')
+    xlabel('Recall (TPR)')
+    ylabel('Precision')
     axis image
     axis([0 1 0 1])
 

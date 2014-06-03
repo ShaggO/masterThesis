@@ -1,7 +1,15 @@
-function svmPath = inriaValidateSvm(n,k,method,svmArgs,desSave)
+function [svmPath, PRAUC] = inriaValidateSvm(data,n,k,method,svmArgs,desSave)
 
 if nargin < 3
     desSave = true;
+end
+
+switch class(svmArgs)
+    case 'char'
+    case 'struct'
+        svmArgs = svmArgs2string(svmArgs);
+    otherwise
+        error('svmArgs must be string or struct.')
 end
 
 load('paths')
@@ -15,10 +23,8 @@ svmVars = {'prob','Ltest','ROC','PR','ROCAUC','PRAUC'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
     disp('Loaded svm file.')
+    PRAUC = svmLoad.PRAUC;
 else
-    % INRIA data wrapper
-    data = inriaData;
-    
     tic
     
     %% Load training data
@@ -49,7 +55,7 @@ else
     ROC = flipud(ROC); PR = flipud(PR);
     ROCAUC = ROCarea(ROC','roc');
     PRAUC = ROCarea(PR','pr');
-    disp([timestamp() ' Computed ROC AUC: ' num2str(ROCAUC)])
+    disp([timestamp() ' Computed ROC AUC: ' num2str(ROCAUC) ', PR AUC: ' num2str(PRAUC)])
 
     if ~exist(desDir,'dir')
         mkdir(desDir);
