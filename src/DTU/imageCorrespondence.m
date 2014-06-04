@@ -48,8 +48,10 @@ for s = setNum
                     match.liNum = l;
                     match.imSize = imSize;
 
-                    [match.coord,D1] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc{m},desSave);
-                    [match.coordKey,D2] = dtuFeatures(match.setNum,imNumKey,liNumKey,mFunc{m},true);
+                    [X1,D1] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc{m},desSave);
+                    match.coord = X1(:,1:2);
+                    [X2,D2] = dtuFeatures(match.setNum,imNumKey,liNumKey,mFunc{m},true);
+                    match.coordKey = X2(:,1:2);
 
                     [match.matchIdx, match.dist] = featureMatch(D1,D2);
                     match.distRatio = match.dist(:,1) ./ (match.dist(:,2) + eps);

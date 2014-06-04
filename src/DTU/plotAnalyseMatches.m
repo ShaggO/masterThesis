@@ -1,4 +1,4 @@
-function [] = plotAnalyseMatches(match,t, mName)
+function [] = plotAnalyseMatches(match,t,mFunc,mName)
 % Inputs:
 %   match   Match structure after completed matching
 %   t       threshold between best and 2nd best match
@@ -8,9 +8,9 @@ function [] = plotAnalyseMatches(match,t, mName)
 load('paths');
 
 imArgin = {match.setNum, match.imNum, match.liNum};
+[imRes.X,imRes.D] = dtuFeatures(imArgin{:},mFunc,false);
+[keyRes.X,keyRes.D] = dtuFeatures(match.setNum,25,0,mFunc,false);
 I = loadDtuImage(imArgin{:});
-imRes = load([dtuResults '/' mName '/descriptors_' dtuImageName(imArgin{:})]);
-keyRes = load([dtuResults '/' mName '/descriptors_' dtuImageName(match.setNum, 25, 0)]);
 Ikey = loadDtuImage(match.setNum, 25, match.liNum);
 
 T = [0; sort(match.distRatio,'ascend')];

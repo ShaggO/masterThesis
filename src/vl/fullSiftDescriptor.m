@@ -4,7 +4,7 @@ function [X,D] = fullSiftDescriptor(I,varargin)
 I = 255*rgb2gray(I);
 
 [X,D] = vl_sift(I,varargin{:});
-X = X(1:2,:)';
+X = X(1:3,:)';
 D = D';
 
 end

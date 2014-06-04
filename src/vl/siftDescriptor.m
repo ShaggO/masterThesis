@@ -3,7 +3,7 @@ function [X,D] = siftDescriptor(I,F,varargin)
 
 F = double(F);
 [X,D] = vl_sift(255*I,'frames',F(:,1:4)',varargin{:});
-X = X(1:2,:)';
+X = X(1:3,:)';
 D = D';
 
 end

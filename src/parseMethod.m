@@ -3,6 +3,22 @@ function [mFunc, mName] = parseMethod(m)
 %descriptor function and unique name. We assume normalized single RGB image
 %inputs.
 
+% Combine/concatenate multiple descriptors into a single descriptor
+% Keeps input order
+if iscell(m.descriptor)
+    mFunc = cell(numel(m.descriptor),1);
+    mName = mFunc;
+    mi = m;
+    for i = 1:numel(m.descriptor)
+        mi.descriptor = m.descriptor{i};
+        mi.descriptorArgs = m.descriptorArgs{i};
+        [mFunc{i},mName{i}] = parseMethod(mi);
+    end
+    mFunc = @(I,resDir,imName,desSave) combineFuncs(I,resDir,imName,desSave,mFunc{:});
+    mName = strjoin(mName','/');
+    return;
+end
+
 detSave = true;
 
 %% Parse detector arguments
@@ -84,7 +100,7 @@ switch lower(m.detector)
         addParameter(p,'scales',1)
         addParameter(p,'gridRadius',10)
         r = parseResults(p,m.detectorArgs);
-        
+
         detName = sprintf('grid-%s-%s-%s', ...
             r.type,nums2str(r.scales),num2str(r.gridRadius));
         detFunc = @(I) gridDetector(size(I),r.type,r.scales,r.gridRadius);
@@ -96,7 +112,7 @@ switch lower(m.detector)
         addParameter(p,'spacing',8)
         addParameter(p,'windowSize',[134 70])
         r = parseResults(p,m.detectorArgs);
-        
+
         detName = sprintf('grid-%s-%s-%s-%s', ...
             r.type,nums2str(r.scales),num2str(r.spacing),nums2str(r.windowSize));
         detFunc = @(I) windowDetector(size(I),r.type,r.scales,r.spacing,r.windowSize);
@@ -302,8 +318,21 @@ if ~isempty(detName)
 end
 desCache = r.cache;
 
+% Shorten mName:
+desName = strrep(desName,'concentric polar central','cpc');
+desName = strrep(desName,'concentric polar','cp');
+desName = strrep(desName,'polar central','pc');
+desName = strrep(desName,'polar','p');
+desName = strrep(desName,'concentric log-polar','clp');
+desName = strrep(desName,'log-polar','lp');
+desName = strrep(desName,'gaussian','g');
+desName = strrep(desName,'square window','sw');
+desName = strrep(desName,'triangle window','tw');
+desName = strrep(desName,'none','n');
+
 %% Combine names and functions
 mName = combineNames(detName,desName);
+
 mFunc = @(I,resDir,imName,desSave) methodFunc(I,resDir,imName,...
         detName,desName,detFunc,desFunc,detCache,desCache,detSave,desSave);
 
@@ -362,7 +391,7 @@ else
                 end
                 save(detPath,'F');
             end
-            
+
             disp(['Detected ' num2str(size(F,1)) ' features.']);
         end
 
@@ -390,4 +419,21 @@ if isempty(detName)
 else
     name = [detName '_' desName];
 end
+end
+
+function [X,D] = combineFuncs(I,resDir,imName,desSave,varargin)
+
+X = [];
+D = [];
+for i = 1:numel(varargin)
+    [Xi, Di] = varargin{i}(I,resDir,imName,desSave);
+    if i > 1
+        [X,ia,ib] = intersect(X,Xi,'rows');
+        D = [D(ia,:) Di(ib,:)];
+    else
+        X = Xi;
+        D = Di;
+    end
+end
+
 end

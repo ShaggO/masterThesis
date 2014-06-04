@@ -20,6 +20,6 @@ for i = 1:size(P,1)
     end
     D(i,:) = Di(:)';
 end
-X = F(:,1:2);
+X = F(:,1:3);
 
 end

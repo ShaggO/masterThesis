@@ -26,7 +26,7 @@ function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
 
 % check if 0 features
 if size(F,1) == 0
-    X = zeros(0,2,'single');
+    X = zeros(0,3,'single');
     D = [];
     return
 end
@@ -170,7 +170,7 @@ D = [];
 for s = 1:numel(Psplit)
     [validP,C,Wcell,Wcenter,cells] = createCells(Isizes,Psplit{s},gridType,gridSize,gridRadius,...
         centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy);
-    X = F(validP,1:2);
+    X = F(validP,1:3);
     
     % Compute bin values (at cell mask points only)
     if ~fullB

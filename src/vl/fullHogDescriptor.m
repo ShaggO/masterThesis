@@ -18,6 +18,6 @@ for i = 1:size(F,1)
     end
     D(i,:) = Di(:)';
 end
-X = F(:,1:2);
+X = F(:,1:3);
 
 end
