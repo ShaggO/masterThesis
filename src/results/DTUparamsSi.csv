@@ -1,0 +1,8 @@
+Row,gridType,gridSize,gridRadius,centerSigma,cellSigma,normSigma,binSigma,binCount
+1,CPC,$12 \times 2$,13.5,2,1.1,2.6,2,8
+2,CPC,$12 \times 2$,14,1.9,1,2.8,1.9,8
+3,CPC,$12 \times 2$,13.5,2,1.1,2.6,2,8
+4,CPC,$12 \times 2$,13.5,2,1.1,2.6,2,8
+5,CPC,$12 \times 2$,14,1.9,1,2.8,1.9,8
+6,CPC,$12 \times 2$,14,1.9,1,2.6,2,8
+chosen,CPC,$\mathbf{12 \times 2}$,13.5,2,1.1,2.6,2,8

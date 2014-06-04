@@ -38,5 +38,5 @@ tables{1}.binCount(end) = 14;
 tables{1}
 tables{2}
 
-writetable(tables{1},'results/ICparamsGo.txt','Delimiter',',','WriteRowNames',true);
-writetable(tables{2},'results/ICparamsSi.txt','Delimiter',',','WriteRowNames',true);
+writetable(tables{1},'results/DTUparamsGo.csv','Delimiter',',','WriteRowNames',true);
+writetable(tables{2},'results/DTUparamsSi.csv','Delimiter',',','WriteRowNames',true);
