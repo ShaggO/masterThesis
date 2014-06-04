@@ -11,9 +11,9 @@ function [matchIdx, dists] = featureMatch(D1, D2)
 %         repmat(D1(idx,1,:),[1 size(D2,2)])),3);
 % end
 
-%dists = zeros(size(D1,1),size(D2,1));
+%dists = zeros(size(D1,1),size(D2,1),'single');
 %for i = 1:size(D1,1)
-%    dists(i,:) = sum((D2 - repmat(D1(i,:),[size(D2,1) 1])) .^ 2,2);
+%    dists(i,:) = sum((single(D2) - repmat(single(D1(i,:)),[size(D2,1) 1])) .^ 2,2);
 %end
 % Use built in function (utilizing a mex file)
 if size(D1,1) > 0 && size(D2,1) > 0

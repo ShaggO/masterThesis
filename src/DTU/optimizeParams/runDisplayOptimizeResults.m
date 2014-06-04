@@ -7,7 +7,7 @@ for i = 1:splits
     si(i) = load(['results/optimize/parameterStudySi_' num2str(i) '-of-' num2str(splits) '.mat']);
 end
 %% Load sift results
-sift = load('results/optimize/full-sift-dtuTest-test.mat');
+sift = load('results/optimize/full-sift-pdist2.mat');
 siftCombined = load('results/optimize/combined_sift_test.mat');
 
 %% compute
@@ -16,7 +16,7 @@ matchPRAUC = [cat(1,go.testPRAUC),cat(1,si.testPRAUC),sift.matchPRAUC,siftCombin
 
 pathTypes = 1:6;
 [imNumKey,liNumKey,imNum,liNum,pathLabels] = dtuPaths('test');
-plotROCAUC = cell(4,numel(imNum));
+plotROCAUC = cell(size(matchROCAUC,2),numel(imNum));
 plotPRAUC = cell(size(plotROCAUC));
 
 setNum = 1:60;
@@ -44,8 +44,8 @@ end
 for p = pathTypes
     % Retrieve results for path from result matrix
     pIdx = idx2spil(:,2) == p;
-    roc = reshape(matchROCAUC(pIdx,:),[numel(liNum{p}) numel(imNum{p}) numel(setNum) 4]);
-    pr = reshape(matchPRAUC(pIdx,:),[numel(liNum{p}) numel(imNum{p}) numel(setNum) 4]);
+    roc = reshape(matchROCAUC(pIdx,:),[numel(liNum{p}) numel(imNum{p}) numel(setNum) size(matchROCAUC,2)]);
+    pr = reshape(matchPRAUC(pIdx,:),[numel(liNum{p}) numel(imNum{p}) numel(setNum) size(matchPRAUC,2)]);
 
     % Compute means based on number of lightings per image
     if numel(liNum{p}) > 1
@@ -58,8 +58,8 @@ for p = pathTypes
         pr = permute(mean(pr,3),[4 2 3 1]);
     end
     % Insert result into plotting cell
-    plotROCAUC(:,p) = mat2cell(roc, ones(1, 4));
-    plotPRAUC(:,p) = mat2cell(pr, ones(1, 4));
+    plotROCAUC(:,p) = mat2cell(roc, ones(1, size(matchROCAUC,2)));
+    plotPRAUC(:,p) = mat2cell(pr, ones(1, size(matchPRAUC,2)));
 end
 
-displayDtuResults(plotROCAUC,plotPRAUC,pathTypes,'test',{{'-k'},{'-b'},{'-r'},{'-m'}},{'go','si','sift','vl sift'});
+displayDtuResults(plotROCAUC,plotPRAUC,pathTypes,'test',{{'-k'},{'-b'},{'-r'},{'-m'}},{'go','si','full-sift','DoG + sift'});

@@ -23,7 +23,8 @@ for k = pathTypes % Generate figure for each image path
         h(i) = plot(x(before+1:end),plotROCAUC{i,k}(before+1:end),plotParams{i}{:});
     end
     padding = (x(end)-x(1))/20;
-    axis([x(1)-padding x(end)+padding 0 1]);
+    axis([x(1)-padding x(end)+padding 0.5 1]);
+    grid on;
     title(['ROC AUC ' pathLabels{k} ]);
     l = legend(h,mNames{:});
     set(l,'interpreter','none','location','southeast');
@@ -34,7 +35,8 @@ for k = pathTypes % Generate figure for each image path
         plot(x(1:before),plotPRAUC{i,k}(1:before),plotParams{i}{:});
         h(i) = plot(x(before+1:end),plotPRAUC{i,k}(before+1:end),plotParams{i}{:});
     end
-    axis([x(1)-padding x(end)+padding 0 1]);
+    axis([x(1)-padding x(end)+padding 0.5 1]);
+    grid on;
     title(['PR AUC ' pathLabels{k} ]);
     l = legend(h,mNames{:});
     set(l,'interpreter','none','location','southeast');
