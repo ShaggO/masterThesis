@@ -1,5 +1,10 @@
 function s = svmArgs2string(args)
 
+if ismember('logc',fieldnames(args))
+    args.c = 10^args.logc;
+    args = rmfield(args,'logc');
+end
+
 s = '';
 fn = sort(fieldnames(args));
 

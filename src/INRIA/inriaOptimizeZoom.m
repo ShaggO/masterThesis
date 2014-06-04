@@ -5,7 +5,7 @@ function [methodBest,svmArgsBest,optimalV] = inriaOptimizeZoom( ...
 splits = 6;
 desSave = true;
 
-isSvmArg = strcmp(parameter,'c');
+isSvmArg = ismember(parameter,{'s','c','logc','p'});
 minV = values(1,:);
 maxV = values(end,:);
 methodBest = method;
@@ -48,6 +48,7 @@ for i = 1:numel(varargin)+1
         end
     end
     
+    PRAUC
     [optimalPRAUC,optimalInd] = max(PRAUC);
     optimalV = values(optimalInd,:);
     if isSvmArg
