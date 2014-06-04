@@ -32,6 +32,10 @@ A number of performance evaluations have been performed in order to be able to j
 
 \citet{dahl2011finding} test the SIFT and DAISY descriptors with 7 state of the art detectors to find the best detector-descriptor combination. This is done by having a dataset with various image transformations and known 3D geometry, and hence having a known ground truth for patch correspondences. Compared to \citet{mikolajczyk2005performance}, the dataset is substantially larger and more varied, which suggests that their results are more generalized. For this study only the nearest neighbour distance ratio is used as matching strategy. The Receiver Operating Characteristics (ROC) curve is computed for varying ratio-thresholds and finally the area under the curve (AUC) is computed. The average AUC over all the scenes of the dataset is used as performance measure. The ROC and AUC measurements are described further in \Cref{sec:performance_measures}. \citet{dahl2011finding} conclude that SIFT and DAISY perform best when being paired with DoG or MSER.
 
+\section{Object detection}
+Notes:
+First abstract object detector using SVM: \cite{papageorgiou2000trainable}.
+
 \subbibliography
 
 \end{document}
