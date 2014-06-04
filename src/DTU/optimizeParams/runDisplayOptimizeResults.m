@@ -9,9 +9,15 @@ end
 %% Load sift results
 sifts = load('results/optimize/fullsift_dogsift_test.mat');
 
-%% compute
-matchROCAUC = [cat(1,go.testROCAUC),cat(1,si.testROCAUC),sifts.PR];
-matchPRAUC = [cat(1,go.testPRAUC),cat(1,si.testPRAUC),sifts.ROC];
+%% Set methods
+%matchROCAUC = [cat(1,go.testROCAUC),cat(1,si.testROCAUC),sifts.ROC];
+%matchPRAUC = [cat(1,go.testPRAUC),cat(1,si.testPRAUC),sifts.PR];
+%plotArgs = {{'-k'},{'-b'},{'-r'},{'-m'}};
+%legends = {'go','si','DoG + sift','full-sift'};
+matchROCAUC = sifts.ROC;
+matchPRAUC = sifts.PR;
+plotArgs = {{'-k'},{'-b'}};
+legends = {'DoG + sift','full-sift'};
 
 pathTypes = 1:6;
 [imNumKey,liNumKey,imNum,liNum,pathLabels] = dtuPaths('test');
@@ -61,4 +67,4 @@ for p = pathTypes
     plotPRAUC(:,p) = mat2cell(pr, ones(1, size(matchPRAUC,2)));
 end
 
-displayDtuResults(plotROCAUC,plotPRAUC,pathTypes,'test',{{'-k'},{'-b'},{'-r'},{'-m'}},{'go','si','full-sift','DoG + sift'});
+displayDtuResults(plotROCAUC,plotPRAUC,pathTypes,'test',plotArgs,legends);
