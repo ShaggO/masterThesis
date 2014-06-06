@@ -16,8 +16,13 @@ chosenGo = go(3).method;
 chosenGo = modifyDescriptor(chosenGo,'normSigma',[1.6 1.6]);
 
 chosenSi = si(1).method;
-methods = {[go.method],chosenGo,[si.method],chosenSi};
-setNums = {[go.setNumTest],(1:60)',[si.setNumTest],(1:60)'};
+
+chosenGoSi = chosenGo;
+chosenGoSi.descriptorArgs = {chosenGoSi.descriptorArgs,chosenSi.descriptorArgs};
+chosenGoSi.descriptor = {'cellhist','cellhist'};
+
+methods = {[go.method],chosenGo,[si.method],chosenSi,chosenGoSi};
+setNums = {[go.setNumTest],(1:60)',[si.setNumTest],(1:60)',(1:60)'};
 
 % Compute ROC and PR on test
 ROC  = cell(size(methods));

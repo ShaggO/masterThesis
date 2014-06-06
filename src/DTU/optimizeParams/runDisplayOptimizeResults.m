@@ -1,11 +1,12 @@
 clear all; clc;
 
 %% Load Go and Si splits
-splits = 6;
-for i = 1:splits
-    go(i) = load(['results/optimize/parameterStudyGo_' num2str(i) '-of-' num2str(splits) '.mat']);
-    si(i) = load(['results/optimize/parameterStudySi_' num2str(i) '-of-' num2str(splits) '.mat']);
-end
+%splits = 6;
+%for i = 1:splits
+%    go(i) = load(['results/optimize/parameterStudyGo_' num2str(i) '-of-' num2str(splits) '.mat']);
+%    si(i) = load(['results/optimize/parameterStudySi_' num2str(i) '-of-' num2str(splits) '.mat']);
+%end
+own = load('results/optimize/DTUparamsTest.mat');
 %% Load sift results
 sifts = load('results/optimize/fullsift_dogsift_test.mat');
 
@@ -14,10 +15,10 @@ sifts = load('results/optimize/fullsift_dogsift_test.mat');
 %matchPRAUC = [cat(1,go.testPRAUC),cat(1,si.testPRAUC),sifts.PR];
 %plotArgs = {{'-k'},{'-b'},{'-r'},{'-m'}};
 %legends = {'go','si','DoG + sift','full-sift'};
-matchROCAUC = sifts.ROC;
-matchPRAUC = sifts.PR;
-plotArgs = {{'-k'},{'-b'}};
-legends = {'DoG + sift','full-sift'};
+matchROCAUC = [own.ROC{:} sifts.ROC];
+matchPRAUC = [own.PR{:} sifts.PR];
+plotArgs = {{'-r'},{'--r'},{'-b'},{'--b'},{'-m'},{'-c'},{'--c'}};
+legends = {'Optimal GO','Chosen GO','Optimal SI','Chosen SI','Chosen Go-Si','DoG + sift','full-sift'};
 
 pathTypes = 1:6;
 [imNumKey,liNumKey,imNum,liNum,pathLabels] = dtuPaths('test');
