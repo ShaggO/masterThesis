@@ -6,7 +6,7 @@ assert(numel(varargin) >= 2,'Specify at least one parameter,value pair');
 assert(mod(numel(varargin),2) == 0,'Wrong formatting of (param,value) pairs');
 
 splits = 6;
-desSave = true;
+runInParallel = false;
 
 parameters = varargin(1:2:end);
 values = varargin(2:2:end);
@@ -25,7 +25,7 @@ for j = 1:nValues
             paramMethods(j) = modifyDescriptor(paramMethods(j),parameters{i},values{i}{j});
         end
     end
-    PRAUC(j) = inriaCrossValidateSvm(data,splits,paramMethods(j),paramSvmArgs(j),desSave);
+    PRAUC(j) = inriaCrossValidateSvm(data,splits,paramMethods(j),paramSvmArgs(j),runInParallel);
 end
 
 % Compute performance of each method and find optimal

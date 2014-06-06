@@ -3,7 +3,7 @@ function [methodBest,svmArgsBest,optimalV] = inriaOptimizeZoom( ...
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
 
 splits = 6;
-desSave = true;
+runInParallel = false;
 
 isSvmArg = ismember(parameter,{'s','c','logc','p'});
 minV = values(1,:);
@@ -41,10 +41,10 @@ for i = 1:numel(varargin)+1
         if isSvmArg
             svmArgsV(v) = svmArgs;
             svmArgsV(v).(parameter) = values(v,:);
-            PRAUC(v) = inriaCrossValidateSvm(data,splits,method,svmArgsV(v),desSave);
+            PRAUC(v) = inriaCrossValidateSvm(data,splits,method,svmArgsV(v),runInParallel);
         else
             methodV(v) = modifyDescriptor(methodBest,parameter,values(v,:));
-            PRAUC(v) = inriaCrossValidateSvm(data,splits,methodV(v),svmArgs,desSave);
+            PRAUC(v) = inriaCrossValidateSvm(data,splits,methodV(v),svmArgs,runInParallel);
         end
     end
     
