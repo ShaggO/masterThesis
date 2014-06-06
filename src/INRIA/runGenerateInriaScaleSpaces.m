@@ -18,7 +18,7 @@ scales = approxScales(sigmaRange,scaleBase,scaleOffset);
 
 load('paths')
 images = [data.posTrain; data.negTrainCutouts; data.negTrainFull; data.posTest; data.negTestCutouts; data.negTestFull];
-images = [data.negTrainFull; data.negTestFull];
+%images = [data.negTrainFull; data.negTestFull];
 
 sDir = [dtuResults '/scaleSpaces'];
 if ~exist(sDir,'dir')
@@ -37,7 +37,7 @@ parfor i = 1:numel(images)
     hash = num2str(imageHash(I(:)));
 
     sPath = [sDir '/' hash '.mat'];
-    [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth,chain,pixelDiff);
+    [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth);
     parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,...
         'scaleBase',scaleBase,'scaleOffset',scaleOffset,...
         'sigmaRange',sigmaRange,'colour',colour,'d',d,...

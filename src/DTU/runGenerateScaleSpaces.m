@@ -12,7 +12,7 @@ pixelDiff = 1;
 
 scales = approxScales(sigmaRange,scaleBase,scaleOffset);
 
-[imNumKey,liNumKey,imNumPaths,liNumPaths,pathLabels] = dtuPaths('train');
+[imNumKey,liNumKey,imNumPaths,liNumPaths,pathLabels] = dtuPaths('test');
 
 load('paths')
 gcp;
@@ -41,7 +41,7 @@ parfor setNum = 1:60
             if ~exist(sDir,'dir')
                 mkdir(sDir)
             end
-            [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth,chain,pixelDiff);
+            [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth);
             parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,...
                 'scaleBase',scaleBase,'scaleOffset',scaleOffset,...
                 'sigmaRange',sigmaRange,'colour',colour,'d',d,...
