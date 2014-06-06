@@ -50,7 +50,7 @@ methods
         end
     end
 
-    function [L,D] = getDescriptors(obj,method,desSave,type,index)
+    function [L,D] = getDescriptors(obj,method,desSave,type,index,runInParallel)
         if nargin < 5
             index = 'all';
         end
@@ -99,9 +99,9 @@ methods
             images = obj.(type);
             
             if strcmp(index,'all')
-                D = inriaDescriptors(images,mFunc);
+                D = inriaDescriptors(images,mFunc,runInParallel);
             else
-                D = inriaDescriptors(images(index),mFunc);
+                D = inriaDescriptors(images(index),mFunc,runInParallel);
             end
             if desSave
                 save(desPath,desVars{:})
