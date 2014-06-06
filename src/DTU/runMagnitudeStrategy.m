@@ -1,10 +1,10 @@
 clc, clear all
 
-I = imread('C:\Users\Ben\Documents\GitHub\masterThesis\src\DTU\img1200x1600\SET001\Img001_diffuse.bmp');
-I = rgb2gray(im2double(I));
+I = loadDtuImage(1,1,0);
+I = rgb2gray(I);
 
 d = kJetCoeffs(3);
-L = dGaussScaleSpace(I,d,1,0);
+L = dGaussScaleSpace(I,d,1,0,true);
 for i = fieldnames(L)'
     L.(char(i)) = L.(char(i)){:};
 end

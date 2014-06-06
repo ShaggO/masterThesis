@@ -3,21 +3,21 @@ function [c, cPol, cellSize] = createCellOffsets(type,gn,gr,cellSigma)
 
 switch type
     case 'square window'
-        x = 0:2*gn:(gr(2)-1)/2-3*cellSigma(2);
+        x = 0:2*gn:(gr(2)-1)/2-3*cellSigma(2)-1;
         x = [-x(end:-1:2) x];
-        y = 0:2*gn:(gr(1)-1)/2-3*cellSigma(1);
+        y = 0:2*gn:(gr(1)-1)/2-3*cellSigma(1)-1;
         y = [-y(end:-1:2) y];
         c = [repmat(x,[numel(y) 1]) repmat(y',[1 numel(x)])];
         c = reshape(c,[],2);
         cellSize = ones(size(c,1),1);
     case 'triangle window'
-        x1 = 0:2*sqrt(3)*gn:(gr(2)-1)/2-3*cellSigma(2);
+        x1 = 0:2*sqrt(3)*gn:(gr(2)-1)/2-3*cellSigma(2)-1;
         x1 = [-x1(end:-1:2) x1];
-        x2 = sqrt(3)*gn:2*sqrt(3)*gn:(gr(2)-1)/2-3*cellSigma(2);
+        x2 = sqrt(3)*gn:2*sqrt(3)*gn:(gr(2)-1)/2-3*cellSigma(2)-1;
         x2 = [-x2(end:-1:1) x2];
-        y1 = 0:2*gn:(gr(1)-1)/2-3*cellSigma(1);
+        y1 = 0:2*gn:(gr(1)-1)/2-3*cellSigma(1)-1;
         y1 = [-y1(end:-1:2) y1];
-        y2 = gn:2*gn:(gr(1)-1)/2-3*cellSigma(1);
+        y2 = gn:2*gn:(gr(1)-1)/2-3*cellSigma(1)-1;
         y2 = [-y2(end:-1:1) y2];
         c1 = [repmat(x1,[numel(y1) 1]) repmat(y1',[1 numel(x1)])];
         c1 = reshape(c1,[],2);

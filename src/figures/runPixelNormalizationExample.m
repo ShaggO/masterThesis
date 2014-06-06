@@ -7,8 +7,8 @@ I2 = rgb2gray(I2rgb);
 
 cutout = {520:899,500:1099};
 
-S1 = dGaussScaleSpace(I1,kJetCoeffs(2),1,1);
-S2 = dGaussScaleSpace(I2,kJetCoeffs(2),1,1);
+S1 = dGaussScaleSpace(I1,kJetCoeffs(2),1,1,true);
+S2 = dGaussScaleSpace(I2,kJetCoeffs(2),1,1,true);
 
 M1 = diffStructure('M',S1,[1 2]);
 M2 = diffStructure('M',S2,[1 2]);
@@ -27,32 +27,27 @@ maxC = max([C1(:); C2(:)]);
 maxCnorm2 = max([C1norm2(:); C2norm2(:)]);
 maxCnorm10 = max([C1norm10(:); C2norm10(:)]);
 
-path = '../report/img/pixelNormalizationExample1.png';
-imwrite(I1rgb(cutout{:},:),path);
-path = '../report/img/pixelNormalizationExample2.png';
-imwrite(I2rgb(cutout{:},:),path);
-
-path = '../report/img/pixelNormalizationExample3.png';
-imwrite(C1 / maxC,path);
-path = '../report/img/pixelNormalizationExample4.png';
-imwrite(C2 / maxC,path);
-
-path = '../report/img/pixelNormalizationExample5.png';
-imwrite(C1norm2 / maxCnorm2,path);
-path = '../report/img/pixelNormalizationExample6.png';
-imwrite(C2norm2 / maxCnorm2,path);
-
-path = '../report/img/pixelNormalizationExample7.png';
-imwrite(C1norm10 / maxCnorm10,path);
-path = '../report/img/pixelNormalizationExample8.png';
-imwrite(C2norm10 / maxCnorm10,path);
+% path = '../report/img/pixelNormalizationExample1.png';
+% imwrite(I1rgb(cutout{:},:),path);
+% path = '../report/img/pixelNormalizationExample2.png';
+% imwrite(I2rgb(cutout{:},:),path);
 % 
-% figure;
-% imshow(M1{1}(cutout{:}),[]);
-% figure;
-% imshow(M2{1}(cutout{:}),[]);
+% path = '../report/img/pixelNormalizationExample3.png';
+% imwrite(C1 / maxC,path);
+% path = '../report/img/pixelNormalizationExample4.png';
+% imwrite(C2 / maxC,path);
 % 
-% figure;
-% imshow(M3{1}(cutout{:}),[]);
-% figure;
-% imshow(M4{1}(cutout{:}),[]);
+% path = '../report/img/pixelNormalizationExample5.png';
+% imwrite(C1norm2 / maxCnorm2,path);
+% path = '../report/img/pixelNormalizationExample6.png';
+% imwrite(C2norm2 / maxCnorm2,path);
+% 
+% path = '../report/img/pixelNormalizationExample7.png';
+% imwrite(C1norm10 / maxCnorm10,path);
+% path = '../report/img/pixelNormalizationExample8.png';
+% imwrite(C2norm10 / maxCnorm10,path);
+
+figure;
+imshow(C1,[]);
+figure;
+imshow(C1norm2,[]);
