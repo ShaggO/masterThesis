@@ -1,9 +1,5 @@
 clc, clear
 
-% s = -1
-% I = shapeIndexImage(s);
-% [min(I(:)) max(I(:))]
-
 d1 = 450;
 d2 = 580;
 d3 = 750;
