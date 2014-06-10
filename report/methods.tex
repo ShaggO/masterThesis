@@ -18,9 +18,47 @@ where $I(x,y)$ is the intensity of the original image $I$ in $(x,y)$ and $\ast$ 
 \begin{align*}
 	f(x,y) \ast g(x,y) &= \int\limits_{\tau_1 = -\infty}^\infty \int\limits_{\tau_2 = -\infty}^\infty f(\tau_1,\tau_2) \cdot g(x-\tau_1,y-\tau_2) d\tau_1 d\tau_2
 \end{align*}
-for the two functions $f$ and $g$.\todo{Add reference to Gonzales and woods}
+for the two functions $f$ and $g$.\todo{Add reference to Gonzales and woods}.
 
 These scale space functions are defined on an infinite continuum but are in practice used on a finite set of scales, for which we wish to retrieve structural information in an image (\cite{lowe2004distinctive,pedersen2013shape,mikolajczyk2005performance} etc.).
+
+\Cref{fig:scaleSpaceExample} shows an example of a finite scale-space representation of the image in \Cref{fig:scaleSpaceExample0} using the five scales $\sigma = 1,2,4,8,$ and $16$. At smaller scales (original, $\sigma = 1,2$) we are able to see detailed structure in the gates, pavement, car, and hedge etc. When increasing the scale to $\sigma = 4$, the small details are smoothed out and only the larger details of the mentioned physical parts are noticeable. At $\sigma = 8,$ and $16$ the details are completely smoothed out and only the larger overall structures are visible. This example clearly shows the power of the scale-space representation being able to model both small details as well as larger structures.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_0.png}
+		\caption{Original}
+		\label{fig:scaleSpaceExample0}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_1.png}
+		\caption{$\sigma = 1$}
+		\label{fig:scaleSpaceExample1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_2.png}
+		\caption{$\sigma = 2$}
+		\label{fig:scaleSpaceExample2}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_4.png}
+		\caption{$\sigma = 4$}
+		\label{fig:scaleSpaceExample4}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_8.png}
+		\caption{$\sigma = 8$}
+		\label{fig:scaleSpaceExample8}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_16.png}
+		\caption{$\sigma = 16$}
+		\label{fig:scaleSpaceExample16}
+	\end{subfigure}
+	\caption{Example of a finite scale-space representation (5 scales) of an image from the INRIA dataset (\Cref{sec:odDataset}).}
+	\label{fig:scaleSpaceExample}
+\end{figure}
 
 \section{Differential structure}
 \label{sec:diffStructure}
@@ -42,12 +80,24 @@ L_x, L_y
 
 \subsection{Gradient orientation and magnitude}
 
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{img/gradientOrientationTheory.pdf}
+	\caption{Illustration of the gradient orientation}
+\end{figure}
+
 \begin{align}
 \Theta &= \Atan{\frac{L_y}{L_x}} \\
 M &= \sigma^2 \sqrt{L_x^2 + L_y^2}
 \end{align}
 
 \subsection{Shape index and curvedness}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{img/shapeIndexTheory.pdf}
+	\caption{Illustration of the shape index}
+\end{figure}
 
 \begin{align}
 S &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4 L_{xy}^2 + (L_{xx} - L_{yy})^2}}} \\
@@ -71,7 +121,7 @@ $S$ & $S$ & $S$ \\
 $C$ & $C$ & $a C$ \\
 %\bottomrule
 \end{tabular}
-\caption{The transformation of various measures by rotation and illumination. The derivations are included in \cref{apx:image_transformations}}.
+\caption{The transformation of various measures by rotation and illumination. The derivations are included in \cref{apx:image_transformations}.}
 \end{table}
 
 \subsection{Translation}
