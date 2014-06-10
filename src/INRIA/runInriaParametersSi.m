@@ -64,7 +64,7 @@ disp([timestamp(startTime) ' Computing test results:']);
 diary off
 
 %% Test with optimal parameters
-svmPath = inriaTestSvm(data,method,svmArgs,false);
+svmPath = inriaTestSvm(method,svmArgs,false);
 load paths;
 optDir = [inriaResults '/optimize'];
 if ~exist(optDir,'dir')

@@ -54,6 +54,9 @@ methods
         if nargin < 5
             index = 'all';
         end
+        if nargin < 6
+            runInParallel = false;
+        end
 
         [mFunc, mName] = parseMethod(method);
         desDir = [obj.paths.inriaResults '/' mName];

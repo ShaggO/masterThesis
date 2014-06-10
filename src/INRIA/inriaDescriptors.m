@@ -9,7 +9,7 @@ inriaResults = p.inriaResults;
 
 D = cell(numel(images),1);
 if runInParallel
-    gcp
+    gcp;
     parfor i = 1:numel(images)
         disp(['Image ' num2str(i) '/' num2str(numel(images))]);
         I = im2single(images(i).image);
