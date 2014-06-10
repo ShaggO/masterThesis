@@ -6,15 +6,21 @@
 \section{Gaussian scale-space}
 \label{sec:GaussianScaleSpace}
 
-The Gaussian scale-space representation of images is a 
-Scale-space theory explanation
-
+When taking pictures of the real world, the resulting images are of various sizes and uses various zoom factors. This causes details to be present in the images at various scales. Using the Gaussian scale-space representation \cite{griffin1997scale,ginneken2000applications} described in this section, we are able to make a multi-scale representation of the details in an image. The representation concists of a set of smoothed versions of the original image, where each (scale-space) image is smoothed with a Gaussan kernel $G$ of size $\sigma$, which corresponds to the scale its smoothed image represents. For a point $(x,y)$, the Kernel at scale $\sigma$ is defined as
 \begin{align}
-	G(x,y;\sigma) &= \frac{1}{2\pi \sigma} \exp \left(\frac{-(x^2+y^2)}{2\sigma} \right) \\
-	L(x,y;\sigma) &= I(x,y) \ast G(x,y;\sigma)
+	G(x,y;\sigma) &= \frac{1}{2\pi \sigma^2} \exp \left(\frac{-(x^2+y^2)}{2\sigma^2} \right)
 \end{align}
-Where $G$ is the Gaussian filter, x and y is the
+and the corresponding scale-space point $L(x,y;\sigma)$ is defined as
+\begin{align}
+	L(x,y;\sigma) &= G(x,y;\sigma) \ast I(x,y),\hspace{1cm}\sigma \geq 0
+\end{align}
+where $I(x,y)$ is the intensity of the original image $I$ in $(x,y)$ and $\ast$ denotes the convolution operation defined as
+\begin{align*}
+	f(x,y) \ast g(x,y) &= \int\limits_{\tau_1 = -\infty}^\infty \int\limits_{\tau_2 = -\infty}^\infty f(\tau_1,\tau_2) \cdot g(x-\tau_1,y-\tau_2) d\tau_1 d\tau_2
+\end{align*}
+for the two functions $f$ and $g$.\todo{Add reference to Gonzales and woods}
 
+These scale space functions are defined on an infinite continuum but are in practice used on a finite set of scales, for which we wish to retrieve structural information in an image (\cite{lowe2004distinctive,pedersen2013shape,mikolajczyk2005performance} etc.).
 
 \section{Differential structure}
 \label{sec:diffStructure}
@@ -72,6 +78,7 @@ Reference \Cref{apx:illumination} for $\Theta,~M,~S$, and $C$.
 By using a small sigma for calculating the derivatives in the jet, we only use a small spatial area for the calculations which minimizes the risk of crossing a shadow edge. By combining multiple jets or shape indices into histograms we are able to calculate a descriptor across a shadow edge but still maintaining illumination invariance.
 
 \subsection{Scale}
+\label{sec:scaleInvariance}
 Noget med scalespace \cite{griffin1997scale}.
 
 \subsection{Perspective}
