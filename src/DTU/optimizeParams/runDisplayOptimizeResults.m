@@ -17,7 +17,7 @@ sifts = load('results/optimize/fullsift_dogsift_test.mat');
 %legends = {'go','si','DoG + sift','full-sift'};
 matchROCAUC = [own.ROC{:} sifts.ROC];
 matchPRAUC = [own.PR{:} sifts.PR];
-plotArgs = {{'-r'},{'--r'},{'-b'},{'--b'},{'-m'},{'-c'},{'--c'}};
+plotArgs = {{'-r'},{'--r'},{'-b'},{'--b'},{'-k'},{'-c'},{'--c'}};
 legends = {'Optimal GO','Chosen GO','Optimal SI','Chosen SI','Chosen Go-Si','DoG + sift','full-sift'};
 
 pathTypes = 1:6;

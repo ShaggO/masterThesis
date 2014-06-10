@@ -46,7 +46,7 @@ State of the art detectors are however using $m$ subscale precision, which we ac
 
 Furthermore it should be noted, that we modify this definition slightly when combining the descriptor with a DoG detector. The DoG detector computes interest points at subscale precision. Given the nature of the DoG detector computing interest points from the difference of two Gaussian scale space images, the detected scales will be in between our previously described set of scale spaces. This is simply handlet by defining the scale spaces to be calculated by $2^{\nicefrac{(n+0.5)}{m}}$ giving us a better approximation of interest point scales for this particular detector. The $l$ and $h$ variables are similarly modified to encapsulate all detected scales. This selection of scales corresponds to using the scales of the right column of scales in \cref{fig:dogSpaces} (where $m = 4$) instead of the left column.
 
-We now have a set of scales for which we calculate the corresponding value and magnitude scale spaces as described in \Cref{sec:derivativesAndScaleSpaces}. The values and magnitudes for each detected interest point can then be found by lookup in the closest computed scale space image. Before making this lookup, we will pre-process the magnitude scale space images to be robust to illumination changes.
+We now have a set of scales for which we calculate the corresponding value and magnitude scale spaces as described in \Cref{sec:diffStructure}. The values and magnitudes for each detected interest point can then be found by lookup in the closest computed scale space image. Before making this lookup, we will pre-process the magnitude scale space images to be robust to illumination changes.
 
 \subsection{Local magnitude normalization}
 
