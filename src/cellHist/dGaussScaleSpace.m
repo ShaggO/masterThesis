@@ -65,14 +65,14 @@ for j = 1:numel(scales)
         end
         hsize = 2*ceil(3*s)+1;
         filter = dGauss2d(0,0,double(hsize),double(s));
-        I = imfilter(I,filter,'conv');
+        I = imfilter(I,filter,'conv','replicate');
         % I = conv2(I,filter,'same');
     end
     for i = 1:size(d,1)
         if all(d(i,:) == 0)
             dI = I;
         else
-            dI = imfilter(I,-d2d(d(i,1),d(i,2)),'conv');
+            dI = imfilter(I,-d2d(d(i,1),d(i,2)),'conv','replicate');
         end
         if rescale > 0
             L(j).(fd{i}) = imresize(dI,rescale/scales(j));

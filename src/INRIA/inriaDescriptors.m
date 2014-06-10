@@ -4,7 +4,7 @@ if nargin < 3
     runInParallel = false;
 end
 
-p = load('paths')
+p = load('paths');
 inriaResults = p.inriaResults;
 
 D = cell(numel(images),1);

@@ -34,9 +34,25 @@ Notes:
 How to calculate n'th order n-dimensional derivatives of Gaussian.
 No covariance in our equations (no skewed Gaussians)
 
+\subsection{Gaussian derivatives}
+
+\begin{align}
+L_x, L_y
+\end{align}
+
 \subsection{Gradient orientation and magnitude}
 
+\begin{align}
+\Theta &= \Atan{\frac{L_y}{L_x}} \\
+M &= \sigma^2 \sqrt{L_x^2 + L_y^2}
+\end{align}
+
 \subsection{Shape index and curvedness}
+
+\begin{align}
+S &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4 L_{xy}^2 + (L_{xx} - L_{yy})^2}}} \\
+C &= \frac12 \sigma^2 \sqrt{L_{xx}^2 + 2 L_{xy}^2 + L_{yy}^2}
+\end{align}
 
 \section{Invariants and robustness}
 When describing interest points and their local regions in real world images we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any of these transformations applied, in which case we have a better chance of recognizing the interest point in other images. In this section we will go through a list of possible transformations that we wish for our descriptor to be invariant to.
