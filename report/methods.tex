@@ -67,7 +67,7 @@ When analysing an image, we are usually interested in the structure of the image
 \subsection{Gaussian derivatives}
 \label{sec:gaussianDerivatives}
 
-The Gaussian derivatives $G_{x^m y^n}$, where $m$ is the order of derivations in the $x$-axis and $n$ is the order of derivations in the $y$-axis, are used for obtaining structural information from an image.
+The \emph{Gaussian derivatives} $G_{x^m y^n}$, where $m$ is the order of derivations in the $x$-axis and $n$ is the order of derivations in the $y$-axis, are used for obtaining structural information from an image.
 The Gaussian derivatives are used for computing Gaussian derivative scale-space images $L_{x^m y^n}$:
 \begin{align}
 	L_{x^m y^n}(x,y;\sigma) &= G_{x^m y^n}(x,y;\sigma) \ast I(x,y)
@@ -98,23 +98,28 @@ Which give us the final equations for the alternative way of computing the Gauss
 
 \subsection{Gradient orientation and magnitude}
 \label{sec:gradientTheory}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth,clip=true,trim=31 0 0 0]{img/gradientOrientationTheory.pdf}
-	\caption{Illustration of the gradient orientation}
-	\label{gradientOrientationTheory}
-\end{figure}
-
-\begin{align}
+%
+The \emph{gradient orientation} $\Theta \in [-\pi,\pi]$ is the orientation of the local first order derivatives. $\Theta$ is independent of the size of the derivatives, which is given by the \emph{gradient magnitudes} $M$. $\Theta$ and $M$ are defined in terms of the image derivatives as
+%
+\begin{align*}
 \Theta &= \text{atan2}(L_y,L_x) \\
-M &= \sigma^2 \sqrt{L_x^2 + L_y^2}
-\end{align}
+M &= \sqrt{L_x^2 + L_y^2}
+\end{align*}
+where atan2 is the arctangent function spanning the whole range of angles $[-\pi,\pi]$.
+%
+\Cref{fig:gradientOrientationTheory} illustrates the relationship between the gradient orientation, gradient magnitude, and $x$- and $y$-derivatives.
+%
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=0.8\textwidth,clip=true,trim=31 0 0 0]{img/gradientOrientationTheory.pdf}
+	\caption{Gradient orientation and magnitude shown in the coordinate system $(L_x,L_y)$ of first order image derivatives.}
+	\label{fig:gradientOrientationTheory}
+\end{figure}
 
 \subsection{Shape index and curvedness}
 \label{sec:shapeIndexTheory}
 %
-The \emph{shape index} $S \in [-1,1]$ \cite{koenderink1992surface} is a scalar characterization of local second order derivatives. Like $\Theta$ and $M$, $S$ is independent of scale which is given by the \emph{curvedness} $C$. Additionally the shape index is independent of orientation.
+The \emph{shape index} $S \in [-1,1]$ \cite{koenderink1992surface} is a scalar characterization of local second order derivatives. Like $\Theta$ and $M$, $S$ is independent of the size of the derivatives, which is given by the \emph{curvedness} $C$. Additionally the shape index is independent of orientation.
 
 $S$ is defined by the orientation of the eigenvalues $\kappa_1$ and $\kappa_2$, also called the principal curvatures, of the local Hessian matrix $\nabla^2 L$. It can also be expressed by the local image derivatives:
 %
@@ -130,11 +135,11 @@ C &= \sqrt{\frac{\kappa_1^2 + \kappa_2^2}{2}} \\
 &= \frac{1}{\sqrt2} \sqrt{L_{xx}^2 + 2 L_{xy}^2 + L_{yy}^2}
 \end{align}
 %
-\Cref{fig:shapeIndexTheory} illustrates the relationship between the principal curvatures, shape index and curvedness, as well as the geometry of various shape indices.
+\Cref{fig:shapeIndexTheory} illustrates the relationship between the principal curvatures, shape index and curvedness, as well as the geometry of various shape indices. As seen in the figure, $S$ ranges over light blobs ($S = -1$), ridges ($S = -0.5$), saddle points ($S = 0$), valleys ($S = 0.5$), and dark blobs ($S = 1$) with continuous deformations in between.
 %
 \begin{figure}
 	\centering
-	\includegraphics[width=\textwidth]{img/shapeIndexTheory.pdf}
+	\includegraphics[width=0.8\textwidth,clip=true,trim=31 0 0 0]{img/shapeIndexTheory.pdf}
 	\caption{Shape index and curvedness shown in the coordinate system $(\kappa_1,\kappa_2)$ of principal curvatures. The blue vector illustrates a shape index $S = \frac{2}{\pi} \phi$ and curvedness $C$, where $\phi$ is the signed angle between the vector and the line $\kappa_2 = -\kappa_1$. Note that the order of $\kappa_1$ and $\kappa_2$ does not matter, as shape index is independent of the orientation of the local geometry.}
 	\label{fig:shapeIndexTheory}
 \end{figure}
@@ -144,7 +149,7 @@ When describing interest points and their local regions in real world images we 
 
 \todo{Add comment to robustness}
 
-\begin{table}
+\begin{table}[H]
 \centering
 \begin{tabular}{@{}l|ll@{}}
 %\toprule
