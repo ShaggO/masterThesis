@@ -6,7 +6,7 @@ assert(numel(varargin) >= 2,'Specify at least one parameter,value pair');
 assert(mod(numel(varargin),2) == 0,'Wrong formatting of (param,value) pairs');
 
 splits = 6;
-runInParallel = false;
+runInParallel = true;
 
 parameters = varargin(1:2:end);
 values = varargin(2:2:end);

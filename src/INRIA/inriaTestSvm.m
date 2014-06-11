@@ -4,7 +4,7 @@ if nargin < 3
     desSave = true;
 end
 
-runInParallel = false;
+runInParallel = true;
 
 load('paths')
 load([inriaDataSet '/inriaMetadata'])
@@ -44,7 +44,7 @@ else
     totalNegTrain = 0;
     for i = 1:nNegTrainFull
         [LnegTrainFull,DnegTrainFull] = ...
-            data.getDescriptors(method,desSave,'negTrainFull',i,runInParallel);
+            data.getDescriptors(method,desSave,'negTrainFull',i,false);
         DnegTrainFull = sparse(double(DnegTrainFull));
         totalNegTrain = totalNegTrain + size(DnegTrainFull,1);
         
@@ -77,7 +77,7 @@ else
     totalNegTest = 0;
     for i = 1:nNegTestFull
         [LnegTestFull,DnegTestFull] = ...
-            data.getDescriptors(method,desSave,'negTestFull',i,runInParallel);
+            data.getDescriptors(method,desSave,'negTestFull',i,false);
         DnegTestFull = sparse(double(DnegTestFull));
         totalNegTest = totalNegTest + size(DnegTestFull,1);
         

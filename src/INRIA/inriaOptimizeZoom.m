@@ -3,7 +3,7 @@ function [methodBest,svmArgsBest,optimalV] = inriaOptimizeZoom( ...
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
 
 splits = 6;
-runInParallel = false;
+runInParallel = true;
 
 isSvmArg = ismember(parameter,{'s','c','logc','p'});
 minV = values(1,:);
