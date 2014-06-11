@@ -96,6 +96,7 @@ else
     PRAUC = ROCarea(PR','pr');
     diary(diaryFile)
     disp([timestamp() ' Computed ROC AUC: ' num2str(ROCAUC)])
+    disp([timestamp() ' Computed PR AUC: ' num2str(PRAUC)])
     diary off
 
     if ~exist(desDir,'dir')

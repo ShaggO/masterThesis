@@ -18,8 +18,8 @@ plot([-d2 d2],[0 0],'k-')
 plot([0 0],[-d2 d2],'k-')
 plot(sqrt(2)/2*[-d1 d1],sqrt(2)/2*[d1 -d1],'k--')
 plot(sqrt(2)/2*[-d1 d1],sqrt(2)/2*[-d1 d1],'k--')
-text(d2-50,70,'\lambda_1','HorizontalAlignment','center','fontsize',14)
-text(70,d2-50,'\lambda_2','HorizontalAlignment','center','fontsize',14)
+text(d2-50,70,'\kappa_1','HorizontalAlignment','center','fontsize',14)
+text(70,d2-50,'\kappa_2','HorizontalAlignment','center','fontsize',14)
 colormap('gray')
 for i = 1:8
     I = shapeIndexImage(s(i));

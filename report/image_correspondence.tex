@@ -239,7 +239,7 @@ The automatic capturing of images using a robot arm combined with the individual
         },
     }
 }
-\pgfplotstableread[col sep=comma]{../src/results/ICparamsGo.txt}\loadedtable
+\pgfplotstableread[col sep=comma]{../src/results/DTUparamsGo.csv}\loadedtable
 \pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
 \pgfplotstabletypeset[
 	string type,
@@ -264,7 +264,7 @@ The automatic capturing of images using a robot arm combined with the individual
 \caption{Parameter study optimal parameters from 6-fold cross validation using gradient orientation as bin value and gradient magnitude as magnitude type}
 \label{fig:ICparamsGo}
 
-\pgfplotstableread[col sep=comma]{../src/results/ICparamsSi.txt}\loadedtable
+\pgfplotstableread[col sep=comma]{../src/results/DTUparamsSi.csv}\loadedtable
 \pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
 \pgfplotstabletypeset[
 	string type,

@@ -102,10 +102,10 @@ while true
                     (imRes.X(wantedIdx,2)-j).^2;
 
                     [~,idx] = min(dists);
-                    x = imRes.X(idx,:);
+                    x = imRes.X(idx,1:2);
                     d = imRes.D(idx,:);
                     matchIdx = match.matchIdx(idx,:);
-                    matchX = keyRes.X(matchIdx,:);
+                    matchX = keyRes.X(matchIdx,1:2);
                     matchD = keyRes.D(matchIdx,:);
                     desInd = 1:numel(d);
 

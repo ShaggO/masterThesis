@@ -97,30 +97,47 @@ Since we have a nice set of increasing scales for our scale-space images, we are
 Which give us the final equations for the alternative way of computing the Gaussian derivative scale-spaces.
 
 \subsection{Gradient orientation and magnitude}
+\label{sec:gradientTheory}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth,clip=true,trim=31 0 0 0]{img/gradientOrientationTheory.pdf}
 	\caption{Illustration of the gradient orientation}
+	\label{gradientOrientationTheory}
 \end{figure}
 
 \begin{align}
-\Theta &= \Atan{\frac{L_y}{L_x}} \\
+\Theta &= \text{atan2}(L_y,L_x) \\
 M &= \sigma^2 \sqrt{L_x^2 + L_y^2}
 \end{align}
 
 \subsection{Shape index and curvedness}
+\label{sec:shapeIndexTheory}
+%
+The \emph{shape index} $S \in [-1,1]$ \cite{koenderink1992surface} is a scalar characterization of local second order derivatives. Like $\Theta$ and $M$, $S$ is independent of scale which is given by the \emph{curvedness} $C$. Additionally the shape index is independent of orientation.
 
+$S$ is defined by the orientation of the eigenvalues $\kappa_1$ and $\kappa_2$, also called the principal curvatures, of the local Hessian matrix $\nabla^2 L$. It can also be expressed by the local image derivatives:
+%
+\begin{align}
+S &= \frac{2}{\pi} \Atan{\frac{\kappa_1 + \kappa_2}{\kappa_1 - \kappa_2}} \\
+&= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4 L_{xy}^2 + (L_{xx} - L_{yy})^2}}}
+\end{align}
+%
+$C$ is defined by the size of $\kappa_1$ and $\kappa_2$, and can also be expressed by the image derivatives:
+%
+\begin{align}
+C &= \sqrt{\frac{\kappa_1^2 + \kappa_2^2}{2}} \\
+&= \frac{1}{\sqrt2} \sqrt{L_{xx}^2 + 2 L_{xy}^2 + L_{yy}^2}
+\end{align}
+%
+\Cref{fig:shapeIndexTheory} illustrates the relationship between the principal curvatures, shape index and curvedness, as well as the geometry of various shape indices.
+%
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{img/shapeIndexTheory.pdf}
-	\caption{Illustration of the shape index}
+	\caption{Shape index and curvedness shown in the coordinate system $(\kappa_1,\kappa_2)$ of principal curvatures. The blue vector illustrates a shape index $S = \frac{2}{\pi} \phi$ and curvedness $C$, where $\phi$ is the signed angle between the vector and the line $\kappa_2 = -\kappa_1$. Note that the order of $\kappa_1$ and $\kappa_2$ does not matter, as shape index is independent of the orientation of the local geometry.}
+	\label{fig:shapeIndexTheory}
 \end{figure}
-
-\begin{align}
-S &= \frac{2}{\pi} \Atan{\frac{-L_{xx} - L_{yy}}{\sqrt{4 L_{xy}^2 + (L_{xx} - L_{yy})^2}}} \\
-C &= \frac12 \sigma^2 \sqrt{L_{xx}^2 + 2 L_{xy}^2 + L_{yy}^2}
-\end{align}
 
 \section{Invariants and robustness}
 When describing interest points and their local regions in real world images we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any of these transformations applied, in which case we have a better chance of recognizing the interest point in other images. In this section we will go through a list of possible transformations that we wish for our descriptor to be invariant to.
