@@ -205,6 +205,18 @@ k &= \frac{1}{\sin \beta} - 1
 %
 Now the whole concentric log-polar grid can be constructed alike the ordinary log-polar grid.
 %
+
+\chapter{Gaussian derivatives}
+
+
+\begin{align*}
+	G_{x^n}(x;\sigma) &= \left(\frac{1}{\sqrt{2}\sigma}\right)^n \cdot
+						 \frac{1}{\sqrt{2\pi}\sigma} \cdot
+						 \exp \left( \frac{x^2}{2\sigma^2} \right) \cdot
+						 \text{hermite} \left(n,\frac{x^2}{\sqrt{2}\sigma} \right) \\
+	G_{x^m y^n}(x,y;\sigma) &=
+						G_{y^n}(y;\sigma)^\text{T} \ast G_{x^m}(x;\sigma)
+\end{align*}
 \subbibliography
 
 \end{document}
