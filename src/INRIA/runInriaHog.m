@@ -20,7 +20,7 @@ data = inriaData;
 diaryFile = ['inriaParametersHog_' strrep(datestr(now),':','-') '.out'];
 diary(diaryFile)
 disp('Optimization of svm for HOG started.');
-diary(off);
+diary off;
 
 [~,svmArgs] = inriaOptimizeZoom(data,diaryFile,method,svmArgs,'logc', ...
         (-6:2)',(-0.5:0.1:0.5)');
