@@ -24,40 +24,72 @@ These scale space functions are defined on an infinite continuum but are in prac
 
 \Cref{fig:scaleSpaceExample} shows an example of a finite scale-space representation of the image in \Cref{fig:scaleSpaceExample0} using the five scales $\sigma = 1,2,4,8,$ and $16$. At smaller scales (original, $\sigma = 1,2$) we are able to see detailed structure in the gates, pavement, car, and hedge etc. When increasing the scale to $\sigma = 4$, the small details are smoothed out and only the larger details of the mentioned physical parts are noticeable. At $\sigma = 8,$ and $16$ the details are completely smoothed out and only the larger overall structures are visible. This example clearly shows the power of the scale-space representation being able to model both small details as well as larger structures.
 
-\begin{figure}
+\begin{figure}[p]
 	\centering
-	\begin{subfigure}[t]{0.3\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_0.png}
 		\caption{Original}
 		\label{fig:scaleSpaceExample0}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.3\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_1.png}
 		\caption{$\sigma = 1$}
 		\label{fig:scaleSpaceExample1}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.3\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_2.png}
 		\caption{$\sigma = 2$}
 		\label{fig:scaleSpaceExample2}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.3\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_4.png}
 		\caption{$\sigma = 4$}
 		\label{fig:scaleSpaceExample4}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.3\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_8.png}
 		\caption{$\sigma = 8$}
 		\label{fig:scaleSpaceExample8}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.3\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_16.png}
 		\caption{$\sigma = 16$}
 		\label{fig:scaleSpaceExample16}
 	\end{subfigure}
 	\caption{Example of a finite scale-space representation (5 scales) of an image from the INRIA dataset (\Cref{sec:odDataset}).}
 	\label{fig:scaleSpaceExample}
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[t]{0.2\textwidth}
+		\includegraphics[width=\textwidth]{img/gaussianDerivative_0_0.png}
+		\caption*{$G$}
+	\end{subfigure}
+	\vspace{2mm}	
+	
+	\begin{subfigure}[t]{0.2\textwidth}
+		\includegraphics[width=\textwidth]{img/gaussianDerivative_1_0.png}
+		\caption*{$G_{x}$}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.2\textwidth}
+		\includegraphics[width=\textwidth]{img/gaussianDerivative_0_1.png}
+		\caption*{$G_{y}$}
+	\end{subfigure}
+	\vspace{2mm}
+	
+	\begin{subfigure}[t]{0.2\textwidth}
+		\includegraphics[width=\textwidth]{img/gaussianDerivative_2_0.png}
+		\caption*{$G_{xx}$}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.2\textwidth}
+		\includegraphics[width=\textwidth]{img/gaussianDerivative_1_1.png}
+		\caption*{$G_{x y}$}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.2\textwidth}
+		\includegraphics[width=\textwidth]{img/gaussianDerivative_0_2.png}
+		\caption*{$G_{yy}$}
+	\end{subfigure}
+	\caption{Gaussian derivatives up to second order}
+	\label{fig:gaussianDerivatives}
 \end{figure}
 
 \section{Differential structure}
@@ -67,7 +99,8 @@ When analysing an image, we are usually interested in the structure of the image
 \subsection{Gaussian derivatives}
 \label{sec:gaussianDerivatives}
 
-The \emph{Gaussian derivatives} $G_{x^m y^n}$, where $m$ is the order of derivations in the $x$-axis and $n$ is the order of derivations in the $y$-axis, are used for obtaining structural information from an image.
+The \emph{Gaussian derivatives} $G_{x^m y^n}$, where $m$ is the order of derivations in the $x$-axis and $n$ is the order of derivations in the $y$-axis, are used for obtaining structural information from an image. \Cref{fig:gaussianDerivatives} illustrates the Gaussian derivatives up to second order.
+
 The Gaussian derivatives are used for computing Gaussian derivative scale-space images $L_{x^m y^n}$:
 \begin{align}
 	L_{x^m y^n}(x,y;\sigma) &= G_{x^m y^n}(x,y;\sigma) \ast I(x,y)
@@ -77,23 +110,29 @@ We often compute the Gaussian derivatives analytically, and then convolve the im
 In theory the Gaussian function has infinite support, but in practice one often uses the 3-sigma rule to determine the support radius of the Gaussian filter and hence the computational load of the convolution.
 
 Since the Gaussian derivative scale-spaces are computed on a set of increasing scales, we need to compute all the needed derivatives for each scale. This give us a large amount of convolutions of the same image using various sizes Gaussian filters, which is computationally inefficient. Given these circumstances, we now describe an alternative and computationally cheaper way of computing the Gaussian derivative scale-spaces. The idea is to compute one smoothing per scale and then calculate all the derivatives at that scale using finite differences. We first define the central differences filter $f$:
+%
 \begin{align*}
 	I_x &= \frac{\partial I}{\partial x} \approx f_x \ast I = \begin{bmatrix} -1 & 0 & 1\end{bmatrix} \ast I \\
 	I_y &= \frac{\partial I}{\partial y} \approx f_y \ast I = \begin{bmatrix} -1 & 0 & 1\end{bmatrix}^\text{T} \ast I
 \end{align*}
+%
 The combined $f_{x^m y^n}$-filter is simply made by convolving $m$ $f_x$-filters and $n$ $f_y$-filters in a chain. Substituting the Gaussian derivatives by the central differences convolved with a Gaussian filter give us:
+%
 \begin{align*}
 	L_{x^m y^n}(x,y;\sigma) &= G_{x^m y^n}(x,y;\sigma) \ast I(x,y) \\
 		&\approx f_{x^m y^n} \ast G(x,y;\sigma) \ast I(x,y) \\
 		&= f_{x^m y^n} \ast L(x,y;\sigma)
 \end{align*}
+%
 Since we have a nice set of increasing scales for our scale-space images, we are able to compute $L(x,y,\sigma_2)$ by using the previous scale space $L(x,y,\sigma_1)$ where $\sigma_2 > \sigma_1$ as described in \cite{tola2008fast}. The idea is to split up the smoothing into two operations and then use the associativity of convolution to use the previous scale-space image for the new smoothing:
+%
 \begin{align*}
 	L(x,y;\sigma_2) &= G(x,y;\sigma_2) \ast I(x,y) \\
 					&= (G(x,y;\sigma_\Delta) \ast G(x,y;\sigma_1)) \ast I(x,y),\hspace{1cm}\sigma_2 > \sigma_1 \\
 					&= G(x,y;\sigma_\Delta) \ast L(x,y;\sigma_1) \\
 			 \sigma_\Delta &= \sqrt{\sigma_2^2 - \sigma_1^2}
 \end{align*}
+%
 Which give us the final equations for the alternative way of computing the Gaussian derivative scale-spaces.
 
 \subsection{Gradient orientation and magnitude}
@@ -109,11 +148,14 @@ where atan2 is the arctangent function spanning the whole range of angles $[-\pi
 %
 \Cref{fig:gradientOrientationTheory} illustrates the relationship between the gradient orientation, gradient magnitude, and $x$- and $y$-derivatives.
 %
-\begin{figure}[tb]
+\begin{figure}[p]
 	\centering
-	\includegraphics[width=0.8\textwidth,clip=true,trim=31 0 0 0]{img/gradientOrientationTheory.pdf}
+	\includegraphics[width=0.64\textwidth,clip=true,trim=31 0 0 0]{img/gradientOrientationTheory.pdf}
 	\caption{Gradient orientation and magnitude shown in the coordinate system $(L_x,L_y)$ of first order image derivatives.}
 	\label{fig:gradientOrientationTheory}
+	\includegraphics[width=0.64\textwidth,clip=true,trim=31 0 0 0]{img/shapeIndexTheory.pdf}
+	\caption{Shape index and curvedness shown in the coordinate system $(\kappa_1,\kappa_2)$ of principal curvatures. The blue vector illustrates a shape index $S = \frac{2}{\pi} \phi$ and curvedness $C$, where $\phi$ is the signed angle between the vector and the line $\kappa_2 = -\kappa_1$. Note that the order of $\kappa_1$ and $\kappa_2$ does not matter, as shape index is independent of the orientation of the local geometry.}
+	\label{fig:shapeIndexTheory}
 \end{figure}
 
 \subsection{Shape index and curvedness}
@@ -137,13 +179,6 @@ C &= \sqrt{\frac{\kappa_1^2 + \kappa_2^2}{2}} \\
 %
 \Cref{fig:shapeIndexTheory} illustrates the relationship between the principal curvatures, shape index and curvedness, as well as the geometry of various shape indices. As seen in the figure, $S$ ranges over light blobs ($S = -1$), ridges ($S = -0.5$), saddle points ($S = 0$), valleys ($S = 0.5$), and dark blobs ($S = 1$) with continuous deformations in between.
 %
-\begin{figure}
-	\centering
-	\includegraphics[width=0.8\textwidth,clip=true,trim=31 0 0 0]{img/shapeIndexTheory.pdf}
-	\caption{Shape index and curvedness shown in the coordinate system $(\kappa_1,\kappa_2)$ of principal curvatures. The blue vector illustrates a shape index $S = \frac{2}{\pi} \phi$ and curvedness $C$, where $\phi$ is the signed angle between the vector and the line $\kappa_2 = -\kappa_1$. Note that the order of $\kappa_1$ and $\kappa_2$ does not matter, as shape index is independent of the orientation of the local geometry.}
-	\label{fig:shapeIndexTheory}
-\end{figure}
-
 \section{Invariants and robustness}
 When describing interest points and their local regions in real world images we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any of these transformations applied, in which case we have a better chance of recognizing the interest point in other images. In this section we will go through a list of possible transformations that we wish for our descriptor to be invariant to.
 
