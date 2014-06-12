@@ -1,7 +1,18 @@
-function I = imnorm(I)
+function I = imnorm(I,sym)
 %IMNORM Normalize image
 
-I = (I - min(I(:))) / (max(I(:)) - min(I(:)));
-
+if nargin < 2
+    sym = false;
 end
 
+if sym
+    maxI = max(abs(I(:)));
+    minI = -maxI;
+else
+    maxI = max(I(:));
+    minI = min(I(:));
+end
+
+I = (I - minI) / (maxI - minI);
+
+end
