@@ -70,4 +70,5 @@ optDir = [inriaResults '/optimize'];
 if ~exist(optDir,'dir')
     mkdir(optDir);
 end
+clear data;
 save([optDir '/inriaParametersGo']);

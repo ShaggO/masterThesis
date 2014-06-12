@@ -37,4 +37,5 @@ profile off
 % profile viewer
 
 % plotInriaResults(svmPath,svmPath2)
+clear data;
 save([inriaResults '/optimize/inriaParametersGoSi']);
