@@ -3,8 +3,8 @@ clc, clear all
 windowSize = [134 70];
 
 load('paths');
-go = load([inriaResults '/optimize/inriaParametersGo']);
-si = load([inriaResults '/optimize/inriaParametersSi']);
+go = load('results/optimize/inriaParametersGo');
+si = load('results/optimize/inriaParametersSi');
 
 % SVM arguments
 % -c cost of C-SVC (default 1)
@@ -38,4 +38,4 @@ profile off
 
 % plotInriaResults(svmPath,svmPath2)
 clear data;
-save([inriaResults '/optimize/inriaParametersGoSi']);
+save('results/optimize/inriaParametersGoSi');

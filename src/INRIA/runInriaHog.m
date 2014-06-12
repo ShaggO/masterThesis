@@ -34,4 +34,4 @@ profile off
 
 % plotInriaResults(svmPath,svmPath2)
 clear data;
-save([inriaResults '/optimize/inriaParametersHog']);
+save('results/optimize/inriaParametersHog');

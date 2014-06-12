@@ -66,7 +66,7 @@ diary off
 %% Test with optimal parameters
 svmPath = inriaTestSvm(method,svmArgs,false);
 load paths;
-optDir = [inriaResults '/optimize'];
+optDir = 'results/optimize';
 if ~exist(optDir,'dir')
     mkdir(optDir);
 end
