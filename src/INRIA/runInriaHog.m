@@ -27,7 +27,7 @@ diary off;
 
 profile off,profile on
 totalTime = tic;
-svmPath = inriaTestSvm(method,svmArgs,false);
+svmPath = inriaTestSvm(method,svmArgs,true);
 totalTime = toc(totalTime)
 profile off
 % profile viewer
