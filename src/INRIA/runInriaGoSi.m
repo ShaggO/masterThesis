@@ -19,7 +19,6 @@ method = methodStruct( ...
     {go.method.descriptorArgs,si.method.descriptorArgs}, ...
     0,{'kx-'});
 
-
 data = inriaData;
 diaryFile = ['inriaParametersGoSi_' strrep(datestr(now),':','-') '.out'];
 diary(diaryFile)
