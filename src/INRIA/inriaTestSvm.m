@@ -40,17 +40,33 @@ else
     diary off
     
     %% Add hard negative training data
-    DnegTrainHard = sparse(0,0);
-    totalNegTrain = 0;
-    for i = 1:nNegTrainFull
-        [LnegTrainFull,DnegTrainFull] = ...
-            data.getDescriptors(method,desSave,'negTrainFull',i,false);
-        DnegTrainFull = sparse(double(DnegTrainFull));
-        totalNegTrain = totalNegTrain + size(DnegTrainFull,1);
-        
-        Lsvm = linearpredict(LnegTrainFull,DnegTrainFull,svm);
-        DnegTrainHard = [DnegTrainHard; DnegTrainFull(Lsvm == 1,:)];
+    DnegTrainHard = cell(nNegTrainFull,1);
+    totalNegTrain = zeros(nNegTrainFull,1);
+    if runInParallel
+        gcp;
+        parfor i = 1:nNegTrainFull
+            [LnegTrainFull,DnegTrainFull] = ...
+                data.getDescriptors(method,desSave,'negTrainFull',i,false);
+            DnegTrainFull = sparse(double(DnegTrainFull));
+            totalNegTrain(i) = size(DnegTrainFull,1);
+            
+            Lsvm = linearpredict(LnegTrainFull,DnegTrainFull,svm);
+            DnegTrainHard{i} = DnegTrainFull(Lsvm == 1,:);
+        end
+    else
+        for i = 1:nNegTrainFull
+            [LnegTrainFull,DnegTrainFull] = ...
+                data.getDescriptors(method,desSave,'negTrainFull',i,false);
+            DnegTrainFull = sparse(double(DnegTrainFull));
+            totalNegTrain(i) = size(DnegTrainFull,1);
+            
+            Lsvm = linearpredict(LnegTrainFull,DnegTrainFull,svm);
+            DnegTrainHard{i} = DnegTrainFull(Lsvm == 1,:);
+        end
     end
+    DnegTrainHard = cell2mat(DnegTrainHard);
+    totalNegTrain = sum(totalNegTrain);
+    
     LnegTrainHard = -ones(size(DnegTrainHard,1),1);
     diary(diaryFile)
     disp([timestamp() ' Classified negative training data: ' num2str(size(DnegTrainHard,1)) ' hard negatives out of ' num2str(totalNegTrain) '.'])
@@ -73,17 +89,27 @@ else
     diary off
     
     %% Test on negative test data
-    probNeg = [];
-    totalNegTest = 0;
-    for i = 1:nNegTestFull
-        [LnegTestFull,DnegTestFull] = ...
-            data.getDescriptors(method,desSave,'negTestFull',i,false);
-        DnegTestFull = sparse(double(DnegTestFull));
-        totalNegTest = totalNegTest + size(DnegTestFull,1);
-        
-        [~,~,probNegi] = linearpredict(LnegTestFull,DnegTestFull,svm);
-        probNeg = [probNeg; probNegi];
+    probNeg = cell(nNegTestFull,1);
+    if runInParallel
+        gcp;
+        parfor i = 1:nNegTestFull
+            [LnegTestFull,DnegTestFull] = ...
+                data.getDescriptors(method,desSave,'negTestFull',i,false);
+            DnegTestFull = sparse(double(DnegTestFull));
+            
+            [~,~,probNeg{i}] = linearpredict(LnegTestFull,DnegTestFull,svm);
+        end
+    else
+        for i = 1:nNegTestFull
+            [LnegTestFull,DnegTestFull] = ...
+                data.getDescriptors(method,desSave,'negTestFull',i,false);
+            DnegTestFull = sparse(double(DnegTestFull));
+            
+            [~,~,probNeg{i}] = linearpredict(LnegTestFull,DnegTestFull,svm);
+        end
     end
+    probNeg = cell2mat(probNeg);
+    
     LnegTest = -ones(numel(probNeg),1);
     diary(diaryFile)
     disp([timestamp() ' Classified negative test data: ' num2str(sum(probNeg < 0)/numel(probNeg)) ' accuracy.'])
