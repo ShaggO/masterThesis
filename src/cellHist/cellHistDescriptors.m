@@ -166,11 +166,13 @@ end
 % Create cell windows (indices, weights, valid points)
 P = scaleSpaceFeatures(F,scales,rescale);
 Psplit = splitPoints(P,windowGrid);
+Fsplit = splitPoints(F,windowGrid);
+X = [];
 D = [];
 for s = 1:numel(Psplit)
     [validP,C,Wcell,Wcenter,cells] = createCells(Isizes,Psplit{s},gridType,gridSize,gridRadius,...
         centerFilter,centerSigma,cellFilter,cellSigma,cellNormStrategy);
-    X = F(validP,1:3);
+    Xs = Fsplit{s}(validP,1:3);
     
     % Compute bin values (at cell mask points only)
     if ~fullB
@@ -220,12 +222,15 @@ for s = 1:numel(Psplit)
     end
     
     % concatenate descriptors for each split
+    X = [X; Xs];
     D = [D; Ds];
 end
 
 if saveVars
     save('cellHistExample')
 end
+
+assert(size(X,1) == size(D,1),'Different number of points and descriptors!')
 
 % Cdata = C.data;
 % WcellData = Wcell.data;
