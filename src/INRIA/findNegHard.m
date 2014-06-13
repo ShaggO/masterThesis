@@ -8,7 +8,7 @@ function idxHard = findNegHard(prob,n)
 % end
 
 Prob = cell2mat(prob);
-[~,idxProb] = sort(Prob);
+[~,idxProb] = sort(Prob,'descend');
 idxProb = idxProb(1:n);
 offset = cumsum(cellfun(@numel,prob));
 offset = [0; offset(:)];
