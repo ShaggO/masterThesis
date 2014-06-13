@@ -185,9 +185,10 @@ C &= \sqrt{\frac{\kappa_1^2 + \kappa_2^2}{2}} \\
 \Cref{fig:shapeIndexTheory} illustrates the relationship between the principal curvatures, shape index and curvedness, as well as the geometry of various shape indices. As seen in the figure, $S$ ranges over light blobs ($S = -1$), ridges ($S = -0.5$), saddle points ($S = 0$), valleys ($S = 0.5$), and dark blobs ($S = 1$) with continuous deformations in between.
 %
 \section{Invariants and robustness}
-When describing interest points and their local regions in real world images we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any of these transformations applied, in which case we have a better chance of recognizing the interest point in other images. In this section we will go through a list of possible transformations that we wish for our descriptor to be invariant to.
+When describing interest points and their local regions in real world images, we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any (or a predefined set) of these transformations applied, in which case we have a better chance of recognizing the interest point in other images.
 
-\todo{Add comment to robustness}
+Apart from invariance to various transformations we also want to be robust to small changes in some of the transformations. This robustness should give us nearly equal descriptors despite having small errors in our estimation of the transformations.
+In this section we will go through a list of transformations that we wish for our descriptor to be invariant and possibly also robust to.
 
 \begin{table}[H]
 \centering
@@ -205,9 +206,9 @@ $C$ & $C$ & $a C$ \\
 \end{table}
 
 \subsection{Translation}
-The first transformation that we describe is translation. Translation occurs when images are taken from different positions and hence the interest points are translated in the image plane. Translation invariance is often achieved by combining a descriptor with an interest point detector which tells the descriptor where the interest points are located spatially in the image. Another approach is to use a sliding window technique in which a detection window is moved around the image trying to find a suitable matching position as in \cite{felzenszwalb2008discriminatively}. Translation invariance is almost always desired.
+The first transformation that we describe is translation. Translation occurs when images are taken from different positions and hence the interest points are translated in the image plane. Translation invariance is often achieved by combining a descriptor with an interest point detector which tells the descriptor where the interest points are located spatially in the image. Another approach is to use a sliding window technique in which a detection window is moved around the image trying to find a suitable matching position as in \cite{felzenszwalb2008discriminatively}. Translation invariance is almost always desired since even tiny vibrations at the time of capture can cause an object to change position in an image.
 
-\todo{Add something about robustness against small translation errors}
+An interest point detector or a sliding window is only able to give an estimate of positions of interest points based on the detail available in the pixels of the image. We therefore also wish to have a descriptor which is robust to small changes in interest point positions allowing for a small error in detection point without having a large impact on the descriptor.
 
 \subsection{Rotation}
 Rotation naturally occurs when either the camera or the object in question is rotated. Even though a precise position is located, the outcome of descriptors with spatial pooling will be affected by rotation, if no efford is done to achieve rotational invariance. For SIFT-like descriptors the general approach to achieving rotational invariance is to estimate the direction of the feature and rotate the descriptor grid to achieve a common direction for all descriptors. for SIFT-like descriptors is to estimate the direction of the gradient in the interest point, and hence it outputs both translation and rotation invariant points to compute descriptors for. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed. More general descriptors such as SIFT are however rotational invariant.
