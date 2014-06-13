@@ -3,7 +3,7 @@ clc, clear all
 nHard = 0;
 windowSize = [134 70];
 
-name = {'Go','Si','GoSi','Hog'};
+name = {'Go','Si','GoSi','Hog','HogDT'};
 
 svmPath = cell(numel(name),1);
 for i = 1:numel(name)
