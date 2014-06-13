@@ -1,6 +1,6 @@
 clc, clear all
 
-nHard = 10^5;
+nHard = 0;
 windowSize = [134 70];
 
 name = {'Go','Si','GoSi','Hog'};

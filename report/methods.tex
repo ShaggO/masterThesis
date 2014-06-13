@@ -310,10 +310,22 @@ With this definition we disallow arbitrary covariances as it does not make sense
 \right)
 \end{align}
 %
-\section{Performance evaluation}
-ROCAUC
-PRAUC
+\section{Binary classification measures}
 
+We base our performance measure on the confusion matrix shown in \Cref{tbl:confusion_matrix}. Using a ground truth (or golden standard), which tells us if two points in the two images in question indeed correspond to one another, we are able to classify each match result into one of the four cells of the confusion matrix. From the four outcomes we define the following three measurements: \emph{recall} ($\TPR$), \emph{fall-out} ($\FPR$), and \emph{1-precision} ($\OMP$) as shown in \Cref{eq:fpr,eq:tpr,eq:omp} respectively.
+\begin{align}
+	\label{eq:fpr}
+	\FPR &= \frac{\FP}{\FP + \TN} \\
+	\label{eq:tpr}
+	\TPR &= \frac{\TP}{\TP + \FN} \\
+	\label{eq:omp}
+	\OMP &= \frac{\FP}{\FP + \TP}
+\end{align}
+Where $\TP,\FP,\TN,~\text{and}~\FN$ are the number of matches placed in each of the four cells of the confusion matrix.
+
+As mentioned above, the threshold $t$ is required in order to classify the matches. In order to get a performance measure independent of the choice of $t$, we vary $t$ across all unique ratios and obtain the measurements $\FPR,\TPR,$ and $\OMP$.
+
+From these three measurements we draw the \ROC-curve and the \PR-curve defined as recall vs. fall-out and recall vs. 1-precision respectively. Integrating these curves gives us the area under the curve (AUC) for \ROC\ or \PR, where a high AUC means that our descriptor is good at separating the matches that correspond to one another from those that don't.
 
 \section{Detectors}
 Detectors, combined with scale space, DoG chosen as our detector

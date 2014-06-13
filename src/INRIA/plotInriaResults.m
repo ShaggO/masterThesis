@@ -1,6 +1,6 @@
 function plotInriaResults(varargin)
 
-colours = {'r-','b-','c-','k-'};
+colours = {'r-','b-','c-','k-','r:','b:','c:','k:'};
 
 ROC = cell(1,numel(varargin));
 PR = ROC;
