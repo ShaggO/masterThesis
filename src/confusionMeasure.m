@@ -5,28 +5,14 @@ groundTruth = groundTruth(idx);
 True = groundTruth == 1;
 False = groundTruth == -1;
 
-% FN = zeros(numel(T)+1,1);
-% TN = zeros(numel(T)+1,1);
-% for i = 1:numel(T)
-%     if True(i)
-%         FN(i+1) = 1;
-%     else
-%         TN(i+1) = 1;
-%     end
-% end
-
 [~,idxT] = unique(T);
 idxT = [idxT; numel(T)+1];
-FN = zeros(numel(idxT),1);
-TN = zeros(numel(idxT),1);
-for i = 2:numel(idxT)
-    FN(i) = sum(True(idxT(i-1):idxT(i)-1));
-    TN(i) = sum(False(idxT(i-1):idxT(i)-1));
-end
 
-FN = cumsum(FN)';
+FN = [0; cumsum(True)];
+FN = FN(idxT);
 TP = sum(True) - FN;
-TN = cumsum(TN)';
+TN = [0; cumsum(False)];
+TN = TN(idxT);
 FP = sum(False) - TN;
 
 FPR = FP ./ (FP + TN); % False-positive rate
