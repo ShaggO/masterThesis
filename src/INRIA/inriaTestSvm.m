@@ -1,7 +1,10 @@
-function svmPath = inriaTestSvm(method,svmArgs,desSave)
+function svmPath = inriaTestSvm(method,svmArgs,desSave,nHard)
 
 if nargin < 3
     desSave = true;
+end
+if nargin < 4
+    nHard = [];
 end
 
 runInParallel = true;
@@ -40,50 +43,74 @@ else
     diary off
     
     %% Add hard negative training data
-    DnegTrainHard = cell(nNegTrainFull,1);
-    totalNegTrain = zeros(nNegTrainFull,1);
-    if runInParallel
-        gcp;
-        parfor i = 1:nNegTrainFull
-            [LnegTrainFull,DnegTrainFull] = ...
-                data.getDescriptors(method,desSave,'negTrainFull',i,false);
-            DnegTrainFull = sparse(double(DnegTrainFull));
-            totalNegTrain(i) = size(DnegTrainFull,1);
-            
-            Lsvm = linearpredict(LnegTrainFull,DnegTrainFull,svm);
-            DnegTrainHard{i} = DnegTrainFull(Lsvm == 1,:);
+    if ~isempty(nHard) && nHard > 0
+        DnegTrainHard = cell(nNegTrainFull,1);
+        totalNegTrain = zeros(nNegTrainFull,1);
+        probNeg = cell(nNegTrainFull,1);
+        if runInParallel
+            gcp;
+            parfor i = 1:nNegTrainFull
+                [LnegTrainFull,DnegTrainFull] = ...
+                    data.getDescriptors(method,desSave,'negTrainFull',i,false);
+                DnegTrainFull = sparse(double(DnegTrainFull));
+                totalNegTrain(i) = size(DnegTrainFull,1);
+                
+                [~,~,probNeg{i}] = linearpredict(LnegTrainFull,DnegTrainFull,svm);
+                if isempty(nHard)
+                    DnegTrainHard{i} = DnegTrainFull(probNeg{i} > 0,:);
+                end
+            end
+            if ~isempty(nHard)
+                idxHard = findNegHard(probNeg,nHard);
+                parfor i = 1:nNegTrainFull
+                    [~,DnegTrainFull] = ...
+                        data.getDescriptors(method,desSave,'negTrainFull',i,false);
+                    DnegTrainHard{i} = DnegTrainFull(idxHard{i},:);
+                end
+            end
+        else
+            % duplicate code!
+            for i = 1:nNegTrainFull
+                [LnegTrainFull,DnegTrainFull] = ...
+                    data.getDescriptors(method,desSave,'negTrainFull',i,false);
+                DnegTrainFull = sparse(double(DnegTrainFull));
+                totalNegTrain(i) = size(DnegTrainFull,1);
+                
+                [~,~,probNeg{i}] = linearpredict(LnegTrainFull,DnegTrainFull,svm);
+                if isempty(nHard)
+                    DnegTrainHard{i} = DnegTrainFull(probNeg{i} > 0,:);
+                end
+            end
+            if ~isempty(nHard)
+                idxHard = findNegHard(probNeg,nHard);
+                for i = 1:nNegTrainFull
+                    [~,DnegTrainFull] = ...
+                        data.getDescriptors(method,desSave,'negTrainFull',i,false);
+                    DnegTrainHard{i} = DnegTrainFull(idxHard{i},:);
+                end
+            end
         end
-    else
-        for i = 1:nNegTrainFull
-            [LnegTrainFull,DnegTrainFull] = ...
-                data.getDescriptors(method,desSave,'negTrainFull',i,false);
-            DnegTrainFull = sparse(double(DnegTrainFull));
-            totalNegTrain(i) = size(DnegTrainFull,1);
-            
-            Lsvm = linearpredict(LnegTrainFull,DnegTrainFull,svm);
-            DnegTrainHard{i} = DnegTrainFull(Lsvm == 1,:);
-        end
+        DnegTrainHard = cell2mat(DnegTrainHard);
+        totalNegTrain = sum(totalNegTrain);
+        
+        LnegTrainHard = -ones(size(DnegTrainHard,1),1);
+        diary(diaryFile)
+        disp([timestamp() ' Classified negative training data: ' num2str(size(DnegTrainHard,1)) ' hard negatives out of ' num2str(totalNegTrain) '.'])
+        diary off
+        
+        %% Retraining with hard negatives
+        ratio = (numel(LnegTrainCutouts) + numel(LnegTrainHard)) / numel(LposTrain);
+        svm = lineartrain([LposTrain; LnegTrainCutouts; LnegTrainHard], ...
+            [DposTrain; DnegTrainCutouts; DnegTrainHard],[svmArgs2string(svmArgs) ' -w1 ' num2str(ratio)]);
+        diary(diaryFile)
+        disp([timestamp() ' Retraining done.'])
+        diary off
     end
-    DnegTrainHard = cell2mat(DnegTrainHard);
-    totalNegTrain = sum(totalNegTrain);
-    
-    LnegTrainHard = -ones(size(DnegTrainHard,1),1);
-    diary(diaryFile)
-    disp([timestamp() ' Classified negative training data: ' num2str(size(DnegTrainHard,1)) ' hard negatives out of ' num2str(totalNegTrain) '.'])
-    diary off
-    
-    %% Retraining with hard negatives
-    ratio = (numel(LnegTrainCutouts) + numel(LnegTrainHard)) / numel(LposTrain);
-    svm = lineartrain([LposTrain; LnegTrainCutouts; LnegTrainHard], ...
-        [DposTrain; DnegTrainCutouts; DnegTrainHard],[svmArgs2string(svmArgs) ' -w1 ' num2str(ratio)]);
-    diary(diaryFile)
-    disp([timestamp() ' Retraining done.'])
-    diary off
     
     %% Test on positive test data
     [LposTest,DposTest] = data.getDescriptors(method,desSave,'posTest','all',runInParallel);
     DposTest = sparse(double(DposTest));
-    [~,acc,probPos] = linearpredict(LposTest,DposTest,svm);
+    [~,~,probPos] = linearpredict(LposTest,DposTest,svm);
     diary(diaryFile)
     disp([timestamp() ' Classified positive test data: ' num2str(sum(probPos >= 0)/numel(probPos)) ' accuracy.'])
     diary off
