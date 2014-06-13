@@ -11,4 +11,4 @@ for i = 1:numel(name)
     svmPath{i} = inriaTestSvm(params.method,params.svmArgs,true,nHard);
 end
 
-save('results/inriaConstantHard','svmPath')
+save('results/inriaNoHard','svmPath')
