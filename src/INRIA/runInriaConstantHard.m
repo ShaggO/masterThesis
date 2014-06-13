@@ -6,7 +6,7 @@ windowSize = [134 70];
 name = {'Go','Si','GoSi','Hog'};
 
 for i = 1:numel(name)
-    load(['results/optimize/inriaParameters' name]); % SI settings
+    load(['results/optimize/inriaParameters' name{i}]); % SI settings
     svmPath{i} = inriaTestSvm(method,svmArgs,true,nHard);
 end
 
