@@ -70,6 +70,7 @@ else
                 parfor i = 1:nNegTrainFull
                     [~,DnegTrainFull] = ...
                         data.getDescriptors(method,desSave,'negTrainFull',i,false);
+                    DnegTrainFull = sparse(double(DnegTrainFull));
                     DnegTrainHard{i} = DnegTrainFull(idxHard{i},:);
                 end
             end
@@ -91,6 +92,7 @@ else
                 for i = 1:nNegTrainFull
                     [~,DnegTrainFull] = ...
                         data.getDescriptors(method,desSave,'negTrainFull',i,false);
+                    DnegTrainFull = sparse(double(DnegTrainFull));
                     DnegTrainHard{i} = DnegTrainFull(idxHard{i},:);
                 end
             end
