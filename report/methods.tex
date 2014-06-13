@@ -1,4 +1,13 @@
 \documentclass[thesis.tex]{subfiles}
+\newcommand\TPR{\mathit{TPR}}
+\newcommand\FPR{\mathit{FPR}}
+\newcommand\OMP{\mathit{1-P}}
+\newcommand\TP{\mathit{TP}}
+\newcommand\FP{\mathit{FP}}
+\newcommand\TN{\mathit{TN}}
+\newcommand\FN{\mathit{FN}}
+\newcommand\ROC{ROC}
+\newcommand\PR{PR}
 \begin{document}
 
 \chapter{Methods}
@@ -327,6 +336,21 @@ Where $\TP,\FP,\TN,~\text{and}~\FN$ are the number of matches placed in each of 
 As mentioned above, the threshold $t$ is required in order to classify the matches. In order to get a performance measure independent of the choice of $t$, we vary $t$ across all unique ratios and obtain the measurements $\FPR,\TPR,$ and $\OMP$.
 
 From these three measurements we draw the \ROC-curve and the \PR-curve defined as recall vs. fall-out and recall vs. 1-precision respectively. Integrating these curves gives us the area under the curve (AUC) for \ROC\ or \PR, where a high AUC means that our descriptor is good at separating the matches that correspond to one another from those that don't.
+
+\begin{table}[tb]
+	\centering
+	\bgroup
+	\def\arraystretch{1.5}
+	\begin{tabular}{|l|c|c|}
+		\cline{2-3}
+		\multicolumn{1}{c|}{} & Condition positive & Condition negative \\ \hline
+		Assigned positive & \cellcolor{green!25}True Positive (TP) & \cellcolor{red!25}False Negative (FN)  \\ \hline
+		Assigned negative & \cellcolor{red!25}False Positive (FP) & \cellcolor{green!25}True Negative (TN) \\ \hline
+	\end{tabular}
+	\egroup
+	\caption{Confusion matrix for postive/negative classification}
+	\label{tbl:confusion_matrix}
+\end{table}
 
 \section{Detectors}
 Detectors, combined with scale space, DoG chosen as our detector

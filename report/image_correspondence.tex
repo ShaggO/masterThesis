@@ -36,21 +36,6 @@ Having established the matching strategy and similarity measure, we now describe
 
 Assume that we have computed the descriptor distances, found the two best matching descriptors in $B$ for each descriptor in $A$ and computed their distance ratio. We now wish to compute the performance of the descriptor algorithm utilized. By choosing a threshold $t$, we are able to classify the matches as either positives or negatives (binary classification). Reference to method section about ROC/PR. Furthermore the \ROC AUC can be interpreted as the probability that a condition positive match has a lower distance ratio than a condition negative match. These two measures are our final performance measures that we will use for evaluating performance of a descriptor on the image correspondence problem. The approach is similar to that of \citet{winder2009picking,dahl2011finding}.
 
-\begin{table}[tb]
-	\centering
-	\bgroup
-	\def\arraystretch{1.5}
-	\begin{tabular}{|l|c|c|}
-		\cline{2-3}
-		\multicolumn{1}{c|}{} & Condition positive & Condition negative \\ \hline
-		Assigned positive & \cellcolor{green!25}True Positive (TP) & \cellcolor{red!25}False Negative (FN)  \\ \hline
-		Assigned negative & \cellcolor{red!25}False Positive (FP) & \cellcolor{green!25}True Negative (TN) \\ \hline
-	\end{tabular}
-	\egroup
-	\caption{Confusion matrix for postive/negative classification}
-	\label{tbl:confusion_matrix}
-\end{table}
-
 \section{Dataset}
 The dataset we use for training and evaluation of our descriptor is called the DTU Robot 3D dataset \cite{aanaes2010recall} (from now on called the DTU dataset). It consists of images of objects taken in a closed black box with varying illumination using 19 fixed position LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes into categories as shown in \Cref{tbl:dtu_scene_classifications}.
 
