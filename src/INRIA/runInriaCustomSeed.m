@@ -14,7 +14,7 @@ svmPath = cell(numel(name),1);
 for i = 1:numel(name)
     params = load(['results/optimize/inriaParameters' name{i}]); % SI settings
     svmPath{i} = inriaTestSvm(params.method,params.svmArgs,true,nHard,pathSuffix);
-    copyfile(svmPath{i},['results/inriaTestSvm' name{i} '100kSeed2.mat'])
+    copyfile(svmPath{i},['results/inriaTestSvm' name{i} '100k_30_seed1.mat'])
 end
 
 % save('results/inriaSeed2','svmPath')
