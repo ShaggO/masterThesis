@@ -7,14 +7,14 @@ properties
     posTest         = [];
     negTestCutouts  = [];
     negTestFull     = [];
-    cutoutSeed      = '';
+    pathSuffix      = '';
     paths
 end
 
 methods
-    function obj = inriaData(cutoutSeed)
+    function obj = inriaData(pathSuffix)
         if nargin == 1
-            obj.cutoutSeed = num2str(cutoutSeed);
+            obj.pathSuffix = num2str(pathSuffix);
         end
         obj.paths = load('paths');
     end
@@ -25,7 +25,7 @@ methods
             obj.loadCache('negTrainCutouts');
             obj.loadCache('negTrainFull');
             obj.loadCache('posTest');
-            obj.loadCache('negTestCutouts');
+%             obj.loadCache('negTestCutouts');
             obj.loadCache('negTestFull');
         else
             if ~isempty(obj.(type))
@@ -37,13 +37,13 @@ methods
                 case 'posTrain'
                     imgPath = [obj.paths.inriaDataSet '/inriaPosTrain'];
                 case 'negTrainCutouts'
-                    imgPath = [obj.paths.inriaDataSet '/inriaNegTrainCutouts' obj.cutoutSeed];
+                    imgPath = [obj.paths.inriaDataSet '/inriaNegTrainCutouts' obj.pathSuffix];
                 case 'negTrainFull'
                     imgPath = [obj.paths.inriaDataSet '/inriaNegTrainFull'];
                 case 'posTest'
                     imgPath = [obj.paths.inriaDataSet '/inriaPosTest'];
                 case 'negTestCutouts'
-                    imgPath = [obj.paths.inriaDataSet '/inriaNegTestCutouts' obj.cutoutSeed];
+                    imgPath = [obj.paths.inriaDataSet '/inriaNegTestCutouts' obj.pathSuffix];
                 case 'negTestFull'
                     imgPath = [obj.paths.inriaDataSet '/inriaNegTestFull'];
                 otherwise
@@ -80,7 +80,7 @@ methods
                 desPath = [desDir '/DposTrain_' s '.mat'];
                 L = 1;
             case 'negTrainCutouts'
-                desPath = [desDir '/DnegTrainCutouts' obj.cutoutSeed '_' s '.mat'];
+                desPath = [desDir '/DnegTrainCutouts' obj.pathSuffix '_' s '.mat'];
                 L = -1;
             case 'negTrainFull'
                 desPath = [desDir '/DnegTrainFull_' s '.mat'];
@@ -89,7 +89,7 @@ methods
                 desPath = [desDir '/DposTest_' s '.mat'];
                 L = 1;
             case 'negTestCutouts'
-                desPath = [desDir '/DnegTestCutouts' obj.cutoutSeed '_' s '.mat'];
+                desPath = [desDir '/DnegTestCutouts' obj.pathSuffix '_' s '.mat'];
                 L = -1;
             case 'negTestFull'
                 desPath = [desDir '/DnegTestFull_' s '.mat'];

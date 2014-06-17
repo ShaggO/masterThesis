@@ -1,7 +1,7 @@
-clc, clear all
+function generateInriaScaleSpacesCustomSeed(pathSuffix)
 
 % Load INRIA image data object
-data = inriaData(2);
+data = inriaData(pathSuffix);
 data.loadCache('all');
 
 scaleBase = 2^(1/3);
@@ -49,3 +49,5 @@ after = numel(dir(sDir));
 disp(['Number of images: ' num2str(numel(images))]);
 disp(['Number of files created: ' num2str(after - before)]);
 toc
+
+end
