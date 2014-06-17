@@ -18,5 +18,6 @@ svmPath{end+1} = 'results/inriaTestSvmSi100k';
 svmPath{end+1} = 'results/inriaTestSvmGoSi100k';
 svmPath{end+1} = 'results/inriaTestSvmHog100k';
 svmPath{end+1} = 'results/inriaTestSvmHogDT100k';
+labels = {'Go','Si','GoSi','HOG (UoCTTI)','HOG (DalalTriggs)'};
 
-plotInriaResults(svmPath{:})
+plotInriaResults(svmPath,labels);
