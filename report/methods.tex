@@ -31,7 +31,7 @@ where $I(x,y)$ is the intensity of the original image $I$ in $(x,y)$ and $\ast$ 
 \begin{align*}
 	f(x,y) \ast g(x,y) &= \int\limits_{\tau_1 = -\infty}^\infty \int\limits_{\tau_2 = -\infty}^\infty f(\tau_1,\tau_2) \cdot g(x-\tau_1,y-\tau_2)\,\text{d}\tau_1\,\text{d}\tau_2
 \end{align*}
-for the two functions $f$ and $g$.\todo{Add reference to Gonzales and woods}.
+for the two functions $f$ and $g$ \cite[p.~345]{gonzalez:2008:digital}.
 
 Note that while these scale-space functions are defined on an infinite continuum, in practice we select a finite set of scales for which we wish to retrieve structural information in an image.
 
@@ -245,13 +245,51 @@ noget med ?
 \section{Histograms}
 \label{sec:histograms}
 
-Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over areas. Traditionally histograms have been constructed using hard boundaries between bins and with hard boundaries between the histograms of a descriptor such as \citet{lowe2004distinctive} does it in SIFT.\mycomment[MSN]{Should we explain SIFT's approach further?}
+Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over local areas. Traditionally histograms have been constructed using hard boundaries between bins and with hard boundaries between the local histogram areas of a descriptor, such as \citet{lowe2004distinctive} does it in SIFT.
 
-These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries, and hence we here describe our histogram framework in which we are able to produce both ordinary as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
+These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries, and hence we here describe a histogram framework which is able to produce both ordinary (hard bounded) as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
 
-The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms and instead let all values contribute to all bins. The contribution of each value to each bin is dependent of the spatial distance to the cell center, the distance between the value and the bin center (angular distance for GO histograms) and the value weight (typically gradient magnitude for GO histograms).\todo{What about spatial weighting with respect to descriptor center as in SIFT}
+The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms and instead let all values contribute to all bins. Given a position we wish to create a histogram for the surrounding local area. This is done by letting all the values from the local area contibute to all the bins of the histogram. The contribution of each value to each bin is dependent of the spatial distance to the chosen position, the distance between the value and the bin center (angular distance for GO histograms) and the value weight (typically gradient magnitude for GO histograms).
 
-Both of these distance weights are simple functions of a distance and hence we are able to compute ordinary histograms by using box functions and smooth histograms by using Gaussian functions.
+Both of these distance weights are simple functions of a distance and hence we are able to compute ordinary sharp-bounded histograms by using box functions and smooth histograms by using Gaussian functions.
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterGaussianPeriodic.pdf}
+		\caption{Periodic Gaussian}
+		\label{fig:1dFilterGaussianPeriodic}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterTrianglePeriodic.pdf}
+		\caption{Periodic Triangle}
+		\label{fig:1dFilterTrianglePeriodic}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterBoxPeriodic.pdf}
+		\caption{Periodic box}
+		\label{fig:1dFilterBoxPeriodic}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterGaussianRenorm.pdf}
+		\caption{Renorm. Gaussian}
+		\label{fig:1dFilterGaussianRenorm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterTriangleRenorm.pdf}
+		\caption{Renorm. triangle}
+		\label{fig:1dFilterTriangleRenorm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterBoxRenorm.pdf}
+		\caption{Renorm. box}
+		\label{fig:1dFilterBoxRenorm}
+	\end{subfigure}
+	\caption{Examples of periodic and renormalized 1D Gaussian, triangle, and box functions. Each figures contains four filters centered at values $-0.75$, $-0.25$, $0.25$, and $0.75$ and with $\sigma = \nicefrac{1}{2}$.}
+	\label{fig:1dFilters}
+\end{figure}
+
+\begin{align}
+\end{align}
 
 NOTES:
 

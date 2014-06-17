@@ -19,6 +19,8 @@ for i = 1:binCount
     plot(x,y(:,i),colour{i})
 end
 axis([left right 0 1.2*binCount/(right-left)])
+xlabel('value');
+ylabel('weight');
 
 end
 
