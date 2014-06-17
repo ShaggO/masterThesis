@@ -1,10 +1,13 @@
-function svmPath = inriaTestSvm(method,svmArgs,desSave,nHard)
+function svmPath = inriaTestSvm(method,svmArgs,desSave,nHard,cutoutSeed)
 
 if nargin < 3
     desSave = true;
 end
 if nargin < 4
     nHard = [];
+end
+if nargin < 5
+    cutoutSeed = '';
 end
 
 runInParallel = true;
@@ -29,7 +32,7 @@ else
     diaryFile = [desDir '/inriaTestSvm_' strrep(datestr(now),':','-') '.out'];
     
     % INRIA data wrapper
-    data = inriaData;
+    data = inriaData(cutoutSeed);
     
     tic
     

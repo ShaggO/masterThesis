@@ -7,11 +7,15 @@ properties
     posTest         = [];
     negTestCutouts  = [];
     negTestFull     = [];
+    cutoutSeed      = '';
     paths
 end
 
 methods
-    function obj = inriaData()
+    function obj = inriaData(cutoutSeed)
+        if nargin == 1
+            obj.cutoutSeed = num2str(cutoutSeed);
+        end
         obj.paths = load('paths');
     end
 
@@ -33,13 +37,13 @@ methods
                 case 'posTrain'
                     imgPath = [obj.paths.inriaDataSet '/inriaPosTrain'];
                 case 'negTrainCutouts'
-                    imgPath = [obj.paths.inriaDataSet '/inriaNegTrainCutouts'];
+                    imgPath = [obj.paths.inriaDataSet '/inriaNegTrainCutouts' obj.cutoutSeed];
                 case 'negTrainFull'
                     imgPath = [obj.paths.inriaDataSet '/inriaNegTrainFull'];
                 case 'posTest'
                     imgPath = [obj.paths.inriaDataSet '/inriaPosTest'];
                 case 'negTestCutouts'
-                    imgPath = [obj.paths.inriaDataSet '/inriaNegTestCutouts'];
+                    imgPath = [obj.paths.inriaDataSet '/inriaNegTestCutouts' obj.cutoutSeed];
                 case 'negTestFull'
                     imgPath = [obj.paths.inriaDataSet '/inriaNegTestFull'];
                 otherwise
@@ -76,7 +80,7 @@ methods
                 desPath = [desDir '/DposTrain_' s '.mat'];
                 L = 1;
             case 'negTrainCutouts'
-                desPath = [desDir '/DnegTrainCutouts_' s '.mat'];
+                desPath = [desDir '/DnegTrainCutouts' obj.cutoutSeed '_' s '.mat'];
                 L = -1;
             case 'negTrainFull'
                 desPath = [desDir '/DnegTrainFull_' s '.mat'];
@@ -85,7 +89,7 @@ methods
                 desPath = [desDir '/DposTest_' s '.mat'];
                 L = 1;
             case 'negTestCutouts'
-                desPath = [desDir '/DnegTestCutouts_' s '.mat'];
+                desPath = [desDir '/DnegTestCutouts' obj.cutoutSeed '_' s '.mat'];
                 L = -1;
             case 'negTestFull'
                 desPath = [desDir '/DnegTestFull_' s '.mat'];
