@@ -26,12 +26,12 @@ if ~exist(sDir,'dir')
 end
 
 before = numel(dir(sDir));
-tic
+start = tic
 
 parfor i = 1:numel(images)
     img = images(i);
     if mod(i,100) == 0
-        disp([timestamp() ' Image ' num2str(i) '/' num2str(numel(images))]);
+        disp([timestamp(start) ' Image ' num2str(i) '/' num2str(numel(images))]);
     end
     I = colourTransform(im2single(img.image),colour);
     hash = num2str(imageHash(I(:)));
