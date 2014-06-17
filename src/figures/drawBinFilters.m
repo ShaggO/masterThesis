@@ -11,7 +11,11 @@ x = linspace(left,right,1000)';
 
 hold on
 for i = 1:binCount
-    y(:,i) = wRenorm(i)*binF(abs(x-binC(i)));
+    d = abs(x-binC(i));
+    if period
+        d = min(d,right-left-d);
+    end
+    y(:,i) = wRenorm(i)*binF(d);
     plot(x,y(:,i),colour{i})
 end
 axis([left right 0 1.2*binCount/(right-left)])
