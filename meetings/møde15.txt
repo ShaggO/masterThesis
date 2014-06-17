@@ -1,0 +1,4 @@
+- Rapport
+DONE - Skriv til Kim mht. nye resultater
+Running Prøv med nyt random seed
+- Google HOG konkurrenter
