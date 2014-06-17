@@ -23,7 +23,13 @@ if isempty(nHard)
 else
     sHard = ['_' num2str(nHard)];
 end
-svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard '.mat'];
+if isempty(cutoutSeed)
+    sSeed = '';
+else
+    sSeed = ['_' num2str(cutoutSeed)];
+end
+
+svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard sSeed '.mat'];
 svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
