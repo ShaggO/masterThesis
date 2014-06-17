@@ -1,6 +1,7 @@
 function plotInriaResults(varargin)
 
-colours = {'r-','b-','c-','k-','r:','b:','c:','k:'};
+% colours = {'r-','b-','c-','k-','r:','b:','c:','k:'};
+colours = {'r-','b-','c-','k-','m-'}
 
 ROC = cell(1,numel(varargin));
 PR = ROC;
@@ -13,6 +14,8 @@ for i = 1:numel(varargin)
     PR{i} = test.PR;
     PRAUC(i) = test.PRAUC;
 end
+
+ROCAUC
 
 %% ROC
 figure
