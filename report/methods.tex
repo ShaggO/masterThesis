@@ -245,13 +245,24 @@ noget med ?
 \section{Histograms}
 \label{sec:histograms}
 
-Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over local areas. Traditionally histograms have been constructed using hard boundaries between bins and with hard boundaries between the local histogram areas of a descriptor, such as \citet{lowe2004distinctive} does it in SIFT.
+Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over local areas. Traditionally histograms have been constructed using hard boundaries between bins; and descriptors have been constructed with hard boundaries between the local histogram areas of a descriptor.
 
-These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries, and hence we here describe a histogram framework which is able to produce both ordinary (hard bounded) as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
+These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries. SIFT used a trilinear interpolation of the gradient magnitude based on the radial distance between the gradient orientation and the bin centers to cope with gradients close to the bin boundaries. In order to improve upon the robustness of the histograms, we here describe a histogram framework which is able to produce both ordinary (hard bounded) as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
 
-The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms and instead let all values contribute to all bins. Given a position we wish to create a histogram for the surrounding local area. This is done by letting all the values from the local area contibute to all the bins of the histogram. The contribution of each value to each bin is dependent of the spatial distance to the chosen position, the distance between the value and the bin center (angular distance for GO histograms) and the value weight (typically gradient magnitude for GO histograms).
+The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area. This is done by letting all the values from the local area contibute to all the bins of the histogram. The contribution of each value to each bin is dependent of the spatial distance to the chosen position, the distance between the value and the bin center (angular distance for GO histograms), and the value weight (typically gradient magnitude for GO histograms). Both distance weights are simple functions of a distance and hence we are able to compute ordinary sharp-bounded histograms by using box functions and smooth histograms by using Gaussian functions.
 
-Both of these distance weights are simple functions of a distance and hence we are able to compute ordinary sharp-bounded histograms by using box functions and smooth histograms by using Gaussian functions.
+Input variables when creating a histogram: inner scale $\sigma$ (=detection scale), tonal scale $\beta$ (=bin width), outer scale/size of ROI $\alpha$ (cell sigma) according to \citet{koenderink1999structure}.
+
+
+\subsection{Periodic histograms}
+
+Likewise possible to make histograms over periodic values (wrap-around over a defined interval).
+
+\subsection{Renormalization}
+
+Renormalization to probability densities by computing the finite integrals of each bin which allows for varying bin sizes. See integral in section about Gaussian filter below.
+
+
 \begin{figure}
 	\centering
 	\begin{subfigure}[t]{0.32\textwidth}
@@ -291,41 +302,28 @@ Both of these distance weights are simple functions of a distance and hence we a
 \begin{align}
 \end{align}
 
-NOTES:
-
-Each bin is counted using a weighting function (bin filter) on all values centered in the bin with a width of $\sigma$.
-Implemented so far: Gaussian, box, triangle
-
-Renormalization to probability densities by computing the finite integrals of each bin which allows for varying bin sizes. See integral in section about Gaussian filter below.
-
-Likewise possible to make histograms over periodic values (wrap-around over a defined interval).
-
-Spatial weighting on each cell (magnitudes) possible as well as on the entire descriptor window.
-
-Input variables when creating a histogram: inner scale $\sigma$, bin-width $\beta$, outer scale/size of ROI $\alpha$ according to \citet{koenderink1999structure}.
-
-
 \subsection{Gaussian filter}
 \label{sec:histogramsGaussianFilter}
+\todo{Should the following 3 subsections be moved to appendx?}
 
 The 1-dimensional Gaussian filter with variance $\sigma$ is defined as:
 %
-\begin{align}
+\begin{align*}
 G(x;\sigma) = \frac{1}{\sqrt{2\pi} \sigma}
 \exp\left( -\frac{x^2}{2 \sigma^2} \right)
-\end{align}
+\end{align*}
 %
 The definite integral of $G(x;\sigma)$ from $a$ to $b$ cannot be expressed by an elementary function. Instead we can use the non-elementary error function, defined as $\mathrm{erf}(b) = \frac{2}{\sqrt{\pi}} \int_0^b \exp(-x^2) \,\mathrm dx$, which can be computed by its Taylor series. First we show an intermediate result using the substitution $u = \sqrt{k} x$ with $\mathrm du = \sqrt{k} \mathrm dx$:
 %
-\begin{align}
+\begin{align*}
 \int_0^b \exp(-k x^2) \,\mathrm dx
 &= \frac{1}{\sqrt{k}} \int_0^{\sqrt{k}b} \exp(-u^2) \,\mathrm du \\
 &= \frac{1}{\sqrt{k}} \frac{\sqrt{\pi}}{2} \mathrm{erf} \left( \sqrt{k} b \right)
-\end{align}
+\end{align*}
 %
 We use this to compute $\int_a^b G(x;\sigma) \,\mathrm dx$:
 %
-\begin{align}
+\begin{align*}
 \int_a^b G(x;\sigma) \,\mathrm dx
 &= \frac{1}{\sqrt{2\pi} \sigma} \int_a^b \exp\left( -\frac{x^2}{2 \sigma^2} \right) \,\mathrm dx \\
 &= \frac{1}{\sqrt{2\pi} \sigma} \left( \int_0^b \exp\left( -\frac{x^2}{2 \sigma^2} \right) \,\mathrm dx - \int_0^a \exp\left( -\frac{x^2}{2 \sigma^2} \right) \,\mathrm dx \right) \\
@@ -336,28 +334,33 @@ We use this to compute $\int_a^b G(x;\sigma) \,\mathrm dx$:
 \mathrm{erf} \left( \frac{b}{\sqrt{2} \sigma} \right) -
 \mathrm{erf} \left( \frac{a}{\sqrt{2} \sigma} \right)
 \right)
-\end{align}
+\end{align*}
 %
 The $n$-dimensional Gaussian filter with variances $\boldsymbol{\sigma} = [\sigma_1, ..., \sigma_n]^T$ is defined as the product of $n$ 1-dimensional filters:
 %
-\begin{align}
+\begin{align*}
 G(\mathbf{x};\boldsymbol{\sigma})
 &= \prod_i G(x_i;\sigma_i) \\
 &= \frac{1}{(2\pi)^\frac{n}{2} \prod_i \mathbf{\sigma}_i}
 \exp\left( -\sum_i \frac{x_i^2}{2 \sigma_i^2} \right)
-\end{align}
+\end{align*}
 %
 With this definition we disallow arbitrary covariances as it does not make sense for a binning function. Note that the factors of $G(\mathbf{x};\boldsymbol{\sigma})$ contain distinct variables. Thus its definite integral from $a_i$ to $b_i$ in each dimension is simply the product of the definite integrals for each dimension:
 %
-\begin{align}
+\begin{align*}
 \int_{a_i}^{b_i} \dots \int_{a_n}^{b_n} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_n} \dots d{x_i}
 &= \prod_i \int_{a_i}^{b_i} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_i} \\
 &= \prod_i \frac{1}{2} \left(
 \mathrm{erf} \left( \frac{b_i}{\sqrt{2} \sigma_i} \right) -
 \mathrm{erf} \left( \frac{a_i}{\sqrt{2} \sigma_i} \right)
 \right)
-\end{align}
+\end{align*}
 %
+\subsection{Triangle filter}
+
+\subsection{Box filter}
+
+
 \section{Binary classification measures}
 
 We base our performance measure on the confusion matrix shown in \Cref{tbl:confusion_matrix}. Using a ground truth (or golden standard), which tells us if two points in the two images in question indeed correspond to one another, we are able to classify each match result into one of the four cells of the confusion matrix. From the four outcomes we define the following three measurements: \emph{recall} ($\TPR$), \emph{fall-out} ($\FPR$), and \emph{1-precision} ($\OMP$) as shown in \Cref{eq:fpr,eq:tpr,eq:omp} respectively.
