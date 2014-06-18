@@ -1,8 +1,9 @@
 clc, clear all
 
-pathSuffix = '_1_30';
+profile off, profile on;
+pathSuffix = '_2_30';
 
-generateInriaImagesCustomSeed(1,30)
+generateInriaImagesCustomSeed(2,30)
 generateInriaScaleSpacesCustomSeed(pathSuffix)
 
 nHard = 10^5;
@@ -16,5 +17,9 @@ for i = 1:numel(name)
     svmPath{i} = inriaTestSvm(params.method,params.svmArgs,true,nHard,pathSuffix);
     copyfile(svmPath{i},['results/inriaTestSvm' name{i} '100k_30_seed1.mat'])
 end
+
+profile off;
+p = profile('info');
+save('customseed2profile.mat','p');
 
 % save('results/inriaSeed2','svmPath')
