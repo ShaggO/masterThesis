@@ -11,7 +11,7 @@ if nargin < 6
     seed = 1;
 end
 
-runInParallel = false;
+runInParallel = true;
 
 load('paths')
 load([inriaDataSet '/inriaMetadata'])

@@ -1,14 +1,13 @@
 clc, clear all
 
 nHard = 10^5;
-% nWindows = [1 2 5 10 20 40 60];
-% seed = (1:10)*10^4;
-nWindows = 40;
-seed = 1*10^4;
+nWindows = [1 2 5 10 20 40 60];
+seed = (1:5)*10^4;
+%nWindows = 40;
+%seed = 2*10^4;
 name = {'Go','Si','GoSi','Hog','HogDT'};
 
-profile on
-
+start = tic;
 for i = 1:numel(name)
     params = load(['results/optimize/inriaParameters' name{i}]); % SI settings
     for j = 1:numel(nWindows)
@@ -18,8 +17,4 @@ for i = 1:numel(name)
         end
     end
 end
-
-profile off
-p = profile('info');
-
-save('results/inriaStabilityTestProfile','p')
+stop = toc(start)
