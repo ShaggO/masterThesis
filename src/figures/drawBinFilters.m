@@ -3,11 +3,16 @@ function [] = drawBinFilters(binType,binSigma,left,right,binCount,binCArgin,peri
 % scale binSigma
 binSigma = binSigma .* (right-left) ./ binCount;
 
-[binF, ~] = ndFilter(binType,binSigma);
+switch binType
+    case 'box'
+        [binF, ~] = ndFilter(binType,binSigma-0.003);
+    otherwise
+        [binF, ~] = ndFilter(binType,binSigma);
+end
 binC = createBinCenters(left,right,binCount,binCArgin{:});
 wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
 
-x = linspace(left,right,1000)';
+x = linspace(left,right,100000)';
 
 hold on
 for i = 1:binCount
