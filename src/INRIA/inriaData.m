@@ -7,14 +7,16 @@ properties
     posTest         = [];
     negTestCutouts  = [];
     negTestFull     = [];
-    pathSuffix      = '';
+    nWindows        = 10;
+    seed            = 1;
     paths
 end
 
 methods
-    function obj = inriaData(pathSuffix)
-        if nargin == 1
-            obj.pathSuffix = num2str(pathSuffix);
+    function obj = inriaData(nWindows,seed)
+        if nargin == 2
+            obj.nWindows = nWindows;
+            obj.seed = seed;
         end
         obj.paths = load('paths');
     end
@@ -22,7 +24,7 @@ methods
     function loadCache(obj,type)
         if strcmp(type,'all')
             obj.loadCache('posTrain');
-            obj.loadCache('negTrainCutouts');
+%             obj.loadCache('negTrainCutouts');
             obj.loadCache('negTrainFull');
             obj.loadCache('posTest');
 %             obj.loadCache('negTestCutouts');
@@ -37,13 +39,17 @@ methods
                 case 'posTrain'
                     imgPath = [obj.paths.inriaDataSet '/inriaPosTrain'];
                 case 'negTrainCutouts'
-                    imgPath = [obj.paths.inriaDataSet '/inriaNegTrainCutouts' obj.pathSuffix];
+                    imgPath = [obj.paths.inriaDataSet '/inriaNegTrainFull'];
+                    type = 'negTrainFull';
+%                     imgPath = [obj.paths.inriaDataSet '/inriaNegTrainCutouts' obj.pathSuffix];
                 case 'negTrainFull'
                     imgPath = [obj.paths.inriaDataSet '/inriaNegTrainFull'];
                 case 'posTest'
                     imgPath = [obj.paths.inriaDataSet '/inriaPosTest'];
                 case 'negTestCutouts'
-                    imgPath = [obj.paths.inriaDataSet '/inriaNegTestCutouts' obj.pathSuffix];
+                    imgPath = [obj.paths.inriaDataSet '/inriaNegTestFull'];
+                    type = 'negTestFull';
+%                     imgPath = [obj.paths.inriaDataSet '/inriaNegTestCutouts' obj.pathSuffix];
                 case 'negTestFull'
                     imgPath = [obj.paths.inriaDataSet '/inriaNegTestFull'];
                 otherwise
@@ -60,6 +66,18 @@ methods
         end
         if nargin < 6
             runInParallel = false;
+        end
+        
+        % workaround incoming!
+        if ismember(type,{'negTrainCutouts','negTestCutouts'})
+            detArgs = struct(method.detectorArgs{:});
+            method.detector = 'randomwindow';
+            if ismember('windowSize',fieldnames(detArgs))
+                method.detectorArgs = {'n',obj.nWindows,'seed',obj.seed, ...
+                    'windowSize',detArgs.windowSize};
+            else
+                method.detectorArgs = {'n',obj.nWindows,'seed',obj.seed};
+            end
         end
 
         [mFunc, mName] = parseMethod(method);
@@ -80,7 +98,8 @@ methods
                 desPath = [desDir '/DposTrain_' s '.mat'];
                 L = 1;
             case 'negTrainCutouts'
-                desPath = [desDir '/DnegTrainCutouts' obj.pathSuffix '_' s '.mat'];
+                desPath = [desDir '/DnegTrainCutouts_' num2str(obj.nWindows) '_' num2str(obj.seed) '_' s '.mat'];
+                type = 'negTrainFull';
                 L = -1;
             case 'negTrainFull'
                 desPath = [desDir '/DnegTrainFull_' s '.mat'];
@@ -89,7 +108,8 @@ methods
                 desPath = [desDir '/DposTest_' s '.mat'];
                 L = 1;
             case 'negTestCutouts'
-                desPath = [desDir '/DnegTestCutouts' obj.pathSuffix '_' s '.mat'];
+                desPath = [desDir '/DnegTestCutouts' num2str(obj.nWindows) '_' num2str(obj.seed) '_' s '.mat'];
+                type = 'negTestFull';
                 L = -1;
             case 'negTestFull'
                 desPath = [desDir '/DnegTestFull_' s '.mat'];

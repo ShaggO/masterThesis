@@ -37,7 +37,7 @@ switch lower(m.detector)
         detName = sprintf('vl-%s-%s-%s-%s',lower(r.Method), ...
             num2str(r.PeakThreshold),num2str(r.EdgeThreshold), ...
             num2str(r.OctaveResolution));
-        detFunc = @(I) vlDetector(I,...
+        detFunc = @(I,~) vlDetector(I,...
             'Method',r.Method,...
             'PeakThreshold',r.PeakThreshold,...
             'EdgeThreshold',r.EdgeThreshold,...
@@ -52,7 +52,7 @@ switch lower(m.detector)
             num2str(r.MinContrast),...
             num2str(r.MinQuality),...
             num2str(r.NumOctaves));
-        detFunc = @(I) cvtDetector(I,'brisk',...
+        detFunc = @(I,~) cvtDetector(I,'brisk',...
             'MinContrast',r.MinContrast,...
             'MinQuality',r.MinQuality,...
             'NumOctaves',r.NumOctaves);
@@ -66,7 +66,7 @@ switch lower(m.detector)
             num2str(r.ThresholdDelta),...
             nums2str(r.RegionAreaRange),...
             num2str(r.MaxAreaVariation));
-        detFunc = @(I) cvtDetector(I,'mser',...
+        detFunc = @(I,~) cvtDetector(I,'mser',...
             'ThresholdDelta',r.ThresholdDelta,...
             'RegionAreaRange',r.RegionAreaRange,...
             'MaxAreaVariation',r.MaxAreaVariation);
@@ -80,7 +80,7 @@ switch lower(m.detector)
             num2str(r.MetricThreshold),...
             num2str(r.NumOctaves),...
             num2str(r.NumScaleLevels));
-        detFunc = @(I) cvtDetector(I,'surf',...
+        detFunc = @(I,~) cvtDetector(I,'surf',...
             'MetricThreshold',r.MetricThreshold,...
             'NumOctaves',r.NumOctaves,...
             'NumScaleLevels',r.NumScaleLevels);
@@ -93,7 +93,7 @@ switch lower(m.detector)
 
         detName = sprintf('dog-%s-%s-%s', ...
             num2str(r.sigma),num2str(r.k),num2str(r.threshold));
-        detFunc = @(I) dogBlobDetector(I,r.sigma,r.k,r.threshold);
+        detFunc = @(I,~) dogBlobDetector(I,r.sigma,r.k,r.threshold);
     case 'grid'
         % Points in regular grid
         addParameter(p,'type','square')
@@ -103,7 +103,7 @@ switch lower(m.detector)
 
         detName = sprintf('grid-%s-%s-%s', ...
             r.type,nums2str(r.scales),num2str(r.gridRadius));
-        detFunc = @(I) gridDetector(size(I),r.type,r.scales,r.gridRadius);
+        detFunc = @(I,~) gridDetector(size(I),r.type,r.scales,r.gridRadius);
         detSave = false;
     case 'window'
         % Sliding window over regular grid
@@ -115,13 +115,23 @@ switch lower(m.detector)
 
         detName = sprintf('grid-%s-%s-%s-%s', ...
             r.type,nums2str(r.scales),num2str(r.spacing),nums2str(r.windowSize));
-        detFunc = @(I) windowDetector(size(I),r.type,r.scales,r.spacing,r.windowSize);
+        detFunc = @(I,~) windowDetector(size(I),r.type,r.scales,r.spacing,r.windowSize);
+        detSave = false;
+    case 'randomwindow'
+        addParameter(p,'n',10)
+        addParameter(p,'seed',1)
+        addParameter(p,'windowSize',[134 70])
+        r = parseResults(p,m.detectorArgs);
+        
+        detName = sprintf('randomwindow-%s-%s-%s', ...
+            num2str(r.n),num2str(r.seed),nums2str(r.windowSize));
+        detFunc = @(I,meta) randomWindowDetector(size(I),r.n,r.seed+meta.i,r.windowSize);
         detSave = false;
     case 'debug'
         r = parseResults(p,m.detectorArgs);
         detName = 'debug';
 %         detFunc = @(I) [];
-        detFunc = @(I) [200 200 1];
+        detFunc = @(I,~) [200 200 1];
 %         detFunc = @(I) [200 200 1; 400 400 1];
     case ''
         r.cache = false;
@@ -359,8 +369,8 @@ function [X,D] = methodFunc(I,resDir,imName,detName,desName,...
     detFunc,desFunc,detCache,desCache,detSave,desSave)
 detDir = [resDir '/' detName];
 desDir = [resDir '/' combineNames(detName,desName)];
-detPath = [detDir '/features_' imName];
-desPath = [desDir '/descriptors_' imName];
+detPath = [detDir '/features_' num2str(imName)];
+desPath = [desDir '/descriptors_' num2str(imName)];
 
 loaded = false;
 if desCache
@@ -383,7 +393,12 @@ else
             F = det.F;
             disp(['Loaded ' num2str(size(F,1)) ' features.']);
         else
-            F = single(detFunc(rgb2gray(I)));
+            if strncmp('randomwindow',detName,12)
+                meta.i = imName;
+                F = single(detFunc(rgb2gray(I),meta));
+            else
+                F = single(detFunc(rgb2gray(I)));
+            end
 
             if detSave
                 if ~exist(detDir,'dir')

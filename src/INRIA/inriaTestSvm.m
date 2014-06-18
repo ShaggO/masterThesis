@@ -1,4 +1,4 @@
-function svmPath = inriaTestSvm(method,svmArgs,desSave,nHard,pathSuffix)
+function svmPath = inriaTestSvm(method,svmArgs,desSave,nHard,nWindows,seed)
 
 if nargin < 3
     desSave = true;
@@ -6,11 +6,12 @@ end
 if nargin < 4
     nHard = [];
 end
-if nargin < 5
-    pathSuffix = '';
+if nargin < 6
+    nWindows = 10;
+    seed = 1;
 end
 
-runInParallel = true;
+runInParallel = false;
 
 load('paths')
 load([inriaDataSet '/inriaMetadata'])
@@ -24,7 +25,7 @@ else
     sHard = ['_' num2str(nHard)];
 end
 
-svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard pathSuffix '.mat'];
+svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard '_' num2str(nWindows) '_' seed '.mat'];
 svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
@@ -33,7 +34,7 @@ else
     diaryFile = [desDir '/inriaTestSvm_' strrep(datestr(now),':','-') '.out'];
     
     % INRIA data wrapper
-    data = inriaData(pathSuffix);
+    data = inriaData(nWindows,seed);
     
     tic
     
