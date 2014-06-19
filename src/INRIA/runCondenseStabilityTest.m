@@ -1,3 +1,4 @@
+clear all; clc;
 nHard = 10^5;
 
 nWindows = [1 2 5 10 20 40 60];
@@ -20,4 +21,4 @@ for i = 1:numel(name)
 end
 stop = toc(start)
 
-save('results/inriaStabilityTest','nHard','nWindows','name','PRAUC','ROCAUC');
+save('results/inriaStabilityTest','nHard','nWindows','name','seed','PRAUC','ROCAUC');
