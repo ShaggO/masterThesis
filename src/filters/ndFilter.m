@@ -19,14 +19,14 @@ end
 
 function v = triangleFilter(sigma,d)
     sz = size(d);
-    sigma = repmat(2*sigma,[sz(1) 1 sz(3:end)]);
-    v = prod((abs(d) <= sigma) .* (1-(abs(d)./sigma))/2,2);
+    sigma = repmat(sigma,[sz(1) 1 sz(3:end)]);
+    v = prod((abs(d) <= 2*sigma) .* (1-(abs(d)./(2*sigma)))./(2*sigma),2);
 end
 
 function v = boxFilter(sigma,d)
     sz = size(d);
     sigma = repmat(sigma,[sz(1) 1 sz(3:end)]);
-    v = prod(abs(d) <= sigma,2)/2;
+    v = prod((abs(d) <= sigma) .* 1./(2*sigma),2);
 end
 
 function v = gaussFilter(sigma,d)
