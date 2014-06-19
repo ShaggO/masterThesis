@@ -201,18 +201,19 @@ Apart from invariance to various transformations we also want to be robust to sm
 In this section we will go through a list of transformations that we wish for our descriptor to be invariant and possibly also robust to.
 
 \begin{table}[H]
-\centering
-\begin{tabular}{@{}l|ll@{}}
-%\toprule
-Measure & Rotation & Illumination \\
-\hline
-$\Theta$ & $\Theta - \theta $ & $\Theta$ \\
-$M$ & $M$ & $a M$ \\
-$S$ & $S$ & $S$ \\
-$C$ & $C$ & $a C$ \\
-%\bottomrule
-\end{tabular}
-\caption{The transformation of various measures by rotation and illumination. The derivations are included in \cref{apx:image_transformations}.}
+	\centering
+	\begin{tabular}{@{}l|ll@{}}
+	%\toprule
+	Measure & Rotation & Illumination \\
+	\hline
+	$\Theta$ & $\Theta - \theta $ & $\Theta$ \\
+	$M$ & $M$ & $a M$ \\
+	$S$ & $S$ & $S$ \\
+	$C$ & $C$ & $a C$ \\
+	%\bottomrule
+	\end{tabular}
+	\caption{The transformation of various measures by rotation and illumination. The derivations are included in \cref{apx:image_transformations}.}
+	\label{tbl:measureInvariances}
 \end{table}
 
 \subsection{Translation}
@@ -221,26 +222,26 @@ The first transformation that we describe is translation. Translation occurs whe
 An interest point detector or a sliding window is only able to give an estimate of positions of interest points based on the detail available in the pixels of the image. We therefore also wish to have a descriptor which is robust to small changes in interest point positions allowing for a small error in detection point without having a large impact on the descriptor.
 
 \subsection{Rotation}
-Rotation naturally occurs when either the camera or the object in question is rotated. Even though a precise position is located, the outcome of descriptors with spatial pooling will be affected by rotation, if no efford is done to achieve rotational invariance. For SIFT-like descriptors the general approach to achieving rotational invariance is to estimate the direction of the feature and rotate the descriptor grid to achieve a common direction for all descriptors. for SIFT-like descriptors is to estimate the direction of the gradient in the interest point, and hence it outputs both translation and rotation invariant points to compute descriptors for. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed. More general descriptors such as SIFT are however rotational invariant.
+Rotation naturally occurs when either the camera or the object in question is rotated. Even though a precise position is located, the outcome of descriptors with spatial pooling will be affected by rotation, if no efford is done to achieve rotational invariance. For SIFT-like descriptors the general approach to achieving rotational invariance is to estimate the direction of the feature and rotate the descriptor grid before computing the descriptor. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed.
 
-Refer to \cref{apx:rotation} for all rotations, \cref{apx:rotation_go,apx:rotation_m,apx:rotation_si,apx:rotation_c} for gradient orientation, gradient magnitude, shape index, and curvedness.
-%
-And thus $\widetilde{S}(x,y,\sigma) = S(x,y,\sigma)$.
+Looking at the differential measures $\Theta, M,~S,$ and $C$, we are able to derive the resulting measure under rotation by $\theta$. We have left out the details of the derivations here, but they can be found in \Cref{apx:rotation}. The final derived results are shown in \Cref{tbl:measureInvariances}. We see that both $M,~S,$ and $C$ are rotational invariant whereas $\Theta$ is rotated by the transformation angle $\theta$.
 %
 \subsection{Reflection}
+Reflection occurs when either an object is flipped along some axis or an entire image is flipped (typically along the x- and/or y-axis). An example could be two sideshot images of a car driving in opposite directions, since a car typically looks the same from either side. Reflection is typically not handled directly in the descriptor but rather in the applications of the descriptor. An example of this is the pedestrian detection application, where \cite{dalal2005histograms} make sure to include both the original positive pedestrian images as well as their horizontally flipped versions in order to obtain a more reflection invarian pedestrian detector.
 
 \subsection{Illumination}
 \label{sec:illumination}
-Reference \Cref{apx:illumination} for $\Theta,~M,~S$, and $C$.
-By using a small sigma for calculating the derivatives in the jet, we only use a small spatial area for the calculations which minimizes the risk of crossing a shadow edge. By combining multiple jets or shape indices into histograms we are able to calculate a descriptor across a shadow edge but still maintaining illumination invariance.
+Illumination transformations both occur as global as well local transformations of light. The global transformation model the overall diffuse light level, which is visible on e.g. a sunny and a cloudy day. The local transformations model the local differences in light such as e.g. cast shadows and directed light.
+
+By assuming the image $\tilde{I} = a I +  b$ is an affine illumination transformation of the underlying image $I$ with no light transformations, we are able to derive the effect of the transformation on the differential measures $\Theta,~M,~S,$ and $C$. Once again we have left out the details here, which can be found in \Cref{apx:illumination}. The final results can be seen in \Cref{tbl:measureInvariances}. We see that $\Theta$ and $S$ are illumination invariant whereas $M$ and $C$ are multiplied by the linear constant $a$ of the affine transformation. These coefficients are typically estimated and corrected for by using some either local or global normalization scheme.
 
 \subsection{Scale}
 \label{sec:scaleInvariance}
-Noget med scalespace \cite{griffin1997scale}.
+
+The scale of objects in images vary depending on multiple factors as descibed in \Cref{sec:GaussianScaleSpace}. In order to achieve scale invariance, descriptors are typically defined relative to a feature scale. Depending on the application, the feature scale is typically defined by an interest point detector or a sliding window.
 
 \subsection{Perspective}
-noget med ?
-
+Perspective distortions and occlusions have major impact on images. Even small changes of camera position can distort objects in 2D images and occlusions might occur. The perspective transformations are hard to estimate without prior knowledge of the scene and its attributes. Therefore only perspective robustness to a certain degree has been achieved in descriptors so far.
 
 
 \section{Histograms}
@@ -250,19 +251,41 @@ Histograms play an essential role in SIFT-like descriptors. They are used for ag
 
 These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries. SIFT used a trilinear interpolation of the gradient magnitude based on the radial distance between the gradient orientation and the bin centers to cope with gradients close to the bin boundaries. In order to improve upon the robustness of the histograms, we here describe a histogram framework which is able to produce both ordinary (hard bounded) as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
 
-The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area. This is done by letting all the values from the local area contibute to all the bins of the histogram. The contribution of each value to each bin is dependent of the spatial distance to the chosen position, the distance between the value and the bin center (angular distance for GO histograms), and the value weight (typically gradient magnitude for GO histograms). Both distance weights are simple functions of a distance and hence we are able to compute ordinary sharp-bounded histograms by using box functions and smooth histograms by using Gaussian functions.
+The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area/region of interest (ROI). This is done by letting all the values from the ROI contibute to all the bins of the histogram. The contribution of each value to each bin is dependent of the spatial distance to the chosen position, the distance between the value and the bin center (angular distance for GO histograms), and the value weight (typically gradient magnitude for GO histograms). Both distance weights are simple functions of a distance and hence we are able to compute ordinary sharp-bounded histograms by using box functions and smooth histograms by using Gaussian functions.
 
-Input variables when creating a histogram: inner scale $\sigma$ (=detection scale), tonal scale $\beta$ (=bin width), outer scale/size of ROI $\alpha$ (cell sigma) according to \citet{koenderink1999structure}.
+\citet{koenderink1999structure} define the LOIs from three scales: inner scale $\sigma$, tonal scale $\beta$, and outer scale $\alpha$. When applying the framework to our work, the inner scale corresponds to the feature scale (scale in scale-space), the tonal scale corresponds to the width of the histogram bin weight function, and the outer scale corresponds to the size of the ROI. The specifics of the histograms used in our work are explained in \Cref{eq:proposed_histogram}.
+\mycomment[MSN]{How much theory here?}
 
+Notes:
+Given a domain in the interval $l \leq r$, we compute the histogram...
+$H(\mu;\sigma,\beta,\alpha)$
 
 \subsection{Periodic histograms}
+When creating histograms of periodic domains, we need to take the periodicity into consideration. We specify the period between $l$ and $r$, where $l \leq r$.
+The periodicity of the domain means that there are multiple distances between any two points. Since we are computing distance weight functions, we need to find the minimum distance $d_{wrap}$ from each point to each bin center in order to correctly compute the weight functions. This is done by a simple wrap-around using the known period of the domain as maximum distance:
+\begin{align*}
+	d_{wrap} = \min(d,(r - l)-d)
+\end{align*}
+where $d$ is the distance $x - \mu$ from a point $x$ to a bin center $\mu$, and $\min$ is the function that chooses the lowest of its arguments.
 
-Likewise possible to make histograms over periodic values (wrap-around over a defined interval).
+ \Cref{fig:1dFilterGaussianPeriodic,fig:1dFilterTrianglePeriodic,fig:1dFilterBoxPeriodic} show 1D examples of four periodic Gaussian, triangle and box filters respectively on the interval $[-1,1]$. Notice how the wrap-around affects the filters at both ends of the periods as expected.
 
 \subsection{Renormalization}
+When making histograms over a non-periodic domain, the weight function will be cropped by the histogram bounds $l$ and $r$. We therefore risk biasing the weights towards the central bins of the domain, since the cropped filters will have. In order to avoid this, we view the bins as probability densities, and hence the area under each bin's weight function has to integrate to 1. This is done by renormalizing the functions based on their areas. Given a filter function $f$ and a bin center $\mu$, for which $l \leq \mu \leq r$ we first calculate the integral bounds $a$ and $b$ followed by the actual area integral $A(\mu,\sigma)$ itself:
+\begin{align*}
+	a &= l - \mu,\hspace{1cm}
+	b = r - \mu \\
+	A(\mu,\sigma) &= \int_a^b f(x;\mu,\sigma)\,\text{d}x
+\end{align*}
+We notice that $a \leq 0 \leq b$. This area is simply used as the normalization constant of the bin centered in $\mu$ resulting in the probability density histogram $H_{pd}$:
+\begin{align*}
+	H_{pd}(\mu) = \frac{H(\mu)}{A(\mu,\sigma)}
+\end{align*}
+The calculations of $A(\mu,\sigma)$ for the Gaussian, triangle, and box filters are shown below in \Cref{sec:histogramsGaussianFilter,sec:histogramsTriangleFilter,sec:histogramsBoxFilter}.
 
-Renormalization to probability densities by computing the finite integrals of each bin which allows for varying bin sizes. See integral in section about Gaussian filter below.
-%
+\Cref{fig:1dFilterGaussianRenorm,fig:1dFilterTriangleRenorm,fig:1dFilterBoxRenorm} show 1D examples of four renormalized Gaussian, triangle, and box filters respectively on the interval $[-1,1]$. Notice how the two weight functions of the outer-most bins have higher peaks than the central bins in order to integrate to 1 when being cut off at the interval bounds. For periodic histograms the renormalization step is excluded since no cut off of the filters occurs.
+\todo{Decide what to do with the poor box illustration}
+
 \begin{figure}
 	\centering
 	\begin{subfigure}[t]{0.32\textwidth}
