@@ -415,7 +415,7 @@ Assuming $-\sigma \leq a,b \leq \sigma$,
 %
 \section{Binary classification measures}
 %
-\emph{Binary classification} is the problem of predicting whether elements are of one of two conditions: positive ($+1$) or negative ($-1$). Formally, we consider elements $x \in X$ with respective condition labels $y \in \{-1, 1\}$. This is also called the ground truth or golden standard. Without the knowledge of $y$, we wish to assign elements $x \in X$ with a prediction or classification $\hat{y} \in \{-1, 1\}$, ideally equal to $y$.
+\emph{Binary classification} is the problem of predicting whether elements have one of two conditions: positive ($+1$) or negative ($-1$). Formally, we consider elements $x \in X$ with respective condition labels $y \in \{-1, 1\}$. This is also called the ground truth or golden standard. Without the knowledge of $y$, we wish to assign elements $x \in X$ with a prediction or classification $\hat{y} \in \{-1, 1\}$, ideally equal to $y$.
 
 Many binary classification methods do not directly output such a classification, but rather a more descriptive \emph{classification score} $s \in \mathbb{R}$ for each $x \in X$, that denotes the confidence of a classification. A higher $s$ means that we find it more likely that $x$ has the label $y = 1$. Thus as an intermediate step we can select a threshold $t \in \mathbb{R}$, and classify $x$ with $\hat{y} = 1$ if $s \geq t$, or $\hat{y} = -1$ if $s < t$. Varying this threshold allows us to modify the ratio between elements classified as positive and negative.
 
@@ -444,10 +444,11 @@ The confusion matrix places classification outcomes into one of four cells, depe
 	\Prec &= \frac{\TP}{\FP + \TP}
 \end{align*}
 %
-As mentioned above, the threshold $t$ is required in order to classify the matches. In order to get a performance measure independent of the choice of $t$, we vary $t$ across all unique ratios and obtain the measurements $\FPR,\TPR,$ and $\OMP$.
-
-From these three measurements we draw the \ROC-curve and the \PR-curve defined as recall vs. fall-out and recall vs. 1-precision respectively. Integrating these curves gives us the area under the curve (AUC) for \ROC\ or \PR, where a high AUC means that our descriptor is good at separating the matches that correspond to one another from those that don't.
-
+\todo{Motivation and description of ROC and PR-curves}
+%As mentioned above, the threshold $t$ is required in order to classify the matches. In order to get a performance measure independent of the choice of $t$, we vary $t$ across all unique ratios and obtain the measurements $\FPR,\TPR,$ and $\OMP$.
+%
+%From these three measurements we draw the \ROC-curve and the \PR-curve defined as recall vs. fall-out and recall vs. 1-precision respectively. Integrating these curves gives us the area under the curve (AUC) for \ROC\ or \PR, where a high AUC means that our descriptor is good at separating the matches that correspond to one another from those that don't.
+%
 \section{Detectors}
 Detectors, combined with scale space, DoG chosen as our detector
 
