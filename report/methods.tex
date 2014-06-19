@@ -1,6 +1,7 @@
 \documentclass[thesis.tex]{subfiles}
 \newcommand\TPR{\mathit{TPR}}
 \newcommand\FPR{\mathit{FPR}}
+\newcommand\Prec{\mathit{P}}
 \newcommand\OMP{\mathit{1-P}}
 \newcommand\TP{\mathit{TP}}
 \newcommand\FP{\mathit{FP}}
@@ -285,7 +286,6 @@ The calculations of $A(\mu,\sigma)$ for the Gaussian, triangle, and box filters 
 \Cref{fig:1dFilterGaussianRenorm,fig:1dFilterTriangleRenorm,fig:1dFilterBoxRenorm} show 1D examples of four renormalized Gaussian, triangle, and box filters respectively on the interval $[-1,1]$. Notice how the two weight functions of the outer-most bins have higher peaks than the central bins in order to integrate to 1 when being cut off at the interval bounds. For periodic histograms the renormalization step is excluded since no cut off of the filters occurs.
 \todo{Decide what to do with the poor box illustration}
 
-
 \begin{figure}
 	\centering
 	\begin{subfigure}[t]{0.32\textwidth}
@@ -321,10 +321,7 @@ The calculations of $A(\mu,\sigma)$ for the Gaussian, triangle, and box filters 
 	\caption{Examples of periodic and renormalized 1D Gaussian, triangle, and box functions. Each figures contains four filters centered at values $-0.75$, $-0.25$, $0.25$, and $0.75$ and with $\sigma = \nicefrac{1}{2}$.}
 	\label{fig:1dFilters}
 \end{figure}
-
-\begin{align}
-\end{align}
-
+%
 \subsection{Gaussian filter}
 \label{sec:histogramsGaussianFilter}
 \todo{Should the following 3 subsections be moved to appendx?}
@@ -359,49 +356,72 @@ We use this to compute $\int_a^b G(x;\sigma) \,\mathrm dx$:
 \right)
 \end{align*}
 %
-The $n$-dimensional Gaussian filter with variances $\boldsymbol{\sigma} = [\sigma_1, ..., \sigma_n]^T$ is defined as the product of $n$ 1-dimensional filters:
-%
-\begin{align*}
-G(\mathbf{x};\boldsymbol{\sigma})
-&= \prod_i G(x_i;\sigma_i) \\
-&= \frac{1}{(2\pi)^\frac{n}{2} \prod_i \mathbf{\sigma}_i}
-\exp\left( -\sum_i \frac{x_i^2}{2 \sigma_i^2} \right)
-\end{align*}
-%
-With this definition we disallow arbitrary covariances as it does not make sense for a binning function. Note that the factors of $G(\mathbf{x};\boldsymbol{\sigma})$ contain distinct variables. Thus its definite integral from $a_i$ to $b_i$ in each dimension is simply the product of the definite integrals for each dimension:
-%
-\begin{align*}
-\int_{a_i}^{b_i} \dots \int_{a_n}^{b_n} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_n} \dots d{x_i}
-&= \prod_i \int_{a_i}^{b_i} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_i} \\
-&= \prod_i \frac{1}{2} \left(
-\mathrm{erf} \left( \frac{b_i}{\sqrt{2} \sigma_i} \right) -
-\mathrm{erf} \left( \frac{a_i}{\sqrt{2} \sigma_i} \right)
-\right)
-\end{align*}
+%The $n$-dimensional Gaussian filter with variances $\boldsymbol{\sigma} = [\sigma_1, ..., \sigma_n]^T$ is defined as the product of $n$ 1-dimensional filters:
+%%
+%\begin{align*}
+%G(\mathbf{x};\boldsymbol{\sigma})
+%&= \prod_i G(x_i;\sigma_i) \\
+%&= \frac{1}{(2\pi)^\frac{n}{2} \prod_i \mathbf{\sigma}_i}
+%\exp\left( -\sum_i \frac{x_i^2}{2 \sigma_i^2} \right)
+%\end{align*}
+%%
+%With this definition we disallow arbitrary covariances as it does not make sense for a binning function. Note that the factors of $G(\mathbf{x};\boldsymbol{\sigma})$ contain distinct variables. Thus its definite integral from $a_i$ to $b_i$ in each dimension is simply the product of the definite integrals for each dimension:
+%%
+%\begin{align*}
+%\int_{a_i}^{b_i} \dots \int_{a_n}^{b_n} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_n} \dots d{x_i}
+%&= \prod_i \int_{a_i}^{b_i} G(\mathbf{x},\boldsymbol{\sigma}) \,\mathrm d{x_i} \\
+%&= \prod_i \frac{1}{2} \left(
+%\mathrm{erf} \left( \frac{b_i}{\sqrt{2} \sigma_i} \right) -
+%\mathrm{erf} \left( \frac{a_i}{\sqrt{2} \sigma_i} \right)
+%\right)
+%\end{align*}
 %
 \subsection{Triangle filter}
-
+\label{sec:histogramsTriangleFilter}
+%
+\begin{align*}
+\mathit{Tri} (x; \sigma) = 
+\begin{cases}
+    \frac{1}{2 \sigma} \left( 1 - \frac{| x |}{2 \sigma} \right) ,& \text{if } |x| \leq 2 \sigma \\
+    0,              & \text{otherwise}
+\end{cases}
+\end{align*}
+%
+Assuming $-2 \sigma \leq a \leq 0 b \leq 2 \sigma$,
+%
+\begin{align*}
+\int_a^b \mathit{Tri} (x; \sigma) \,\mathrm dx &= \frac{1}{2 \sigma} \left( \int_a^0 \left( 1 + \frac{x}{2 \sigma} \right) \,\mathrm dx + \int_0^b \left( 1 - \frac{x}{2 \sigma} \right) \,\mathrm dx \right) \\
+&= \frac{1}{2 \sigma} \left( - a - \frac{a^2}{4 \sigma} + b - \frac{b^2}{4 \sigma} \right) \\
+&= \frac{1}{2 \sigma} (b - a) - \frac{1}{8 \sigma^2} (a^2 + b^2)
+\end{align*}
+%
 \subsection{Box filter}
-
-
+\label{sec:histogramsBoxFilter}
+%
+\begin{align*}
+\mathit{Box} (x; \sigma) = 
+\begin{cases}
+    \frac{1}{2 \sigma},& \text{if } |x| \leq \sigma \\
+    0,              & \text{otherwise}
+\end{cases}
+\end{align*}
+%
+Assuming $-\sigma \leq a,b \leq \sigma$,
+%
+\begin{align*}
+\int_a^b \mathit{Box} (x; \sigma) \,\mathrm dx &= \int_a^b \frac{1}{2 \sigma} \,\mathrm dx \\
+&= \frac{1}{2 \sigma} (b - a)
+\end{align*}
+%
 \section{Binary classification measures}
+%
+\emph{Binary classification} is the problem of predicting whether elements have one of two conditions: positive ($+1$) or negative ($-1$). Formally, we consider elements $x \in X$ with respective condition labels $y \in \{-1, 1\}$. This is also called the ground truth or golden standard. Without the knowledge of $y$, we wish to assign elements $x \in X$ with a prediction or classification $\hat{y} \in \{-1, 1\}$, ideally equal to $y$.
 
-We base our performance measure on the confusion matrix shown in \Cref{tbl:confusion_matrix}. Using a ground truth (or golden standard), which tells us if two points in the two images in question indeed correspond to one another, we are able to classify each match result into one of the four cells of the confusion matrix. From the four outcomes we define the following three measurements: \emph{recall} ($\TPR$), \emph{fall-out} ($\FPR$), and \emph{1-precision} ($\OMP$) as shown in \Cref{eq:fpr,eq:tpr,eq:omp} respectively.
-\begin{align}
-	\label{eq:fpr}
-	\FPR &= \frac{\FP}{\FP + \TN} \\
-	\label{eq:tpr}
-	\TPR &= \frac{\TP}{\TP + \FN} \\
-	\label{eq:omp}
-	\OMP &= \frac{\FP}{\FP + \TP}
-\end{align}
-Where $\TP,\FP,\TN,~\text{and}~\FN$ are the number of matches placed in each of the four cells of the confusion matrix.
+Many binary classification methods do not directly output such a classification, but rather a more descriptive \emph{classification score} $s \in \mathbb{R}$ for each $x \in X$, that denotes the confidence of a classification. A higher $s$ means that we find it more likely that $x$ has the label $y = 1$. Thus as an intermediate step we can select a threshold $t \in \mathbb{R}$, and classify $x$ with $\hat{y} = 1$ if $s \geq t$, or $\hat{y} = -1$ if $s < t$. Varying this threshold allows us to modify the ratio between elements classified as positive and negative.
 
-As mentioned above, the threshold $t$ is required in order to classify the matches. In order to get a performance measure independent of the choice of $t$, we vary $t$ across all unique ratios and obtain the measurements $\FPR,\TPR,$ and $\OMP$.
-
-From these three measurements we draw the \ROC-curve and the \PR-curve defined as recall vs. fall-out and recall vs. 1-precision respectively. Integrating these curves gives us the area under the curve (AUC) for \ROC\ or \PR, where a high AUC means that our descriptor is good at separating the matches that correspond to one another from those that don't.
-
-\begin{table}[tb]
+To measure the performance of a binary classification method, we could simply compute the ratio of correctly classified elements. However, this measure is flawed if the distribution of elements favours one of the two conditions, or if it is more important to classify one of the conditions correctly than the other. Instead, we base our measures on the confusion matrix:
+%
+\begin{table}[H]
 	\centering
 	\bgroup
 	\def\arraystretch{1.5}
@@ -412,10 +432,23 @@ From these three measurements we draw the \ROC-curve and the \PR-curve defined a
 		Assigned negative & \cellcolor{red!25}False Positive (FP) & \cellcolor{green!25}True Negative (TN) \\ \hline
 	\end{tabular}
 	\egroup
-	\caption{Confusion matrix for postive/negative classification}
+	\caption{Confusion matrix for binary classification}
 	\label{tbl:confusion_matrix}
 \end{table}
-
+%
+The confusion matrix places classification outcomes into one of four cells, depending on both the condition and assigned label. We define $\TP$, $\FP$, $\FN$, and $\TN$ to be the number of respective outcomes across a given set of elements. We also define the following three measurements: \emph{recall} or \emph{true positive rate} ($\TPR$), \emph{fall-out} or \emph{false positive rate} ($\FPR$), and \emph{precision} ($\Prec$):
+%
+\begin{align*}
+	\FPR &= \frac{\FP}{\FP + \TN} \\
+	\TPR &= \frac{\TP}{\TP + \FN} \\
+	\Prec &= \frac{\TP}{\FP + \TP}
+\end{align*}
+%
+\todo{Motivation and description of ROC and PR-curves}
+%As mentioned above, the threshold $t$ is required in order to classify the matches. In order to get a performance measure independent of the choice of $t$, we vary $t$ across all unique ratios and obtain the measurements $\FPR,\TPR,$ and $\OMP$.
+%
+%From these three measurements we draw the \ROC-curve and the \PR-curve defined as recall vs. fall-out and recall vs. 1-precision respectively. Integrating these curves gives us the area under the curve (AUC) for \ROC\ or \PR, where a high AUC means that our descriptor is good at separating the matches that correspond to one another from those that don't.
+%
 \section{Detectors}
 Detectors, combined with scale space, DoG chosen as our detector
 
