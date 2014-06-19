@@ -226,20 +226,21 @@ Rotation naturally occurs when either the camera or the object in question is ro
 Looking at the differential measures $\Theta, M,~S,$ and $C$, we are able to derive the resulting measure under rotation by $\theta$. We have left out the details of the derivations here, but they can be found in \Cref{apx:rotation}. The final derived results are shown in \Cref{tbl:measureInvariances}. We see that both $M,~S,$ and $C$ are rotational invariant whereas $\Theta$ is rotated by the transformation angle $\theta$.
 %
 \subsection{Reflection}
-
+Reflection occurs when either an object is flipped along some axis or an entire image is flipped (typically along the x- and/or y-axis). An example could be two sideshot images of a car driving in opposite directions, since a car typically looks the same from either side. Reflection is typically not handled directly in the descriptor but rather in the applications of the descriptor. An example of this is the pedestrian detection application, where \cite{dalal2005histograms} make sure to include both the original positive pedestrian images as well as their horizontally flipped versions in order to obtain a more reflection invarian pedestrian detector.
 
 \subsection{Illumination}
 \label{sec:illumination}
-Reference \Cref{apx:illumination} for $\Theta,~M,~S$, and $C$.
-By using a small sigma for calculating the derivatives in the jet, we only use a small spatial area for the calculations which minimizes the risk of crossing a shadow edge. By combining multiple jets or shape indices into histograms we are able to calculate a descriptor across a shadow edge but still maintaining illumination invariance.
+Illumination transformations both occur as global as well local transformations of light. The global transformation model the overall diffuse light level, which is visible on e.g. a sunny and a cloudy day. The local transformations model the local differences in light such as e.g. cast shadows and directed light.
+
+By assuming the image $\tilde{I} = a I +  b$ is an affine illumination transformation of the underlying image $I$ with no light transformations, we are able to derive the effect of the transformation on the differential measures $\Theta,~M,~S,$ and $C$. Once again we have left out the details here, which can be found in \Cref{apx:illumination}. The final results can be seen in \Cref{tbl:measureInvariances}. We see that $\Theta$ and $S$ are illumination invariant whereas $M$ and $C$ are multiplied by the linear constant $a$ of the affine transformation. These coefficients are typically estimated and corrected for by using some either local or global normalization scheme.
 
 \subsection{Scale}
 \label{sec:scaleInvariance}
-Noget med scalespace \cite{griffin1997scale}.
+
+The scale of objects in images vary depending on multiple factors as descibed in \Cref{sec:GaussianScaleSpace}. In order to achieve scale invariance, descriptors are typically defined relative to a feature scale. Depending on the application, the feature scale is typically defined by an interest point detector or a sliding window.
 
 \subsection{Perspective}
-noget med ?
-
+Perspective distortions and occlusions have major impact on images. Even small changes of camera position can distort objects in 2D images and occlusions might occur. The perspective transformations are hard to estimate without prior knowledge of the scene and its attributes. Therefore only perspective robustness to a certain degree has been achieved in descriptors so far.
 
 
 \section{Histograms}
