@@ -3,8 +3,7 @@ nHard = 10^5;
 
 nWindows = [1 2 5 10 20 40 60];
 seed = (1:10)*10^4;
-%name = {'Go','Si','GoSi','Hog','HogDT'};
-name = {'Go','Si'};
+name = {'Go','Si','GoSi','Hog','HogDT'};
 
 PRAUC = zeros(numel(nWindows),numel(name),numel(seed));
 ROCAUC = PRAUC;
