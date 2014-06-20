@@ -1,7 +1,7 @@
 clc, clear all
 
-setNum = 1;
-imNum = 12;
+setNum = 16;
+imNum = 1;
 liNum = 0;
 
 peakThresholdDog = 6.5;

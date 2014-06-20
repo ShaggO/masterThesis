@@ -113,12 +113,13 @@ When analysing an image, we are usually interested in the structure of the image
 \subsection{Gaussian derivatives}
 \label{sec:gaussianDerivatives}
 
-The \emph{Gaussian derivatives} $G_{x^m y^n}$, where $m$ is the order of derivations in the $x$-axis and $n$ is the order of derivations in the $y$-axis, are used for obtaining structural information from an image. \Cref{fig:gaussianDerivatives} illustrates the Gaussian derivatives up to second order.
+The \emph{Gaussian derivatives} $G_{x^m y^n}$, where $m$ and $n$ are the order of derivations with respect to $x$ and $y$, are used for obtaining structural information from an image. \Cref{fig:gaussianDerivatives} illustrates the Gaussian derivatives up to second order.
 
-The Gaussian derivatives are used for computing Gaussian derivative scale-space images $L_{x^m y^n}$:
+Based on the Gaussian derivatives we define the Gaussian derivative scale-space images $L_{x^m y^n}$:
 \begin{align}
 	L_{x^m y^n}(x,y;\sigma) &= G_{x^m y^n}(x,y;\sigma) \ast I(x,y)
 \end{align}
+%
 We often compute the Gaussian derivatives analytically, and then convolve the image $I$ by the derived Gaussian filter. Given a Gaussian filter smaller than the image $I$, this ordering minimizes the number of calculations needed since we only compute one convolution with $I$.
 
 In theory the Gaussian function has infinite support, but in practice one often uses the 3-sigma rule to determine the support radius of the Gaussian filter and hence the computational load of the convolution.
