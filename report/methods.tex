@@ -118,23 +118,24 @@ Based on the Gaussian derivatives we define the Gaussian derivative scale-space 
 	L_{x^m y^n}(x,y;\sigma) &= G_{x^m y^n}(x,y;\sigma) \ast I(x,y)
 \end{align}
 %
-We often compute the Gaussian derivatives analytically, and then convolve the image $I$ by the derived Gaussian filter. Given a Gaussian filter smaller than the image $I$, this ordering minimizes the number of calculations needed since we only compute one convolution with $I$.
+The complexity of the convolution is not irrelevant when calculating scale spaces. Given a filter $f$ with $k$ elements and an image $I$ with $l$ entries, the complexity of a convolution is $\mathcal{O}(k l)$ since we perform $k$ multiplications and $k-1$ summations for each of the $l$ elements. Here we have assumed that the boundaries of the image are padded to allow a full filter computation for all $l$ entries.
+In theory the Gaussian function has infinite support causing the Gaussian filter to be infeasibly large. In practice one often uses the 3-sigma rule to determine the support radius of the Gaussian filter and hence the computational load of the convolution. The rule states that approximately 99.7\% of the area under a Gaussian function lies within 3$\sigma$ of the center of the function, and hence using $3\sigma$ as the Gaussian function support radius suffices.
 
-In theory the Gaussian function has infinite support, but in practice one often uses the 3-sigma rule to determine the support radius of the Gaussian filter and hence the computational load of the convolution.
+When computing a single Gaussian derivative image, a typical approach is to solve $G_{x^m y^n}$ analytically and sample the 2D filter from the analytical solution. Given a square filter of width and height $6\sigma$ we get $k=(6\sigma)^2$ filter elements. By solving $G_{x^m}$ and $G_{y^n}$ analytically, sampling two 1D filters of size $6\sigma$ and performing two chained convolutions of $I$, we get the same resulting image but at the cost of two significantly smaller filter convolutions. The same strategy can of course be applied to other separable 2D filters such as the ordinary Gaussian smoothing filter.
 
-Since the Gaussian derivative scale-spaces are computed on a set of increasing scales, we need to compute all the needed derivatives for each scale. This give us a large amount of convolutions of the same image using various sizes Gaussian filters, which is computationally inefficient. Given these circumstances, we now describe an alternative and computationally cheaper way of computing the Gaussian derivative scale-spaces. The idea is to compute one smoothing per scale and then calculate all the derivatives at that scale using finite differences. We first define the central differences filter $f$:
+Since the Gaussian derivative scale-spaces are computed on a set of increasing scales, we need to compute all the needed derivatives for each scale. This give us a large amount of convolutions of the same image using various sizes Gaussian filters, which is computationally inefficient. Given these circumstances, we now describe an alternative and computationally cheaper way of computing the Gaussian derivative scale-spaces. The idea is to compute one smoothing per scale, and then calculate all the derivatives at that scale using finite differences filters. We first define the central differences filter $f$:
 %
 \begin{align*}
 	I_x &= \frac{\partial I}{\partial x} \approx f_x \ast I = \begin{bmatrix} -1 & 0 & 1\end{bmatrix} \ast I \\
 	I_y &= \frac{\partial I}{\partial y} \approx f_y \ast I = \begin{bmatrix} -1 & 0 & 1\end{bmatrix}^\text{T} \ast I
 \end{align*}
 %
-The combined $f_{x^m y^n}$-filter is simply made by convolving $m$ $f_x$-filters and $n$ $f_y$-filters in a chain. Substituting the Gaussian derivatives by the central differences convolved with a Gaussian filter give us:
+The $f_{x^m}$ filter is made by convolving $m$ $f_x$-filters in a chain and the $f_{y^n}$-filter is constructed similarly. The combined derivative is calculated by following the alternative approach above, where we chain two 1D convolutions of $G$ together:
 %
 \begin{align*}
 	L_{x^m y^n}(x,y;\sigma) &= G_{x^m y^n}(x,y;\sigma) \ast I(x,y) \\
-		&\approx f_{x^m y^n} \ast G(x,y;\sigma) \ast I(x,y) \\
-		&= f_{x^m y^n} \ast L(x,y;\sigma)
+		&\approx f_{x^m} \ast \left( f_{y^n} \ast \left (G(x,y;\sigma) \ast I(x,y) \right) \right) \\
+		&= f_{x^m} \ast \left( f_{y^n} \ast L(x,y;\sigma) \right)
 \end{align*}
 %
 Since we have a nice set of increasing scales for our scale-space images, we are able to compute $L(x,y,\sigma_2)$ by using the previous scale space $L(x,y,\sigma_1)$ where $\sigma_2 > \sigma_1$ as described in \cite{tola2008fast}. The idea is to split up the smoothing into two operations and then use the associativity of convolution to use the previous scale-space image for the new smoothing:
