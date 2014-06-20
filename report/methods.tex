@@ -418,7 +418,7 @@ Assuming $-\sigma \leq a,b \leq \sigma$,
 
 Many binary classification methods do not directly output such a classification, but rather a more descriptive \emph{classification score} $s \in \mathbb{R}$ for each $x \in X$, that denotes the confidence of a classification. A higher $s$ means that we find it more likely that $x$ has the label $y = 1$. Thus as an intermediate step we can select a threshold $t \in \mathbb{R}$, and classify $x$ with $\hat{y} = 1$ if $s \geq t$, or $\hat{y} = -1$ if $s < t$. Varying this threshold allows us to modify the ratio between elements classified as positive and negative.
 
-To measure the performance of a binary classification method, we could simply compute the ratio of correctly classified elements. However, this measure is flawed if the distribution of elements is skewed towards one of the two conditions, or if it is more important to classify one of the conditions correctly than the other. Instead, we base our measures on the confusion matrix:
+To measure the performance of a binary classification method, we could simply compute the ratio of correctly classified elements. However, this measure is flawed if the distribution of elements is skewed toward one of the two conditions, or if it is more important to classify one of the conditions correctly than the other. Instead, we base our measures on the confusion matrix:
 %
 \begin{table}[H]
 	\centering
@@ -435,23 +435,24 @@ To measure the performance of a binary classification method, we could simply co
 	\label{tbl:confusion_matrix}
 \end{table}
 %
-The confusion matrix places classification outcomes into one of four cells, depending on both the condition and assigned label. We define $\TP$, $\FP$, $\FN$, and $\TN$ to be the number of respective outcomes across a given set of elements. We also define the following three measurements: \emph{recall} or \emph{true positive rate} ($\TPR$), \emph{fall-out} or \emph{false positive rate} ($\FPR$), and \emph{precision} ($\Prec$):
+The confusion matrix places classification outcomes into one of four cells, depending on both the condition and assigned label. We define $\TP$, $\FP$, $\FN$, and $\TN$ to be the number of respective outcomes across a given set of elements. We also define the following three measures: \emph{recall} or \emph{true positive rate} ($\TPR$), \emph{fall-out} or \emph{false positive rate} ($\FPR$), and \emph{precision} ($\Prec$):
 %
 \begin{align*}
-	\FPR &= \frac{\FP}{\FP + \TN} \\
 	\TPR &= \frac{\TP}{\TP + \FN} \\
+	\FPR &= \frac{\FP}{\FP + \TN} \\
 	\Prec &= \frac{\TP}{\FP + \TP}
 \end{align*}
 %
-In other words, recall is the percentage of condition positives that we have classified correctly, fall-out is the percentage of condition negatives that we have classified correctly, and precision is the percentage of assigned positives that are indeed condition positives.
+In other words, recall is the percentage of condition positives that we have classified correctly, fall-out is the percentage of condition negatives that we have classified incorrectly, and precision is the percentage of assigned positives that are indeed condition positives.
 
-As mentioned above, the threshold $t$ is required in order to perform the classification. In order to get a performance measure independent of the choice of $t$, we vary $t$ across $\mathbb{R}$ and obtain the measurements $\FPR,\TPR,$ and $\Prec$ for each value of $t$.
-%
-From these three measurements we draw the ROC-curve and the PR-curve defined as recall vs. fall-out and precision vs. recall respectively. Integrating these curves gives us the area under the curve (AUC) for ROC and PR. A ROC-curve describes the ability to classify both condition positives and negatives correctly, whereas a PR-curve describes the relation between the ``quality'' of assigned positives and the ``quantity'' of assigned condition positives.
+Recall that these measures depend on the threshold $t$ used for classification. There are two common ways to visualize the effect of $t$: the ROC-curve defined as recall vs. fall-out and the PR-curve defined as precision vs. recall. They are constructed by varying $t$ across $\mathbb{R}$ and plotting the measures as a curve in the respective spaces. A ROC-curve describes the ability to classify both condition positives and negatives correctly, whereas a PR-curve describes the relation between the ``quality'' of assigned positives and the ``quantity'' of assigned condition positives. \todo{Reference ROC/PR figures later in the report as examples}
 
-Note that PR-curves are used when the positive class is the main class of interest, or when a large skew towards one of the conditions of the classification is present as according to \citet{davis2006relationship}. Furthermore \citet{davis2006relationship} proves that an algorithm which optimizes ROCAUC doesn't necessarily optimize PRAUC, and hence optimization algorithms should utilize the final choice of evaluation measure to achieve optimal results. It is however also shown that given two curves, the first curve dominates the second in ROC space if and only if the first curve dominates the second in PR space \cite[Theorem 3.2]{davis2006relationship}, and hence an algorithm which always beats the competitors in PR also beats the competitors in ROC. In this context the notion of a curve dominating another curve means that the second curve is beneath or equal to first (dominating) curve.
+In order to get a performance measure independent of the choice of $t$, we can integrate the ROC- and PR-curves giving us the area under the curve (AUC). We refer to these measures as the ROC AUC and PR AUC. The ROC AUC has the property of being the probability that a randomly chosen condition positive element has a higher classification score $s$ than a randomly chosen condition negative element. The PR AUC is also called the average precision, as it is the average precision across all possible recall ratios.
+
+Note that PR-curves are used when the positive class is the main class of interest, or when a large skew towards one of the conditions of the classification is present as according to \citet{davis2006relationship}. Furthermore \citet{davis2006relationship} prove that an algorithm which optimizes ROCAUC doesn't necessarily optimize PRAUC, and hence optimization algorithms should utilize the final choice of evaluation measure to achieve optimal results. It is however also shown that given two curves, the first curve dominates the second in ROC space if and only if the first curve dominates the second in PR space \cite[Theorem 3.2]{davis2006relationship}, and hence an algorithm which always beats the competitors in PR also beats the competitors in ROC. In this context the notion of a curve dominating another curve means that the second curve is beneath or equal to first (dominating) curve.
+
+The choice between using the ROC- or PR-curves and their AUCs are discussed in the individual application sections \Cref{sec:od,sec:ic}.
 %
-The pros and cons of using the ROC- and PR-curves and their AUCs are discussed in the application sections \Cref{sec:od,sec:ic}.
 \section{Detectors}
 Detectors, combined with scale space, DoG chosen as our detector
 

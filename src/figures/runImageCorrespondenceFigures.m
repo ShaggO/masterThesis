@@ -54,6 +54,30 @@ hold on
 plot(TPmatchesX,TPmatchesY,'g.-')
 plot(FPmatchesX,FPmatchesY,'r.-')
 % plot(match.coord(UPidx,1),match.coord(UPidx,2),'y.')
-hold off
 export_fig('-r300','../report/img/imageCorrespondenceMatches.pdf');
-title('Classified as positive matches')
+
+%% ROC- and PR-curves
+
+figure
+set(gcf,'color','white')
+hold on
+plot(match.ROC(:,1),match.ROC(:,2),'r-','linewidth',2)
+% plot(match.ROC(idx,1),match.ROC(idx,2),'kx','linewidth',2,'markersize',15)
+title(['ROC-curve, AUC = ' num2str(match.ROCAUC)])
+xlabel('Fall-out (FPR)')
+ylabel('Recall (TPR)')
+axis image
+axis([0 1 0 1])
+export_fig('-r300','../report/img/imageCorrespondenceROC.pdf');
+
+figure
+set(gcf,'color','white')
+hold on
+plot(match.PR(:,2),1-match.PR(:,1),'r-','linewidth',2)
+% plot(match.PR(idx,2),1-match.PR(idx,1),'kx','linewidth',2,'markersize',15)
+title(['PR-curve, AUC = ' num2str(match.PRAUC)])
+xlabel('Recall (TPR)')
+ylabel('Precision')
+axis image
+axis([0 1 0 1])
+export_fig('-r300','../report/img/imageCorrespondencePR.pdf');
