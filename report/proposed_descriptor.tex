@@ -7,7 +7,7 @@
 \begin{document}
 \chapter{Proposed descriptor}
 %
-Our proposed descriptor consists of weighted smooth histograms computed for several \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
+Given an interest point $\x_0$ at scale $\sigma_0$, we wish to describe the surrounding area. Our proposed descriptor consists of weighted smooth histograms computed for several \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
 %
 \begin{align}
 \label{eq:proposed_histogram}
@@ -25,7 +25,7 @@ where
 \item[] $B$ is a binning aperture function.
 \end{itemize}
 %
-Note that this definition is similar to the galaxy descriptor \cite{pedersen2013shape}, except we consider several histograms with their own aperture functions $A_j$ and add the additional center aperture function $P$. The descriptor $D$ is constructed by concatenating all $n$ bin values of all $m$ cell histograms:
+Note that we have kept this definition similar to the galaxy descriptor \cite{pedersen2013shape}, except we consider several histograms with their own aperture functions $A_j$ and add the additional center aperture function $P$. The descriptor $D$ is constructed by concatenating all $n$ bin values of all $m$ cell histograms:
 %
 \begin{align}
 \label{eq:proposed_descriptor}

@@ -200,11 +200,27 @@ The automatic capturing of images using a robot arm combined with the individual
 %
 \section{Example}
 %
-\begin{figure}
+\begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{img/imageCorrespondenceMatches.pdf}
-		\caption{Matches with score under $t = 0.8$}
-		\label{fig:imageCorrespondenceMatches}
+\caption{Matches with score under $t = 0.8$}
+\label{fig:imageCorrespondenceMatches}
+\includegraphics[width=\textwidth]{img/imageCorrespondenceCorrectMatch.pdf}
+\caption{Example of a condition positive match. First and second best matches have descriptor distances $0.076$ and $0.083$, respectively, resulting in a distance ratio of $0.92$.}
+\label{fig:imageCorrespondenceCorrectMatch}
+\includegraphics[width=\textwidth]{img/imageCorrespondenceIncorrectMatch.pdf}
+\caption{Example of an condition negative match. First and second best matches have descriptor distances $0.079$ and $0.081$, respectively, resulting in a distance ratio of $0.97$.}
+\label{fig:imageCorrespondenceIncorrectMatch}
+\end{figure}
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{img/imageCorrespondenceROC.pdf}
+\caption{ROC-curve}
+\label{fig:imageCorrespondenceROC}
+\includegraphics[width=0.5\textwidth]{img/imageCorrespondencePR.pdf}
+\caption{PR-curve}
+\label{fig:imageCorrespondencePR}
 \end{figure}
 %
 \section{Experiments}

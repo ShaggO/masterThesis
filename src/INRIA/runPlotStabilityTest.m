@@ -8,7 +8,7 @@ sigma = std(PRAUC,1,3);
 
 figure
 hold on
-i = 2;
+i = 1:5;
 plot(x(:,i),mu(:,i)+sigma(:,i))
 plot(x(:,i),mu(:,i)-sigma(:,i))
 % semilogy(x,sigma)
