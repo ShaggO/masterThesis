@@ -285,17 +285,16 @@ where $d$ is the distance $x - \mu$ from a point $x$ to a bin center $\mu$, and 
  \Cref{fig:1dFilterGaussianPeriodic,fig:1dFilterTrianglePeriodic,fig:1dFilterBoxPeriodic} show 1D examples of four periodic Gaussian, triangle and box filters respectively on the interval $[-1,1]$. Notice how the wrap-around affects the filters at both ends of the periods as expected.
 
 \subsection{Renormalization}
-When making histograms over a non-periodic domain, the weight function will be cropped by the histogram bounds $l$ and $r$. We therefore risk biasing the weights towards the central bins of the domain, since the cropped filters will have. In order to avoid this, we view the bins as probability densities, and hence the area under each bin's weight function has to integrate to 1. This is done by renormalizing the functions based on their areas. Given a filter function $f$ and a bin center $\mu$, for which $l \leq \mu \leq r$ we first calculate the integral bounds $a$ and $b$ followed by the actual area integral $A(\mu,\sigma)$ itself:
+When making histograms over a non-periodic domain, the weight function will be cropped by the histogram bounds $l$ and $r$. We therefore risk biasing the weights towards the central bins of the domain, since the cropped filters will have. In order to avoid this, we view the bins as probability densities, and hence the area under each bin's weight function has to integrate to 1. This is done by renormalizing the functions based on their areas. Given a bin aperture function $B$ and a bin center $f_i$, for which $l \leq f_i \leq r$ we calculate the bounds $a$ and $b$ of $B$ given $f_i$:
 \begin{align*}
-	a &= l - \mu,\hspace{1cm}
-	b = r - \mu \\
-	A(\mu,\sigma) &= \int_a^b f(x;\mu,\sigma)\,\text{d}x
+	a = l - f_i,\hspace{1cm}
+	b = r - f_i,\hspace{1cm}
 \end{align*}
-We notice that $a \leq 0 \leq b$. This area is simply used as the normalization constant of the bin centered in $\mu$ resulting in the probability density histogram $H_{pd}$:
+We notice that $a \leq 0 \leq b$. The renormalized bin aperture funtion $B_\text{renorm}$ is obtained by dividing $B$ with its definite integral:
 \begin{align*}
-	H_{pd}(\mu) = \frac{H(\mu)}{A(\mu,\sigma)}
+	B_\text{renorm}\left( f(\x;\sigma)-f_i;\beta \right) = \frac{B \left(f(\x;\sigma)-f_i;\beta \right)}{\int_a^b B \left( z;\beta \right)\,\text{d}z}
 \end{align*}
-The calculations of $A(\mu,\sigma)$ for the Gaussian, triangle, and box filters are shown below in \Cref{sec:histogramsGaussianFilter,sec:histogramsTriangleFilter,sec:histogramsBoxFilter}.
+Notice how the bounds $a$ and $b$ of the integral are offset by the bin center $f_i$.
 
 \Cref{fig:1dFilterGaussianRenorm,fig:1dFilterTriangleRenorm,fig:1dFilterBoxRenorm} show 1D examples of four renormalized Gaussian, triangle, and box filters respectively on the interval $[-1,1]$. Notice how the two weight functions of the outer-most bins have higher peaks than the central bins in order to integrate to 1 when being cut off at the interval bounds. For periodic histograms the renormalization step is excluded since no cut off of the filters occurs.
 \todo{Decide what to do with the poor box illustration}
