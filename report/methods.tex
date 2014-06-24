@@ -256,9 +256,9 @@ These types of histograms are however neither robust to small interest point tra
 
 The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area/region of interest (ROI). This is done by letting all the values from the ROI contibute to all the bins of the histogram. When looking at discrete problems, this corresponds to using a Parzen window technique \cite{parzen1962estimation}. \mycomment[MSN]{Should this be mentioned or not?}
 
-Given a value domain computed by the function $f$ and a spatial ROI center $\x_0$, we wish to compute the histogram $H$ value at bin center $f_i$.
-We first introduce the value function $f(\x,\sigma)$, which corresponds to calculating the function $f$ in position $\x$ at (inner) scale $\sigma$. In terms of images this could correspond to calculating the gradient orientation at a position $\x$ in a certain scale space image $\sigma$.
-Next we compute the bin aperture function $B$ of the distance between the bin center $f_i$ and $f(\x,\sigma)$ using the (tonal) scale $\beta$ as ``width'' of $B$. Finally we compute a spatial aperture function $A$ of the distance between $\x_0$ and $\x$ using the (outer) scale $\alpha$ as the ``width'' of $A$. The histogram of the bin center $f_i$ is defined from $f,~B,$ and $A$ as
+Given a value function $f$ with a range of $[l,r]$, and a spatial ROI center $\x_0$, we wish to compute the histogram $H$ value at bin center $f_i$.
+The value function defined as $f(\x,\sigma)$ corresponds to calculating the function $f$ in position $\x$ at (inner) scale $\sigma$. In terms of images this could correspond to calculating the gradient orientation at a position $\x$ in a scale space image at scale $\sigma$.
+We use the distance between the bin center $f_i$ and $f(\x,\sigma)$ to compute the bin aperture function $B$ using the (tonal) scale $\beta$ as ``width'' of $B$. Finally we compute a spatial aperture function $A$ of the distance between $\x_0$ and $\x$ using the (outer) scale $\alpha$ as the ``width'' of $A$. The histogram of the bin center $f_i$ is defined from $f,~B,$ and $A$ as
 %
 \begin{align}
 	\label{eq:histogramLong}
