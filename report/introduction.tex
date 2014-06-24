@@ -3,11 +3,11 @@
 
 \section*{Introduction}
 
-Computer scientists have for many years tried to make computers perceive real world images as humans do, in order to solve problems such as object detection of pedestrians \citet{felzenszwalb2008discriminatively}, content based image retrieval \cite{smeulders2000content}, and the image correspondence problem \cite{dahl2011finding}.
+Computer scientists have for many years tried to make computers perceive real world images as humans do, in order to solve problems such as object detection of pedestrians \cite{felzenszwalb2008discriminatively}, content based image retrieval \cite{smeulders2000content}, and the image correspondence problem \cite{dahl2011finding}.
 %
 The approaches to these problems are often based on extraction of features/interest points in the images. An \emph{interest point} is a single point in an image having an interesting local structure such as a corner or a blob. A \emph{descriptor} is a representation of local structure of an image typically surrounding an interest point. This is also often referred to as a \emph{feature}.
 
-Interest points are found using various detectors. The detectors that are popular and have proven to be successful are the Harris corner detector, Hessian based detectors, the Difference of Gaussian (DoG) detector, and the Maximally Stable Extremal Regions (MSER) detector \cite{aanaes2012interesting,dahl2011finding}. The sliding window technique is an alternative approach to finding features described in \cite{dalal2005histograms}\todo{Add reference to own section about sliding window}.
+Interest points are found using various detectors. The detectors that are popular and have proven to be successful are the Harris corner detector, Hessian based detectors, the Difference of Gaussian (DoG) detector, and the Maximally Stable Extremal Regions (MSER) detector \cite{aanaes2012interesting,dahl2011finding}. The sliding window technique (see \Cref{sec:slidingWindow}) is an alternative approach to finding features described in \cite{dalal2005histograms}.
 \mycomment[KSP]{Og hvad med descriptors?}
 
 Descriptors are designed to be invariant to several image transformations such as rotation, translation, illumination, scale, perspective, and noise. This way real world objects will be described similarly despite being captured under different conditions. The choice of invariant properties depends on the application of the descriptor. For example rotation invariance is desired for texture description but not necessarily for recognition of pedestrians.

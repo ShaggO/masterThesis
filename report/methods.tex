@@ -7,9 +7,12 @@
 \newcommand\FP{\mathit{FP}}
 \newcommand\TN{\mathit{TN}}
 \newcommand\FN{\mathit{FN}}
+\def\x{\mathbf{x}}
 \begin{document}
 
 \chapter{Methods}
+In this chapter we will go through basic computer vision theory and methods that we have found relevant throughout our work.
+\todo{Add proper introduction to the chapter once it's finished}
 
 \section{Gaussian scale-space}
 \label{sec:GaussianScaleSpace}
@@ -251,18 +254,29 @@ Histograms play an essential role in SIFT-like descriptors. They are used for ag
 
 These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries. SIFT used a trilinear interpolation of the gradient magnitude based on the radial distance between the gradient orientation and the bin centers to cope with gradients close to the bin boundaries. In order to improve upon the robustness of the histograms, we here describe a histogram framework which is able to produce both ordinary (hard bounded) as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
 
-The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area/region of interest (ROI). This is done by letting all the values from the ROI contibute to all the bins of the histogram. The contribution of each value to each bin is dependent of the spatial distance to the chosen position, the distance between the value and the bin center (angular distance for GO histograms), and the value weight (typically gradient magnitude for GO histograms). Both distance weights are simple functions of a distance and hence we are able to compute ordinary sharp-bounded histograms by using box functions and smooth histograms by using Gaussian functions.
+The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area/region of interest (ROI). This is done by letting all the values from the ROI contibute to all the bins of the histogram. When looking at discrete problems, this corresponds to using a Parzen window technique \cite{parzen1962estimation}. \mycomment[MSN]{Should this be mentioned or not?}
 
-\citet{koenderink1999structure} define the LOIs from three scales: inner scale $\sigma$, tonal scale $\beta$, and outer scale $\alpha$. When applying the framework to our work, the inner scale corresponds to the feature scale (scale in scale-space), the tonal scale corresponds to the width of the histogram bin weight function, and the outer scale corresponds to the size of the ROI. The specifics of the histograms used in our work are explained in \Cref{eq:proposed_histogram}.
-\mycomment[MSN]{How much theory here?}
-
-Notes:
-Given a domain in the interval $l \leq r$, we compute the histogram...
-$H(\mu;\sigma,\beta,\alpha)$
-
+Given a value domain computed by the function $f$ and a spatial ROI center $\x_0$, we wish to compute the histogram $H$ value at bin center $f_i$.
+We first introduce the value function $f(\x,\sigma)$, which corresponds to calculating the function $f$ in position $\x$ at (inner) scale $\sigma$. In terms of images this could correspond to calculating the gradient orientation at a position $\x$ in a certain scale space image $\sigma$.
+Next we compute the bin aperture function $B$ of the distance between the bin center $f_i$ and $f(\x,\sigma)$ using the (tonal) scale $\beta$ as ``width'' of $B$. Finally we compute a spatial aperture function $A$ of the distance between $\x_0$ and $\x$ using the (outer) scale $\alpha$ as the ``width'' of $A$. The histogram of the bin center $f_i$ is defined from $f,~B,$ and $A$ as
+%
+\begin{align}
+	\label{eq:histogramLong}
+	H(f_i;\x_0,\sigma,\beta,\alpha) &= \int A(\x;\x_0,\alpha) B(f(\x;\sigma)-f_i;\beta)\,\text{d}\x
+\end{align}
+%
+When using such a histogram in practice, the parameters $\x_0,~\sigma,~\beta,$ and $\alpha$ are already defined as well as the functions $A,~B,$ and $f$ leading to the following shorthand notation for a histogram:
+%
+\begin{align}
+	\label{eq:histogramShort}
+	H(f_i) &= \int A(\x) B(\x;f_i,f)\,\text{d}\x
+\end{align}
+%
+The specifics of the histograms used in our work are explained in \Cref{eq:proposed_histogram}.
+%
 \subsection{Periodic histograms}
 When creating histograms of periodic domains, we need to take the periodicity into consideration. We specify the period between $l$ and $r$, where $l \leq r$.
-The periodicity of the domain means that there are multiple distances between any two points. Since we are computing distance weight functions, we need to find the minimum distance $d_{wrap}$ from each point to each bin center in order to correctly compute the weight functions. This is done by a simple wrap-around using the known period of the domain as maximum distance:
+The periodicity of the domain means that there are multiple distances between any two points. Since we are computing distance bin aperture functions, we need to find the minimum distance $d_{wrap}$ from each point value to each bin center in order to correctly compute the function values. This is done by a simple wrap-around using the known period of the domain as maximum distance:
 \begin{align*}
 	d_{wrap} = \min(d,(r - l)-d)
 \end{align*}
@@ -454,7 +468,9 @@ Note that PR-curves are used when the positive class is the main class of intere
 
 The choice between using the ROC- or PR-curves and their AUCs are discussed in the individual application sections \Cref{sec:od,sec:ic}.
 %
-\section{Detectors}
+\section{Interest point detectors}
+Interest points described
+blobs, corners.
 Detectors, combined with scale space, DoG chosen as our detector
 
 \subsection{Difference of Gaussian}
@@ -468,6 +484,9 @@ shown on the left. Adjacent Gaussian images are subtracted to produce the differ
 Gaussian image is down-sampled by a factor of 2, and the process repeated.}
 	\label{fig:dogSpaces}
 \end{figure}
+
+\section{Sliding window}
+\label{sec:slidingWindow}
 
 \section{Descriptors}
 
