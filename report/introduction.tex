@@ -1,7 +1,7 @@
 \documentclass[thesis.tex]{subfiles}
 \begin{document}
 
-\section*{Introduction}
+\section{Introduction}
 \label{sec:introduction}
 
 Computer scientists have for many years tried to make computers perceive real world images as humans do, in order to solve problems such as object detection of pedestrians \cite{felzenszwalb2008discriminatively}, content based image retrieval \cite{smeulders2000content}, and the image correspondence problem \cite{dahl2011finding}.
@@ -20,6 +20,10 @@ We will try to design and implement a variant of the HOG descriptor utilizing hi
 
 At first we will try to experiment with a HOG descriptor extended to various orders of differential information (like Jet descriptors à la \cite{larsen2012jet}) and various parameters for the number of cells per block, number of pixels per cell and number of bins per cell histogram. Furthermore we will experiment with the combination of HOG and the shape index \cite{koenderink1992surface} as well as different ways of processing the higher order information.
 %%%% /proposed solution
+
+
+%% Note on appendices in the report
+In this report we try to focus on the essential parts of our study of higher order descriptors. In order to keep this focus we have chosen to omit certain derivation details from the report itself and put them in appendices instead. Throughout the report there are notes when details are moved to appendices.
 
 
 
