@@ -404,10 +404,12 @@ Note that PR-curves are used when the positive class is the main class of intere
 
 The choice between using the ROC- or PR-curves and their AUCs are discussed in the individual application sections \Cref{sec:od,sec:ic}.
 %
+
 \section{Interest point detectors}
-Interest points described
-blobs, corners.
-Detectors, combined with scale space, DoG chosen as our detector
+\label{sec:interestPointDetectors}
+As mentioned in \Cref{sec:introduction} interest point detectors are used for finding interesting points in images having various desired properties. These properties vary between blobs, corners, and edges depending on the detector used. Furthermore some detectors are multi-scale detectors meaning that they search through a scale space pyramid in order to find interest points at multiple scales. Combining a multi-scale detector with a descriptor is a typical way of achieving scale invariant descriptors as mentioned in \Cref{sec:scaleInvariance}.
+
+The focus of this report is to study higher order descriptors and hence we simply choose to use the multi-scale DoG detector described below for solving the image correspondence problem.
 
 \subsection{Difference of Gaussian}
 DoG detector
@@ -423,6 +425,7 @@ Gaussian image is down-sampled by a factor of 2, and the process repeated.}
 
 \section{Sliding window}
 \label{sec:slidingWindow}
+
 
 \section{Descriptors}
 
