@@ -197,6 +197,123 @@ C &= \sqrt{\frac{\kappa_1^2 + \kappa_2^2}{2}} \\
 %
 \Cref{fig:shapeIndexTheory} illustrates the relationship between the principal curvatures, shape index and curvedness, as well as the geometry of various shape indices. As seen in the figure, $S$ ranges over light blobs ($S = -1$), ridges ($S = -0.5$), saddle points ($S = 0$), valleys ($S = 0.5$), and dark blobs ($S = 1$) with continuous deformations in between.
 %
+\section{Histograms}
+\label{sec:histograms}
+
+Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over local areas. Traditionally histograms have been constructed using hard boundaries between bins; and descriptors have been constructed with hard boundaries between the local histogram areas of a descriptor.
+
+These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries. SIFT used a trilinear interpolation of the gradient magnitude based on the radial distance between the gradient orientation and the bin centers to cope with gradients close to the bin boundaries. In order to improve upon the robustness of the histograms, we here describe a histogram framework which is able to produce both ordinary (hard bounded) as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
+
+The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area/region of interest (ROI). This is done by letting all the values from the ROI contibute to all the bins of the histogram. When looking at discrete problems, this corresponds to using a Parzen window technique \cite{parzen1962estimation}. \mycomment[MSN]{Should this be mentioned or not?}
+
+Given a value function $f$ with a range of $[l,r]$, and a spatial ROI center $\x_0$, we wish to compute the histogram $H$ value at bin center $f_i$.
+The value function defined as $f(\x,\sigma)$ corresponds to calculating the function $f$ in position $\x$ at (inner) scale $\sigma$. In terms of images this could correspond to calculating the gradient orientation at a position $\x$ in a scale space image at scale $\sigma$.
+We use the distance between the bin center $f_i$ and $f(\x,\sigma)$ to compute the bin aperture function $B$ using the (tonal) scale $\beta$ as ``width'' of $B$. Finally we compute a spatial aperture function $A$ of the distance between $\x_0$ and $\x$ using the (outer) scale $\alpha$ as the ``width'' of $A$. The histogram of the bin center $f_i$ is defined from $f,~B,$ and $A$ as
+%
+\begin{align}
+	\label{eq:histogramLong}
+	H(f_i;\x_0,\sigma,\beta,\alpha) &= \int A(\x;\x_0,\alpha) B(f(\x;\sigma)-f_i;\beta)\,\text{d}\x
+\end{align}
+%
+When using such a histogram in practice, the parameters $\x_0,~\sigma,~\beta,$ and $\alpha$ are already defined as well as the functions $A,~B,$ and $f$ leading to the following shorthand notation for a histogram:
+%
+\begin{align}
+	\label{eq:histogramShort}
+	H(f_i) &= \int A(\x) B(\x;f_i,f)\,\text{d}\x
+\end{align}
+%
+The specifics of the histograms used in our work are explained in \Cref{eq:proposed_histogram}.
+%
+\subsection{Aperture kernel functions}
+%
+We consider three choices of kernel functions for $A$ and $B$: box, triangle, and Gaussian. In 1D, the kernels are defined as
+%
+\begin{align*}
+\mathit{Box} (x; \beta) &= 
+\begin{cases}
+    \frac{1}{2 \beta},& \text{if } |x| \leq \beta \\
+    0,              & \text{otherwise}
+\end{cases} \\
+\mathit{Tri} (x; \beta) &= 
+\begin{cases}
+    \frac{1}{2 \beta} \left( 1 - \frac{| x |}{2 \beta} \right) ,& \text{if } |x| \leq 2 \beta \\
+    0,              & \text{otherwise}
+\end{cases} \\
+G(x;\beta) &= \frac{1}{\sqrt{2\pi} \beta}
+\exp\left( -\frac{x^2}{2 \beta^2} \right)
+\end{align*}
+%
+For bin aperture functions $B$ we can use these kernels directly. The spatial aperture functions $A$ are however defined on a 2D domain; this is handled by multiplying two of the same kernel functions together, i.e:
+%
+\begin{align*}
+G(\x;\beta) &= G(x;\beta) G(y;\beta) \\
+&= \frac{1}{2\pi \beta^2}
+\exp\left( -\frac{x^2 + y^2}{2 \beta^2} \right)
+\end{align*}
+%
+where $\x = [x ~~ y]^T$. We do not allow for separate scales $\beta$ for each dimension.
+%
+\subsection{Periodic histograms}
+When creating histograms of periodic domains, we need to take the periodicity into consideration. We specify the period between $l$ and $r$, where $l \leq r$.
+The periodicity of the domain means that there are multiple distances between any two points. Since we are computing distance bin aperture functions, we need to find the minimum distance $d_{wrap}$ from each point value to each bin center in order to correctly compute the function values. This is done by a simple wrap-around using the known period of the domain as maximum distance:
+\begin{align*}
+	d_{wrap} = \min(d,(r - l)-d)
+\end{align*}
+where $d$ is the distance $x - \mu$ from a point $x$ to a bin center $\mu$, and $\min$ is the function that chooses the lowest of its arguments.
+
+ \Cref{fig:1dFilterGaussianPeriodic,fig:1dFilterTrianglePeriodic,fig:1dFilterBoxPeriodic} show 1D examples of four periodic Gaussian, triangle and box filters respectively on the interval $[-1,1]$. Notice how the wrap-around affects the filters at both ends of the periods as expected.
+
+\subsection{Renormalization}
+When making histograms over a non-periodic domain, the weight function will be cropped by the histogram bounds $l$ and $r$. We therefore risk biasing the weights towards the central bins of the domain, since the cropped filters will have. In order to avoid this, we view the bins as probability densities, and hence the area under each bin's weight function has to integrate to 1. This is done by renormalizing the functions based on their areas. Given a bin aperture function $B$ and a bin center $f_i$, for which $l \leq f_i \leq r$ we calculate the bounds $a$ and $b$ of $B$ given $f_i$:
+\begin{align*}
+	a = l - f_i,\hspace{1cm}
+	b = r - f_i,\hspace{1cm}
+\end{align*}
+We notice that $a \leq 0 \leq b$. The renormalized bin aperture function $B_\text{renorm}$ is obtained by dividing $B$ with its definite integral:
+\begin{align*}
+	B_\text{renorm}\left( f(\x;\sigma)-f_i;\beta \right) = \frac{B \left(f(\x;\sigma)-f_i;\beta \right)}{\int_a^b B \left( z;\beta \right)\,\text{d}z}
+\end{align*}
+Notice how the bounds $a$ and $b$ of the integral are offset by the bin center $f_i$. The definite integrals of our chosen kernel functions are computed in \Cref{apx:histogramRenormalization}.
+
+\Cref{fig:1dFilterGaussianRenorm,fig:1dFilterTriangleRenorm,fig:1dFilterBoxRenorm} show 1D examples of four renormalized Gaussian, triangle, and box filters respectively on the interval $[-1,1]$. Notice how the two weight functions of the outer-most bins have higher peaks than the central bins in order to integrate to 1 when being cut off at the interval bounds. For periodic histograms the renormalization step is excluded since no cut off of the filters occurs.
+\todo{Decide what to do with the poor box illustration}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterGaussianPeriodic.pdf}
+		\caption{Periodic Gaussian}
+		\label{fig:1dFilterGaussianPeriodic}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterTrianglePeriodic.pdf}
+		\caption{Periodic Triangle}
+		\label{fig:1dFilterTrianglePeriodic}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterBoxPeriodic.pdf}
+		\caption{Periodic box}
+		\label{fig:1dFilterBoxPeriodic}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterGaussianRenorm.pdf}
+		\caption{Renorm. Gaussian}
+		\label{fig:1dFilterGaussianRenorm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterTriangleRenorm.pdf}
+		\caption{Renorm. triangle}
+		\label{fig:1dFilterTriangleRenorm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/binFilterBoxRenorm.pdf}
+		\caption{Renorm. box}
+		\label{fig:1dFilterBoxRenorm}
+	\end{subfigure}
+	\caption{Examples of periodic and renormalized 1D Gaussian, triangle, and box functions. Each figures contains four filters centered at values $-0.75$, $-0.25$, $0.25$, and $0.75$ and with $\sigma = \nicefrac{1}{2}$.}
+	\label{fig:1dFilters}
+\end{figure}
+%
 \section{Invariants and robustness}
 When describing interest points and their local regions in real world images, we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any (or a predefined set) of these transformations applied, in which case we have a better chance of recognizing the interest point in other images.
 
@@ -245,95 +362,6 @@ The scale of objects in images vary depending on multiple factors as descibed in
 
 \subsection{Perspective}
 Perspective distortions and occlusions have major impact on images. Even small changes of camera position can distort objects in 2D images and occlusions might occur. The perspective transformations are hard to estimate without prior knowledge of the scene and its attributes. Therefore only perspective robustness to a certain degree has been achieved in descriptors so far.
-
-
-\section{Histograms}
-\label{sec:histograms}
-
-Histograms play an essential role in SIFT-like descriptors. They are used for aggregating gradient orientation (GO) and magnitude information over local areas. Traditionally histograms have been constructed using hard boundaries between bins; and descriptors have been constructed with hard boundaries between the local histogram areas of a descriptor.
-
-These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries. SIFT used a trilinear interpolation of the gradient magnitude based on the radial distance between the gradient orientation and the bin centers to cope with gradients close to the bin boundaries. In order to improve upon the robustness of the histograms, we here describe a histogram framework which is able to produce both ordinary (hard bounded) as well as smooth histograms based on locally orderless images (LOI), \cite{koenderink1999structure}.
-
-The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area/region of interest (ROI). This is done by letting all the values from the ROI contibute to all the bins of the histogram. When looking at discrete problems, this corresponds to using a Parzen window technique \cite{parzen1962estimation}. \mycomment[MSN]{Should this be mentioned or not?}
-
-Given a value function $f$ with a range of $[l,r]$, and a spatial ROI center $\x_0$, we wish to compute the histogram $H$ value at bin center $f_i$.
-The value function defined as $f(\x,\sigma)$ corresponds to calculating the function $f$ in position $\x$ at (inner) scale $\sigma$. In terms of images this could correspond to calculating the gradient orientation at a position $\x$ in a scale space image at scale $\sigma$.
-We use the distance between the bin center $f_i$ and $f(\x,\sigma)$ to compute the bin aperture function $B$ using the (tonal) scale $\beta$ as ``width'' of $B$. Finally we compute a spatial aperture function $A$ of the distance between $\x_0$ and $\x$ using the (outer) scale $\alpha$ as the ``width'' of $A$. The histogram of the bin center $f_i$ is defined from $f,~B,$ and $A$ as
-%
-\begin{align}
-	\label{eq:histogramLong}
-	H(f_i;\x_0,\sigma,\beta,\alpha) &= \int A(\x;\x_0,\alpha) B(f(\x;\sigma)-f_i;\beta)\,\text{d}\x
-\end{align}
-%
-When using such a histogram in practice, the parameters $\x_0,~\sigma,~\beta,$ and $\alpha$ are already defined as well as the functions $A,~B,$ and $f$ leading to the following shorthand notation for a histogram:
-%
-\begin{align}
-	\label{eq:histogramShort}
-	H(f_i) &= \int A(\x) B(\x;f_i,f)\,\text{d}\x
-\end{align}
-%
-The specifics of the histograms used in our work are explained in \Cref{eq:proposed_histogram}.
-%
-\subsection{Periodic histograms}
-When creating histograms of periodic domains, we need to take the periodicity into consideration. We specify the period between $l$ and $r$, where $l \leq r$.
-The periodicity of the domain means that there are multiple distances between any two points. Since we are computing distance bin aperture functions, we need to find the minimum distance $d_{wrap}$ from each point value to each bin center in order to correctly compute the function values. This is done by a simple wrap-around using the known period of the domain as maximum distance:
-\begin{align*}
-	d_{wrap} = \min(d,(r - l)-d)
-\end{align*}
-where $d$ is the distance $x - \mu$ from a point $x$ to a bin center $\mu$, and $\min$ is the function that chooses the lowest of its arguments.
-
- \Cref{fig:1dFilterGaussianPeriodic,fig:1dFilterTrianglePeriodic,fig:1dFilterBoxPeriodic} show 1D examples of four periodic Gaussian, triangle and box filters respectively on the interval $[-1,1]$. Notice how the wrap-around affects the filters at both ends of the periods as expected.
-
-\subsection{Renormalization}
-When making histograms over a non-periodic domain, the weight function will be cropped by the histogram bounds $l$ and $r$. We therefore risk biasing the weights towards the central bins of the domain, since the cropped filters will have. In order to avoid this, we view the bins as probability densities, and hence the area under each bin's weight function has to integrate to 1. This is done by renormalizing the functions based on their areas. Given a bin aperture function $B$ and a bin center $f_i$, for which $l \leq f_i \leq r$ we calculate the bounds $a$ and $b$ of $B$ given $f_i$:
-\begin{align*}
-	a = l - f_i,\hspace{1cm}
-	b = r - f_i,\hspace{1cm}
-\end{align*}
-We notice that $a \leq 0 \leq b$. The renormalized bin aperture funtion $B_\text{renorm}$ is obtained by dividing $B$ with its definite integral:
-\begin{align*}
-	B_\text{renorm}\left( f(\x;\sigma)-f_i;\beta \right) = \frac{B \left(f(\x;\sigma)-f_i;\beta \right)}{\int_a^b B \left( z;\beta \right)\,\text{d}z}
-\end{align*}
-Notice how the bounds $a$ and $b$ of the integral are offset by the bin center $f_i$.
-
-\Cref{fig:1dFilterGaussianRenorm,fig:1dFilterTriangleRenorm,fig:1dFilterBoxRenorm} show 1D examples of four renormalized Gaussian, triangle, and box filters respectively on the interval $[-1,1]$. Notice how the two weight functions of the outer-most bins have higher peaks than the central bins in order to integrate to 1 when being cut off at the interval bounds. For periodic histograms the renormalization step is excluded since no cut off of the filters occurs.
-\todo{Decide what to do with the poor box illustration}
-
-\begin{figure}
-	\centering
-	\begin{subfigure}[t]{0.32\textwidth}
-		\includegraphics[width=\textwidth]{img/binFilterGaussianPeriodic.pdf}
-		\caption{Periodic Gaussian}
-		\label{fig:1dFilterGaussianPeriodic}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
-		\includegraphics[width=\textwidth]{img/binFilterTrianglePeriodic.pdf}
-		\caption{Periodic Triangle}
-		\label{fig:1dFilterTrianglePeriodic}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
-		\includegraphics[width=\textwidth]{img/binFilterBoxPeriodic.pdf}
-		\caption{Periodic box}
-		\label{fig:1dFilterBoxPeriodic}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
-		\includegraphics[width=\textwidth]{img/binFilterGaussianRenorm.pdf}
-		\caption{Renorm. Gaussian}
-		\label{fig:1dFilterGaussianRenorm}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
-		\includegraphics[width=\textwidth]{img/binFilterTriangleRenorm.pdf}
-		\caption{Renorm. triangle}
-		\label{fig:1dFilterTriangleRenorm}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.32\textwidth}
-		\includegraphics[width=\textwidth]{img/binFilterBoxRenorm.pdf}
-		\caption{Renorm. box}
-		\label{fig:1dFilterBoxRenorm}
-	\end{subfigure}
-	\caption{Examples of periodic and renormalized 1D Gaussian, triangle, and box functions. Each figures contains four filters centered at values $-0.75$, $-0.25$, $0.25$, and $0.75$ and with $\sigma = \nicefrac{1}{2}$.}
-	\label{fig:1dFilters}
-\end{figure}
 %
 \section{Binary classification measures}
 %
