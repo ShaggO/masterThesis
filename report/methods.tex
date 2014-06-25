@@ -17,7 +17,7 @@ In this chapter we will go through basic computer vision theory and methods that
 \section{Gaussian scale-space}
 \label{sec:GaussianScaleSpace}
 %
-When taking pictures of the real world, the resulting images are of various sizes and resolutions, and include objects at different distances. This causes details to be present in the images at various scales. Using the Gaussian scale-space representation \cite{griffin1997scale,ginneken2000applications} described in this section, we are able to create a multi-scale representation of the details in an image. The representation consists of a set of smoothed versions of the original image, obtained by applying Gaussian filters $G$ of various sizes $\sigma$ corresponding to the image scales. For a point $(x,y)$, the filter at scale $\sigma$ is defined as
+When taking pictures of the real world, the resulting images are of various sizes and resolutions, and include objects at different distances. This causes details to be present in the images at various scales. Using the Gaussian scale-space representation \cite{griffin1997scale,ginneken2000applications} described in this section, we are able to create a multi-scale representation of the details in an image. The representation consists of a set of smoothed versions of the original image, obtained by applying Gaussian filters $G$ of various sizes $\sigma$ corresponding to the image scales. When an image is smoothed by a filter at scale $\sigma$, the details smaller than that scale are removed. For a point $(x,y)$, the Gaussian filter at scale $\sigma$ is defined as
 %
 \begin{align}
 	G(x,y;\sigma) &= \frac{1}{2\pi \sigma^2} \exp \left(\frac{-(x^2+y^2)}{2\sigma^2} \right)
@@ -411,16 +411,39 @@ As mentioned in \Cref{sec:introduction} interest point detectors are used for fi
 
 The focus of this report is to study higher order descriptors and hence we simply choose to use the multi-scale DoG detector described below for solving the image correspondence problem.
 
-\subsection{Difference of Gaussian}
-DoG detector
+\subsection{Difference of Gaussians}
 
-\begin{figure}[tb]
+Recall from \Cref{sec:GaussianScaleSpace} that our scale-space representation removes image details below a given scale $\sigma$. The idea of the Difference of Gaussian (DoG) blob detector is that by computing the difference of two scale-space images for $\sigma_1$ and $\sigma_2$, we also remove the details at a higher scale, leaving only details between $\sigma_1$ and $\sigma_2$. The $\mathit{DoG}$ function is thus defined as
+%
+\begin{align*}
+\mathit{DoG}(\x,\sigma_1,\sigma_2) &= L(\x,\sigma_2) - L(\x,\sigma_1) \\
+&= \left( G(\x,\sigma_2) - G(\x,\sigma_1) \right) \ast I(\x)
+\end{align*}
+%
+where $\sigma_2 > \sigma_1$. Minima and maxima of this function indicate dark and light blobs at a scale between $\sigma_1$ and $\sigma_2$, respectively.
+%
+\begin{figure}[p]
 	\centering
 	\includegraphics[width=\textwidth,clip=true,trim=0 200 0 220]{img/SIFT_dogspaces.pdf}
 	\caption{Reproduced DoG scalespace figure \cite[figure 1,pp. 95]{lowe2004distinctive}. Original caption: For each octave of scale space, the initial image is repeatedly convolved with Gaussians to produce the set of scale space images
 shown on the left. Adjacent Gaussian images are subtracted to produce the difference-of-Gaussian images on the right. After each octave, the
 Gaussian image is down-sampled by a factor of 2, and the process repeated.}
 	\label{fig:dogSpaces}
+	\vspace{5mm}
+
+	\centering
+	\begin{subfigure}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_2-1.png}
+		\caption{$\sigma_1 = 1, \sigma_2 = 2$}
+		\label{fig:dogExampleFirst}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_16-8.png}
+		\caption{$\sigma_1 = 8, \sigma_2 = 16$}
+		\label{fig:dogExampleLast}
+	\end{subfigure}
+	\caption{Example of DoG images computed for the set of scale-space images from \Cref{fig:scaleSpaceExample} at two fine scales $\sigma_1 = 1, \sigma_2 = 2$ and two course scales $\sigma_1 = 8, \sigma_2 = 16$. Light and dark areas correspond to dark and light blobs in the respective scale intervals.}
+	\label{fig:dogExample}
 \end{figure}
 
 \section{Sliding window}

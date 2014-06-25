@@ -10,3 +10,9 @@ imwrite(I,'../report/img/scaleSpaceTheory_0.png');
 for i = 1:numel(scales)
     imwrite(S(i).none,['../report/img/scaleSpaceTheory_' num2str(scales(i)) '.png']);
 end
+
+for i = [1 4]
+    DoG = S(i+1).none - S(i).none;
+    DoG = (DoG + 0.2) / 0.4;
+    imwrite(DoG,['../report/img/scaleSpaceTheory_' num2str(scales(i+1)) '-' num2str(scales(i)) '.png']);
+end
