@@ -26,7 +26,7 @@ else
 end
 
 svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard '_' num2str(nWindows) '_' num2str(seed) '.mat'];
-svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC'};
+svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC','svm'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
     disp('Loaded svm file.')

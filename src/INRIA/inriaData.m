@@ -21,7 +21,7 @@ methods
         obj.paths = load('paths');
     end
 
-    function loadCache(obj,type)
+    function images = loadCache(obj,type)
         if strcmp(type,'all')
             obj.loadCache('posTrain');
 %             obj.loadCache('negTrainCutouts');
@@ -57,6 +57,7 @@ methods
             end
             data = load(imgPath);
             obj.(type) = data.images;
+            images = data.images;
         end
     end
 

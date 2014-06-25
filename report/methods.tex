@@ -407,27 +407,27 @@ The choice between using the ROC- or PR-curves and their AUCs are discussed in t
 
 \section{Interest point detectors}
 \label{sec:interestPointDetectors}
-As mentioned in \Cref{sec:introduction} interest point detectors are used for finding interesting points in images having various desired properties. These properties vary between blobs, corners, and edges depending on the detector used. Furthermore some detectors are multi-scale detectors meaning that they search through a scale space pyramid in order to find interest points at multiple scales. Combining a multi-scale detector with a descriptor is a typical way of achieving scale invariant descriptors as mentioned in \Cref{sec:scaleInvariance}.
+As mentioned in \Cref{sec:introduction} interest point detectors are used for finding distinctive points in images having various desired properties. These properties vary between blobs, corners, and edges depending on the detector used. Furthermore some detectors are multi-scale detectors meaning that they search through a scale space pyramid in order to find interest points at multiple scales. Combining a multi-scale detector with a descriptor is a typical way of achieving scale invariant descriptors as mentioned in \Cref{sec:scaleInvariance}.
 
 The focus of this report is to study higher order descriptors and hence we simply choose to use the multi-scale DoG detector described below for solving the image correspondence problem.
 
 \subsection{Difference of Gaussians}
 
-Recall from \Cref{sec:GaussianScaleSpace} that our scale-space representation removes image details below a given scale $\sigma$. The idea of the Difference of Gaussian (DoG) blob detector is that by computing the difference of two scale-space images for $\sigma_1$ and $\sigma_2$, we also remove the details at a higher scale, leaving only details between $\sigma_1$ and $\sigma_2$. The $\mathit{DoG}$ function is thus defined as
+Recall from \Cref{sec:GaussianScaleSpace} that our scale-space representation removes image details below a given scale $\sigma$. The idea of the Difference of Gaussian (DoG) blob detector is that by computing the difference of two scale-space images for $\sigma_1$ and $\sigma_2$, we also remove the details at a higher scale, leaving only details between $\sigma_1$ and $\sigma_2$. Thus we define
 %
 \begin{align*}
-\mathit{DoG}(\x,\sigma_1,\sigma_2) &= L(\x,\sigma_2) - L(\x,\sigma_1) \\
-&= \left( G(\x,\sigma_2) - G(\x,\sigma_1) \right) \ast I(\x)
+\Gamma(\x;\sigma_1,\sigma_2) &= L(\x;\sigma_2) - L(\x;\sigma_1) \\
+&= \left( G(\x;\sigma_2) - G(\x;\sigma_1) \right) \ast I(\x)
 \end{align*}
 %
-where $\sigma_2 > \sigma_1$. Minima and maxima of this function indicate dark and light blobs at a scale between $\sigma_1$ and $\sigma_2$, respectively.
+where $\sigma_2 > \sigma_1$. Minima and maxima of this function indicate dark and light blobs, respectively, at a scale between $\sigma_1$ and $\sigma_2$. In order to create a multi-scale DoG detector, we compute $\Gamma$ across all adjacent pairs of scale-space images, as illustrated in \Cref{fig:dogSpaces}. We then extract points that are not just extrema in their respective DoG images, but for adjacent DoG images as well. In practice this is done by finding extrema in a 26-pixel neighbourhood. To prevent extracting too many interest points, we can select only the most significant points by placing a threshold on the magnitude of $\Gamma$.
+
+An example of DoG images is shown in \Cref{fig:dogExample}, which is based on the scale-space images from \Cref{fig:scaleSpaceExample}. We see that the two different scales locate dark and light blobs of different sizes.
 %
 \begin{figure}[p]
 	\centering
 	\includegraphics[width=\textwidth,clip=true,trim=0 200 0 220]{img/SIFT_dogspaces.pdf}
-	\caption{Reproduced DoG scalespace figure \cite[figure 1,pp. 95]{lowe2004distinctive}. Original caption: For each octave of scale space, the initial image is repeatedly convolved with Gaussians to produce the set of scale space images
-shown on the left. Adjacent Gaussian images are subtracted to produce the difference-of-Gaussian images on the right. After each octave, the
-Gaussian image is down-sampled by a factor of 2, and the process repeated.}
+	\caption{Illustration of how DoG images are computed by subtracting adjacent Gaussian scale-space images. The resulting images contain details between the two respective scales. This figure is taken from \citet[figure 1,pp. 95]{lowe2004distinctive}.}
 	\label{fig:dogSpaces}
 	\vspace{5mm}
 
