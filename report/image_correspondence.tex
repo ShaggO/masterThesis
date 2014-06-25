@@ -200,27 +200,45 @@ The automatic capturing of images using a robot arm combined with the individual
 %
 \section{Example}
 %
+In this section we will continue the example from \Cref{sec:proposedDescriptorExample} by extending it to show the results of solving the image correspondence problem between the image of the example and the corresponding keyframe image from the DTU robot dataset.
+\Cref{fig:imageCorrespondenceMatches} shows matches between the descriptors from the two images with score $s$ below threshold $t = 0.8$. The green and red lines indicate true and false positive classifications respectively. The images contain several similar beer cans and hence many of the false positive classifications are caused by patterns that are visible in multiple of the cans.
+
+\Cref{fig:imageCorrespondenceCorrectMatch,fig:imageCorrespondenceIncorrectMatch} show two examples of a true positive match and a true negative match respectively. The green line shows a condition positive match and the red lines show condition negative matches. In \Cref{fig:imageCorrespondenceCorrectMatch} we see that there indeed is a correspondence between the best match of the two images with distance 0.083, and that our matching strategy results in a distance ratio (score) $s$ of 0.92. In \Cref{fig:imageCorrespondenceIncorrectMatch} we see that there is no match between the best matching descriptors of each image with distance 0.081. For this match $s$ is computed to 0.97. If we wanted to classify both matches correctly we should therefore set our threshold $t$ between 0.92 and 0.97. If we had used the distance as similarity measure we would not have been able to classify both correctly since the distance of the condition negative match is lower than the distance of the condition positive match.
+
+When having computed the distance ratios of all matches, we are able to construct the ROC- and PR-curves giving us two measures of the performance of the descriptor matching. \Cref{fig:imageCorrespondenceCurves} shows the ROC-curve \subref{fig:imageCorrespondenceROC} and PR-curve \subref{fig:imageCorrespondencePR} as well as the area under the two curves. The match has a ROC AUC of 0.72 and PR AUC of 0.63. From the ROC plot wee see that the descriptor matching performs better than a random classification since the ROC-curve (blue line) lies above the curve of no predictive value (dashed line). This is likewise indicated by the ROC AUC which is above the random classification ROC AUC of 0.5.
+
+
 \begin{figure}[p]
-\centering
-\includegraphics[width=\textwidth]{img/imageCorrespondenceMatches.pdf}
-\caption{Matches with score under $t = 0.8$}
-\label{fig:imageCorrespondenceMatches}
-\includegraphics[width=\textwidth]{img/imageCorrespondenceCorrectMatch.pdf}
-\caption{Example of a condition positive match. First and second best matches have descriptor distances $0.076$ and $0.083$, respectively, resulting in a distance ratio of $0.92$.}
-\label{fig:imageCorrespondenceCorrectMatch}
-\includegraphics[width=\textwidth]{img/imageCorrespondenceIncorrectMatch.pdf}
-\caption{Example of an condition negative match. First and second best matches have descriptor distances $0.079$ and $0.081$, respectively, resulting in a distance ratio of $0.97$.}
-\label{fig:imageCorrespondenceIncorrectMatch}
+	\centering
+	\includegraphics[width=\textwidth]{img/imageCorrespondenceMatches.pdf}
+	\caption{Matches with score $s$ below threshold $t = 0.8$}
+	\label{fig:imageCorrespondenceMatches}
+	\vspace{5mm}
+	%
+	\includegraphics[width=\textwidth]{img/imageCorrespondenceCorrectMatch.pdf}
+	\caption{Example of a condition positive match. First and second best matches have descriptor distances $0.076$ and $0.083$, respectively, resulting in a distance ratio of $0.92$.}
+	\label{fig:imageCorrespondenceCorrectMatch}
+	\vspace{5mm}
+	%
+	\includegraphics[width=\textwidth]{img/imageCorrespondenceIncorrectMatch.pdf}
+	\caption{Example of an condition negative match. First and second best matches have descriptor distances $0.079$ and $0.081$, respectively, resulting in a distance ratio of $0.97$.}
+	\label{fig:imageCorrespondenceIncorrectMatch}
 \end{figure}
 %
 \begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{img/imageCorrespondenceROC.pdf}
-\caption{ROC-curve}
-\label{fig:imageCorrespondenceROC}
-\includegraphics[width=0.5\textwidth]{img/imageCorrespondencePR.pdf}
-\caption{PR-curve}
-\label{fig:imageCorrespondencePR}
+	\centering
+	\begin{subfigure}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{img/imageCorrespondenceROC.pdf}
+		\caption{ROC-curve (blue line), curve of no predictive value attained by classifying randomly (dashed line), and area under the ROC-curve (light blue area)}
+		\label{fig:imageCorrespondenceROC}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{img/imageCorrespondencePR.pdf}
+		\caption{PR-curve (blue line), area under the PR-curve (light blue area)}
+		\label{fig:imageCorrespondencePR}
+	\end{subfigure}
+	\caption{Examples of evaluation measure curves}
+	\label{fig:imageCorrespondenceCurves}
 \end{figure}
 %
 \section{Experiments}

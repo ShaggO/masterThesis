@@ -243,7 +243,7 @@ The shape index has values spanning the interval $[-1,1]$, and hence by placing 
 \subsection{Histogram normalization}
 We have now covered all the functions needed in order to compute the $j$'th histogram $H_j$, \Cref{eq:proposed_histogram}, for each cell $j$ as well as the positioning of each of these cells. The last operation we need to perform to get our descriptor $D$, \Cref{eq:proposed_descriptor}, is a concatenation of all the $H_j$ histograms. Finally we view $D$ as a single vector and normalize it by using the $L_2$-norm as \citet{lowe2004distinctive} does in his SIFT descriptor. This could cause problems when dealing with occluded interest points and hence other strategies could be persued. We have however not chosen to do so.\todo{Decide whether to persue other strategies or not}
 %
-\section{Example}
+\section{Example} \label{sec:proposedDescriptorExample}
 %
 In order to visualize the construction of our descriptor, we will show an example of the whole process. As value and magnitude functions we choose the standard gradient orientation with gradient magnitude. We start by extracting interest points from an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
 
