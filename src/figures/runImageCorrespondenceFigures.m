@@ -83,7 +83,7 @@ h = text(mean(firstMatchX)+60*sind(theta),mean(firstMatchY)+60*cosd(theta),'1');
 set(h,'color','g','HorizontalAlignment','center','VerticalAlignment','middle','fontsize',30)
 plot(secondMatchX,secondMatchY,'r-')
 drawCircle(firstMatchX(:),firstMatchY(:),firstMatchS(:),'g')
-drawCircle(secondMatchX(:),secondMatchY(:),secondMatchS(:),'r')
+drawCircle(secondMatchX(2),secondMatchY(2),secondMatchS(:),'r')
 theta = atan2d(secondMatchY(2)-secondMatchY(1),secondMatchX(2)-secondMatchX(1));
 h = text(mean(secondMatchX)+60*sind(theta),mean(secondMatchY)-60*cosd(theta),'2');
 set(h,'color','r','HorizontalAlignment','center','VerticalAlignment','middle','fontsize',30)
@@ -113,7 +113,7 @@ h = text(mean(firstMatchX)+100*sind(theta),mean(firstMatchY)+100*cosd(theta),'1'
 set(h,'color','r','HorizontalAlignment','center','VerticalAlignment','middle','fontsize',30)
 plot(secondMatchX,secondMatchY,'r-')
 drawCircle(firstMatchX(:),firstMatchY(:),firstMatchS(:),'r')
-drawCircle(secondMatchX(:),secondMatchY(:),secondMatchS(:),'r')
+drawCircle(secondMatchX(2),secondMatchY(2),secondMatchS(:),'r')
 theta = atan2d(secondMatchY(2)-secondMatchY(1),secondMatchX(2)-secondMatchX(1));
 h = text(mean(secondMatchX)+60*sind(theta),mean(secondMatchY)-60*cosd(theta),'2');
 set(h,'color','r','HorizontalAlignment','center','VerticalAlignment','middle','fontsize',30)
