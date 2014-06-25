@@ -8,7 +8,7 @@ properties
     negTestCutouts  = [];
     negTestFull     = [];
     nWindows        = 10;
-    seed            = 1;
+    seed            = 10^5;
     paths
 end
 
@@ -61,7 +61,7 @@ methods
         end
     end
 
-    function [L,D] = getDescriptors(obj,method,desSave,type,index,runInParallel)
+    function [L,D,X] = getDescriptors(obj,method,desSave,type,index,runInParallel)
         if nargin < 5
             index = 'all';
         end
@@ -117,7 +117,7 @@ methods
                 L = -1;
         end
 
-        desVars = {'D'};
+        desVars = {'X','D'};
         [loaded,desLoad] = loadIfExist(desPath,'file');
         if loaded && all(ismember(desVars,fieldnames(desLoad)))
             D = desLoad.D;
@@ -127,9 +127,9 @@ methods
             images = obj.(type);
             
             if strcmp(index,'all')
-                D = inriaDescriptors(images,mFunc,runInParallel);
+                [X,D] = inriaDescriptors(images,mFunc,runInParallel);
             else
-                D = inriaDescriptors(images(index),mFunc,runInParallel);
+                [X,D] = inriaDescriptors(images(index),mFunc,runInParallel);
             end
             if desSave
                 save(desPath,desVars{:})

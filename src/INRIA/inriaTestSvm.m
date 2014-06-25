@@ -26,7 +26,7 @@ else
 end
 
 svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard '_' num2str(nWindows) '_' num2str(seed) '.mat'];
-svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC','svm'};
+svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC','svm','idxNeg','Xneg'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
     disp('Loaded svm file.')
@@ -129,25 +129,33 @@ else
 
     %% Test on negative test data
     probNeg = cell(nNegTestFull,1);
+    idxNeg = probNeg;
+    Xneg = probNeg;
     if runInParallel
         gcp;
         parfor i = 1:nNegTestFull
-            [LnegTestFull,DnegTestFull] = ...
+            [LnegTestFull,DnegTestFull,XnegTestFull] = ...
                 data.getDescriptors(method,desSave,'negTestFull',i,false);
             DnegTestFull = sparse(double(DnegTestFull));
 
             [~,~,probNeg{i}] = linearpredict(LnegTestFull,DnegTestFull,svm);
+            Xneg{i} = XnegTestFull;
+            idxNeg{i} = repmat(i,size(XnegTestFull,1),1);
         end
     else
         for i = 1:nNegTestFull
-            [LnegTestFull,DnegTestFull] = ...
+            [LnegTestFull,DnegTestFull,XnegTestFull] = ...
                 data.getDescriptors(method,desSave,'negTestFull',i,false);
             DnegTestFull = sparse(double(DnegTestFull));
 
             [~,~,probNeg{i}] = linearpredict(LnegTestFull,DnegTestFull,svm);
+            Xneg{i} = XnegTestFull;
+            idxNeg{i} = repmat(i,size(XnegTestFull,1),1);
         end
     end
     probNeg = cell2mat(probNeg);
+    idxNeg = cell2mat(idxNeg);
+    Xneg = cell2mat(Xneg);
 
     LnegTest = -ones(numel(probNeg),1);
     diary(diaryFile)

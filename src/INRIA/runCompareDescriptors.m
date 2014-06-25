@@ -32,7 +32,7 @@ method(2) = methodStruct( ...
 mFunc1 = parseMethod(method(1));
 mFunc2 = parseMethod(method(2));
 
-D1 = inriaDescriptors(images(1),mFunc1);
-D2 = inriaDescriptors(images(1),mFunc2);
+[~,D1] = inriaDescriptors(images(1),mFunc1);
+[~,D2] = inriaDescriptors(images(1),mFunc2);
 
 figure,plot(D1),figure,plot(D2)
