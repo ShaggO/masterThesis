@@ -1,16 +1,16 @@
 \documentclass[thesis.tex]{subfiles}
 \begin{document}
 
-\chapter{Object detection}
+\chapter{Pedestrian detection}
 \label{sec:od}
+In this chapter we describe the object detection problem and how we apply the discriptor to solve it.
+Some introduction to object detection
 
-\section{Sliding window}
-
-$\sigma \cdot 134x70$ (128x64 + 3 pixel border)
+Sliding window: $\sigma \cdot 134x70$ (128x64 + 3 pixel border)
 
 \section{Support vector machine}
 
-LIBLINEAR v. 1.94 \cite{fan2008liblinear}
+$L_2$-regularized $L_2$ loss support vector classifier from LIBLINEAR v. 1.94 \cite{fan2008liblinear}
 
 
 \section{Performance measures}
@@ -18,10 +18,14 @@ LIBLINEAR v. 1.94 \cite{fan2008liblinear}
 \section{Dataset}
 \label{sec:odDataset}
 
-INRIA Person Dataset \footnote{\url{http://pascal.inrialpes.fr/data/human/}} \cite{dalal2005histograms}
+The dataset we use for training and testing our descriptor on the pedestrian detection application is called the \emph{INRIA Person Dataset}\footnote{\url{http://pascal.inrialpes.fr/data/human/}} (from now on called the INRIA dataset) constructed by \citet{dalal2005histograms}.
+It concists of various real world images grouped into two subsets: Images with pedestrians (positives) and images without pedestrians (negatives). The positive images are rescaled cutouts centered around each pedestrian in larger images. The cutouts are first extracted and then individually re-scaled to make the pedestrian of each cutout 96 pixels in height from their feet to shoulders. The size of the cutouts are $64 \times 128$ pixels. In case a pedestrian cutout is smaller than the defined size after resizing, the borders are replicated to achieve the desired dimensions.
+The positive set only contains images of somewhat upright persons that initially were at least 100 pixels in height. In order to improve the robustness of the dataset against reflected images, each positive cutout has its left-right reflected image included as well.
+The training dataset has a total of 2416 positives and 1218 negative images.
+The test dataset has a total of 1126 positives and 453 negative images.
 
-Notes: Pedestrians, somewhat upright persons, all images flipped horizontally.
-1218 negative training, 2416 positive train, 1126 positive test, 453 negative test images (320x240,640x480)
+
+\Cref{fig:inriaExampleImages} shows examples of positive \subref{fig:inriaPositives} and negative \subref{fig:inriaNegatives} images from the INRIA dataset. From the positive examples we clearly see the high variety of upright positions and surroundings in the dataset.
 
 \begin{figure}
 	\centering
@@ -40,8 +44,14 @@ Notes: Pedestrians, somewhat upright persons, all images flipped horizontally.
 	\label{fig:inriaExampleImages}
 \end{figure}
 
-\subsection{Deficiencies 6 pitfalls}
+\subsection{Deficiencies \& pitfalls}
 10 duplicate negative train images
+
+Occluded or small persons in negatives
+
+Duplicates:
+1 neg test
+10 neg train
 
 \section{Example}
 
