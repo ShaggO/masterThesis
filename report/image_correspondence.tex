@@ -171,7 +171,30 @@ See \citet{aanaes2010recall,aanaes2010ground} for more information about the dat
 \end{figure}
 %
 \subsection{Evaluation}
-In order to be able to classify matches between two images $A$ and $B$ as true or false, we need an evaluation method. In other words we need to compute/generate the match ground truth. The DTU dataset has been scanned using \emph{structured light} generating point clouds for the surfaces in each image. Using these points and the known camera positions for each image we are able to check if a matching of two points from $A$ and $B$ indeed correspond to 3D points close enough to one another to be true. Sometimes a matching is made for an image position with no corresponding 3D point. In this case no ground truth can be calculated and the matching is ignored in the performance evaluation. The details of the evaluation method are described by \citet{larsen2012in}.
+In order to be able to classify matches between two images $A$ and $B$ as true or false, we need an evaluation method. In other words we need to compute/generate the match ground truth. The DTU dataset has been scanned using \emph{structured light} generating point clouds for the surfaces in each image. Using these points and the known camera positions for each image we are able to check if a matching of two points from $A$ and $B$ indeed correspond to 3D points close enough to one another to be true. \citet{aanaes2010recall} defined three evaluation criteria, of which we will be using the two first: Epipolar and surface geometry. We first define the property of being 3D reconstructable: an image point is said to be 3D reconstructable if there exists a point from the surface point cloud within a 10 pixel window in the image plane. This corresponds to a pixel within approximately 6 mm in the surface point cloud. Sometimes a matching is made for a point which is not 3D reconstructable. In this case no ground truth can be calculated, and the matching is ignored in the performance evaluation. The following two criteria (illustrated in \Cref{fig:icEvalGT}) determine the matching correspondence ground truth of the two points:
+\begin{itemize}
+	\item \textbf{Epipolar geometry consistency:} Given a point in the first image, the point in the second image should be within a 2.5 pixel orthogonal distance to the epipolar line of the first point as illustrated in \Cref{fig:icEval1GT}.
+	\item \textbf{Surface geometry consistency:} The points need to be 3D reconstructable and they need to be within 3 mm of each other in the surface point cloud as illustrated in \Cref{fig:icEval2GT}.
+\end{itemize}
+
+\todo{Should we refer to \cite{larsen2012in}?}
+
+\begin{figure}[tb]
+	\centering
+	\begin{subfigure}[t]{0.8\textwidth}
+		\includegraphics[width=\textwidth]{img/icEval1GT.pdf}
+		\caption{Epipolar geometry consistency. Corresponding points should have an orthogonal distance to each others epipolar lines of maximum 2.5 pixel.}
+		\label{fig:icEval1GT}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.8\textwidth}
+		\includegraphics[width=\textwidth]{img/icEval2GT.pdf}
+		\caption{Surface geometry consistency. Corresponding descriptors should be 3D reconstructable and be within 3 mm of each other in the surface point cloud.}
+		\label{fig:icEval2GT}
+	\end{subfigure}
+	\caption{Illustration of the two ground truth evaluation criteria. Figure reproduced from \cite[Figure 5 (a-b),pp. 4]{aanaes2010recall}}
+	\label{fig:icEvalGT}
+\end{figure}
+
 %
 \subsection{Pitfalls and deficiencies}
 The DTU dataset is built to test the ability of computer vision systems to cope with viewpoint changes, scaling, light changes, and to a certain extent occlusions as well. Since all images are captured with the same camera tilt, no rotation of objects occurs and hence rotational invariance and robustness cannot be evaluated using this dataset.
@@ -225,7 +248,7 @@ When having computed the distance ratios of all matches, we are able to construc
 	\label{fig:imageCorrespondenceIncorrectMatch}
 \end{figure}
 %
-\begin{figure}
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}[t]{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/imageCorrespondenceROC.pdf}
@@ -246,7 +269,7 @@ When having computed the distance ratios of all matches, we are able to construc
 %
 \section{Parameter study}
 \label{sec:icParameterStudy}
-\begin{table}
+\begin{table}[tb]
 \centering
 \pgfplotstableset{
     highlight/.append style={
