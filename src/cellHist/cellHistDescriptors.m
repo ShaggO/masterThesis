@@ -227,7 +227,7 @@ for s = 1:numel(Psplit)
 end
 
 if saveVars
-    save('cellHistExample')
+    save('cellHistExampleInria')
 end
 
 assert(size(X,1) == size(D,1),'Different number of points and descriptors!')

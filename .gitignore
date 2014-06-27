@@ -81,3 +81,4 @@ src/DTU/optimizeParams/results140602/parameterStudyGo_*-of-6.mat
 src/DTU/optimizeParams/results140602/parameterStudySi_*-of-6.mat
 src/runTestPdist2.m
 src/results/inriaTestSvm*_*_*0000.mat
+src/cellHistExampleGoInria.mat
