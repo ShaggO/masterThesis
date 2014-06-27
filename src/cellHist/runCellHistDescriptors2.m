@@ -1,6 +1,6 @@
 clc, clear all
 
-load('results\optimize\inriaParametersGo.mat')
+load('results/optimize/inriaParametersGo.mat')
 
 [mFunc, mName] = parseMethod(method);
 profile off, profile on
