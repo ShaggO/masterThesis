@@ -20,38 +20,32 @@ GO = visualizeGoHist(vars.cells+repmat(vars.F(1:2),size(vars.cells,1),1),vars.bi
 GOx = reshape(GO(:,1,:),2,[]);
 GOy = reshape(GO(:,2,:),2,[]);
 Dnorm = vars.D / max(vars.D);
-[~,idx] = sort(Dnorm);
-idx = idx(Dnorm(idx) > 0.01);
+[~,idx] = sort(Dnorm,'ascend');
+%idx = idx(Dnorm(idx) > 0.01);
+
 
 figure
+colours = double(Dnorm(idx))' * [1 1 1];
+set(gcf,'DefaultAxesColorOrder',colours)
 imshow(zeros(size(vars.I)))
+hold on;
 set(gcf,'position',[600 250 70*3 134*3])
-hold on
-for i = idx
-    plot(GOx(:,i),GOy(:,i),'color',[1 1 1]*Dnorm(i))
-    drawnow
-end
-% colours = Dnorm(idx)' * [1 1 1];
-% set(gcf,'DefaultAxesColorOrder',colours .* 0.99)
-% plot(GOx(:,idx),GOy(:,idx))
+plot(GOx(:,idx),GOy(:,idx))
 saveTightFigure(gcf,'../report/img/inriaExampleDescriptor.pdf')
 
-DnormW = vars.D .* test.svm.w;
+
+DnormW = double(vars.D .* test.svm.w);
 DnormW = DnormW / max(DnormW);
 [~,idx] = sort(DnormW);
-idx = idx(DnormW(idx) > 0.01);
+idx = idx(DnormW(idx) > 0);
 
 figure
+colours = double(DnormW(idx))' * [1 1 1];
+set(gcf,'DefaultAxesColorOrder',colours);
 imshow(zeros(size(vars.I)))
-set(gcf,'position',[600 250 70*3 134*3])
 hold on
-for i = idx
-    plot(GOx(:,i),GOy(:,i),'color',[1 1 1]*DnormW(i))
-    drawnow
-end
-% colours = DnormW(idx)' * [1 1 1];
-% set(gcf,'DefaultAxesColorOrder',colours .* 0.99)
-% plot(GOx(:,idx),GOy(:,idx))
+set(gcf,'position',[600 250 70*3 134*3])
+plot(GOx(:,idx),GOy(:,idx))
 saveTightFigure(gcf,'../report/img/inriaExampleDescriptorSvm.pdf')
 
 % figure
