@@ -2,7 +2,7 @@ clc, clear all
 
 data = inriaData;
 images = data.loadCache('posTest');
-Irgb = images(1).image;
+Irgb = images(330).image;
 
 vars = load('cellHistExampleGoInria.mat');
 test = load('results/inriaTestSvmGoFinal');
@@ -30,7 +30,7 @@ set(gcf,'DefaultAxesColorOrder',colours)
 imshow(zeros(size(vars.I)))
 hold on;
 set(gcf,'position',[600 250 70*3 134*3])
-plot(GOx(:,idx),GOy(:,idx))
+plot(GOx(:,idx),GOy(:,idx),'linewidth',2)
 saveTightFigure(gcf,'../report/img/inriaExampleDescriptor.pdf')
 
 
@@ -45,13 +45,42 @@ set(gcf,'DefaultAxesColorOrder',colours);
 imshow(zeros(size(vars.I)))
 hold on
 set(gcf,'position',[600 250 70*3 134*3])
-plot(GOx(:,idx),GOy(:,idx))
+plot(GOx(:,idx),GOy(:,idx),'linewidth',2)
 saveTightFigure(gcf,'../report/img/inriaExampleDescriptorSvm.pdf')
 
-% figure
-% Isvm = zeros(size(Irgb,1),size(Irgb,2));
-% for i = 1:size(vars.C.data{1},3)
-%     Isvm(vars.C.data{1}(:,:,i)) = Isvm(vars.C.data{1}(:,:,i)) + ...
-%         vars.Wcell.data{1}(:,:,i) .* maxSvmW(i);
-% end
-% imshow(Isvm,[])
+
+DnormW = double(vars.D .* test.svm.w);
+DnormW = DnormW / min(DnormW);
+[~,idx] = sort(DnormW);
+idx = idx(DnormW(idx) > 0);
+
+figure
+colours = double(DnormW(idx))' * [1 1 1];
+set(gcf,'DefaultAxesColorOrder',colours);
+imshow(zeros(size(vars.I)))
+hold on
+set(gcf,'position',[600 250 70*3 134*3])
+plot(GOx(:,idx),GOy(:,idx),'linewidth',2)
+saveTightFigure(gcf,'../report/img/inriaExampleDescriptorSvmNeg.pdf')
+
+%% Positive SVM weights
+figure
+Isvm = zeros(size(Irgb,1),size(Irgb,2));
+for i = 1:size(vars.C.data{1},3)
+    Isvm(vars.C.data{1}(:,:,i)) = Isvm(vars.C.data{1}(:,:,i)) + ...
+        vars.Wcell.data{1}(:,:,i) .* maxSvmW(i);
+end
+imshow(Isvm,[])
+set(gcf,'position',[600 250 70*3 134*3])
+saveTightFigure(gcf,'../report/img/inriaExampleDescriptorSvmMax.pdf')
+
+%% Negative SVM weights
+figure
+Isvm = zeros(size(Irgb,1),size(Irgb,2));
+for i = 1:size(vars.C.data{1},3)
+    Isvm(vars.C.data{1}(:,:,i)) = Isvm(vars.C.data{1}(:,:,i)) + ...
+        vars.Wcell.data{1}(:,:,i) .* minSvmW(i);
+end
+imshow(Isvm,[])
+set(gcf,'position',[600 250 70*3 134*3])
+saveTightFigure(gcf,'../report/img/inriaExampleDescriptorSvmMin.pdf')
