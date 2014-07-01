@@ -239,7 +239,7 @@ switch lower(m.descriptor)
         fTypes = {'gaussian','triangle','box'};
         fTypesCenter = [fTypes {'none'}];
         fTypesCell = [fTypes {'polar gaussian'}];
-        nTypes = {'cell','block','pixel','none'};
+        nTypes = {'cell','block','pixel','pixelvar','none'};
         magnitudeTypes = {'m','c','j2','m-c','1'};
         addParameter(p,'contentType','go');
         addParameter(p,'magnitudeType','m',okArg(magnitudeTypes));
