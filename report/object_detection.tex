@@ -35,9 +35,9 @@ However, linear separation of the two classes is almost never feasible. Instead 
 %
 where $\xi_i$ are slack variables allowing for misplaced points.
 
-Mention separate costs for each class.
+If there is a large skew in the number of elements in each class, the larger class will have a higher propability of encapsulating a large amount of the variations in the smaller class. If the smaller class is of great importance, the cost parameter $C$ can be defined for each of the two classes individually allowing for a correction for the element skew.
 
-We use the $L_2$-regularized $L_2$ loss support vector classifier from LIBLINEAR v. 1.94 \cite{fan2008liblinear}
+When using the SVM for solving the pedestrian detection problem, we use the $L_2$-regularized $L_2$ loss support vector classifier from LIBLINEAR v. 1.94\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/liblinear/}} \cite{fan2008liblinear} and hence the $L_2$-norm is used for computing both $\| \w \|$ and $\xi_i$.
 
 \section{Performance measures}
 
