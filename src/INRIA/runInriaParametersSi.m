@@ -31,7 +31,7 @@ method = methodStruct( ...
     'cellNormStrategy',4},...
     true,{'co-'});
 
-data = inriaData;
+data = inriaData(40,10^4);
 startTime = tic;
 
 %% Optimize the following parameters
@@ -53,7 +53,7 @@ for i = 1:iters
     method = inriaOptimizeZoom(data,diaryFile,method,svmArgs,'binCount', ...
         (4:16)');
     method = inriaOptimizeZoom(data,diaryFile,method,svmArgs,'normSigma', ...
-        repmat((1:5)',[1 2]),repmat((-0.4:0.2:0.4)',[1 2]));
+        repmat((3:10)',[1 2]),repmat((-0.4:0.2:0.4)',[1 2]));
     [~,svmArgs] = inriaOptimizeZoom(data,diaryFile,method,svmArgs,'logc', ...
         (-6:2)',(-0.5:0.1:0.5)');
 end
