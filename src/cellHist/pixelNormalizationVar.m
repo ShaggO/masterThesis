@@ -1,4 +1,4 @@
-function Mnorm = pixelNormalization(M,type,sigma)
+function Mnorm = pixelNormalizationVar(M,type,sigma)
 %PIXELNORMALIZATION Compute pixel-wise normalization
 %
 % Inputs:
@@ -16,7 +16,8 @@ for i = 1:numel(M)
 
     V = f([X(:),Y(:)]);
     F = reshape(V,size(X));
-    Mnorm{i} = M{i} ./ (imfilter(M{i},F,'conv','replicate') + eps);
+    Mnorm{i} = M{i} - imfilter(M{i},F,'conv','replicate');
+%     Mnorm{i} = Mnorm{i} ./ (sqrt(imfilter(Mnorm{i}.^2,F,'conv','replicate')) + eps);
 end
 
 end

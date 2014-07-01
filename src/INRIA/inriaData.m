@@ -8,7 +8,7 @@ properties
     negTestCutouts  = [];
     negTestFull     = [];
     nWindows        = 10;
-    seed            = 10^5;
+    seed            = 10^4;
     paths
 end
 

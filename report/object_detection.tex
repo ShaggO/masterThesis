@@ -75,7 +75,7 @@ The test dataset has a total of 1126 positives and 453 negative images.
 We have found two smaller problems with the INRIA dataset which could affect the results of using the dataset. The first problem is duplicate images. Amongst the negative training images we have found 10 pair-wise duplicates. This chould bias the svm since it effectively means that these images are weighted twice as high as the others. Given the small percentage of duplicates in the dataset the effect should however be close to nothing. In the initial training there are furthermore extracted windows at different random positions of the duplicates which decreases the bias even more. We have likewise found one duplicated image in the negative test set.
 
 The second problem is the presence of people in some of the negatives.
-\Cref{fig:inriaNegativePersons} show two examples of persons in the negative images of the INRIA dataset. The people are however either too small to fit correctly into the sliding window at any of the used scales or partially occluded by the image bounds to such an extend that we shouldn't be able to detect them anyway.
+\Cref{fig:inriaNegativePersons} show two examples of persons in the negative images of the INRIA dataset. The people are however either too small to fit correctly into the sliding window at any of the used scales or partially occluded by the image bounds to such an extent that we shouldn't be able to detect them anyway.
 
 \begin{figure}[tb]
 	\begin{subfigure}[t]{0.5\textwidth}
@@ -89,6 +89,11 @@ The second problem is the presence of people in some of the negatives.
 \end{figure}
 
 \section{Test setup}
+%
+We have a test setup for parameter optimization using only the training data, and a more involved test setup for evaluating descriptors on test data.
+
+Our parameter optimization setup is as follows. The training data is split into six parts, for the purpose of (leave-one-out) cross-validation by training on five parts and training on one. For each split, an SVM is trained and evaluated.
+
 Notes:
 
 We follow \citet{dalal2005histograms}

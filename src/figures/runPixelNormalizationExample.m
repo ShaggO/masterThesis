@@ -1,4 +1,4 @@
-clc, clear all, close all
+clc, clear all
 
 I1rgb = im2double(loadDtuImage(1,25,28));
 I1 = rgb2gray(I1rgb);
@@ -12,10 +12,10 @@ S2 = dGaussScaleSpace(I2,kJetCoeffs(2),1,1,true);
 
 M1 = diffStructure('M',S1,[1 2]);
 M2 = diffStructure('M',S2,[1 2]);
-M1norm2 = pixelNormalization(M1,'gaussian',[2 2]);
-M2norm2 = pixelNormalization(M2,'gaussian',[2 2]);
-M1norm10 = pixelNormalization(M1,'gaussian',[10 10]);
-M2norm10 = pixelNormalization(M2,'gaussian',[10 10]);
+M1norm2 = pixelNormalizationVar(M1,'gaussian',[2 2]);
+M2norm2 = pixelNormalizationVar(M2,'gaussian',[2 2]);
+M1norm10 = pixelNormalizationVar(M1,'gaussian',[10 10]);
+M2norm10 = pixelNormalizationVar(M2,'gaussian',[10 10]);
 
 C1 = M1{1}(cutout{:});
 C2 = M2{1}(cutout{:});
@@ -50,4 +50,4 @@ maxCnorm10 = max([C1norm10(:); C2norm10(:)]);
 figure;
 imshow(C1,[]);
 figure;
-imshow(C1norm2,[]);
+imshow(C1norm10,[]);

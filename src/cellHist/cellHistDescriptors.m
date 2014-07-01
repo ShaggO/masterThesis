@@ -147,6 +147,13 @@ if strcmp(normType,'pixel')
         normSigma = scales' * normSigma;
     end
     MscalesNorm = pixelNormalization(Mscales,normFilter,normSigma);
+elseif strcmp(normType,'pixelvar')
+    if rescale > 0
+        normSigma = repmat(normSigma,[numel(scales) 1]);
+    else
+        normSigma = scales' * normSigma;
+    end
+    MscalesNorm = pixelNormalizationVar(Mscales,normFilter,normSigma);
 else
     MscalesNorm = Mscales;
 end

@@ -1,4 +1,4 @@
-function [method,svmArgs] = inriaOptimizeEnum( ...
+function [method,svmArgs,PRAUC] = inriaOptimizeEnum( ...
     data,diaryFile,method,svmArgs,varargin)
 % ENUMOPTIMIZEPARAMETER Optimize enumerated sets of parameters
 
@@ -34,19 +34,21 @@ PRAUC
 method = paramMethods(optimalInd);
 svmArgs = paramSvmArgs(optimalInd);
 
-% Display results
-diary(diaryFile)
-for p = 1:numel(parameters)
-    param = parameters{p};
-    switch class(values{p}{optimalInd})
-        case 'char'
-            optimalStr = values{p}{optimalInd};
-        case 'double'
-            optimalStr = nums2str(values{p}{optimalInd});
+if ~isempty(diaryFile)
+    % Display results
+    diary(diaryFile)
+    for p = 1:numel(parameters)
+        param = parameters{p};
+        switch class(values{p}{optimalInd})
+            case 'char'
+                optimalStr = values{p}{optimalInd};
+            case 'double'
+                optimalStr = nums2str(values{p}{optimalInd});
+        end
+        disp(['Optimal ' param ': ' optimalStr]);
     end
-    disp(['Optimal ' param ': ' optimalStr]);
+    disp(['Optimal PRAUC: ' num2str(optimalPRAUC) sprintf('\n')]);
+    diary off
 end
-disp(['Optimal PRAUC: ' num2str(optimalPRAUC) sprintf('\n')]);
-diary off
 
 end
