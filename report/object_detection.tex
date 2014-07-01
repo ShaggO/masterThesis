@@ -35,11 +35,16 @@ However, linear separation of the two classes is almost never feasible. Instead 
 %
 where $\xi_i$ are slack variables allowing for misplaced points.
 
-Mention separate costs for each class.
+If there is a large skew in the number of elements in each class, the larger class will have a higher propability of encapsulating a large amount of the variations in the smaller class. If the smaller class is of great importance, the cost parameter $C$ can be defined for each of the two classes individually allowing for a correction for the element skew.
 
-We use the $L_2$-regularized $L_2$ loss support vector classifier from LIBLINEAR v. 1.94 \cite{fan2008liblinear}
+When using the SVM for solving the pedestrian detection problem, we use the $L_2$-regularized $L_2$ loss support vector classifier from LIBLINEAR v. 1.94\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/liblinear/}} \cite{fan2008liblinear} and hence the $L_2$-norm is used for computing both $\| \w \|$ and $\xi_i$.
 
 \section{Performance measures}
+
+Having described the method of using a SVM for (binary) classification, we are now able to derive a performance measures for the pedestrian detection problem. By using the SVM classifier, we get the distance $\w \cdot \x - b$ between each descriptor $\x$ and the hyperplane dividing the two classes. Using this distance as the classification score $s$ and following the binary classification method described in \Cref{sec:binaryClassificationMeasures}, we are able to compute both the PR- and ROC-curves and their AUCs. In other words we vary a threshold on the distance to the hyperplane to get the two measures of the performance of a descriptor.
+
+When finding pedestrians, the only positives are the exact windows from (possibly larger) images with pedestrians of the correct height relative to the window height. The amount of variations in pedestrians is however significantly smaller than the amount of variations in all non-pedestrian images and hence we will most likely have a large skew in the amount of positives and negatives.
+Recall that the PR measure is used when a large skew towards one of the classes of a binary classification is present as described in \Cref{sec:binaryClassificationMeasures}. Therefore we will be using the PR measure as performance measure for our pedestrian detection parameter study as well as testing. \Citet{dalal2005histograms} use the log-log plot of the ROC-curve as performance measure, and hence we will show test results for this performance measure as well. In order for this measure to make sense, the actual plot is defined as the logarithm of $1-\text{Recall}$ versus the logarithm of $FPR$.
 
 \section{Dataset}
 \label{sec:odDataset}
@@ -85,7 +90,7 @@ The test dataset has a total of 1126 positives and 453 negative images.
 \restoregeometry
 
 \subsection{Pitfalls and deficiencies}
-We have found two smaller problems with the INRIA dataset which could affect the results of using the dataset. The first problem is duplicate images. Amongst the negative training images we have found 10 pair-wise duplicates. This chould bias the svm since it effectively means that these images are weighted twice as high as the others. Given the small percentage of duplicates in the dataset the effect should however be close to nothing. In the initial training there are furthermore extracted windows at different random positions of the duplicates which decreases the bias even more. We have likewise found one duplicated image in the negative test set.
+We have found two smaller problems with the INRIA dataset which could affect the results of using the dataset. The first problem is duplicate images. Amongst the negative training images we have found 10 pair-wise duplicates. This chould bias the SVM since it effectively means that these images are weighted twice as high as the others. Given the small percentage of duplicates in the dataset the effect should however be close to nothing. In the initial training there are furthermore extracted windows at different random positions of the duplicates which decreases the bias even more. We have likewise found one duplicated image in the negative test set.
 
 The second problem is the presence of people in some of the negatives.
 \Cref{fig:inriaNegativePersons} show two examples of persons in the negative images of the INRIA dataset. The people are however either too small to fit correctly into the sliding window at any of the used scales or partially occluded by the image bounds to such an extent that we shouldn't be able to detect them anyway.
