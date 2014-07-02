@@ -1,4 +1,4 @@
-function [SposTrain, SnegTrain, SposTest, SnegTest] = inriaSplit(n,k)
+function [SposTrain, SnegTrain, SposTest, SnegTest] = inriaSplit(n,k,nWindows)
 %DTUSPLITSETS Splits the INRIA training data into n parts. Optionally
 %only retrieve the k'th split(s).
 
@@ -9,7 +9,7 @@ end
 rng(1,'combRecursive');
 
 nPosTrain = 2416;
-nNegTrain = 12180;
+nNegTrain = 1218;
 permPosTrain = randperm(nPosTrain)';
 permNegTrain = randperm(nNegTrain)';
 
@@ -25,5 +25,13 @@ end
 
 SposTrain = permPosTrain(~ismember(permPosTrain,SposTest));
 SnegTrain = permNegTrain(~ismember(permNegTrain,SnegTest));
+
+SnegTrain = repmat(nWindows * (SnegTrain'-1),[nWindows 1]) + ...
+    repmat((1:nWindows)',[1 numel(SnegTrain)]);
+SnegTrain = SnegTrain(:);
+
+SnegTest = repmat(nWindows * (SnegTest'-1),[nWindows 1]) + ...
+    repmat((1:nWindows)',[1 numel(SnegTest)]);
+SnegTest = SnegTest(:);
 
 end

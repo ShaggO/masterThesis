@@ -35,7 +35,7 @@ else
     DnegTrainCutouts = sparse(double(DnegTrainCutouts));
     
     %% Split training data into training/validation
-    [SposTrain, SnegTrain, SposTest, SnegTest] = inriaSplit(n,k);
+    [SposTrain, SnegTrain, SposTest, SnegTest] = inriaSplit(n,k,data.nWindows);
     Dtrain = [DposTrain(SposTrain,:); DnegTrainCutouts(SnegTrain,:)];
     Ltrain = [LposTrain(SposTrain); LnegTrainCutouts(SnegTrain)];
     Dtest = [DposTrain(SposTest,:); DnegTrainCutouts(SnegTest,:)];

@@ -7,7 +7,7 @@ properties
     posTest         = [];
     negTestCutouts  = [];
     negTestFull     = [];
-    nWindows        = 10;
+    nWindows        = 40;
     seed            = 10^4;
     paths
 end

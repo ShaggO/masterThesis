@@ -4,11 +4,12 @@ if nargin < 3
     desSave = true;
 end
 if nargin < 4
-    nHard = [];
+    nHard = 10^5;
 end
 if nargin < 6
-    nWindows = 10;
-    seed = 1;
+    data = inriaData;
+else
+    data = inriaData(nWindows,seed);
 end
 
 runInParallel = true;
@@ -25,16 +26,13 @@ else
     sHard = ['_' num2str(nHard)];
 end
 
-svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard '_' num2str(nWindows) '_' num2str(seed) '.mat'];
+svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard '_' num2str(data.nWindows) '_' num2str(data.seed) '.mat'];
 svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC','svm','idxNeg','Xneg'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
     disp('Loaded svm file.')
 else
     diaryFile = [desDir '/inriaTestSvm_' strrep(datestr(now),':','-') '.out'];
-
-    % INRIA data wrapper
-    data = inriaData(nWindows,seed);
 
     tic
 
