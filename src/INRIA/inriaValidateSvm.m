@@ -18,7 +18,7 @@ load([inriaDataSet '/inriaMetadata'])
 [~, mName] = parseMethod(method);
 desDir = [inriaResults '/' mName];
 
-svmPath = [desDir '/svm_validate_' num2str(k) 'of' num2str(n) '_' svmArgs '.mat'];
+svmPath = [desDir '/svm_validate_' num2str(k) 'of' num2str(n) '_' svmArgs '_' num2str(data.nWindows) '_' num2str(data.seed) '.mat'];
 svmVars = {'prob','Ltest','ROC','PR','ROCAUC','PRAUC'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
 if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
