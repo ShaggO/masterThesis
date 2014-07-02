@@ -44,7 +44,7 @@ Recall the discussion of the benefits of ROC and PR in \Cref{sec:binaryClassific
 \section{Dataset}
 The dataset we use for training and evaluation of our descriptor is called the \emph{DTU Robot 3D dataset} \cite{aanaes2010recall} (from now on called the DTU dataset). It consists of images of objects taken in a closed black box with varying illumination using 19 fixed position LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes into categories as shown in \Cref{tbl:dtu_scene_classifications}.
 
-\begin{figure}[tb]
+\begin{figure}[p]
 	\centering
 	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/dtu_example_1.png}
@@ -61,11 +61,11 @@ The dataset we use for training and evaluation of our descriptor is called the \
 	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{img/dtu_example_4.png}
 	\end{subfigure}
-	\caption{Examples of scenes from the DTU dataset}
+	\caption{Example scenes from the DTU dataset}
 	\label{fig:dtu_examples}
-\end{figure}
-
-\begin{table}[tb]
+%
+\vspace{1cm}
+%
 	\centering
 	\begin{tabular}{l l r}
 		\toprule
@@ -85,7 +85,7 @@ The dataset we use for training and evaluation of our descriptor is called the \
 	\end{tabular}
 	\caption{Scene object classifications from \cite[Table 1]{aanaes2010ground}}
 	\label{tbl:dtu_scene_classifications}
-\end{table}
+\end{figure}
 
 The camera is positioned around each scene using an industrial robot arm, which has automatically captured each scene from 119 positions. These positions are defined from a fixed frontal view varying the viewpoint $\theta$ in three arcs at different distance $d$ to the scene. Arc 1 has $d = \SI{0.5}{\meter}$ to the scene and $\theta$ spans $\SI{\pm40}{\degree}$, arc 2 has $d = \SI{0.65}{\meter}$ and $\theta$ spans $\SI{\pm25}{\degree}$, and arc 3 has $d = \SI{0.8}{\meter}$ and $\theta$ spans $\SI{\pm20}{\degree}$. Furthermore a linear path is captured by moving the camera away from the scene, which corresponds to zooming or scaling the scene. This is done at $\theta = \SI{0}{\degree}$ and $d$ spans $[\SI{0.5}{\meter};\SI{0.8}{\meter} ]$. At each of the 119 camera positions 19 individual images $I_i$ are taken with each of the LED lights $i,~\text{for}~i = 1,\hdots,19$ turned on. Using the given camera positions we get four camera paths: three arc paths and one linear path. \Cref{fig:dtu_overview} shows an overview of the four camera paths just described. When computing the performance across the paths we wish to solve the image correspondence problem for matching each image in each path with the \emph{keyframe} image (middle position on arc 1), since this gives us the performance when varying the viewing angle and scale in a structured manner.
 
@@ -234,7 +234,7 @@ In this section we will continue the example from \Cref{sec:proposedDescriptorEx
 
 When having computed the distance ratios of all matches, we are able to construct the ROC- and PR-curves giving us two measures of the performance of the descriptor matching. \Cref{fig:imageCorrespondenceCurves} shows the ROC-curve \subref{fig:imageCorrespondenceROC} and PR-curve \subref{fig:imageCorrespondencePR} as well as the area under the two curves. The match has a ROC AUC of 0.72 and PR AUC of 0.63. From the ROC plot wee see that the descriptor matching performs better than a random classification since the ROC-curve (blue line) lies above the curve of no predictive value (dashed line). This is likewise indicated by the ROC AUC which is above the random classification ROC AUC of 0.5.
 
-
+\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
 \begin{figure}[p]
 	\centering
 	\includegraphics[width=\textwidth]{img/imageCorrespondenceMatches.pdf}
@@ -251,6 +251,7 @@ When having computed the distance ratios of all matches, we are able to construc
 	\caption{Example of an condition negative match. First and second best matches have descriptor distances $0.079$ and $0.081$, respectively, resulting in a distance ratio of $0.97$.}
 	\label{fig:imageCorrespondenceIncorrectMatch}
 \end{figure}
+\restoregeometry
 %
 \begin{figure}[tb]
 	\centering
