@@ -303,11 +303,18 @@ Now the whole concentric log-polar grid can be constructed alike the ordinary lo
 %
 \chapter{Gaussian derivatives}
 %
+The $n$'th order $x$-derivative of the Gaussian filter $G$ has the following relation to the Hermite polynomial:
+%
 \begin{align*}
 	G_{x^n}(x;\sigma) &= \left(\frac{1}{\sqrt{2}\sigma}\right)^n \cdot
 						 \frac{1}{\sqrt{2\pi}\sigma} \cdot
 						 \exp \left( \frac{x^2}{2\sigma^2} \right) \cdot
-						 \text{hermite} \left(n,\frac{x^2}{\sqrt{2}\sigma} \right) \\
+						 \text{hermite} \left(n,\frac{x^2}{\sqrt{2}\sigma} \right)
+\end{align*}
+%
+Thus an arbitrary 2D Gaussian derivative can be written as:
+%
+\begin{align*}
 	G_{x^m y^n}(x,y;\sigma) &=
 						G_{y^n}(y;\sigma)^\text{T} \ast G_{x^m}(x;\sigma)
 \end{align*}

@@ -1,9 +1,8 @@
 \documentclass[thesis.tex]{subfiles}
 \def\x{\mathbf{x}}
+\def\d{\mathbf{d}}
 \def\p{\mathbf{p}}
 \def\c{\mathbf{c}}
-\def\sigmacellj{\boldsymbol{\sigma}_{\text{cell},j}}
-\def\sigmacenter{\boldsymbol{\sigma}_\text{center}}
 \begin{document}
 \chapter{Proposed descriptor}
 %
@@ -25,11 +24,11 @@ where
 \item[] $B$ is a binning aperture function.
 \end{itemize}
 %
-Note that we have kept this definition similar to the galaxy descriptor \cite{pedersen2013shape}, except we consider several histograms with their own aperture functions $A_j$ and add the additional center aperture function $P$. The descriptor $D$ is constructed by concatenating all $n$ bin values of all $m$ cell histograms:
+Note that we have kept this definition similar to the galaxy descriptor \cite{pedersen2013shape}, except we consider several histograms with their own aperture functions $A_j$ and add the additional center aperture function $P$. The descriptor $\d$ is constructed by concatenating all $n$ bin values of all $m$ cell histograms:
 %
 \begin{align}
 \label{eq:proposed_descriptor}
-D = \Bigl( \left(H_1(f_1) \cdots H_1(f_n)\right) \cdots (H_m(f_1) \cdots H_m(f_n)) \Bigr)
+\d = \Bigl( \left(H_1(f_1) \cdots H_1(f_n)\right) \cdots (H_m(f_1) \cdots H_m(f_n)) \Bigr) ^\text{T}
 \end{align}
 %
 The five functions above can be seen as the components that make up our descriptor, and we consider different choices for each. The functions depend on numerous additional parameters, which we define and describe further in this chapter. These parameters will be subject to a parameter study for each of our applications in order to get the most optimal descriptor for the specific application. The parameter studies are described in \Cref{sec:icParameterStudy,sec:odParameterStudy}.
@@ -54,13 +53,13 @@ In \Cref{sec:illumination} we described the problem of handling illumination in 
 The pixel normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
 %
 \begin{align}
-F_\text{norm}(\p) = \frac{F(\p)}{\int F(\x) G(\x - \p; \boldsymbol{\sigma}) \,\text{d} \x}
+F_\text{norm}(\p) = \frac{F(\p)}{\int F(\x) G(\x - \p; \boldsymbol{\eta}) \,\text{d} \x}
 \end{align}
 %
 The idea behind this scheme is that an image is locally affected by light changes according to the affine illumination model. In order to estimate $a$ on a pixel-level, we use intensity information from the surrounding pixels. Using a Gaussian filter we are able to weight the surrounding intensities based on their spatial distance to the pixel in question. The rationale for this is, that pixels close to one another has a higher probability of being affected by equal light conditions than pixels further away from one another. By dividing the pixel value by the sum of all these weighted intensities (estimation of $a$), we remove the affine coefficient from the pixel.
 
 Having applied the pixel normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
-\Cref{fig:pixelNormalizationExample} shows two examples of images containing shadows, their gradient magnitudes, their pixel normalized magnitudes with $\sigma_\text{norm} = 2$, and their pixel normalized magnitudes with $\sigma_\text{norm} = 10$. These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images, the shadows have a dampening effect on the gradient magnitude. By using a small $\sigma_\text{norm}$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\sigma_\text{norm}$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well. The choice of optimal $\sigma_\text{norm}$ is part of our parameter studies.
+\Cref{fig:pixelNormalizationExample} shows two examples of images containing shadows, their gradient magnitudes, their pixel normalized magnitudes with $\eta = 2$, and their pixel normalized magnitudes with $\eta = 10$. These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images, the shadows have a dampening effect on the gradient magnitude. By using a small $\eta$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\eta$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well. The choice of optimal $\eta$ is part of our parameter studies.
 
 Another technique for local illumination handling is normalization of each cell histogram, which can be done instead of or alongside pixel normalization. This was used succesfully in the DAISY descriptor \cite{tola2008fast}. We have tried various strategies but none were able to beat pixel normalization through preliminary tests, and hence we have omitted to pursue these strategies further.
 %
@@ -106,7 +105,7 @@ Another technique for local illumination handling is normalization of each cell 
         \caption{}
         \label{fig:pixelNormalizationExample8}
     \end{subfigure}
-    \caption{Images \subref{fig:pixelNormalizationExample1} and \subref{fig:pixelNormalizationExample2} show cut-outs of an image with leftmost and rightmost artificial lighting, respectively. Images \subref{fig:pixelNormalizationExample3} and \subref{fig:pixelNormalizationExample4} show gradient magnitudes of these images. Images \subref{fig:pixelNormalizationExample5} and \subref{fig:pixelNormalizationExample6} show pixel normalized magnitudes for $\sigma_\text{norm} = 2$. Images \subref{fig:pixelNormalizationExample7} and \subref{fig:pixelNormalizationExample8} show pixel normalized magnitudes for $\sigma_\text{norm} = 10$.}
+    \caption{Images \subref{fig:pixelNormalizationExample1} and \subref{fig:pixelNormalizationExample2} show cut-outs of an image with leftmost and rightmost artificial lighting, respectively. Images \subref{fig:pixelNormalizationExample3} and \subref{fig:pixelNormalizationExample4} show gradient magnitudes of these images. Images \subref{fig:pixelNormalizationExample5} and \subref{fig:pixelNormalizationExample6} show pixel normalized magnitudes for normalization scale $\eta = 2$. Images \subref{fig:pixelNormalizationExample7} and \subref{fig:pixelNormalizationExample8} show pixel normalized magnitudes for $\eta = 10$.}
     \label{fig:pixelNormalizationExample}
 \end{figure}
 %
@@ -116,25 +115,25 @@ Another technique for local illumination handling is normalization of each cell 
 The purpose of the cell aperture functions $A_j$ is to weight points closer to each cell center higher in their respective cell histograms. We define a cell aperture function as a Gaussian function
 %
 \begin{align}
-A_j(\x) = G(\x - \c_j; \sigmacellj)
+A_j(\x) = G(\x - \c_j; \alpha_j)
 \end{align}
 %
-where $\c_j$ is the cell center for cell $j$ and $\sigmacellj$ is the standard deviation of cell $j$.
+where $\c_j$ is the cell center for cell $j$ and $\alpha_j$ is the scale, or standard deviation, of cell $j$.
 
 The cell aperture function is defined for all cells in the feature. Having defined $A_j$ we are now able to define the \emph{grid layouts} that define the cell centers $\boldsymbol{c}_j$ for each feature. \Cref{fig:gridType} shows examples of the six different grid layouts that we propose for describing the local area around an interest point: polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance}, Irregular SIFT \cite{cui2009scale}, and DAISY \cite{tola2008fast} layouts. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the Cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into Cartesian coordinates afterwards. The two log-polar grids both use Cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 rings. The two ``central'' and log-polar grids additionally have a single central cell.
 
 All these layouts are defined relative to the \emph{grid radius}, which is defined as a constant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that by default the 1 standard deviation curves of the outer-most cells in the feature touch the grid radius. Each ring consists of $n$ cells dividing the ring equally in the angular direction. Furthermore the following holds for each of the specific layouts:
 
-For log-polar layouts the radial span of each ring is defined such that the 1 standard deviation curve $\sigmacellj$ of a cell $j$ touches the 1 standard deviation curves of the neighbouring rings and neighbouring angles by default. This results in different default cell sigmas for the normal and concentric log-polar grid layouts since the concentric log-polar grid layout can pack the cells more densely without overlapping cells as seen in \Cref{fig:gridTypeLp,fig:gridTypeClp}.
+For log-polar layouts the radial span of each ring is defined such that the 1 standard deviation curve $\alpha_j$ of a cell $j$ touches the 1 standard deviation curves of the neighbouring rings and neighbouring angles by default. This results in different default cell sigmas for the normal and concentric log-polar grid layouts since the concentric log-polar grid layout can pack the cells more densely without overlapping cells as seen in \Cref{fig:gridTypeLp,fig:gridTypeClp}.
 
 For polar layouts the radial span is divided equally between the rings. The polar central layouts are furthermore having a central cell of half the radial span of the rings. The polar Gaussian cell aperture function combined with postioning of the cell centers $\c_j$ are shown in \Cref{fig:gridTypeP,fig:gridTypePc,fig:gridTypeCp,fig:gridTypeCpc}.
 See \Cref{apx:gridLayouts} for more information on how to compute the grid layout positions.
 
 As mentioned in the descriptions above, the grids are defined with default cell sigmas. All these cell sigmas can be scaled both up and down to allow for additional or less overlap between the cells. This will however not change the positioning of the cell centers $\c_j$.
 
-For the grid layout examples in this section, we have simply chosen a grid size and a grid radius. These two variables are however having a major impact on the dimensionality and final outcome of the descriptor along with $\sigmacellj$, and hence these three parameters are tuned in our parameter studies in order to get the optimal descriptor layout and overlap.
+For the grid layout examples in this section, we have simply chosen a grid size and a grid radius. These two variables are however having a major impact on the dimensionality and final outcome of the descriptor along with $\alpha_j$, and hence these three parameters are tuned in our parameter studies in order to get the optimal descriptor layout and overlap.
 
-\Cref{fig:gridTypeWindow} shows examples of the two grid layouts that we propose for describing sliding windows, where we wish to have a more uniform description across the whole window. Following the same logic as before, we construct the grids such that by default the 1 standard deviation curves of neighbouring cells are tangent to each other, and allow a scaling of these by $\sigmacellj$.
+\Cref{fig:gridTypeWindow} shows examples of the two grid layouts that we propose for describing sliding windows, where we wish to have a more uniform description across the whole window. Following the same logic as before, we construct the grids such that by default the 1 standard deviation curves of neighbouring cells are tangent to each other, and allow a scaling of these by $\alpha_j$.
 
 \begin{figure}[p]
 	\centering
@@ -219,16 +218,16 @@ For the grid layout examples in this section, we have simply chosen a grid size 
 Similarly to $A_j$, the purpose of the center aperture function $P$ is to weight points closer to the detected interest point higher, since they are of greater importance to the local structure. We define it as a Gaussian function
 %
 \begin{align}
-P(\x) = G(\x - \p; \sigmacenter)
+P(\x) = G(\x - \p; \rho)
 \end{align}
 %
-where $\p$ is the interest point and $\sigmacenter$ is the standard deviation of the center aperture function. The $\sigmacenter$ is by default equal to the grid radius but can be scaled both up and down to achieve the best performance. The center aperture function is inspired by SIFT \cite{lowe2004distinctive} and DAISY \cite{tola2008fast} which similarly use a center aperture function. For SIFT the standard deviation of the corresponding function is however pre-defined to have a $\sigma$ 1.5 times its square-grid width and height, whereas we choose to find the optimal $\sigmacenter$ by adding it to our parameterstudies.
+where $\p$ is the interest point and $\rho$ is the scale, or standard deviation, of the center aperture function. $\rho$ is by default equal to the grid radius but can be scaled both up and down to achieve the best performance. The center aperture function is inspired by SIFT \cite{lowe2004distinctive} and DAISY \cite{tola2008fast} which similarly use a center aperture function. For SIFT the standard deviation of the corresponding function is however pre-defined to have a $\sigma$ 1.5 times its square-grid width and height, whereas we choose to find the optimal $\rho$ by adding it to our parameterstudies.
 %
 \section{Binning aperture function}
 %
 As mentioned in the introduction to the proposed descriptor, we use smooth histograms as described in \Cref{sec:histograms} for our descriptor. The binning aperture function decides the shape of the smooth histograms that make up our descriptor. We define it as a Gaussian function
 \begin{align}
-	B(f_i, \x; f) = G(f(\x) - f_i; \sigma)
+	B(f_i, \x; f) = G(f(\x) - f_i; \beta)
 \end{align}
 
 For our proposed descriptor value function $f$ is either the gradient orientation or the shape index. The number $n_\text{bins}$ of bin centers $f_i$ for $i = 1,\hdots,n_\text{bins}$ is variable and hence we need to define the bin centers as a function of $n_\text{bins}$. Given an interval $[a,b]$, we define the bin centers $f_i$
@@ -241,7 +240,7 @@ which corresponds to splitting the interval into $n_\text{bins}$ equally sized p
 The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:binCenters} their areas will integrate to different values. This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{apx:gaussianKernel}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area and hence we choose to omit re-normalization when computing the gradient orientation to save computations. The perodicity is implemented by using simple wrap-around of the distance $f(\x) - f_i$.
 %
 \subsection{Histogram normalization}
-We have now covered all the functions needed in order to compute the $j$'th histogram $H_j$, \Cref{eq:proposed_histogram}, for each cell $j$ as well as the positioning of each of these cells. The last operation we need to perform to get our descriptor $D$, \Cref{eq:proposed_descriptor}, is a concatenation of all the $H_j$ histograms. Finally we view $D$ as a single vector and normalize it by using the $L_2$-norm as \citet{lowe2004distinctive} does in his SIFT descriptor. This could cause problems when dealing with occluded interest points and hence other strategies could be persued. We have however not chosen to do so.\todo{Decide whether to persue other strategies or not}
+We have now covered all the functions needed in order to compute the $j$'th histogram $H_j$, \Cref{eq:proposed_histogram}, for each cell $j$ as well as the positioning of each of these cells. The last operation we need to perform to get our descriptor $\d$, \Cref{eq:proposed_descriptor}, is a concatenation of all the $H_j$ histograms. Finally we view $\d$ as a single vector and normalize it by using the $L_2$-norm as \citet{lowe2004distinctive} does in his SIFT descriptor. This could cause problems when dealing with occluded interest points and hence other strategies could be persued. We have however not chosen to do so.\todo{Decide whether to persue other strategies or not}
 %
 \section{Example} \label{sec:proposedDescriptorExample}
 %
@@ -303,7 +302,7 @@ The next step is to construct the scale space images as described in \Cref{sec:v
 
 From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed, which are used to compute gradient orientation and magnitude images. We then apply our pixel normalization scheme to the magnitudes. These images are shown in \Cref{fig:cellHistScaleSpacesVM}.
 
-We need to compute the cell and center weights for pixels in every cell according to the chosen grid layout parameters. In order to save computation time, we confine the support radius of the Gaussian cell aperture filters to $3 \sigmacellj$, ignoring pixels outside this distance to each cell center. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, though since many cells overlap we show the maximal weight for each pixel.
+We need to compute the cell and center weights for pixels in every cell according to the chosen grid layout parameters. In order to save computation time, we confine the support radius of the Gaussian cell aperture filters to $3 \alpha_j$, ignoring pixels outside this distance to each cell center. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, though since many cells overlap we show the maximal weight for each pixel.
 The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and then simply look up the value when needed in a cell.
 
 

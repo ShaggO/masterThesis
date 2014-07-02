@@ -1,6 +1,9 @@
-\newcommand{\x}{\mathbf{x}}
-\newcommand{\w}{\mathbf{w}}
 \documentclass[thesis.tex]{subfiles}
+\def\x{\mathbf{x}}
+\def\d{\mathbf{d}}
+\def\w{\mathbf{w}}
+\newcommand\TPR{\mathit{TPR}}
+\newcommand\FPR{\mathit{FPR}}
 \begin{document}
 
 \chapter{Pedestrian detection}
@@ -13,7 +16,7 @@ The chapter is structured as follows...
 
 \section{Support vector machine}
 
-Suppose we have some training data split into positive and negative elements. In our case these are $d$-dimensional descriptors of regions with and without pedestrians. We wish to construct a binary classifier which accurately assigns a classification score denoting how confident we are that there is or isn't a pedestrian present. The approach of a linear support vector machine (SVM) is to place a $(d-1)$-dimensional hyperplane in descriptor space which separates the two classes. The hyperplane $(\w,b)$ is defined as the points $\x$ satisfying
+Suppose we have some training data split into positive and negative elements. In our case these are $n$-dimensional descriptors of regions with and without pedestrians. We wish to construct a binary classifier which accurately assigns a classification score denoting how confident we are that there is or isn't a pedestrian present. The approach of a linear support vector machine (SVM) is to place a $(n-1)$-dimensional hyperplane in descriptor space which separates the two classes. The hyperplane $(\w,b)$ is defined as the points $\x$ satisfying
 %
 \begin{align*}
 \w \cdot \x - b = 0.
@@ -29,33 +32,33 @@ where $\x_i$ are training data points and $y_i \in \{-1,1\}$ their respective co
 
 However, linear separation of the two classes is almost never feasible. Instead a \emph{soft-margin} SVM is used. The idea is to allow some of the data points to be placed on the wrong side of the margin. The total distance of misplaced points to the margin is minimized, in addition to maximizing the margin. This is done by introducing a \emph{cost} parameter $C$ which weights the importance of the misplacement minimization relative to the margin maximization. Formally, the soft-margin optimization problem is written as
 %
-\begin{align*}
+\begin{align}
+\label{eq:svmDefinition}
 \min_{\w,\boldsymbol{\xi},b} \left\{ \frac12 \| \w \|^2 + C \sum_i \xi_i \right\} \qquad \text{subject to} \qquad \begin{aligned} y_i (\w \cdot \x_i - b) &\geq 1 - \xi_i, \\ \xi_i &\geq 0, \end{aligned}
-\end{align*}
+\end{align}
 %
 where $\xi_i$ are slack variables allowing for misplaced points.
 
-If there is a large skew in the number of elements in each class, the larger class will have a higher propability of encapsulating a large amount of the variations in the smaller class. If the smaller class is of great importance, the cost parameter $C$ can be defined for each of the two classes individually allowing for a correction for the element skew.
+If there is a large skew in the number of elements in each class, the larger class will dominate the misplacement term, and we will be less likely to find a good separation. In order to correct this skew, the cost parameter $C$ can be defined for each of the two classes individually. The simplest approach is dividing $C$ by the number of elements in the respective classes.
 
-When using the SVM for solving the pedestrian detection problem, we use the $L_2$-regularized $L_2$ loss support vector classifier from LIBLINEAR v. 1.94\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/liblinear/}} \cite{fan2008liblinear} and hence the $L_2$-norm is used for computing both $\| \w \|$ and $\xi_i$.
+When using the SVM for solving the pedestrian detection problem, we use the $L_2$-regularized $L_2$ loss support vector classifier from LIBLINEAR v. 1.94\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/liblinear/}} \cite{fan2008liblinear}. The naming of this SVM type means that the $L_2$-norm is used for computing both $\| \w \|$ and $\xi_i$, as in \Cref{eq:svmDefinition}.
 
 \section{Performance measures}
 
-Having described the method of using a SVM for (binary) classification, we are now able to derive a performance measures for the pedestrian detection problem. By using the SVM classifier, we get the distance $\w \cdot \x - b$ between each descriptor $\x$ and the hyperplane dividing the two classes. Using this distance as the classification score $s$ and following the binary classification method described in \Cref{sec:binaryClassificationMeasures}, we are able to compute both the PR- and ROC-curves and their AUCs. In other words we vary a threshold on the distance to the hyperplane to get the two measures of the performance of a descriptor.
+Having described the method of using a SVM for binary classification, we are now able to define a performance measure for the pedestrian detection problem. Recall that the an SVM gives us the signed distances $\w \cdot \d - b$ between each descriptor $\d$ and the hyperplane dividing the two classes: positive for pedestrians and negative for non-pedestrians. Since the SVM is trained to find the best separation between the classes, we can use this distance as the classification score $s$. Following the binary classification method described in \Cref{sec:binaryClassificationMeasures}, we are able to compute both the PR- and ROC-curves and their AUCs. In other words we vary a threshold on the distance to the hyperplane to get the two measures of the performance of a descriptor.
 
-When finding pedestrians, the only positives are the exact windows from (possibly larger) images with pedestrians of the correct height relative to the window height. The amount of variations in pedestrians is however significantly smaller than the amount of variations in all non-pedestrian images and hence we will most likely have a large skew in the amount of positives and negatives.
-Recall that the PR measure is used when a large skew towards one of the classes of a binary classification is present as described in \Cref{sec:binaryClassificationMeasures}. Therefore we will be using the PR measure as performance measure for our pedestrian detection parameter study as well as testing. \Citet{dalal2005histograms} use the log-log plot of the ROC-curve as performance measure, and hence we will show test results for this performance measure as well. In order for this measure to make sense, the actual plot is defined as the logarithm of $1-\text{Recall}$ versus the logarithm of $FPR$.
-
+The dataset we use (described in \Cref{sec:odDataset}) has a large skew in the amount of positives and negatives. This is because the only positives are the exact cut-outs of pedestrians, while negatives can be anything else.
+Recall that the PR measure is preferred when there is a large skew towards one of the classes of a binary classification, as described in \Cref{sec:binaryClassificationMeasures}. We will therefore be using the PR measure as performance measure for our pedestrian detection parameter study as well as testing. \Citet{dalal2005histograms} use the log-log plot of the ROC-curve as performance measure, and hence we will show test results for this performance measure as well. In order for this measure to make sense, the actual plot is defined as the logarithm of $1-\text{Recall}$ versus the logarithm of $\FPR$.
+%
 \section{Dataset}
 \label{sec:odDataset}
+%
+The dataset we use for training and testing our descriptor on the pedestrian detection application is called the \emph{INRIA Person Dataset}\footnote{\url{http://pascal.inrialpes.fr/data/human/}} (from now on called the INRIA dataset) created by \citet{dalal2005histograms}. The purpose of this dataset is to evaluate methods on more challenging images, compared to the earlier MIT Pedestrian dataset \cite{papageorgiou2000trainable}.
 
-The dataset we use for training and testing our descriptor on the pedestrian detection application is called the \emph{INRIA Person Dataset}\footnote{\url{http://pascal.inrialpes.fr/data/human/}} (from now on called the INRIA dataset) constructed by \citet{dalal2005histograms}.
+It consists of various real world images grouped into two subsets: images with pedestrians (positives) and images without pedestrians (negatives). From the positive images, cut-outs of pedestrians are extracted and rescaled to a fixed size, such that the pedestrian in each cut-out is 96 pixels in height from their feet to shoulders. We extract our own cut-outs from the negative images. The size of the cut-outs are $64 \times 128$ pixels with a 3 pixel border to avoid boundary condition effects. In case a pedestrian cut-out is smaller than the defined size after resizing, the borders are replicated to achieve the desired dimensions.
+The positive set only contains images of somewhat upright persons that initially were at least 100 pixels in height. In order to improve the robustness of the dataset against reflected images, each positive cut-out has its horizontally flipped image included as well.
 
-It consists of various real world images grouped into two subsets: Images with pedestrians (positives) and images without pedestrians (negatives). The positive images are rescaled cutouts centered around each pedestrian in larger images. The cutouts are first extracted and then individually re-scaled to make the pedestrian of each cutout 96 pixels in height from their feet to shoulders. The size of the cutouts are $64 \times 128$ pixels with a 3 pixel border to avoid boundary condition effects. In case a pedestrian cutout is smaller than the defined size after resizing, the borders are replicated to achieve the desired dimensions.
-The positive set only contains images of somewhat upright persons that initially were at least 100 pixels in height. In order to improve the robustness of the dataset against reflected images, each positive cutout has its horizontally flipped image included as well.
-
-The training dataset has a total of 2416 positives and 1218 negative images.
-The test dataset has a total of 1126 positives and 453 negative images.
+The dataset has been pre-split into training and test data in order to compare methods fairly. The training data has a total of 2416 positive and 1218 negative images, while the test data has a total of 1126 positives and 453 negatives.
 
 \Cref{fig:inriaExampleImages} shows examples of positive \subref{fig:inriaPositives} and negative \subref{fig:inriaNegatives} images from the INRIA dataset. From the positive examples we clearly see the high variety of upright positions and surroundings in the dataset.
 
@@ -90,7 +93,7 @@ The test dataset has a total of 1126 positives and 453 negative images.
 \restoregeometry
 
 \subsection{Pitfalls and deficiencies}
-We have found two smaller problems with the INRIA dataset which could affect the results of using the dataset. The first problem is duplicate images. Amongst the negative training images we have found 10 pair-wise duplicates. This chould bias the SVM since it effectively means that these images are weighted twice as high as the others. Given the small percentage of duplicates in the dataset the effect should however be close to nothing. In the initial training there are furthermore extracted windows at different random positions of the duplicates which decreases the bias even more. We have likewise found one duplicated image in the negative test set.
+We have found two minor problems with the INRIA dataset which could affect the results of using the dataset. The first problem is duplicate images. Amongst the negative training images we have found 10 pair-wise duplicates. This could bias the SVM since it effectively means that these images are weighted twice as high as the others. Given the small percentage of duplicates in the dataset the effect should however be close to nothing. We have also found a single duplicated image in the negative test set.
 
 The second problem is the presence of people in some of the negatives.
 \Cref{fig:inriaNegativePersons} show two examples of persons in the negative images of the INRIA dataset. The people are however either too small to fit correctly into the sliding window at any of the used scales or partially occluded by the image bounds to such an extent that we shouldn't be able to detect them anyway.
@@ -221,7 +224,7 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 		\caption{False positives}
 		\label{fig:objectDetectionFP}
 	\end{subfigure}
-	\caption{Example classifications of INRIA windows.}
+	\caption{Example classifications of INRIA cut-outs.}
 	\label{fig:imageCorrespondenceCurves}
 \end{figure}
 \restoregeometry
