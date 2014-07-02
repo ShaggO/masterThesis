@@ -9,7 +9,7 @@ data = inriaData(nWindows,seed);
 
 for i = 1:numel(name)
     params = load(['results/optimize/inriaParameters' name{i}]); % settings
-    [~,~,PRAUC(i)] = inriaOptimizeEnum(data,'',params.method,params.svmArgs, ...
+    [~,~,PRAUC{i}] = inriaOptimizeEnum(data,'',params.method,params.svmArgs, ...
         'normType',normType);
 end
 
