@@ -1,5 +1,5 @@
 clear all; clc;
-diaryFile = ['inriaParametersGo_' strrep(datestr(now),':','-') '.out'];
+diaryFile = ['results/optimize/inriaParametersGo_' strrep(datestr(now),':','-') '.out'];
 diary(diaryFile)
 disp('Optimization of parameters for GO started.');
 
@@ -59,7 +59,7 @@ for i = 1:iters
 end
 diary(diaryFile)
 totalTime = timestamp(startTime)
-method.descriptorArgs
+struct(method.descriptorArgs{:})
 disp([timestamp(startTime) ' Computing test results:']);
 diary off
 

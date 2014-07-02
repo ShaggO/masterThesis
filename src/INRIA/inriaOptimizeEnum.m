@@ -37,6 +37,7 @@ svmArgs = paramSvmArgs(optimalInd);
 if ~isempty(diaryFile)
     % Display results
     diary(diaryFile)
+    disp(['PRAUCs: ' num2str(PRAUC)])
     for p = 1:numel(parameters)
         param = parameters{p};
         switch class(values{p}{optimalInd})

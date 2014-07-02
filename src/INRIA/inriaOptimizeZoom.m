@@ -60,6 +60,7 @@ for i = 1:numel(varargin)+1
     end
 
     diary(diaryFile)
+    disp(['PRAUCs: ' num2str(PRAUC)])
     disp(['Optimal this iteration: ' nums2str(optimalV)]);
     disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
     diary off
