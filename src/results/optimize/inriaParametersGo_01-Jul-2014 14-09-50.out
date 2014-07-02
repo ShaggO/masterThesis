@@ -1,0 +1,213 @@
+Optimization of parameters for GO started.
+Optimizing SVM parameter: logc
+Iteration 1, values: -6,-5,-4,-3,-2,-1,0,1,2
+Optimal this iteration: -2
+Optimal PRAUC: 0.98085
+Iteration 2, values: -2.5,-2.4,-2.3,-2.2,-2.1,-2,-1.9,-1.8,-1.7,-1.6,-1.5
+Optimal this iteration: -2.2
+Optimal PRAUC: 0.98104
+Final optimal value: -2.2
+
+[434s] Optimizing parameters (iteration 1/3):
+Optimal gridType: triangle window
+Optimal PRAUC: 0.98176
+
+Optimizing method parameter: gridSize
+Iteration 1, values: 2,2.5,3,3.5,4
+Optimal this iteration: 2
+Optimal PRAUC: 0.9824
+Iteration 2, values: 2,2.1,2.2,2.3,2.4
+Optimal this iteration: 2
+Optimal PRAUC: 0.9824
+Final optimal value: 2
+
+Optimizing method parameter: cellSigma
+Iteration 1, values: 0.5,1,1.5,2,0.5,1,1.5,2
+Optimal this iteration: 1,1
+Optimal PRAUC: 0.9824
+Iteration 2, values: 0.8,0.9,1,1.1,1.2,0.8,0.9,1,1.1,1.2
+Optimal this iteration: 1,1
+Optimal PRAUC: 0.9824
+Final optimal value: 1,1
+
+Optimal cellNormStrategy: 4
+Optimal PRAUC: 0.9824
+
+Optimizing method parameter: binSigma
+Iteration 1, values: 0.5,1,1.5,2,2.5
+Optimal this iteration: 1
+Optimal PRAUC: 0.98095
+Iteration 2, values: 0.8,0.9,1,1.1,1.2
+Optimal this iteration: 1.2
+Optimal PRAUC: 0.9824
+Final optimal value: 1.2
+
+Optimizing method parameter: binCount
+Iteration 1, values: 4,6,8,10,12,14,16
+Optimal this iteration: 16
+Optimal PRAUC: 0.9828
+Final optimal value: 16
+
+Optimizing method parameter: normSigma
+Iteration 1, values: 3,4,5,6,7,8,9,10,3,4,5,6,7,8,9,10
+Optimal this iteration: 10,10
+Optimal PRAUC: 0.99931
+Iteration 2, values: 9.2,9.4,9.6,9.8,10,9.2,9.4,9.6,9.8,10
+Optimal this iteration: 10,10
+Optimal PRAUC: 0.99931
+Final optimal value: 10,10
+
+Optimizing SVM parameter: logc
+Iteration 1, values: -6,-5,-4,-3,-2,-1,0,1,2
+Optimal this iteration: -2
+Optimal PRAUC: 0.99931
+Iteration 2, values: -2.5,-2.4,-2.3,-2.2,-2.1,-2,-1.9,-1.8,-1.7,-1.6,-1.5
+Optimal this iteration: -2.5
+Optimal PRAUC: 0.99932
+Final optimal value: -2.5
+
+[8974s] Optimizing parameters (iteration 2/3):
+Optimal gridType: triangle window
+Optimal PRAUC: 0.99932
+
+Optimizing method parameter: gridSize
+Iteration 1, values: 2,2.5,3,3.5,4
+Optimal this iteration: 2.5
+Optimal PRAUC: 0.99954
+Iteration 2, values: 2.3,2.4,2.5,2.6,2.7
+Optimal this iteration: 2.5
+Optimal PRAUC: 0.99954
+Final optimal value: 2.5
+
+Optimizing method parameter: cellSigma
+Iteration 1, values: 0.5,1,1.5,2,0.5,1,1.5,2
+Optimal this iteration: 1,1
+Optimal PRAUC: 0.99954
+Iteration 2, values: 0.8,0.9,1,1.1,1.2,0.8,0.9,1,1.1,1.2
+Optimal this iteration: 1,1
+Optimal PRAUC: 0.99954
+Final optimal value: 1,1
+
+Optimal cellNormStrategy: 4
+Optimal PRAUC: 0.99954
+
+Optimizing method parameter: binSigma
+Iteration 1, values: 0.5,1,1.5,2,2.5
+Optimal this iteration: 1
+Optimal PRAUC: 0.99955
+Iteration 2, values: 0.8,0.9,1,1.1,1.2
+Optimal this iteration: 1
+Optimal PRAUC: 0.99955
+Final optimal value: 1
+
+Optimizing method parameter: binCount
+Iteration 1, values: 4,6,8,10,12,14,16
+Optimal this iteration: 16
+Optimal PRAUC: 0.99955
+Final optimal value: 16
+
+Optimizing method parameter: normSigma
+Iteration 1, values: 3,4,5,6,7,8,9,10,3,4,5,6,7,8,9,10
+Optimal this iteration: 8,8
+Optimal PRAUC: 0.99957
+Iteration 2, values: 7.6,7.8,8,8.2,8.4,7.6,7.8,8,8.2,8.4
+Optimal this iteration: 8.2,8.2
+Optimal PRAUC: 0.99957
+Final optimal value: 8.2,8.2
+
+Optimizing SVM parameter: logc
+Iteration 1, values: -6,-5,-4,-3,-2,-1,0,1,2
+Optimal this iteration: -3
+Optimal PRAUC: 0.99954
+Iteration 2, values: -3.5,-3.4,-3.3,-3.2,-3.1,-3,-2.9,-2.8,-2.7,-2.6,-2.5
+Optimal this iteration: -2.7
+Optimal PRAUC: 0.99958
+Final optimal value: -2.7
+
+[19363s] Optimizing parameters (iteration 3/3):
+Optimal gridType: triangle window
+Optimal PRAUC: 0.99958
+
+Optimizing method parameter: gridSize
+Iteration 1, values: 2,2.5,3,3.5,4
+Optimal this iteration: 2.5
+Optimal PRAUC: 0.99958
+Iteration 2, values: 2.3,2.4,2.5,2.6,2.7
+Optimal this iteration: 2.5
+Optimal PRAUC: 0.99958
+Final optimal value: 2.5
+
+Optimizing method parameter: cellSigma
+Iteration 1, values: 0.5,1,1.5,2,0.5,1,1.5,2
+Optimal this iteration: 1,1
+Optimal PRAUC: 0.99958
+Iteration 2, values: 0.8,0.9,1,1.1,1.2,0.8,0.9,1,1.1,1.2
+Optimal this iteration: 1,1
+Optimal PRAUC: 0.99958
+Final optimal value: 1,1
+
+Optimal cellNormStrategy: 4
+Optimal PRAUC: 0.99958
+
+Optimizing method parameter: binSigma
+Iteration 1, values: 0.5,1,1.5,2,2.5
+Optimal this iteration: 1
+Optimal PRAUC: 0.99958
+Iteration 2, values: 0.8,0.9,1,1.1,1.2
+Optimal this iteration: 1
+Optimal PRAUC: 0.99958
+Final optimal value: 1
+
+Optimizing method parameter: binCount
+Iteration 1, values: 4,6,8,10,12,14,16
+Optimal this iteration: 16
+Optimal PRAUC: 0.99958
+Final optimal value: 16
+
+Optimizing method parameter: normSigma
+Iteration 1, values: 3,4,5,6,7,8,9,10,3,4,5,6,7,8,9,10
+Optimal this iteration: 8,8
+Optimal PRAUC: 0.99958
+Iteration 2, values: 7.6,7.8,8,8.2,8.4,7.6,7.8,8,8.2,8.4
+Optimal this iteration: 7.6,7.6
+Optimal PRAUC: 0.99958
+Final optimal value: 7.6,7.6
+
+Optimizing SVM parameter: logc
+Iteration 1, values: -6,-5,-4,-3,-2,-1,0,1,2
+Optimal this iteration: -3
+Optimal PRAUC: 0.99953
+Iteration 2, values: -3.5,-3.4,-3.3,-3.2,-3.1,-3,-2.9,-2.8,-2.7,-2.6,-2.5
+Optimal this iteration: -2.7
+Optimal PRAUC: 0.99958
+Final optimal value: -2.7
+
+
+totalTime =
+
+[27704s]
+
+
+ans = 
+
+  Columns 1 through 8
+
+    'colour'    'gray'    'contentType'    'go'    'magnitudeType'    'm'    'rescale'    [1]
+
+  Columns 9 through 15
+
+    'scaleBase'    [1.2599]    'scaleOffset'    [0]    'gridType'    'triangle window'    'gridSize'
+
+  Columns 16 through 22
+
+    [2.5000]    'gridRadius'    [1x2 double]    'centerFilter'    'none'    'cellFilter'    'gaussian'
+
+  Columns 23 through 29
+
+    'cellSigma'    [1x2 double]    'normType'    'pixel'    'normSigma'    [1x2 double]    'binSigma'
+
+  Columns 30 through 34
+
+    [1]    'binCount'    [16]    'cellNormStrategy'    [4]
+
+[27704s] Computing test results:
