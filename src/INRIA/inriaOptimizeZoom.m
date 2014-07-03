@@ -1,5 +1,5 @@
 function [methodBest,svmArgsBest,optimalV] = inriaOptimizeZoom( ...
-    data,diaryFile,method,svmArgs,parameter,values,varargin)
+    data,diaryFile,logger,method,svmArgs,parameter,values,varargin)
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
 
 splits = 6;
@@ -64,6 +64,8 @@ for i = 1:numel(varargin)+1
     disp(['Optimal this iteration: ' nums2str(optimalV)]);
     disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
     diary off
+    
+    logger.data(end+1) = struct('parameter',parameter,'iteration',i,'values',values,'PRAUC',PRAUC);
 
     if i <= numel(varargin)
         r = varargin{i};

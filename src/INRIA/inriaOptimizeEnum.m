@@ -1,5 +1,5 @@
 function [method,svmArgs,PRAUC] = inriaOptimizeEnum( ...
-    data,diaryFile,method,svmArgs,varargin)
+    data,diaryFile,logger,method,svmArgs,varargin)
 % ENUMOPTIMIZEPARAMETER Optimize enumerated sets of parameters
 
 assert(numel(varargin) >= 2,'Specify at least one parameter,value pair');
@@ -51,5 +51,7 @@ if ~isempty(diaryFile)
     disp(['Optimal PRAUC: ' num2str(optimalPRAUC) sprintf('\n')]);
     diary off
 end
+
+logger.data(end+1) = struct('parameter',parameter,'iteration',1,'values',values,'PRAUC',PRAUC);
 
 end

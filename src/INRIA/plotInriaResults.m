@@ -19,6 +19,8 @@ for i = 1:numel(svmPath)
     PRAUC(i) = test.PRAUC;
 end
 
+PRAUC
+
 %% ROC
 figure
 set(gcf,'color','white');

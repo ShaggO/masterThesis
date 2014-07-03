@@ -25,7 +25,8 @@ diary(diaryFile)
 disp('Optimization of svm for GoSi started.');
 diary off;
 
-[~,svmArgs] = inriaOptimizeZoom(data,diaryFile,method,svmArgs,'logc', ...
+logger = handler(struct('parameter',{},'iteration',{},'values',{},'PRAUC',{}));
+[~,svmArgs] = inriaOptimizeZoom(data,diaryFile,logger,method,svmArgs,'logc', ...
         (-6:2)',(-0.5:0.1:0.5)');
 
 profile off,profile on
