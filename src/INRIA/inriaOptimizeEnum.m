@@ -52,6 +52,6 @@ if ~isempty(diaryFile)
     diary off
 end
 
-logger.data(end+1) = struct('parameter',parameter,'iteration',1,'values',values,'PRAUC',PRAUC);
+logger.data(end+1) = struct('parameter',parameters,'iteration',1,'values',values,'PRAUC',PRAUC);
 
 end
