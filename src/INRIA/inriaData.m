@@ -121,6 +121,7 @@ methods
         [loaded,desLoad] = loadIfExist(desPath,'file');
         if loaded && all(ismember(desVars,fieldnames(desLoad)))
             D = desLoad.D;
+            X = desLoad.X;
             disp([num2str(size(D,1)) ' descriptors loaded.']);
         else
             obj.loadCache(type);
