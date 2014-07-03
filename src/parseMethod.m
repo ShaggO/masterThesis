@@ -443,7 +443,8 @@ D = [];
 for i = 1:numel(varargin)
     [Xi, Di] = varargin{i}(I,resDir,imName,desSave);
     if i > 1
-        [X,ia,ib] = intersect(X,Xi,'rows');
+        [ia,ib] = ismember(X,Xi,'rows');
+        X = X(ia,:);
         D = [D(ia,:) Di(ib,:)];
     else
         X = Xi;
