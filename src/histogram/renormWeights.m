@@ -23,13 +23,17 @@ switch type
     case 'gaussian'
         w = 1 ./ prod(1/2*(erf(B./(sqrt(2)*Sigma)) - ...
             erf(A./(sqrt(2)*Sigma))),2);
-
     case 'box'
-        w = 2 ./ prod(min(B,Sigma) - max(A,-Sigma),2);
-
+        w = 2 * prod(Sigma,2) ./ prod(min(B,Sigma) - max(A,-Sigma),2);
     case 'triangle'
         A = max(A,-2*Sigma);
         B = min(B,2*Sigma);
-        w = 2 ./ prod(B .* (1 - B./(4*Sigma)) - A .* (1 + A./(4*Sigma)),2);
+        w = 2 * prod(Sigma,2) ./ prod(B - A - (A.^2 + B.^2) ./ (4*prod(Sigma,2)),2);
 end
+
+% A
+% B
+% Sigma
+% w
+
 end

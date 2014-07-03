@@ -2,7 +2,7 @@ clc, clear all
 
 %% Periodic
 
-binSigma = 1/2;
+binSigma = 3/2;
 left = -1;
 right = 1;
 binCount = 4;
