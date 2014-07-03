@@ -42,6 +42,7 @@ Recall the discussion of the benefits of ROC and PR in \Cref{sec:binaryClassific
 %The approach is similar to that of \citet{winder2009picking,dahl2011finding}.
 
 \section{Dataset}
+\label{sec:dtuDataset}
 The dataset we use for training and evaluation of our descriptor is called the \emph{DTU Robot 3D dataset} \cite{aanaes2010recall} (from now on called the DTU dataset). It consists of images of objects taken in a closed black box with varying illumination using 19 fixed position LED lights. In total there are 60 scenes with varying objects. \Cref{fig:dtu_examples} shows 4 example scenes. \citet{aanaes2010ground} classify the scenes into categories as shown in \Cref{tbl:dtu_scene_classifications}.
 
 \begin{figure}[p]
@@ -91,12 +92,18 @@ The camera is positioned around each scene using an industrial robot arm, which 
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics[width=0.8\textwidth]{img/CameraPosb.pdf}
-	\caption{Overview of camera positions and paths in the DTU dataset. The figure originates from \cite{aanaes2010recall}.}
+	\includegraphics[width=0.8\textwidth]{img/CameraPosbOwn.pdf}
+	\caption{Overview of camera positions and paths in the DTU dataset. The red positions mark training camera positions, the arrows mark camera positions of the light path experiments where only the ones marked with blue are used for training. Reconstructed and improved illustration from \citet[Figure 3, pp. 3]{aanaes2010recall}.}
 	\label{fig:dtu_overview}
 \end{figure}
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/dtu_light_overview.pdf}
+	\caption{Light positions of the x- and z-axis light paths. Training light light positions marked with red. Reproduced and improved figure from \citet[Fig. 1, pp. 644]{larsen2012in}.}
+	\label{fig:dtu_light_overview}
+\end{figure}
 
-The choice of capturing the scenes with individual LED lights created images with a high amount of cast shadows. \citet{larsen2012jet} created a set\footnote{dataset available at http://roboimagedata.imm.dtu.dk/data/condensed.tar.gz} of artificial diffuse and light paths from the individual LED images which we now briefly explain. The artificial diffuse light images are created from the individual lightings in order to only evaluate the performance of our descriptor under viewpoint changes and to get more natural images. These diffuse images are created by averaging over the individual light images for each camera position:
+The choice of capturing the scenes with individual LED lights created images with a high amount of cast shadows. \citet{larsen2012jet} created a set\footnote{dataset available at \url{http://roboimagedata.imm.dtu.dk/data/condensed.tar.gz}} of artificial diffuse and light paths from the individual LED images which we now briefly explain. The artificial diffuse light images are created from the individual lightings in order to only evaluate the performance of our descriptor under viewpoint changes and to get more natural images. These diffuse images are created by averaging over the individual light images for each camera position:
 \begin{align}
 	I_{\text{diffuse}} = \frac{1}{19} \sum_{i = 1}^{19} I_{i}
 \end{align}
@@ -105,41 +112,41 @@ Given a light position ${\boldsymbol{x}}$ in the spatial domain of the LED posit
 \begin{align}
 	I_{x} = \sum_{i = 1}^{19} G(\boldsymbol{x} - \boldsymbol{x}_i,\sigma) I_{i}
 \end{align}
-In order to get a somewhat general measurement for the robustness against light variations there are light paths generated for the following four image positions: 12 (arc 1), 25 (arc 1), 60 (linear path), and 87 (arc 2).
+In order to get a somewhat general measurement for the robustness against light variations the dataset comes with light paths generated for the image position marked with arrows in \Cref{fig:dtu_overview}. \Cref{fig:dtu_light_overview} shows the x- and y-axis light paths with 9 and 7 light positions respectively.
 See \citet{aanaes2010recall,aanaes2010ground} for more information about the dataset and the generated light paths.
 
 \Cref{fig:light_example} show 6 of the different light images for scene 4 at camera position 60. \Cref{fig:light_example_02,fig:light_example_17,fig:light_example_08} show the images taken with individual LED lighting (numbers 2, 17, and 8 respectively), and \Cref{fig:light_example_00} shows the diffuse light image. We here notice the significant difference in cast shadows using the three LEDs individually compared to the diffuse light image. The diffuse light image is however quite dark compared to the LED 8 light image, which could potentially cause problems in some scenes generating too few interest points. Such an issue could however be handled by adapting detection thresholds or by using histogram stretching/equalization.
 \Cref{fig:light_example_28,fig:light_example_20} show the left- and rightmost positions of the X light path. By comparing these to their LED counterparts (\subref{fig:light_example_02} and \subref{fig:light_example_17} respectively) we see that the cast shadows are less significant therefore looking more natural.
-\Cref{fig:viewpoint_example} shows 4 different camera positions for scene 4 including the keyframe (position 25)..
+\Cref{fig:viewpoint_example} shows 3 different camera positions for scene 4 including the keyframe (position 25).
 %
 \begin{figure}[tb]
 	\centering
-	\begin{subfigure}{0.49\textwidth}
-		\includegraphics[width=\textwidth]{img/scene_04_img60_02.png}
-		\caption{LED 2 light}
-		\label{fig:light_example_02}
-	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
-		\includegraphics[width=\textwidth]{img/scene_04_img60_17.png}
-		\caption{LED 17 light}
-		\label{fig:light_example_17}
-		\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img60_08.png}
 		\caption{LED 8 light}
 		\label{fig:light_example_08}
 	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/scene_04_img60_02.png}
+		\caption{LED 2 light}
+		\label{fig:light_example_02}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\includegraphics[width=\textwidth]{img/scene_04_img60_17.png}
+		\caption{LED 17 light}
+		\label{fig:light_example_17}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img60_00.png}
 		\caption{Diffuse light}
 		\label{fig:light_example_00}
 	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img60_28.png}
 		\caption{Leftmost position of X light path}
 		\label{fig:light_example_28}
 	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img60_20.png}
 		\caption{Rightmost position of X light path}
 		\label{fig:light_example_20}
@@ -150,22 +157,17 @@ See \citet{aanaes2010recall,aanaes2010ground} for more information about the dat
 %
 \begin{figure}[tb]
 	\centering
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img12_00.png}
 		\caption{Camera position 12 (arc 1)}
 		\label{fig:viewpoint_example_left}
 	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
-		\includegraphics[width=\textwidth]{img/scene_04_img47_00.png}
-		\caption{Camera position 47 (arc 1)}
-		\label{fig:viewpoint_example_right}
-	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img25_00.png}
 		\caption{Camera position 25 (keyframe)}
 		\label{fig:viewpoint_example_keyframe}
 	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/scene_04_img64_00.png}
 		\caption{Camera position 64 (linear path)}
 		\label{fig:viewpoint_example_scale}
@@ -271,6 +273,11 @@ When having computed the distance ratios of all matches, we are able to construc
 %
 \section{Experimental setup}
 %
+The DTU dataset is constructed using four different camera movement paths: Arc 1 through 3 and the linear path described in \Cref{sec:dtuDataset}. We therefore choose to perform one experiment for each of these paths, where we average across the different scenes for each camera position. These four experiments are all conducted using the diffuse light images. Furthermore we conduct two light experiments, where we move the light in the x- and z-axis respectively. For these experiments we both average across scenes and a fixed set of camera positions. In total we have six different experiments with perspective, scale and light transformations.
+
+Since the DTU dataset is not split in a test and a train part, there is no pre-defined way of training and testing an algorithm on the dataset. \citet{larsen2012jet} used the Oxford Affine Covariance Region\footnote{\url{http://www.robots.ox.ac.uk/~vgg/research/affine}} dataset for manual parameter optimization of their Jet-based local image descriptors. This dataset is however very small and limited and hence we risk severe overfitting to the dataset if used for training. Instead we choose to split the DTU dataset with respect to the scenes into six parts for the purpose of (leave-on-out) cross-validation.
+
+Testing is done on the full dataset, wheras we only perform training on a subset of the camera and light positions, since the dataset contains quite a large amount of images to be processed. \Cref{fig:dtu_overview} shows the camera positions of the dataset as described in \Cref{sec:dtuDataset}. In this illustration the training camera positions for the three arcs and the linear path are marked with red. The camera positions for the light experiments are marked with arrows, where only the ones marked with blue arrows are used for training. \Cref{fig:dtu_light_overview} shows the light positions for the light experiments. The red plusses and circles mark the x- and z-axis light path images used for training respectively.
 %
 \section{Parameter study}
 \label{sec:icParameterStudy}
