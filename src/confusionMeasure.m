@@ -1,11 +1,12 @@
-function [ROC, PR] = confusionMeasure(groundTruth,prob)
+function [ROC, PR, Tunique] = confusionMeasure(groundTruth,prob)
 
 [T,idx] = sort(prob);
 groundTruth = groundTruth(idx);
 True = groundTruth == 1;
 False = groundTruth == -1;
 
-[~,idxT] = unique(T);
+[Tunique,idxT] = unique(T);
+Tunique = [Tunique; Inf];
 idxT = [idxT; numel(T)+1];
 
 FN = [0; cumsum(True)];

@@ -232,6 +232,53 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 \section{Parameter study}
 \label{sec:odParameterStudy}
 
+\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+\begin{figure}[p]
+\centering
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/inriaParameters_gridSize.pdf}
+		\caption{Cell spacing $r$}
+		\label{fig:inriaParameters_gridSize}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/inriaParameters_cellSigma.pdf}
+		\caption{Cell scale $\alpha$}
+		\label{fig:inriaParameters_cellSigma}
+		\vspace{2mm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/inriaParameters_normSigma.pdf}
+		\caption{Normalization scale $\eta$}
+		\label{fig:inriaParameters_normSigma}
+		\vspace{2mm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/inriaParameters_binSigma.pdf}
+		\caption{Bin scale $\beta$}
+		\label{fig:inriaParameters_binSigma}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/inriaParameters_binCount.pdf}
+		\caption{Bin count $n$}
+		\label{fig:inriaParameters_binCount}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/inriaParameters_logc.pdf}
+		\caption{SVM weight $C$}
+		\label{fig:inriaParameters_logc}
+		\vspace{2mm}
+	\end{subfigure}
+	\caption{Parameter study results for GO.}
+	\label{fig:imageCorrespondenceCurves}
+\end{figure}
+\restoregeometry
+
 \subbibliography
 
 \end{document}

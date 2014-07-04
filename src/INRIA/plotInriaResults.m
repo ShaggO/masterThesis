@@ -13,6 +13,11 @@ ROCAUC = zeros(1,numel(svmPath));
 PRAUC = ROCAUC;
 for i = 1:numel(svmPath)
     test = load(svmPath{i});
+%     [~,~,T] = confusionMeasure([ones(size(test.probPos)); -ones(size(test.probNeg))], ...
+%         [test.probPos; test.probNeg]);
+%     idx{i} = find(test.ROC(:,1) >= 10^-4,1);
+%     T(idx{i})
+%     idx{i} = find(T >= -10,1);
     ROC{i} = test.ROC;
     ROCAUC(i) = test.ROCAUC;
     PR{i} = test.PR;
@@ -33,6 +38,9 @@ xlabel('FPR');
 ylabel('1-TPR');
 axis([1e-6 1e-1 0.01 0.5])
 legend(labels,'interpreter','none','location','southwest')
+% for i = 1:numel(svmPath)
+%     loglog(ROC{i}(idx{i},1)+eps,1-ROC{i}(idx{i},2)+eps,[colours{i} 'o']);
+% end
 export_fig('../report/img/inriaTestResultsROC.pdf','-r300');
 
 %% PR
@@ -47,6 +55,9 @@ xlabel('Recall');
 ylabel('Precision');
 axis([0.75 1 0 1])
 legend(labels,'interpreter','none','location','southwest')
+% for i = 1:numel(svmPath)
+%     loglog(PR{i}(idx{i},2)+eps,1-PR{i}(idx{i},1),[colours{i} 'o']);
+% end
 export_fig('../report/img/inriaTestResultsPR.pdf','-r300');
 
 end

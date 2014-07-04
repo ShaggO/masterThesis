@@ -39,7 +39,7 @@ svmPath{end+1} = 'results/inriaTestSvmHogDTFinal';
 
 svmPath{end+1} = 'results/inriaTestSvmGoFinal';
 svmPath{end+1} = 'results/inriaTestSvmSiFinal';
-% svmPath{end+1} = 'results/inriaTestSvmGoSiFinal';
+svmPath{end+1} = 'results/inriaTestSvmGoSiFinal';
 
 % labels = {'Go','Si','GoSi','HOG (UoCTTI)','HOG (DalalTriggs)', ...
 %     'Go 30pw train','Si 30k train','GoSi 30k train','HOG (UoCTTI) 30k train','HOG (DalalTriggs) 30k train'};
