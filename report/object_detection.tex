@@ -62,17 +62,17 @@ The dataset has been pre-split into training and test data in order to compare m
 
 \Cref{fig:inriaExampleImages} shows examples of positive \subref{fig:inriaPositives} and negative \subref{fig:inriaNegatives} images from the INRIA dataset. From the positive examples we clearly see the high variety of upright positions and surroundings in the dataset.
 
-\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+%\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
 \begin{figure}[p]
 	\centering
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaPositives.png}
+		\centerline{\includegraphics[width=1.2\textwidth]{img/inriaPositives.png}}
 		\caption{Positives}
 		\label{fig:inriaPositives}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaNegatives.png}
+		\centerline{\includegraphics[width=1.2\textwidth]{img/inriaNegatives.png}}
 		\caption{Negatives}
 		\label{fig:inriaNegatives}
 	\end{subfigure}
@@ -81,16 +81,18 @@ The dataset has been pre-split into training and test data in order to compare m
 	%
 	\vspace{1cm}
 	%
-	\begin{subfigure}[t]{0.495\textwidth}
+	\centerline{
+	\begin{subfigure}[t]{0.593\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaManExample1.png}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.495\textwidth}
+	\begin{subfigure}[t]{0.593\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaManOccluded.png}
 	\end{subfigure}
+	}
 	\caption{Examples of pedestrians in negative images.}
 	\label{fig:inriaNegativePersons}
 \end{figure}
-\restoregeometry
+%\restoregeometry
 
 \subsection{Pitfalls and deficiencies}
 We have found two minor problems with the INRIA dataset which could affect the results of using the dataset. The first problem is duplicate images. Amongst the negative training images we have found 10 pair-wise duplicates. This could bias the SVM since it effectively means that these images are weighted twice as high as the others. Given the small percentage of duplicates in the dataset the effect should however be close to nothing. We have also found a single duplicated image in the negative test set.
@@ -109,125 +111,128 @@ Our test setup is a modification of the one described by \citet{dalal2005histogr
 Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per image as opposed to 10) and add a lot more hard negatives ($10^5$ as opposed to just the positive classification scores). The old amounts of training examples were caused by hardware limitations of only having $1.7$ GB of RAM for SVM training. We also prefer using a fixed number of hard negatives in order to train the SVM on the same number of images for each descriptor.
 
 \section{Example}
-\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+%\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
 \begin{figure}
 	\centering
-	\begin{subfigure}[t]{0.135\textwidth}
+	\centerline{
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/hogExample1.jpg}
 		\caption{}
 		\label{fig:hogExample1}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/hogExample2.png}
 		\caption{}
 		\label{fig:hogExample2}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/hogExample3.png}
 		\caption{}
 		\label{fig:hogExample3}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/hogExample4.jpg}
 		\caption{}
 		\label{fig:hogExample4}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/hogExample5.png}
 		\caption{}
 		\label{fig:hogExample5}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/hogExample6.png}
 		\caption{}
 		\label{fig:hogExample6}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/hogExample7.png}
 		\caption{}
 		\label{fig:hogExample7}
 		\vspace{2mm}
 	\end{subfigure}
 	%
+	}
 	\setcounter{subfigure}{0}
 	%
-	\begin{subfigure}[t]{0.13\textwidth}
+	\centerline{
+	\begin{subfigure}[t]{0.1635\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaPosTrainMeanM.png}
 		\caption{}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptorSvmMax.pdf}
 		\caption{}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptorSvmMin.pdf}
 		\caption{}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleCells.pdf}
 		\caption{}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptor.pdf}
 		\caption{}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptorSvm.pdf}
 		\caption{}
 		\vspace{2mm}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.135\textwidth}
+	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptorSvmNeg.pdf}
 		\caption{}
 		\label{fig:inriaExampleDescriptorSvm}
 		\vspace{2mm}
 	\end{subfigure}
+	}
 	\caption{Figure taken from HOG \citep{dalal2005histograms} (top) reproduced for our GO descriptor (bottom). \subref{fig:hogExample1} shows the average gradient image over training data. \subref{fig:hogExample2} and \subref{fig:hogExample3} show the maximal positive and minimal negative SVM weights for each cell, respectively. \subref{fig:hogExample4} shows a test image, where we have overlaid our grid layout. \subref{fig:hogExample5} shows its computed descriptor. \subref{fig:hogExample6} and \subref{fig:hogExample7} show the descriptor weighted by positive and negative SVM weights, respectively.}
 	\label{fig:hogDescriptorExample}
 \end{figure}
-\restoregeometry
+%\restoregeometry
 
-\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+%\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
 \begin{figure}
-	\centering
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/objectDetectionTP.png}
+		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionTP.png}}
 		\caption{True positives}
 		\label{fig:objectDetectionTP}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/objectDetectionTN.png}
+		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionTN.png}}
 		\caption{True negatives}
 		\label{fig:objectDetectionTN}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/objectDetectionFN.png}
+		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionFN.png}}
 		\caption{False negatives}
 		\label{fig:objectDetectionFN}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/objectDetectionFP.png}
+		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionFP.png}}
 		\caption{False positives}
 		\label{fig:objectDetectionFP}
 	\end{subfigure}
 	\caption{Example classifications of INRIA cut-outs.}
 	\label{fig:ownDescriptorExample}
 \end{figure}
-\restoregeometry
+%\restoregeometry
 
 \section{Parameter study}
 \label{sec:odParameterStudy}
@@ -263,10 +268,9 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 ]\loadedtable
 \caption{Parameter study optimal parameters from 6-fold cross validation for GO and SI methods.}
 \label{fig:INRIAparams}
-\end{table}
-
-
-\begin{table}[tb]
+%
+\vspace{1cm}
+%
 \centering
 \pgfplotstableset{
     highlight/.append style={
