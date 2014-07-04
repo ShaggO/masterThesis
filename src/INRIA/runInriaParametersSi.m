@@ -38,7 +38,7 @@ startTime = tic;
 %% Optimize the following parameters
 [~,svmArgs] = inriaOptimizeZoom(data,diaryFile,logger,method,svmArgs,'logc', ...
     (-6:2)',(-0.5:0.1:0.5)');
-iters = 3;
+iters = 5;
 for i = 1:iters
     diary(diaryFile)
     disp([timestamp(startTime) ' Optimizing parameters (iteration ' num2str(i) '/' num2str(iters) '):']);
