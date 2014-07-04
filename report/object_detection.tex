@@ -194,7 +194,7 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 		\vspace{2mm}
 	\end{subfigure}
 	\caption{Figure taken from HOG \citep{dalal2005histograms} (top) reproduced for our GO descriptor (bottom). \subref{fig:hogExample1} shows the average gradient image over training data. \subref{fig:hogExample2} and \subref{fig:hogExample3} show the maximal positive and minimal negative SVM weights for each cell, respectively. \subref{fig:hogExample4} shows a test image, where we have overlaid our grid layout. \subref{fig:hogExample5} shows its computed descriptor. \subref{fig:hogExample6} and \subref{fig:hogExample7} show the descriptor weighted by positive and negative SVM weights, respectively.}
-	\label{fig:imageCorrespondenceCurves}
+	\label{fig:hogDescriptorExample}
 \end{figure}
 \restoregeometry
 
@@ -225,12 +225,78 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 		\label{fig:objectDetectionFP}
 	\end{subfigure}
 	\caption{Example classifications of INRIA cut-outs.}
-	\label{fig:imageCorrespondenceCurves}
+	\label{fig:ownDescriptorExample}
 \end{figure}
 \restoregeometry
 
 \section{Parameter study}
 \label{sec:odParameterStudy}
+
+\begin{table}[tb]
+\centering
+\pgfplotstableset{
+    highlight/.append style={
+        postproc cell content/.append code={
+                \pgfkeysalso{@cell content=\textbf{##1}}%
+        },
+    }
+}
+\let\ESCAPE=\string
+\pgfplotstableread[col sep=comma]{../src/results/INRIAparams.csv}\loadedtable
+\pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
+\pgfplotstabletypeset[
+	string type,
+	every head row/.style={
+		before row={%
+			\global\let\ESCAPE=\relax
+			 {} & \multicolumn{2}{c}{Methods} \\
+			},
+		after row={\hline}
+	},
+%	every last row/.style={after row=\hline},
+    columns/colnames/.style={
+        string type,
+        column name={Variable},
+        column type={l|}
+    },
+    col sep=comma
+]\loadedtable
+\caption{Parameter study optimal parameters from 6-fold cross validation for GO and SI methods.}
+\label{fig:INRIAparams}
+\end{table}
+
+
+\begin{table}[tb]
+\centering
+\pgfplotstableset{
+    highlight/.append style={
+        postproc cell content/.append code={
+                \pgfkeysalso{@cell content=\textbf{##1}}%
+        },
+    }
+}
+\pgfplotstableread[col sep=comma]{../src/results/INRIAparamC.csv}\loadedtable
+\pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
+\pgfplotstabletypeset[
+	string type,
+	every head row/.style={
+		before row={%
+			 {} & \multicolumn{5}{c}{Methods} \\
+			},
+		after row={\hline}
+	},
+%	every last row/.style={after row=\hline},
+    columns/colnames/.style={
+        string type,
+        column name={Variable},
+        column type={l|}
+    },
+    col sep=comma
+]\loadedtable
+\caption{Parameter study optimal C parameter from 6-fold cross validation for GO, SI, GoSi, Hog, and HogDT}
+\label{fig:INRIAparamC}
+\end{table}
+
 
 \subbibliography
 
