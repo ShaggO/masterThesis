@@ -234,24 +234,23 @@ In this section we will continue the example from \Cref{sec:proposedDescriptorEx
 
 When having computed the distance ratios of all matches, we are able to construct the ROC- and PR-curves giving us two measures of the performance of the descriptor matching. \Cref{fig:imageCorrespondenceCurves} shows the ROC-curve \subref{fig:imageCorrespondenceROC} and PR-curve \subref{fig:imageCorrespondencePR} as well as the area under the two curves. The match has a ROC AUC of 0.72 and PR AUC of 0.63. From the ROC plot wee see that the descriptor matching performs better than a random classification since the ROC-curve (blue line) lies above the curve of no predictive value (dashed line). This is likewise indicated by the ROC AUC which is above the random classification ROC AUC of 0.5.
 
-\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+%\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
 \begin{figure}[p]
-	\centering
-	\includegraphics[width=\textwidth]{img/imageCorrespondenceMatches.pdf}
+	\centerline{\includegraphics[width=1.1\textwidth]{img/imageCorrespondenceMatches.pdf}}
 	\caption{Matches with score $s$ below threshold $t = 0.8$}
 	\label{fig:imageCorrespondenceMatches}
 	\vspace{5mm}
 	%
-	\includegraphics[width=\textwidth]{img/imageCorrespondenceCorrectMatch.pdf}
+	\centerline{\includegraphics[width=1.1\textwidth]{img/imageCorrespondenceCorrectMatch.pdf}}
 	\caption{Example of a condition positive match. First and second best matches have descriptor distances $0.076$ and $0.083$, respectively, resulting in a distance ratio of $0.92$.}
 	\label{fig:imageCorrespondenceCorrectMatch}
 	\vspace{5mm}
 	%
-	\includegraphics[width=\textwidth]{img/imageCorrespondenceIncorrectMatch.pdf}
+	\centerline{\includegraphics[width=1.1\textwidth]{img/imageCorrespondenceIncorrectMatch.pdf}}
 	\caption{Example of an condition negative match. First and second best matches have descriptor distances $0.079$ and $0.081$, respectively, resulting in a distance ratio of $0.97$.}
 	\label{fig:imageCorrespondenceIncorrectMatch}
 \end{figure}
-\restoregeometry
+%\restoregeometry
 %
 \begin{figure}[tb]
 	\centering
@@ -289,7 +288,6 @@ We wish to optimize the following parameters:
 \end{itemize}
 %
 \begin{table}[tb]
-\centering
 \pgfplotstableset{
     highlight/.append style={
         postproc cell content/.append code={
@@ -297,12 +295,15 @@ We wish to optimize the following parameters:
         },
     }
 }
+\centerline{%
+\let\ESCAPE=\string
 \pgfplotstableread[col sep=comma]{../src/results/DTUparamsGo.csv}\loadedtable
 \pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
 \pgfplotstabletypeset[
 	string type,
 	every head row/.style={
 		before row={%
+			\global\let\ESCAPE=\relax
 			 {} & \multicolumn{6}{c|}{Splits} & {} \\
 			},
 		after row={\hline}
@@ -319,15 +320,21 @@ We wish to optimize the following parameters:
     },
     col sep=comma
 ]\loadedtable
+}
 \caption{Parameter study optimal parameters from 6-fold cross validation using gradient orientation as bin value and gradient magnitude as magnitude type}
 \label{fig:ICparamsGo}
-
+%
+\vspace{1cm}
+%
+\centerline{%
+\let\ESCAPE=\string
 \pgfplotstableread[col sep=comma]{../src/results/DTUparamsSi.csv}\loadedtable
 \pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
 \pgfplotstabletypeset[
 	string type,
 	every head row/.style={
 		before row={%
+			\global\let\ESCAPE=\relax
 			 {} & \multicolumn{6}{c|}{Splits} & {} \\
 			},
 		after row={\hline}
@@ -344,10 +351,10 @@ We wish to optimize the following parameters:
     },
     col sep=comma
 ]\loadedtable
+}
 \caption{Parameter study optimal parameters from 6-fold cross validation using shape index as bin value and curvedness as magnitude type}
 \label{fig:ICparamsSi}
 \end{table}
-
 
 Test: 6 fold cross validation.
 Tune on 5 folds, test on 1.

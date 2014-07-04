@@ -1,5 +1,7 @@
 clear all;
 
+names = {'Go','Si'};
+
 %% Load Go and Si splits
 splits = 6;
 for i = 1:splits
@@ -40,3 +42,12 @@ tables{2}
 
 writetable(tables{1},'results/DTUparamsGo.csv','Delimiter',',','WriteRowNames',true);
 writetable(tables{2},'results/DTUparamsSi.csv','Delimiter',',','WriteRowNames',true);
+
+for name = names
+    colNames = 'Row,Grid type,Grid size,Grid radius $r$,Center scale,Cell scale $\ESCAPE\alpha$,Norm. scale $\ESCAPE\eta$,Bin scale $\ESCAPE\beta$,Bin count $n$';
+    csvContent = fileread(['results/DTUparams' name{:} '.csv']);
+    [~,csvData] = strtok(csvContent,char(10));
+    csvFile = fopen(['results/DTUparams' name{:} '.csv'],'w');
+    fprintf(csvFile,'%s',[colNames csvData]);
+    fclose(csvFile);
+end
