@@ -275,6 +275,7 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
         },
     }
 }
+\centerline{%
 \pgfplotstableread[col sep=comma]{../src/results/INRIAparamC.csv}\loadedtable
 \pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
 \pgfplotstabletypeset[
@@ -293,6 +294,7 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
     },
     col sep=comma
 ]\loadedtable
+}
 \caption{Parameter study optimal C parameter from 6-fold cross validation for GO, SI, GoSi, Hog, and HogDT}
 \label{fig:INRIAparamC}
 \end{table}
