@@ -21,8 +21,15 @@ chosenGoSi = chosenGo;
 chosenGoSi.descriptorArgs = {chosenGoSi.descriptorArgs,chosenSi.descriptorArgs};
 chosenGoSi.descriptor = {'cellhist','cellhist'};
 
-methods = {[go.method],chosenGo,[si.method],chosenSi,chosenGoSi};
-setNums = {[go.setNumTest],(1:60)',[si.setNumTest],(1:60)',(1:60)'};
+GoSi = go.method;
+for i = 1:splits
+    GoSi(i).descriptorArgs = {go(i).method.descriptorArgs,si(i).method.descriptorArgs};
+    GoSi(i).descriptor = {'cellhist','cellhist'};
+end
+
+% Define methods and their corresponding sets
+methods = {[go.method],chosenGo,[si.method],chosenSi,GoSi,chosenGoSi};
+setNums = {[go.setNumTest],(1:60)',[si.setNumTest],(1:60)',[go.setNumTest],(1:60)'};
 
 % Compute ROC and PR on test
 ROC  = cell(size(methods));

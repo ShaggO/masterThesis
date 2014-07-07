@@ -365,5 +365,99 @@ Notes:
 
 1. Problems with boosting the noise when using pixel normalization?
 %
+
+\section{Results}
+%
+
+\begin{figure}[tb]
+	\centerline{
+		\includegraphics[width=1.2\textwidth]{img/dtuResults_legend_cropped.pdf}
+	}	
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_1.pdf}
+		\caption{Arc 1}
+		\label{fig:dtuResultsPRarc1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_2.pdf}
+		\caption{Arc 2}
+		\label{fig:dtuResultsPRarc2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_3.pdf}
+		\caption{Arc 3}
+		\label{fig:dtuResultsPRarc3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_4.pdf}
+		\caption{Linear path}
+		\label{fig:dtuResultsPRlinear}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_5.pdf}
+		\caption{Light path, $x$-axis}
+		\label{fig:dtuResultsPRxAxis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_6.pdf}
+		\caption{Light path, $z$-axis}
+		\label{fig:dtuResultsPRzAxis}
+	\end{subfigure}
+	}
+	\caption{Mean PR AUC test results on the DTU dataset paths.}
+	\label{fig:dtuResultsPR}
+\end{figure}
+
+%
+\begin{figure}[tb]
+	\centerline{
+		\includegraphics[width=1.2\textwidth]{img/dtuResults_legend_cropped.pdf}
+	}	
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_1.pdf}
+		\caption{Arc 1}
+		\label{fig:dtuResultsROCarc1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_2.pdf}
+		\caption{Arc 2}
+		\label{fig:dtuResultsROCarc2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_3.pdf}
+		\caption{Arc 3}
+		\label{fig:dtuResultsROCarc3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_4.pdf}
+		\caption{Linear path}
+		\label{fig:dtuResultsROClinear}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_5.pdf}
+		\caption{Light path, $x$-axis}
+		\label{fig:dtuResultsROCyAxis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_6.pdf}
+		\caption{Light path, $z$-axis}
+		\label{fig:dtuResultsROCzAxis}
+	\end{subfigure}
+	}
+	\caption{Mean ROC AUC test results on the DTU dataset paths.}
+	\label{fig:dtuResultsROC}
+\end{figure}
+
+%
 \subbibliography
 \end{document}
