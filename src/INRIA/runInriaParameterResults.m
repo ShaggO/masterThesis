@@ -8,8 +8,20 @@ for i = 1:numel(name)
 
     params.loggerParameterResults = handler(struct('parameter',{},'iteration',{},'values',{},'PRAUC',{}));
     
+    % set gridsize values
+    r = struct(params.method.descriptorArgs{:});
+    if strcmp(r.gridType,'square window')
+        mink = (r.gridRadius(2)/2-2)/(2*2)-3*r.cellSigma(2)/2;
+        maxk = (r.gridRadius(2)/2-2)/(2*4)-3*r.cellSigma(2)/2;
+        gridSize = (r.gridRadius(2)/2-2)./(2*(round(mink):-1:round(maxk))+3*r.cellSigma(2))-10^-6;
+    elseif strcmp(r.gridType,'triangle window')
+        mink = (r.gridRadius(2)/2-2)/(sqrt(3)*2)-3*r.cellSigma(2)/sqrt(3);
+        maxk = (r.gridRadius(2)/2-2)/(sqrt(3)*4)-3*r.cellSigma(2)/sqrt(3);
+        gridSize = (r.gridRadius(2)/2-2)./(sqrt(3)*(round(mink):-1:round(maxk))+3*r.cellSigma(2))-10^-6;
+    end
+    
     [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
-        'gridSize', (2:0.1:4)');
+        'gridSize', gridSize');
     [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'cellSigma', repmat((0.5:0.1:2)',[1 2]));
     [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
