@@ -133,7 +133,10 @@ methods
                 [X,D] = inriaDescriptors(images(index),mFunc,runInParallel);
             end
             if desSave
-                save([desDir relPath],desVars{:})
+                save([desDir relPath],desVars{:},'-v7.3')
+                if ~exist([desDir relPath],'file')
+                    error(['Failed to save descriptors with size:' nums2str(size(D))]);
+                end
             end
         end
 
