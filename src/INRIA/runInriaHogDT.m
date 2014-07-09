@@ -22,7 +22,7 @@ diary(diaryFile)
 disp('Optimization of svm for HOG (DT) started.');
 diary off;
 
-logger = handler(struct('parameter',{},'iteration',{},'values',{},'PRAUC',{}));
+logger = handler(emptyLogger);
 [~,svmArgs] = inriaOptimizeZoom(data,diaryFile,logger,method,svmArgs,'logc', ...
         (-6:2)',(-0.5:0.1:0.5)');
 

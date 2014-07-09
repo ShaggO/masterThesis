@@ -6,7 +6,7 @@ name = {'Go','Si'};
 for i = 1:numel(name)
     params = load(['results/optimize/inriaParameters' name{i}]);
 
-    params.loggerParameterResults = handler(struct('parameter',{},'iteration',{},'values',{},'PRAUC',{}));
+    params.loggerParameterResults = handler(emptyLogger);
     
     % set gridsize values
     r = struct(params.method.descriptorArgs{:});
