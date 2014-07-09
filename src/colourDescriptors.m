@@ -4,7 +4,7 @@ function desFunc = colourDescriptors(desFunc,colour)
 
 switch colour
     case 'gray'
-        desFunc = @(I,F) desFunc(rgb2gray(I),F);
+        desFunc = @(I,F) desFunc(colourTransform(I,colour),F);
     case 'rgb bin'
         desFunc = @(I,F) desAverage(I,F,desFunc);
     case 'rgb'

@@ -4,7 +4,10 @@ function J = colourTransform(I, type)
 
 switch type
     case 'gray'
-        J = rgb2gray(I);
+%         J = rgb2gray(I);
+        T    = inv([1.0 0.956 0.621; 1.0 -0.272 -0.647; 1.0 -1.106 1.703]);
+        coef = T(1,:);
+        J = pixelTransform(I,@(x) coef*x);
     case 'opponent'
         M = [[1 -1 0]/sqrt(2); [1 1 -2]/sqrt(6); [1 1 1]/sqrt(3)];
         J = pixelTransform(I,@(x) M*x);
@@ -58,5 +61,5 @@ end
 function J = pixelTransform(I,pixelFunc)
     % Performs a given function (e.g. a 3x3 matrix multiplication) on each
     % pixel
-    J = reshape((pixelFunc(reshape(I,numel(I)/3,3)'))',size(I));
+    J = reshape((pixelFunc(reshape(I,numel(I)/3,3)'))',size(I,1),size(I,2),[]);
 end
