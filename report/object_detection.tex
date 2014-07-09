@@ -236,8 +236,7 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 
 \section{Parameter study}
 \label{sec:odParameterStudy}
-
-%\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+%
 \begin{figure}[p]
 \centering
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
@@ -409,6 +408,25 @@ Bin count $n$ & $16$ & $13$ \\
 \caption{Parameter study optimal C parameter from 6-fold cross validation for GO, SI, GoSi, Hog, and HogDT}
 \label{fig:INRIAparamC}
 \end{table}
+%
+\section{Results}
+%
+\begin{figure}[tb]
+\centering
+	\centerline{\includegraphics[width=1.2\textwidth]{img/inriaTestResultsLegend.pdf}}
+	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaTestResultsROC.pdf}
+		\caption{ROC-curve}
+		\label{fig:inriaTestResultsROC}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaTestResultsPR.pdf}
+		\caption{PR-curve}
+		\label{fig:inriaTestResultsPR}
+	\end{subfigure}}
+	\caption{HOG sucks.}
+	\label{fig:inriaTestResults}
+\end{figure}
 %
 \subbibliography
 

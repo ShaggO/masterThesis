@@ -40,6 +40,7 @@ svmPath = {};
 svmPath{end+1} = 'results/inriaTestSvmGoFinal';
 svmPath{end+1} = 'results/inriaTestSvmSiFinal';
 svmPath{end+1} = 'results/inriaTestSvmGoSiFinal';
+svmPath{end+1} = 'results/inriaTestSvmHogFinal';
 
 % svmPath{end+1} = 'results/inriaTestSvmGoTriangleFinal';
 % svmPath{end+1} = 'results/inriaTestSvmSiTriangleFinal';
@@ -49,5 +50,5 @@ svmPath{end+1} = 'results/inriaTestSvmGoSiFinal';
 %     'Go 30pw train','Si 30k train','GoSi 30k train','HOG (UoCTTI) 30k train','HOG (DalalTriggs) 30k train'};
 % labels = {'Go (old params)','Si (old params)','GoSi (old params)','HOG (UoCTTI)','HOG (DalalTriggs)', ...
 %     'Go','Si','GoSi','HOG (UoCTTI)','HOG (DalalTriggs)'};
-labels = {'GO (Gauss)','SI (Gauss)','GO+SI (Gauss)','GO (tri)','SI (tri)'};
+labels = {'GO','SI','GO+SI','HOG'};
 plotInriaResults(svmPath,labels);

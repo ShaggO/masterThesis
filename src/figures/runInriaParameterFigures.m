@@ -2,7 +2,8 @@ clc, clear all, close all
 
 parameters = {'gridSize','cellSigma','normSigma','binSigma','binCount','logc'};
 symbols = {'r','\alpha','\eta','\beta','n','log(C)'};
-name = {'Go','Si'};
+% name = {'Go','Si'};
+name = {'Go'};
 minAuc = [0.98 0.96];
 
 for i = 1:numel(name)
@@ -25,6 +26,9 @@ for i = 1:numel(name)
         ylabel('PR AUC')
         plot(v(idxmaxauc),maxauc,'x','markersize',10)
         export_fig('-r300',['../report/img/inriaParameters' name{i} '_' parameters{j} '.pdf']);
+        
+        fig('unit','inches','width',7,'height',3,'fontsize',8);
+        plot(v,auc)
     end
 end
 
