@@ -1,4 +1,4 @@
-function [matchROCAUC, matchPRAUC] = dtuTest(setNum,method,pathTypes,display,runInParallel,testType)
+function [matchROCAUC, matchPRAUC, dims] = dtuTest(setNum,method,pathTypes,display,runInParallel,testType)
 %DTUTEST Evaluates given methods by the image correspondence problem on the
 % DTU dataset. Plots the average ROC AUC and PR AUC over given image sets
 % for each method.
@@ -70,7 +70,7 @@ if runInParallel
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],desSave);
+        [pathMatches, dims] = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],desSave);
 
         matchROCAUC(c,:) = [pathMatches.ROCAUC];
         matchPRAUC(c,:) = [pathMatches.PRAUC];
@@ -84,7 +84,7 @@ else
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 
         % Run on all lighting settings and all images in path across all sets
-        pathMatches = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],desSave);
+        [pathMatches, dims] = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],desSave);
 
         matchROCAUC(c,:) = [pathMatches.ROCAUC];
         matchPRAUC(c,:) = [pathMatches.PRAUC];
