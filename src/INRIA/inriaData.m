@@ -81,13 +81,6 @@ methods
             end
         end
 
-        [mFunc, mName] = parseMethod(method);
-        desDir = [obj.paths.inriaResults '/' mName];
-
-        if desSave && ~exist(desDir,'dir')
-            mkdir(desDir);
-        end
-
         if strcmp(index,'all')
             s = 'all';
         else
@@ -115,6 +108,13 @@ methods
             case 'negTestFull'
                 relPath = ['/DnegTestFull_' s '.mat'];
                 L = -1;
+        end
+        
+        [mFunc, mName] = parseMethod(method);
+        desDir = [obj.paths.inriaResults '/' mName];
+
+        if desSave && ~exist(desDir,'dir')
+            mkdir(desDir);
         end
 
         desVars = {'X','D'};

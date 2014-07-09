@@ -1,4 +1,5 @@
-function [method,optimal] = enumOptimizeParameter(setNum, method, diaryFile, varargin)
+function [method,optimal] = enumOptimizeParameter( ...
+    setNum, method, diaryFile, logger, varargin)
 % ENUMOPTIMIZEPARAMETER Optimize enumerated sets of parameters
 
 assert(numel(varargin) >= 2,'Specify at least one parameter,value pair');
@@ -21,7 +22,7 @@ for i = 1:numel(parameters)
 end
 
 % Compute performance of each method and find optimal
-[matchROCAUC, matchPRAUC] = dtuTest(setNum,paramMethods,pathTypes,false,runInParallel,'train');
+[matchROCAUC, matchPRAUC, dims] = dtuTest(setNum,paramMethods,pathTypes,false,runInParallel,'train');
 ROCAUC = mean(matchROCAUC,1);
 PRAUC = mean(matchPRAUC,1)
 [optimalPRAUC,optimal] = max(PRAUC);
@@ -49,5 +50,7 @@ for p = 1:numel(parameters)
 end
 disp(['Optimal PRAUC: ' num2str(optimalPRAUC) sprintf('\n')]);
 diary off
+
+logger.data(end+1) = struct('parameter',parameter,'iteration',1,'values',values,'PRAUC',PRAUC,'dims',dims);
 
 end

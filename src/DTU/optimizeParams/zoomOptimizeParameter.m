@@ -1,4 +1,5 @@
-function [methodBest, optimalV] = zoomOptimizeParameter(setNum,method,diaryFile,parameter,values,varargin)
+function [methodBest, optimalV] = zoomOptimizeParameter( ...
+    setNum,method,diaryFile,logger,parameter,values,varargin)
 % OPTIMIZEPARAMETER Optimize single parameter iteratively
 
 pathTypes = 1:6;
@@ -30,7 +31,7 @@ for i = 1:numel(varargin)+1
         methodV(v) = modifyDescriptor(methodBest,parameter,values(v,:));
     end
     % Perform dtuTest on defined methods and find optimal value
-    [matchROCAUC, matchPRAUC] = dtuTest(setNum,methodV,pathTypes,false,runInParallel,'train');
+    [matchROCAUC, matchPRAUC, dims] = dtuTest(setNum,methodV,pathTypes,false,runInParallel,'train');
     ROCAUC = mean(matchROCAUC,1);
     PRAUC = mean(matchPRAUC,1)
     [optimalPRAUC,optimalInd] = max(PRAUC);
@@ -41,6 +42,8 @@ for i = 1:numel(varargin)+1
     disp(['Optimal this iteration: ' nums2str(optimalV)]);
     disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
     diary off
+    
+    logger.data(end+1) = struct('parameter',parameter,'iteration',i,'values',values,'PRAUC',PRAUC,'dims',dims);
 
     load paths;
     optDir = [dtuResults '/optimize'];
