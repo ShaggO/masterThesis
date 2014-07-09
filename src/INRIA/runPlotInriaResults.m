@@ -41,8 +41,8 @@ svmPath{end+1} = 'results/inriaTestSvmGoFinal';
 svmPath{end+1} = 'results/inriaTestSvmSiFinal';
 svmPath{end+1} = 'results/inriaTestSvmGoSiFinal';
 
-svmPath{end+1} = 'results/inriaTestSvmGoTriangleFinal';
-svmPath{end+1} = 'results/inriaTestSvmSiTriangleFinal';
+% svmPath{end+1} = 'results/inriaTestSvmGoTriangleFinal';
+% svmPath{end+1} = 'results/inriaTestSvmSiTriangleFinal';
 % svmPath{end+1} = 'results/inriaTestSvmGoSiFinal';
 
 % labels = {'Go','Si','GoSi','HOG (UoCTTI)','HOG (DalalTriggs)', ...

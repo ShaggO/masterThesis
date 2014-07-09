@@ -96,29 +96,29 @@ methods
 
         switch type
             case 'posTrain'
-                desPath = [desDir '/DposTrain_' s '.mat'];
+                relPath = ['/DposTrain_' s '.mat'];
                 L = 1;
             case 'negTrainCutouts'
-                desPath = [desDir '/DnegTrainCutouts_' num2str(obj.nWindows) '_' num2str(obj.seed) '_' s '.mat'];
+                relPath = ['/DnegTrainCutouts_' num2str(obj.nWindows) '_' num2str(obj.seed) '_' s '.mat'];
                 type = 'negTrainFull';
                 L = -1;
             case 'negTrainFull'
-                desPath = [desDir '/DnegTrainFull_' s '.mat'];
+                relPath = ['/DnegTrainFull_' s '.mat'];
                 L = -1;
             case 'posTest'
-                desPath = [desDir '/DposTest_' s '.mat'];
+                relPath = ['/DposTest_' s '.mat'];
                 L = 1;
             case 'negTestCutouts'
-                desPath = [desDir '/DnegTestCutouts' num2str(obj.nWindows) '_' num2str(obj.seed) '_' s '.mat'];
+                relPath = ['/DnegTestCutouts' num2str(obj.nWindows) '_' num2str(obj.seed) '_' s '.mat'];
                 type = 'negTestFull';
                 L = -1;
             case 'negTestFull'
-                desPath = [desDir '/DnegTestFull_' s '.mat'];
+                relPath = ['/DnegTestFull_' s '.mat'];
                 L = -1;
         end
 
         desVars = {'X','D'};
-        [loaded,desLoad] = loadIfExist(desPath,'file');
+        [loaded,desLoad] = loadIfExist([desDir relPath],'file');
         if loaded && all(ismember(desVars,fieldnames(desLoad)))
             D = desLoad.D;
             X = desLoad.X;
@@ -133,7 +133,7 @@ methods
                 [X,D] = inriaDescriptors(images(index),mFunc,runInParallel);
             end
             if desSave
-                save(desPath,desVars{:})
+                save([desDir relPath],desVars{:})
             end
         end
 

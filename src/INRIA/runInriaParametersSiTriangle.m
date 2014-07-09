@@ -1,5 +1,5 @@
 clear all; clc;
-logger = handler(struct('parameter',{},'iteration',{},'values',{},'PRAUC',{}));
+logger = handler(emptyLogger);
 diaryFile = ['results/optimize/inriaParametersSiTriangle_' strrep(datestr(now),':','-') '.out'];
 diary(diaryFile)
 disp('Optimization of parameters for SI (triangle bin filter) started.');

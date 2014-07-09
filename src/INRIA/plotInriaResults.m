@@ -5,7 +5,8 @@ if nargin < 2
 end
 
 % colours = {'r-','b-','c-','k-','r:','b:','c:','k:'};
-colours = {'b-','g-','c-','r-','m-','b:','g:','c:','r:','m:'};
+% colours = {'b-','g-','c-','r-','m-','b:','g:','c:','r:','m:'};
+colours = {'r-','g-','b-','k-','m-'};
 
 ROC = cell(1,numel(svmPath));
 PR = ROC;

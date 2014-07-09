@@ -1,5 +1,5 @@
 clear all; clc;
-logger = handler(struct('parameter',{},'iteration',{},'values',{},'PRAUC',{}));
+logger = handler(emptyLogger);
 diaryFile = ['results/optimize/inriaParametersGo_' strrep(datestr(now),':','-') '.out'];
 diary(diaryFile)
 disp('Optimization of parameters for GO started.');

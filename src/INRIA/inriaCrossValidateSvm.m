@@ -1,13 +1,15 @@
-function PRAUC = inriaCrossValidateSvm(data,nSplit,method,svmArgs,runInParallel)
+function [PRAUC, dims] = inriaCrossValidateSvm(data,nSplit,method,svmArgs,runInParallel)
 
 desSave = true;
 nMethod = numel(method);
 
 PRAUC = zeros(nSplit,nMethod);
+dims = zeros(1,nMethod);
 % pre-calculate descriptors
 for km = 1:nMethod
-    data.getDescriptors(method(km),desSave,'posTrain','all',runInParallel);
+    [~,D,~] = data.getDescriptors(method(km),desSave,'posTrain','all',runInParallel);
     data.getDescriptors(method(km),desSave,'negTrainCutouts','all',runInParallel);
+    dims(km) = size(D,2);
 end
 
 if runInParallel

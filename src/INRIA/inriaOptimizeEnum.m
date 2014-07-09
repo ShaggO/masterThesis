@@ -17,6 +17,7 @@ nValues = numel(values{1});
 paramMethods(1:nValues) = method;
 paramSvmArgs(1:nValues) = svmArgs;
 PRAUC = zeros(1,nValues);
+dims = PRAUC;
 for j = 1:nValues
     for i = 1:numel(parameters)
         if ismember(parameters{i},{'s','c','logc','p'})
@@ -25,7 +26,7 @@ for j = 1:nValues
             paramMethods(j) = modifyDescriptor(paramMethods(j),parameters{i},values{i}{j});
         end
     end
-    PRAUC(j) = inriaCrossValidateSvm(data,splits,paramMethods(j),paramSvmArgs(j),runInParallel);
+    [PRAUC(j),dims(j)] = inriaCrossValidateSvm(data,splits,paramMethods(j),paramSvmArgs(j),runInParallel);
 end
 
 % Compute performance of each method and find optimal
@@ -52,6 +53,6 @@ if ~isempty(diaryFile)
     diary off
 end
 
-logger.data(end+1) = struct('parameter',parameters,'iteration',1,'values',values,'PRAUC',PRAUC);
+logger.data(end+1) = struct('parameter',parameters,'iteration',1,'values',values,'PRAUC',PRAUC,'dims',dims);
 
 end

@@ -2,7 +2,8 @@ clc, clear all, close all
 
 parameters = {'gridSize','cellSigma','normSigma','binSigma','binCount','logc'};
 symbols = {'r','\alpha','\eta','\beta','n','log(C)'};
-name = {'Go'};
+name = {'Go','Si'};
+minAuc = [0.98 0.96];
 
 for i = 1:numel(name)
     params = load(['results/optimize/inriaParameters' name{i}]);
@@ -16,14 +17,14 @@ for i = 1:numel(name)
         [maxauc,idxmaxauc] = max(auc);
         fig('unit','inches','width',7,'height',3,'fontsize',8);
         plot(v,auc)
-        axis([v(1) v(end) 0.98 1])
+        axis([v(1) v(end) minAuc(i) 1])
         set(gcf,'color','white')
         box on
         hold on
         xlabel(symbols{j})
         ylabel('PR AUC')
         plot(v(idxmaxauc),maxauc,'x','markersize',10)
-        export_fig('-r300',['../report/img/inriaParameters_' parameters{j} '.pdf']);
+        export_fig('-r300',['../report/img/inriaParameters' name{i} '_' parameters{j} '.pdf']);
     end
 end
 

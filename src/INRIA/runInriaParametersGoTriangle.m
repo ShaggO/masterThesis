@@ -1,5 +1,5 @@
 clear all; clc;
-logger = handler(struct('parameter',{},'iteration',{},'values',{},'PRAUC',{}));
+logger = handler(emptyLogger);
 diaryFile = ['results/optimize/inriaParametersGoTriangle_' strrep(datestr(now),':','-') '.out'];
 diary(diaryFile)
 disp('Optimization of parameters for GO (triangle bin filter) started.');
