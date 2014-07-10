@@ -62,6 +62,7 @@ time = tic;
 % Start/get cluster with current profile
 if runInParallel
     gcp;
+    dims = [];
     % Run in parallel
     parfor c = 1:imgNum % Run all methods on each requested image
         tic;
@@ -70,7 +71,10 @@ if runInParallel
         [s,i,l] = deal(idx(1),idx(3),idx(4));
 
         % Run on all lighting settings and all images in path across all sets
-        [pathMatches, dims] = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],desSave);
+        [pathMatches, dimsC] = imageCorrespondence(s,i,l,mFunc,mName,[method.cache],desSave);
+        if c == 1
+            dims = dimsC;
+        end
 
         matchROCAUC(c,:) = [pathMatches.ROCAUC];
         matchPRAUC(c,:) = [pathMatches.PRAUC];
