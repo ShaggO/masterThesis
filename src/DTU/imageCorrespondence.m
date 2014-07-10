@@ -43,6 +43,7 @@ for s = setNum
                 if loaded && ismember('match',fieldnames(matchLoad))
                     disp('Matches loaded');
                     match = matchLoad.match;
+                    dims = matchLoad.dims;
                 else
                     match.setNum = s;
                     match.imNum = i;
@@ -66,7 +67,7 @@ for s = setNum
                     if ~exist(mDir,'dir')
                         mkdir(mDir)
                     end
-                    save(matchPath,'match')
+                    save(matchPath,'match','dims')
                 end
 
                 matches(n) = match;
