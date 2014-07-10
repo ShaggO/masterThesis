@@ -16,8 +16,8 @@ scales = approxScales(sigmaRange,scaleBase,scaleOffset);
 
 load('paths')
 gcp;
+time = tic;
 parfor setNum = 1:60
-    time = tic;
     disp([timestamp(time) ' Set ' num2str(setNum) '/60'])
     for pathType = 0:6
         if pathType == 0
@@ -50,4 +50,4 @@ parfor setNum = 1:60
         end
     end
 end
-toc
+toc(time);
