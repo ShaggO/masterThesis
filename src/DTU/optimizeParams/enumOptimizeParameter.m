@@ -51,6 +51,6 @@ end
 disp(['Optimal PRAUC: ' num2str(optimalPRAUC) sprintf('\n')]);
 diary off
 
-logger.data(end+1) = struct('parameter',parameters,'iteration',1,'values',values,'PRAUC',PRAUC,'dims',dims);
+logger.data(end+1:end+numel(parameters)) = struct('parameter',parameters,'iteration',1,'values',values,'PRAUC',PRAUC,'dims',dims);
 
 end
