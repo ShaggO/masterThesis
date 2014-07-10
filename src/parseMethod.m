@@ -266,13 +266,13 @@ switch lower(m.descriptor)
 
         % modify grid spacing for sliding window descriptors
         if strcmp(r.gridType,'square window')
-%             before = r.gridSize
-            k = (r.gridRadius(2)/2-2)/(2*r.gridSize)-3*r.cellSigma(2)/2;
-            r.gridSize = (r.gridRadius(2)/2-2)/(2*round(k)+3*r.cellSigma(2))-10^-6;
-%             after = r.gridSize
+            k = (r.gridRadius(2)-4)/(2*r.gridSize)-3;
+            n = 2*round(k/2)+3;
+            r.gridSize = (r.gridRadius(2)-4)/(2*n)-10^-6;
         elseif strcmp(r.gridType,'triangle window')
-            k = (r.gridRadius(2)/2-2)/(sqrt(3)*r.gridSize)-3*r.cellSigma(2)/sqrt(3);
-            r.gridSize = (r.gridRadius(2)/2-2)/(sqrt(3)*round(k)+3*r.cellSigma(2))-10^-6;
+            k = (r.gridRadius(2)-4)/(sqrt(3)*r.gridSize)-6/sqrt(3);
+            n = 2*round(k/2)+6/sqrt(3);
+            r.gridSize = (r.gridRadius(2)-4)/(sqrt(3)*n)-10^-6;
         end
         
         % modify normalization type method names
