@@ -26,9 +26,14 @@ correctPath = sprintf('%s/correct%.2d_%.3d-%.3d.mat',correctDir, ...
     match.setNum,KeyFrame,match.imNum);
 [loaded,file] = loadIfExist(correctPath,'file');
 if loaded && all(ismember({'pair','correct'},fieldnames(file)))
-    [cached,idx] = ismember([P1 P2],file.pair,'rows');
-    match.CorrectMatch(cached) = file.correct(idx(cached));
-    unknownIdx = find(~cached)';
+    try
+        [cached,idx] = ismember([P1 P2],file.pair,'rows');
+        match.CorrectMatch(cached) = file.correct(idx(cached));
+        unknownIdx = find(~cached)';
+    catch Exception
+        save('debugCorrectMatch');
+        assert(false);
+    end
 else
     unknownIdx = 1:size(match.coord,1);
 end
