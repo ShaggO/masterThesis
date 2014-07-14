@@ -49,10 +49,8 @@ for p = 1:numel(parameters)
     disp(['Optimal ' param ': ' optimalStr]);
 end
 disp(['Optimal PRAUC: ' num2str(optimalPRAUC) sprintf('\n')]);
-dims
 diary off
 
-dims
 if numel(parameters) > 1
     logger.data(end+1) = struct('parameter',{parameters},'iteration',1,'values',{values},'PRAUC',PRAUC,'dims',dims);
 else
