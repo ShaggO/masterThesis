@@ -449,7 +449,8 @@ An example of DoG images is shown in \Cref{fig:dogExample}, which is based on th
 
 \section{Sliding window}
 \label{sec:slidingWindow}
-
+%
+Sliding windows are an alternative approach to selecting image regions for which to compute descriptors. Instead of centering regions around interest points, we systematically extract regions from varying positions and scales. Generally this is achieved by placing a square grid in each scale-space image. Regions are then extracted around each grid point at a size respective to each scale. We use a somewhat dense grid, causing a large overlap between regions. The sliding window method is used when we require an exhaustive search of an image, which is the case for object detection.
 
 \section{Descriptors}
 
