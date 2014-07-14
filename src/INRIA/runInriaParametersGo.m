@@ -26,7 +26,7 @@ for i = 1:iters
     diary off
     method = inriaOptimizeEnum(data,diaryFile,logger,method,svmArgs,'gridType',{'square window','triangle window'});
     method = inriaOptimizeZoom(data,diaryFile,logger,method,svmArgs,'gridSize', ...
-        (2:0.5:4)',(-0.2:0.1:0.2)');
+        (1.6:0.4:3.2)',(-0.2:0.1:0.2)');
     method = inriaOptimizeZoom(data,diaryFile,logger,method,svmArgs,'cellSigma', ...
         repmat((0.5:0.5:2)',[1 2]),repmat((-0.2:0.1:0.2)',[1 2]));
     method = inriaOptimizeEnum(data,diaryFile,logger,method,svmArgs,'cellNormStrategy',{0,4});
