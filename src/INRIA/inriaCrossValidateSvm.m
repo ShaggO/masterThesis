@@ -7,12 +7,12 @@ PRAUC = zeros(nSplit,nMethod);
 dims = zeros(1,nMethod);
 % pre-calculate descriptors
 for km = 1:nMethod
-    [~,D,~] = data.getDescriptors(method(km),desSave,'posTrain','all',runInParallel);
-    data.getDescriptors(method(km),desSave,'negTrainCutouts','all',runInParallel);
+    [~,D,~] = data.getDescriptors(method(km),desSave,'posTrain','all',true);
+    data.getDescriptors(method(km),desSave,'negTrainCutouts','all',true);
     dims(km) = size(D,2);
 end
 
-if runInParallel
+if runInParallel && all(dims < 12600)
     gcp;
     % iterate over splits and methods
     parfor k = 1:nSplit*nMethod
