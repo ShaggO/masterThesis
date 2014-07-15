@@ -371,11 +371,20 @@ Tune on 5 folds, test on 1.
 %
 Notes:
 
+1. Iterative minimization
+2. Computationally heavy, many parameters, hard to say something about the correlation of the parameters:
+3. Each sub-optimization:
+3a. Enum: One of the enumerated choices
+3b. Zoom: (2 iterations, initially large interval, then small zoomed in interval)
+4. 
+
 1. Problems with boosting the noise when using pixel normalization?
 %
 
 \section{Results}
 %
+PR results: \Cref{fig:dtuResultsPR}
+ROC results: \Cref{fig:dtuResultsROC}
 
 \begin{figure}[tb]
 	\centerline{
