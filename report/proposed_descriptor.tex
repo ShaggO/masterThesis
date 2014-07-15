@@ -6,7 +6,7 @@
 \begin{document}
 \chapter{Proposed descriptor}
 %
-Given an interest point $\x_0$ at scale $\sigma_0$, we wish to describe the surrounding area. Our proposed descriptor consists of weighted smooth histograms computed for several \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
+Given an interest point $\x_0$ at scale $\sigma_0$, we wish to effectively describe the surrounding area. Our proposed descriptor consists of weighted smooth histograms computed for several \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
 %
 \begin{align}
 \label{eq:proposed_histogram}
@@ -17,7 +17,7 @@ where
 %
 \begin{itemize}
 \item[] $f_i$ is a bin center,
-\item[] $f$ is a value function defining the bin domain,
+\item[] $f$ is a bin value function,
 \item[] $F$ is a magnitude function,
 \item[] $A_j$ is a cell aperture function,
 \item[] $P$ is a center aperture function, and
@@ -31,17 +31,18 @@ Note that we have kept this definition similar to the galaxy descriptor \cite{pe
 \d = \Bigl( \left(H_1(f_1) \cdots H_1(f_n)\right) \cdots (H_m(f_1) \cdots H_m(f_n)) \Bigr) ^\text{T}
 \end{align}
 %
-The five functions above can be seen as the components that make up our descriptor, and we consider different choices for each. The functions depend on numerous additional parameters, which we define and describe further in this chapter. These parameters will be subject to a parameter study for each of our applications in order to get the most optimal descriptor for the specific application. The parameter studies are described in \Cref{sec:icParameterStudy,sec:odParameterStudy}.
+The five functions above can be seen as the components that make up our descriptor, and we consider different choices for each. The functions depend on numerous additional parameters, which we define and describe throughout this chapter. These parameters will be subject to a parameter study for each of our applications in order to find the optimal descriptor for the specific application. The parameter studies are described in \Cref{sec:icParameterStudy,sec:odParameterStudy}.
 %
-\section{Value and magnitude functions}
+\section{Bin value and magnitude functions}
 \label{sec:valueMagnitudeFunctions}
 %
-The choice of value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. The by far most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function (possibly post-processed). Another choice \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$.
-\todo{Finish definition of value and magnitude functions when results are here}
+The choice of bin value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. By far the most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function. Another good choice \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$. Finally we experimented with using the $l,b,a$ reparametrization of second order information weighted by 2-jet norm $\| \overset{\rightarrow}{j} \|$ \citep{griffin2007second}. We were however unable to produce good results through initial testing, and decided not to pursue the idea further.
 
-We wish to make our descriptor scale invariant, and hence we wish to compute the descriptor according to the detection scale of each interest point. This is achieved by computing a scale space pyramid of both value and magnitude images. These scales are usually defined to be $2^n$ for $n = l,\hdots,h$, where $l$ is the lowest exponent and $h$ is the highest exponent needed to encapsulate all interest point scales. In this case each octave divides the dimensions of the image by 2.
+\todo{Move a lot of the following to methods, and instead assume we are given the scales to compute descriptors for.}
 
-State of the art detectors are however using $m$ subscale precision, which we accomodate by calculating the scales to be $\left(2^{\nicefrac{1}{m}}\right)^n = 2^{\nicefrac{n}{m}}$, and $l$ and $h$ are equally modified to encapsulate all interest point scales. This likewise means that each time $n$ is increased, the dimensions of the image is divided by $2^{\nicefrac{1}{m}}$.
+In order to make our descriptor scale invariant, we wish to compute the descriptor according to the detection scale of each interest point. This is achieved by computing a scale space pyramid of both value and magnitude images. These scales are usually defined to be $2^n$ for $n = l,\hdots,h$, where $l$ is the lowest exponent and $h$ is the highest exponent needed to encapsulate all interest point scales. In this case each octave divides the dimensions of the image by 2.
+
+State of the art detectors are however using $m$ subscale precision, which we accommodate by calculating the scales to be $\left(2^{\nicefrac{1}{m}}\right)^n = 2^{\nicefrac{n}{m}}$, and $l$ and $h$ are equally modified to encapsulate all interest point scales. This likewise means that each time $n$ is increased, the dimensions of the image is divided by $2^{\nicefrac{1}{m}}$.
 
 Furthermore it should be noted, that we modify this definition slightly when combining the descriptor with a DoG detector. The DoG detector computes interest points at subscale precision. Given the nature of the DoG detector computing interest points from the difference of two Gaussian scale space images, the detected scales will be in between our previously described set of scale spaces. This is simply handlet by defining the scale spaces to be calculated by $2^{\nicefrac{(n+0.5)}{m}}$ giving us a better approximation of interest point scales for this particular detector. The $l$ and $h$ variables are similarly modified to encapsulate all detected scales. This selection of scales corresponds to using the scales of the right column of scales in \cref{fig:dogSpaces} (where $m = 4$) instead of the left column.
 

@@ -21,7 +21,7 @@ desSave = false;
 
 setNum = reshape(setNum,1,[]);
 pathTypes = reshape(pathTypes,1,[]);
-[imNumKey,~,imNum,liNum,pathLabels] = dtuPaths(testType);
+[~,~,imNum,liNum] = dtuPaths(testType);
 
 tic
 % Number of images in each set
