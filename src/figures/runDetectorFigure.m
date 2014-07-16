@@ -1,8 +1,8 @@
 clc, clear all, close all
 
-load('cellHistExample')
+load('cellHistExampleGo')
 
-figure
+fig('fontsize',14)
 imshow(I)
 hold on
 drawCircle(F(:,1),F(:,2),F(:,3),'g')

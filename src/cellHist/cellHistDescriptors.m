@@ -24,6 +24,8 @@ function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
 %   binSigma        Variance of bin filter
 %   binCount        Number of bins
 
+saveVars = true;
+
 % check if 0 features
 if size(F,1) == 0
     X = zeros(0,3,'single');
@@ -113,7 +115,6 @@ switch magnitudeType
         mFunc = @(L,s) diffStructure('1',L,s);
 end
 
-saveVars = false;
 windowGrid = any(strcmp(gridType,{'square window','triangle window'})) && ...
     size(F,1) > 1;
 
@@ -234,7 +235,7 @@ for s = 1:numel(Psplit)
 end
 
 if saveVars
-    save('cellHistExampleInria')
+    save('cellHistExample')
 end
 
 assert(size(X,1) == size(D,1),'Different number of points and descriptors!')

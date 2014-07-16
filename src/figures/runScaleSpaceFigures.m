@@ -2,25 +2,25 @@ clc, clear all, close all
 
 load('cellHistExampleGo')
 
-figure
+fig('fontsize',24)
 visualizeScaleSpaces({L.none},scales,[0 1],gray(256),'Grayscale intensity',P,validP);
 set(gcf,'color','w');
 path = '../report/img/cellHistScaleSpacesP.pdf';
 export_fig('-r300',path);
 
-figure
+fig('fontsize',24)
 visualizeScaleSpaces(Vscales,scales,[-pi pi],hsv(256),'Gradient orientation');
 set(gcf,'color','w');
 path = '../report/img/cellHistScaleSpacesV.pdf';
 export_fig('-r300',path);
 
-figure
+fig('fontsize',24)
 visualizeScaleSpaces(Mscales,scales,[0 0.3],gray(256),'Gradient magnitude');
 set(gcf,'color','w');
 path = '../report/img/cellHistScaleSpacesM.pdf';
 export_fig('-r300',path);
 
-figure
+fig('fontsize',24)
 visualizeScaleSpaces(MscalesNorm,scales,[],gray(256),'Normalized gradient magnitude');
 set(gcf,'color','w');
 path = '../report/img/cellHistScaleSpacesMnorm.pdf';
@@ -38,7 +38,7 @@ for i = 1:numel(C.data)
 end
 Iw = varArray.newVector(W,Isizes,C.map);
 
-figure
+fig('fontsize',24)
 visualizeScaleSpaces(Iw.data,scales,[],gray(256),'Spatial weights',zeros(0,4),zeros(0,1),true);
 set(gcf,'color','w');
 path = '../report/img/cellHistScaleSpacesSpatialWeights.pdf';
@@ -49,7 +49,7 @@ B = zeros(size(V,1),nBin);
 B(:) = ndBinWeights(V(:),binC,binF,binR, ...
     'period',period,'wBin',wRenorm) .* repmat(M(:),[1 nBin]);
 for i = 1:binCount
-    figure
+    fig('fontsize',24)
     visualizeScaleSpaces(vector2cells(B(:,i),Isizes),scales,[],gray(256),'Bin values');
     set(gcf,'color','w');
     path = sprintf('../report/img/cellHistScaleSpacesBin%.2d.pdf',i);
@@ -61,19 +61,19 @@ end
 clear all
 load('cellHistExampleSi')
 
-figure
+fig('fontsize',24)
 visualizeScaleSpaces(Vscales,scales,[-1 1],jet(256),'Shape index');
 set(gcf,'color','w');
 path = '../report/img/cellHistScaleSpacesS.pdf';
 export_fig('-r300',path);
 
-figure
+fig('fontsize',24)
 visualizeScaleSpaces(Mscales,scales,[0 0.3],gray(256),'Curvedness');
 set(gcf,'color','w');
 path = '../report/img/cellHistScaleSpacesC.pdf';
 export_fig('-r300',path);
 
-figure
+fig('fontsize',24)
 visualizeScaleSpaces(MscalesNorm,scales,[],gray(256),'Normalized curvedness');
 set(gcf,'color','w');
 path = '../report/img/cellHistScaleSpacesCnorm.pdf';

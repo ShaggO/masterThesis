@@ -225,6 +225,7 @@ When using such a histogram in practice, the parameters $\x_0,~\sigma,~\beta,$ a
 The specifics of the histograms used in our work are explained in \Cref{eq:proposed_histogram}.
 %
 \subsection{Aperture kernel functions}
+\label{sec:apertureKernelFunctions}
 %
 We consider three choices of kernel functions for $A$ and $B$: box, triangle, and Gaussian. In 1D, the kernels are defined as
 %
@@ -246,12 +247,12 @@ G(x;\beta) &= \frac{1}{\sqrt{2\pi} \beta}
 For bin aperture functions $B$ we can use these kernels directly. The spatial aperture functions $A$ are however defined on a 2D domain; this is handled by multiplying two of the same kernel functions together, e.g:
 %
 \begin{align*}
-G(\x;\beta) &= G(x;\beta) G(y;\beta) \\
-&= \frac{1}{2\pi \beta^2}
-\exp\left( -\frac{x^2 + y^2}{2 \beta^2} \right)
+G(\x;\alpha) &= G(x;\alpha) G(y;\alpha) \\
+&= \frac{1}{2\pi \alpha^2}
+\exp\left( -\frac{x^2 + y^2}{2 \alpha^2} \right)
 \end{align*}
 %
-where $\x = [x ~~ y]^T$. We do not allow for separate scales $\beta$ for each dimension.
+where $\x = [x ~~ y]^T$. We do not allow for separate scales $\alpha$ for each dimension.
 %
 \subsection{Periodic histograms}
 When creating histograms of periodic domains, we need to take the periodicity into consideration. We specify the period between $l$ and $r$, where $l \leq r$.
