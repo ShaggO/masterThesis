@@ -24,7 +24,7 @@ function [X,D] = cellHistDescriptors(I,F,contentType,magnitudeType,...
 %   binSigma        Variance of bin filter
 %   binCount        Number of bins
 
-saveVars = true;
+saveVars = false;
 
 % check if 0 features
 if size(F,1) == 0
