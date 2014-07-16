@@ -1,5 +1,0 @@
-TODO:
-
-- Framework for concatenation of descriptors
-- Support for rotationally invariant descriptors
-- Investigate full-svm performance

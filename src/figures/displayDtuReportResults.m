@@ -1,6 +1,6 @@
 function displayDtuReportResults(plotROCAUC,plotPRAUC,pathTypes,testType,plotParams,mNames)
 
-[imNumKey,liNumKey,imNum,liNum,pathNames,pathLabels,pathXlabel] = dtuPaths(testType);
+[imNumKey,liNumKey,imNum,liNum,pathNames,pathX,pathXlabel] = dtuPaths(testType);
 
 fig('unit','inches','width',12,'height',1,'fontsize',8);
 hold on;
@@ -24,7 +24,7 @@ for k = pathTypes % Generate figure for each image path
     else
         before = 0;
     end
-    x = pathLabels{k};
+    x = pathX{k};
 
     width = ~mod(k,2) * 7.2 + mod(k,2) * 8;
     fig('width',width,'height',4.5,'unit','in','fontsize',10)

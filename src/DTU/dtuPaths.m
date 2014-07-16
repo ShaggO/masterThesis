@@ -1,4 +1,4 @@
-function [imNumKey,liNumKey,imNum,liNum,pathNames,pathLabels,pathXlabel] = dtuPaths(type)
+function [imNumKey,liNumKey,imNum,liNum,pathNames,pathX,pathXlabel] = dtuPaths(type)
 %DTUPATHS Returns the 4 arcs and 2 light path indices for the DTU dataset
 if nargin < 1
     type = 'test';
@@ -15,7 +15,7 @@ pathNames = {...
 
 imNumKey = 25;
 liNumKey = 0;
-pathLabels = {};
+pathX = {};
 pathXlabel = {};
 
 switch type
@@ -23,23 +23,23 @@ switch type
         % Arc 1 [1:24 26:49]
         %imNum{1} = [1 12 24 26 38 49];
         imNum{1} = [1:24 26:49];
-        pathLabels{1} = linspace(-40,40,numel(imNum{1})+1);
-        pathLabels{1} = pathLabels{1}([1:24,26:end]);
+        pathX{1} = linspace(-40,40,numel(imNum{1})+1);
+        pathX{1} = pathX{1}([1:24,26:end]);
         pathXlabel{1} = 'Angle (degrees)';
         % Arc 2 [65:94]
         %imNum{2} = [65 70 75 84 89 94];
         imNum{2} = 65:94;
-        pathLabels{2} = linspace(-25,25,numel(imNum{2}));
+        pathX{2} = linspace(-25,25,numel(imNum{2}));
         pathXlabel{2} = 'Angle (degrees)';
         % Arc 3 [95:119]
         %imNum{3} = [95 99 103 111 115 119];
         imNum{3} = 95:119;
-        pathLabels{3} = linspace(-20,20,numel(imNum{3}));
+        pathX{3} = linspace(-20,20,numel(imNum{3}));
         pathXlabel{3} = 'Angle (degrees)';
         % Linear [50:64]
         %imNum{4} = [50 54 57 60 64];
         imNum{4} = 50:64;
-        pathLabels{4} = linspace(50,80,numel(imNum{4}));
+        pathX{4} = linspace(50,80,numel(imNum{4}));
         pathXlabel{4} = 'Distance (cm)';
         % Light path x [12 25 60 87]
         %imNum{5} = [12 87];
@@ -57,8 +57,8 @@ switch type
                  20:28,... % [20:28]
                  29:35}; % [29:35]
 
-        pathLabels{5} = 1:numel(liNum{5});
-        pathLabels{6} = (1:numel(liNum{6}))+numel(liNum{5});
+        pathX{5} = 1:numel(liNum{5});
+        pathX{6} = (1:numel(liNum{6}))+numel(liNum{5});
     case 'train'
         % 21 train images in total (+keyframe)
         imNum = {...

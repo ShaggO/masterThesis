@@ -19,7 +19,7 @@ fig('unit','inches','width',6,'height',6,'fontsize',8);
 visualizeCellHist({L.none},P(n,:),H(:,:,n),cells,binC,2,'si')
 set(gcf,'color','w');
 path = '../report/img/cellHistFigureSi.pdf';
- export_fig('-r300',path);
+% export_fig('-r300',path);
 saveTightFigure(gcf,path)
 
 %figh = fig('unit','inches','width',6,'height',4,'fontsize',8);
@@ -32,7 +32,7 @@ xlabh = get(gca,'XLabel');
 set(xlabh,'Position',get(xlabh,'Position') - [0 0.00023 0])
 set(gca,'OuterPosition',get(gca,'OuterPosition') - [0 -0.12 0 0.12]);
 ylabel('Bin value')
-set(gca,'box','off')
+%set(gca,'box','off')
 hold on;
 set(gca,'XTickMode','manual');
 set(gca,'XTick',x(1,:));

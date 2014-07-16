@@ -371,11 +371,20 @@ Tune on 5 folds, test on 1.
 %
 Notes:
 
+1. Iterative minimization
+2. Computationally heavy, many parameters, hard to say something about the correlation of the parameters:
+3. Each sub-optimization:
+3a. Enum: One of the enumerated choices
+3b. Zoom: (2 iterations, initially large interval, then small zoomed in interval)
+4. 
+
 1. Problems with boosting the noise when using pixel normalization?
 %
 
 \section{Results}
 %
+PR results: \Cref{fig:dtuResultsPR}
+ROC results: \Cref{fig:dtuResultsROC}
 
 \begin{figure}[tb]
 	\centerline{
@@ -417,10 +426,50 @@ Notes:
 		\label{fig:dtuResultsPRzAxis}
 	\end{subfigure}
 	}
-	\caption{Mean PR AUC test results on the DTU dataset paths.}
+	\caption{Mean PR AUC test results on the DTU dataset.}
 	\label{fig:dtuResultsPR}
 \end{figure}
-
+%
+\begin{figure}[tb]
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStats_1.pdf}
+		\caption{Arc 1}
+		\label{fig:dtuResultsPRarc1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStats_2.pdf}
+		\caption{Arc 2}
+		\label{fig:dtuResultsPRarc2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStats_3.pdf}
+		\caption{Arc 3}
+		\label{fig:dtuResultsPRarc3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStats_4.pdf}
+		\caption{Linear path}
+		\label{fig:dtuResultsPRlinear}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStats_5.pdf}
+		\caption{Light path, $x$-axis}
+		\label{fig:dtuResultsPRxAxis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStats_6.pdf}
+		\caption{Light path, $z$-axis}
+		\label{fig:dtuResultsPRzAxis}
+	\end{subfigure}
+	}
+	\caption{Confidence intervals on the PR AUC difference between our GO descriptor and SIFT. A positive difference denotes that our GO descriptor outperforms SIFT. If the confidence interval for a position contains zero, there is no significant difference in performance.}
+	\label{fig:dtuResultsPR}
+\end{figure}
 %
 \begin{figure}[tb]
 	\centerline{
