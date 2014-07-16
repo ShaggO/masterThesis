@@ -3,10 +3,10 @@ function [X,D] = hogDescriptor(I,F,windowSize,cellsize,varargin)
 
 windows = extractWindows(255*I,F,windowSize);
 
-for i = 1:size(P,1)
+for i = 1:size(F,1)
     Di = vl_hog(windows{i},cellsize,varargin{:});
     if i == 1
-        D = zeros(size(P,1),numel(Di),'single');
+        D = zeros(size(F,1),numel(Di),'single');
     end
     D(i,:) = Di(:)';
 end

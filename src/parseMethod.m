@@ -145,7 +145,7 @@ detCache = r.cache;
 %% Parse descriptor arguments
 p = inputParser;
 colours = {'gray','rgb bin','rgb','opponent','gaussian opponent', ...
-    'c-colour','xyz','perceptual'};
+    'c-colour','xyz','perceptual','none'};
 addParameter(p,'cache',1);
 addParameter(p,'debug',0);
 addParameter(p,'colour',colours{1},okArg(colours));

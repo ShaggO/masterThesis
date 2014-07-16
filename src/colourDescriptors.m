@@ -3,6 +3,8 @@ function desFunc = colourDescriptors(desFunc,colour)
 % between 0 and 1
 
 switch colour
+    case 'none'
+        % no change to desFunc
     case 'gray'
         desFunc = @(I,F) desFunc(colourTransform(I,colour),F);
     case 'rgb bin'
