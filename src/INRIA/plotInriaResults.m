@@ -6,7 +6,7 @@ end
 
 % colours = {'r-','b-','c-','k-','r:','b:','c:','k:'};
 % colours = {'b-','g-','c-','r-','m-','b:','g:','c:','r:','m:'};
-colours = {'r-','g-','b-','k-','m-'};
+colours = {'r-','g-','b-','k-','r--','r-.'};
 
 ROC = cell(1,numel(svmPath));
 PR = ROC;
@@ -62,7 +62,7 @@ axis([0.75 1 0 1])
 export_fig('../report/img/inriaTestResultsPR.pdf','-r300');
 
 %% Legend
-fig('unit','inches','width',12,'height',1,'fontsize',8);
+fig('unit','inches','width',14,'height',1,'fontsize',8);
 hold on;
 h = zeros(1,numel(colours));
 for i = 1:numel(colours)
