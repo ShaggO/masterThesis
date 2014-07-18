@@ -10,6 +10,8 @@ for i = 1:numel(names)
     params.loggerParameterResults = handler(emptyLogger);
 
     % set gridsize values
+
+    r = struct(params.method.descriptorArgs{:});
     % Triangle
     mink = (r.gridRadius(2)-4)/(sqrt(3)*1.6)-6/sqrt(3);
     maxk = (r.gridRadius(2)-4)/(sqrt(3)*4)-6/sqrt(3);
@@ -17,7 +19,6 @@ for i = 1:numel(names)
     gridSizeTriangle = (r.gridRadius(2)-4)./(sqrt(3)*unique(n))-10^-6;
 
     % Square
-    r = struct(params.method.descriptorArgs{:});
     mink = (r.gridRadius(2)-4)/(2*1.6)-3;
     maxk = (r.gridRadius(2)-4)/(2*4)-3;
     n = 2*round((mink:-1:maxk)/2)+3;
