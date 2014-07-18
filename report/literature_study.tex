@@ -39,29 +39,16 @@ The image correspondence problem has been frequently used throughout the literat
 Object detection has been conducted in various ways and complexities throughout the literature. Since we are interested in comparing our descriptor performance against state of the art descriptors, we will not be developing a complex object detection system, but rather stay with a simple one for which we can change the descriptor. Therefore we limit this part of our literature study to simple object detection algorithms. As mentioned in \Cref{sec:gradientDescriptors} the HOG descriptor was developed for pedestrian detection using a binary classification of windows across the image, and \cite{felzenszwalb2008discriminatively} improved this approach by expanding the HOG algorithm with a parts-model.
 
 \todo{Make notes into a proper paragraph}
-The binary classification of \citet{dalal2005histograms} is a typical image classification problem. This problem is commonly solved by using the bag-of-visual-words (BoW) strategy
- Notes:
- 
- Bag of words (bag-of-keypoints): \cite{csurka2004visual}
- 1. Codebook generation
- 	1. Describe images
- 	2. Cluster to words
- 2. Use on images
-	1. Describe image with descriptors of keypoints
-	2. Assign each descriptor to closest word
-	3. histogram (bag) of words per image (BoW)
-	4. Assign to class based on BoW using classifier
+The binary classification of \citet{dalal2005histograms} is a typical image classification. \citet{dalal2005histograms} use a SVM on the raw HOG descriptors for training and and predicting the outcome of the binary classification.
 
-Fischer Vectors \cite{sanchez2013image} is an alternative to BoW classification, where a Gaussian Mixture Model (GMM) with a diagonal covariance matrix is assumed for the distribution of descriptors of an image. Various statistics of the GMM are computed, from which we compute the Fischer vector signature of each image's descriptors and apply power (signed square-rooting) and $l_2$ normalizations. The Fischer vectors are then compared against a soft-BoV histogram approach using a linear SVM for training and prediction.
+Image classification problems are however commonly solved by using the bag-of-visual-words (BoVW) strategy such as \citet{csurka2004visual} do with their \emph{Bags of Keypoints} for visual categorization. The BoVW strategy's training step is called codebook generation. First, descriptors are computed for a training set of images. Second, the descriptors are clustered into $k$ cluster centers called the vocabulary. Third, the descriptors are projected to their closest match in the vocabulary and a histogram (bag) of words is created for each image. Finally a classifier is trained on the bags-of-visual-words and their corresponding class. Prediction of an image is performed by computing the bags-of-visual-words (like training step 3) for the image and predicting the class using the trained classifier.
+
+Fischer Vectors \cite{sanchez2013image} is an alternative to the BoVW strategy. A Gaussian Mixture Model (GMM) with a diagonal covariance matrix is assumed for the distribution of descriptors of an image. Various statistics of the GMM are computed, from which we compute the Fischer vector signature of each image's descriptors and apply power (signed square-rooting) and $l_2$ normalizations. \citet{sanchez2013image} compares the Fischer vectors against a soft-BoVW \todo{Find reference for soft-BoVW} histogram approach using a linear SVM for training and prediction.
 
 First abstract object detector using SVM: \cite{papageorgiou2000trainable}.
 SVM original: \cite{boser1992training}
  
 Potential extra Mining article: \cite{fernando2014mining}
-
-\section{Performance evaluations}
-
-
 
 \subbibliography
 
