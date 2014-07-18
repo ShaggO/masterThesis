@@ -7,7 +7,7 @@ for i = 1:numel(name)
     params = load(['results/optimize/inriaParameters' name{i}]);
 
     params.loggerParameterResults = handler(emptyLogger);
-    
+
     % set gridsize values
     r = struct(params.method.descriptorArgs{:});
     if strcmp(r.gridType,'square window')
@@ -21,19 +21,49 @@ for i = 1:numel(name)
         n = 2*round((mink:-1:maxk)/2)+6/sqrt(3);
         gridSize = (r.gridRadius(2)-4)./(sqrt(3)*unique(n))-10^-6;
     end
-    
-    [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+
+    %% Optimization parameters
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'gridSize', gridSize');
-    [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'cellSigma', repmat((0.5:0.1:2)',[1 2]));
-    [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'binSigma', (0.5:0.1:2.5)');
-    [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'binCount', (4:16)');
-    [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'normSigma', repmat((3:0.2:10)',[1 2]));
-    [~] = inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'logc', (-6:0.1:2)');
-    
+
+    %% Alpha and beta tests
+    % Triangle and box alpha:
+    methodAlphaTri = modifyDescriptor(params.method,'binFilter','triangle');
+    methodAlphaBox = modifyDescriptor(params.method,'binFilter','box');
+
+    % Triangle and box beta:
+    methodBetaTri = modifyDescriptor(params.method,'cellFilter','triangle');
+    methodBetaBox = modifyDescriptor(params.method,'cellFilter','box');
+
+    % Run alpha and beta dense
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodAlphaTri,params.svmArgs, ...
+        'cellSigma', repmat((0.5:0.1:2)',[1 2]));
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodAlphaBox,params.svmArgs, ...
+        'cellSigma', repmat((0.5:0.1:2)',[1 2]));
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodBetaTri,params.svmArgs, ...
+        'binSigma', (0.5:0.1:2.5)');
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodBetaBox,params.svmArgs, ...
+        'binSigma', (0.5:0.1:2.5)');
+
+    %% Additional parameter choice tests
+    inriaOptimizeEnum(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+        'normType', {'pixel','none'});
+    inriaOptimizeEnum(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+        'cellNormStrategy', {0,3});
+    inriaOptimizeEnum(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+        'smooth', {true,false});
+    inriaOptimizeEnum(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+        'colour', {'gray','none'});
+
     save(['results/optimize/inriaParameters' name{i}],'-struct','params');
 end
