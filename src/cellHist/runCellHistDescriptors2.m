@@ -1,6 +1,8 @@
 clc, clear all
 
 load('results/optimize/inriaParametersGo.mat')
+% method = modifyDescriptor(method,'gridSize',4,'cellFilter','triangle');
+% method = modifyDescriptor(method,'cellSigma',[10 10]);
 
 [mFunc, mName] = parseMethod(method);
 profile off, profile on

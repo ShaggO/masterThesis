@@ -19,7 +19,18 @@ else
     end
 end
 
-[cen,cenPol,cellSize] = createCellOffsets(gridType,gridSize,gridRadius,cellSigma);
+% set support radius
+switch cellFilter
+    case 'gaussian'
+        support = 3*max(cellSigma);
+    case 'triangle'
+        support = 2*max(cellSigma);
+    case 'box'
+        support = max(cellSigma);
+    case 'polar gaussian'
+        support = 3*max(cellSigma);
+end
+[cen,cenPol,cellSize] = createCellOffsets(gridType,gridSize,gridRadius,support);
 nCen = size(cen,1);
 
 if strcmp(centerFilter,'none')
@@ -67,7 +78,6 @@ for i = 1:numel(uniquePsize)
     validPi = all(PiRound + repmat(minContrib,[nPi 1]) >= 1 & ...
         PiRound + repmat(maxContrib,[nPi 1]) <= Isizes(Pi(:,3),2:-1:1),2);
     maski(maski) = validPi;
-%     PiOld = Pi;
     Pi = Pi(validPi,:);
     nPi = size(Pi,1);
     validP(maski) = 1;
@@ -75,8 +85,12 @@ for i = 1:numel(uniquePsize)
 %     figure
 %     hold on
 %     axis equal
-%     plot(PiOld(:,1),PiOld(:,2),'rx')
-%     plot(PiOld(validP,1),PiOld(validP,2),'bx')
+%     wr = gridRadius(2)/2;
+%     hr = gridRadius(1)/2;
+%     axis([-wr wr -hr hr])
+%     plot(cen(:,1),cen(:,2),'rx')
+%     drawCircle(cen(:,1),cen(:,2),cellSize*cellSigma(1))
+%     cellSigma
     
     for j = 1:numel(win.data)
         k = k + 1;
