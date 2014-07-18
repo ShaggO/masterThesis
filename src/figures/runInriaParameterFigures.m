@@ -26,8 +26,8 @@ for i = 1:numel(name)
         plot(v(idxmaxauc),maxauc,'x','markersize',10)
         export_fig('-r300',['../report/img/inriaParameters' name{i} '_' parameters{j} '.pdf']);
         
-        fig('unit','inches','width',7,'height',3,'fontsize',8);
-        plot(v,auc)
+%         fig('unit','inches','width',7,'height',3,'fontsize',8);
+%         plot(v,auc)
     end
 end
 

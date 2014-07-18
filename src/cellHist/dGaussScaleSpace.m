@@ -32,6 +32,9 @@ if loaded
         disp(d);
         disp('Present:');
         disp(file.d);
+    elseif ismember('smooth',fieldnames(file)) && smooth ~= file.smooth
+        disp('Incompatible scale space file. (different smoothing)');
+        disp(['Input smooth: ' num2str(smooth) ', file smooth: ' num2str(file.smooth)]);
     else
         disp('Loaded scale space file.')
         L = file.S(idx);

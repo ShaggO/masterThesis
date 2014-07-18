@@ -288,8 +288,8 @@ switch lower(m.descriptor)
         end
 
         extras = '';
-        if ~r.smooth
-            extras = [extras ';smooth'];
+        if r.smooth
+            extras = [extras ';s'];
         end
         desName = sprintf(['cellhist' repmat('-%s',[1 18]) '%s'],...
             r.colour,...
@@ -456,9 +456,9 @@ D = [];
 for i = 1:numel(varargin)
     [Xi, Di] = varargin{i}(I,resDir,imName,desSave);
     if i > 1
-        [ia,ib] = ismember(X,Xi,'rows');
-        X = X(ia,:);
-        D = [D(ia,:) Di(ib,:)];
+	[ia,ib] = ismember(X,Xi,'rows');
+	X = X(ia,:);
+	D = [D(ia,:) Di(ib(ia),:)];
     else
         X = Xi;
         D = Di;

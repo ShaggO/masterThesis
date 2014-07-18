@@ -11,25 +11,15 @@ for i = 1:splits
     si(i) = load(['results/optimize/parameterStudySi_' num2str(i) '-of-' num2str(splits) '.mat']);
 end
 
-% Generate method and setnum cells
-chosenGo = go(3).method;
-chosenGo = modifyDescriptor(chosenGo,'normSigma',[1.6 1.6]);
-
-chosenSi = si(1).method;
-
-chosenGoSi = chosenGo;
-chosenGoSi.descriptorArgs = {chosenGoSi.descriptorArgs,chosenSi.descriptorArgs};
-chosenGoSi.descriptor = {'cellhist','cellhist'};
-
-GoSi = go.method;
+GoSi = [go.method];
 for i = 1:splits
     GoSi(i).descriptorArgs = {go(i).method.descriptorArgs,si(i).method.descriptorArgs};
     GoSi(i).descriptor = {'cellhist','cellhist'};
 end
 
 % Define methods and their corresponding sets
-methods = {[go.method],chosenGo,[si.method],chosenSi,GoSi,chosenGoSi};
-setNums = {[go.setNumTest],(1:60)',[si.setNumTest],(1:60)',[go.setNumTest],(1:60)'};
+methods = {[go.method],[si.method],GoSi};
+setNums = {[go.setNumTest],[si.setNumTest],[go.setNumTest]};
 
 % Compute ROC and PR on test
 ROC  = cell(size(methods));
@@ -43,4 +33,4 @@ for i = 1:numel(methods)
 end
 
 % Save results
-save('results/optimize/DTUparamsTest');
+save('results/optimize/DTUparamsTestFinal');
