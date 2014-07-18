@@ -7,7 +7,7 @@ close all;
 %    go(i) = load(['results/optimize/parameterStudyGo_' num2str(i) '-of-' num2str(splits) '.mat']);
 %    si(i) = load(['results/optimize/parameterStudySi_' num2str(i) '-of-' num2str(splits) '.mat']);
 %end
-own = load('results/optimize/DTUparamsTest.mat');
+own = load('results/optimize/DTUparamsTestFinal.mat');
 %% Load sift results
 sifts = load('results/optimize/fullsift_dogsift_test.mat');
 
@@ -18,8 +18,8 @@ sifts = load('results/optimize/fullsift_dogsift_test.mat');
 %legends = {'go','si','DoG + sift','full-sift'};
 matchROCAUC = [own.ROC{:} sifts.ROC];
 matchPRAUC = [own.PR{:} sifts.PR];
-matchROCAUC = [own.ROC{[1,3,5]} sifts.ROC(:,1)];
-matchPRAUC = [own.PR{[1,3,5]} sifts.PR(:,1)];
+matchROCAUC = [own.ROC{:} sifts.ROC(:,1)];
+matchPRAUC = [own.PR{:} sifts.PR(:,1)];
 plotArgs = {{'-r'},{'-g'},{'-b'},{'--','Color',[0.6 0.6 0.6]}};
 legends = {'GO','SI','GO-SI','SIFT'};
 %legends = {'Optimal GO','Chosen GO','Optimal SI','Chosen SI','"Optimal" Go-Si','Chosen Go-Si','DoG + sift','full-sift'};

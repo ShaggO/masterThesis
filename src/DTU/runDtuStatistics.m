@@ -1,6 +1,6 @@
 clc, clear all
 
-dtu = load('results/optimize/DTUparamsTest.mat');
+dtu = load('results/optimize/DTUparamsTestFinal.mat');
 sift = load('results/optimize/fullsift_dogsift_test.mat');
 
 pathTypes = 1:6;
@@ -92,7 +92,7 @@ end
 % disp('GO+SI vs SIFT:')
 % for i = 1:6
 %     idx = idx2spil(:,2) == i;
-%     PRgosi = dtu.PR{5}(idx);
+%     PRgosi = dtu.PR{3}(idx);
 %     PRsift = sift.PR(idx,1);
 %     [~,p,ci] = ttest(PRgosi,PRsift);
 %     if mean(ci) > 0
@@ -118,7 +118,7 @@ end
 % disp('GO-SI vs GO:')
 % for i = 1:6
 %     idx = idx2spil(:,2) == i;
-%     PRgosi = dtu.PR{5}(idx);
+%     PRgosi = dtu.PR{3}(idx);
 %     PRgo = dtu.PR{1}(idx);
 %     [~,p,ci] = ttest(PRgosi,PRgo);
 %     if mean(ci) > 0
