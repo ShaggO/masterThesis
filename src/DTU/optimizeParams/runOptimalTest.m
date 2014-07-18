@@ -11,7 +11,7 @@ for i = 1:splits
     si(i) = load(['results/optimize/parameterStudySi_' num2str(i) '-of-' num2str(splits) '.mat']);
 end
 
-GoSi = go.method;
+GoSi = [go.method];
 for i = 1:splits
     GoSi(i).descriptorArgs = {go(i).method.descriptorArgs,si(i).method.descriptorArgs};
     GoSi(i).descriptor = {'cellhist','cellhist'};
