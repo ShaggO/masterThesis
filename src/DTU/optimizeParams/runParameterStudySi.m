@@ -128,8 +128,7 @@ for split = 1:6
 
     %% Test with optimal parameters
     [testROCAUC, testPRAUC] = dtuTest(setNumTest,method,1:6,false,true,'test');
-    load paths;
-    optDir = [dtuResults '/optimize'];
+    optDir = ['results/optimize'];
     if ~exist(optDir,'dir')
         mkdir(optDir);
     end
