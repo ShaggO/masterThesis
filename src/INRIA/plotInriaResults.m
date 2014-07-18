@@ -6,7 +6,7 @@ end
 
 % colours = {'r-','b-','c-','k-','r:','b:','c:','k:'};
 % colours = {'b-','g-','c-','r-','m-','b:','g:','c:','r:','m:'};
-colours = {'r-','g-','b-','k-','r--','r-.'};
+colours = {'r-','g-','b-','k-','r--','r-.','k--'};
 
 ROC = cell(1,numel(svmPath));
 PR = ROC;
