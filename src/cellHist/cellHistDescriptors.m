@@ -136,9 +136,27 @@ if saveVars
     d = [0 0; d];
 end
 scales = approxScales(F(:,3:end),scaleBase,scaleOffset);
-[L,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth);
+
+if size(I,3) == 1
+    [L,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth);
+    Mscales = mFunc(L,scales);
+else
+    % Compute and choose max magnitude across colour channels
+    for i = 1:size(I,3)
+        [L(:,i),Isizes] = dGaussScaleSpace(I(:,:,i),d,scales,rescale,smooth);
+        Mscales(:,i) = cells2vector(mFunc(L(:,i),scales));
+    end
+    [Mscales,mIdx] = max(Mscales,[],2);
+    mIdx = sub2ind([numel(Mscales) size(I,3)],(1:numel(mIdx))',mIdx);
+    args = {};
+    for i = fieldnames(L)'
+        Li = reshape(cells2vector({L.(char(i))}),[],size(I,3));
+        args = [args, {char(i), vector2cells(Li(mIdx),Isizes)'}];
+    end
+    L = struct(args{:});
+    Mscales = vector2cells(Mscales,Isizes)';
+end
 Vscales = vFunc(L,scales);
-Mscales = mFunc(L,scales);
 
 % Pixel-wise normalization of magnitudes
 if strcmp(normType,'pixel')
