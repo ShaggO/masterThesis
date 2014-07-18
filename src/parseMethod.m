@@ -288,8 +288,8 @@ switch lower(m.descriptor)
         end
 
         extras = '';
-        if ~r.smooth
-            extras = [extras ';smooth'];
+        if r.smooth
+            extras = [extras ';s'];
         end
         desName = sprintf(['cellhist' repmat('-%s',[1 18]) '%s'],...
             r.colour,...
