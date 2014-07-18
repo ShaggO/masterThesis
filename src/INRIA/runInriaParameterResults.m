@@ -2,29 +2,37 @@ clc, clear all
 
 data = inriaData;
 
-name = {'Go','Si'};
-for i = 1:numel(name)
-    params = load(['results/optimize/inriaParameters' name{i}]);
+names = {'Go','Si'};
+for name = names
+    params = load(['results/optimize/inriaParameters' name]);
 
     params.loggerParameterResults = handler(emptyLogger);
 
     % set gridsize values
+    % Square
     r = struct(params.method.descriptorArgs{:});
-    if strcmp(r.gridType,'square window')
-        mink = (r.gridRadius(2)-4)/(2*1.6)-3;
-        maxk = (r.gridRadius(2)-4)/(2*4)-3;
-        n = 2*round((mink:-1:maxk)/2)+3;
-        gridSize = (r.gridRadius(2)-4)./(2*unique(n))-10^-6;
-    elseif strcmp(r.gridType,'triangle window')
-        mink = (r.gridRadius(2)-4)/(sqrt(3)*1.6)-6/sqrt(3);
-        maxk = (r.gridRadius(2)-4)/(sqrt(3)*4)-6/sqrt(3);
-        n = 2*round((mink:-1:maxk)/2)+6/sqrt(3);
-        gridSize = (r.gridRadius(2)-4)./(sqrt(3)*unique(n))-10^-6;
-    end
+    mink = (r.gridRadius(2)-4)/(2*1.6)-3;
+    maxk = (r.gridRadius(2)-4)/(2*4)-3;
+    n = 2*round((mink:-1:maxk)/2)+3;
+    gridSizeSquare = (r.gridRadius(2)-4)./(2*unique(n))-10^-6;
+
+    % Triangle
+    mink = (r.gridRadius(2)-4)/(sqrt(3)*1.6)-6/sqrt(3);
+    maxk = (r.gridRadius(2)-4)/(sqrt(3)*4)-6/sqrt(3);
+    n = 2*round((mink:-1:maxk)/2)+6/sqrt(3);
+    gridSizeTriangle = (r.gridRadius(2)-4)./(sqrt(3)*unique(n))-10^-6;
+
+    methodTri = modifyDescriptor(params.method,'gridType','triangle window');
+    methodSqu = modifyDescriptor(params.method,'gridType','square window');
+
 
     %% Optimization parameters
-    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
+    % Gridtypes triangle and square
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.methodTri,params.svmArgs, ...
         'gridSize', gridSize');
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.methodSqu,params.svmArgs, ...
+        'gridSize', gridSize');
+    % Other optimal
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'cellSigma', repmat((0.5:0.1:2)',[1 2]));
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
@@ -65,5 +73,5 @@ for i = 1:numel(name)
     inriaOptimizeEnum(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'colour', {'gray','none'});
 
-    save(['results/optimize/inriaParameters' name{i}],'-struct','params');
+    save(['results/optimize/inriaParameters' name],'-struct','params');
 end
