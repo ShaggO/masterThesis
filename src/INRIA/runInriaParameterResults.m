@@ -3,8 +3,9 @@ clc, clear all
 data = inriaData;
 
 names = {'Go','Si'};
-for name = names
-    params = load(['results/optimize/inriaParameters' name]);
+names = {'Go'};
+for i = 1:numel(names)
+    params = load(['results/optimize/inriaParameters' name{i}]);
 
     params.loggerParameterResults = handler(emptyLogger);
 
@@ -73,5 +74,5 @@ for name = names
     inriaOptimizeEnum(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'colour', {'gray','none'});
 
-    save(['results/optimize/inriaParameters' name],'-struct','params');
+    save(['results/optimize/inriaParameters' name{i}],'-struct','params');
 end
