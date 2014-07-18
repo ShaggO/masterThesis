@@ -2,8 +2,7 @@ clc, clear all, close all
 
 parameters = {'gridSize','cellSigma','normSigma','binSigma','binCount','logc'};
 symbols = {'r','\alpha','\eta','\beta','n','log(C)'};
-% name = {'Go','Si'};
-name = {'Go'};
+name = {'Go','Si'};
 minAuc = [0.98 0.96];
 
 for i = 1:numel(name)
