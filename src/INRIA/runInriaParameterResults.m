@@ -5,7 +5,7 @@ data = inriaData;
 names = {'Go','Si'};
 names = {'Go'};
 for i = 1:numel(names)
-    params = load(['results/optimize/inriaParameters' name{i}]);
+    params = load(['results/optimize/inriaParameters' names{i}]);
 
     params.loggerParameterResults = handler(emptyLogger);
 
@@ -74,5 +74,5 @@ for i = 1:numel(names)
     inriaOptimizeEnum(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'colour', {'gray','none'});
 
-    save(['results/optimize/inriaParameters' name{i}],'-struct','params');
+    save(['results/optimize/inriaParameters' names{i}],'-struct','params');
 end
