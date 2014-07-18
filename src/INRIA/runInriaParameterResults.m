@@ -10,18 +10,18 @@ for i = 1:numel(names)
     params.loggerParameterResults = handler(emptyLogger);
 
     % set gridsize values
+    % Triangle
+    mink = (r.gridRadius(2)-4)/(sqrt(3)*1.6)-6/sqrt(3);
+    maxk = (r.gridRadius(2)-4)/(sqrt(3)*4)-6/sqrt(3);
+    n = 2*round((mink:-1:maxk)/2)+6/sqrt(3);
+    gridSizeTriangle = (r.gridRadius(2)-4)./(sqrt(3)*unique(n))-10^-6;
+
     % Square
     r = struct(params.method.descriptorArgs{:});
     mink = (r.gridRadius(2)-4)/(2*1.6)-3;
     maxk = (r.gridRadius(2)-4)/(2*4)-3;
     n = 2*round((mink:-1:maxk)/2)+3;
     gridSizeSquare = (r.gridRadius(2)-4)./(2*unique(n))-10^-6;
-
-    % Triangle
-    mink = (r.gridRadius(2)-4)/(sqrt(3)*1.6)-6/sqrt(3);
-    maxk = (r.gridRadius(2)-4)/(sqrt(3)*4)-6/sqrt(3);
-    n = 2*round((mink:-1:maxk)/2)+6/sqrt(3);
-    gridSizeTriangle = (r.gridRadius(2)-4)./(sqrt(3)*unique(n))-10^-6;
 
     methodTri = modifyDescriptor(params.method,'gridType','triangle window');
     methodSqu = modifyDescriptor(params.method,'gridType','square window');
@@ -30,9 +30,9 @@ for i = 1:numel(names)
     %% Optimization parameters
     % Gridtypes triangle and square
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodTri,params.svmArgs, ...
-        'gridSize', gridSizeSquare');
-    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodSqu,params.svmArgs, ...
         'gridSize', gridSizeTriangle');
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodSqu,params.svmArgs, ...
+        'gridSize', gridSizeSquare');
     % Other optimal
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'cellSigma', repmat((0.5:0.1:2)',[1 2]));
