@@ -1,4 +1,4 @@
-function [c, cPol, cellSize] = createCellOffsets(type,gn,gr,cellSigma)
+function [c, cPol, cellSize] = createCellOffsets(type,gn,gr,support)
 %CREATECELLOFFSETS Create cell offsets
 
 switch type
@@ -10,7 +10,7 @@ switch type
         c = [repmat(x,[numel(y) 1]) repmat(y',[1 numel(x)])];
         c = reshape(c,[],2);
         d = min(abs(abs(c) - repmat(fliplr(gr)/2,size(c,1),1)),[],2);
-        cellSize = min((d-2)/(3*cellSigma(1))-10^-6,1);
+        cellSize = min((d-2)/support-10^-6,1);
     case 'triangle window'
         x1 = 0:2*sqrt(3)*gn:gr(2)/2-3*gn-2;
         x1 = [-x1(end:-1:2) x1];
@@ -26,7 +26,7 @@ switch type
         c2 = reshape(c2,[],2);
         c = [c1; c2];
         d = min(abs(abs(c) - repmat(fliplr(gr)/2,size(c,1),1)),[],2);
-        cellSize = min((d-2)/(3*cellSigma(1))-10^-6,1);
+        cellSize = min((d-2)/support-10^-6,1);
     case 'square'
         d = 2*gr ./ gn;
         r = (gn-1)/2;

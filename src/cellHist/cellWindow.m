@@ -28,14 +28,48 @@ switch type
         P = varArray.newFull(Pdata,sizes,map);
     case 'triangle'
         r = ceil(r);
-        [X,Y] = meshgrid(-r(1):r(1),-r(2):r(2));
-        mask = abs(X/r(1)) + abs(Y/r(2)) <= 1;
-        P = [X(mask) Y(mask)];
+        uniqueR = unique(r,'rows','stable');
+        
+        Pdata = cell(size(uniqueR,1),1);
+        sizes = ones(size(uniqueR,1),3);
+        map = zeros(size(uniqueR,1),1);
+        minP = zeros(size(r,1),2);
+        maxP = minP;
+        for i = 1:size(uniqueR,1)
+            ri = uniqueR(i,:);
+            rMaski = ismember(r,ri,'rows');
+            nwi = sum(rMaski);
+            [X,Y] = meshgrid(-ri(1):ri(1),-ri(2):ri(2));
+            Pi = [X(:) Y(:)];
+            Pdata{i} = repmat(Pi,[1 1 nwi]);
+            sizes(i,1:ndims(Pdata{i})) = size(Pdata{i});
+            map(rMaski) = i;
+            minP(rMaski,:) = repmat(min(Pi,[],1),[nwi 1]);
+            maxP(rMaski,:) = repmat(max(Pi,[],1),[nwi 1]);
+        end
+        P = varArray.newFull(Pdata,sizes,map);
     case 'box'
         r = ceil(r);
-        [X,Y] = meshgrid(-r(1):r(1),-r(2):r(2));
-        mask = ':';
-        P = [X(mask) Y(mask)];
+        uniqueR = unique(r,'rows','stable');
+        
+        Pdata = cell(size(uniqueR,1),1);
+        sizes = ones(size(uniqueR,1),3);
+        map = zeros(size(uniqueR,1),1);
+        minP = zeros(size(r,1),2);
+        maxP = minP;
+        for i = 1:size(uniqueR,1)
+            ri = uniqueR(i,:);
+            rMaski = ismember(r,ri,'rows');
+            nwi = sum(rMaski);
+            [X,Y] = meshgrid(-ri(1):ri(1),-ri(2):ri(2));
+            Pi = [X(:) Y(:)];
+            Pdata{i} = repmat(Pi,[1 1 nwi]);
+            sizes(i,1:ndims(Pdata{i})) = size(Pdata{i});
+            map(rMaski) = i;
+            minP(rMaski,:) = repmat(min(Pi,[],1),[nwi 1]);
+            maxP(rMaski,:) = repmat(max(Pi,[],1),[nwi 1]);
+        end
+        P = varArray.newFull(Pdata,sizes,map);
     case 'polar gaussian'
         rBox = ceil(max(r(:,2) + rCenter(:,2)));
         [X,Y] = meshgrid(-rBox:rBox,-rBox:rBox);
