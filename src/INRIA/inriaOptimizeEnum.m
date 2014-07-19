@@ -46,6 +46,10 @@ if ~isempty(diaryFile)
                 optimalStr = values{p}{optimalInd};
             case 'double'
                 optimalStr = nums2str(values{p}{optimalInd});
+            case 'single'
+                optimalStr = nums2str(values{p}{optimalInd});
+            case 'logical'
+                optimalStr = nums2str(values{p}{optimalInd});
         end
         disp(['Optimal ' param ': ' optimalStr]);
     end
