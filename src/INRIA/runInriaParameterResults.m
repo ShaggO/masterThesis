@@ -48,12 +48,12 @@ for i = 1:numel(names)
 
     %% Alpha and beta tests
     % Triangle and box alpha:
-    methodAlphaTri = modifyDescriptor(params.method,'binFilter','triangle');
-    methodAlphaBox = modifyDescriptor(params.method,'binFilter','box');
+    methodAlphaTri = modifyDescriptor(params.method,'cellFilter','triangle');
+    methodAlphaBox = modifyDescriptor(params.method,'cellFilter','box');
 
     % Triangle and box beta:
-    methodBetaTri = modifyDescriptor(params.method,'cellFilter','triangle');
-    methodBetaBox = modifyDescriptor(params.method,'cellFilter','box');
+    methodBetaTri = modifyDescriptor(params.method,'binFilter','triangle');
+    methodBetaBox = modifyDescriptor(params.method,'binFilter','box');
 
     % Run alpha and beta dense
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodAlphaTri,params.svmArgs, ...
