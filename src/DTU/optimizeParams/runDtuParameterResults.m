@@ -45,12 +45,12 @@ for j = 1:numel(names)
 
         %% Alpha and beta tests
         % Triangle and box alpha:
-        methodAlphaTri = modifyDescriptor(params.method,'binFilter','triangle');
-        methodAlphaBox = modifyDescriptor(params.method,'binFilter','box');
+        methodAlphaTri = modifyDescriptor(params.method,'cellFilter','triangle');
+        methodAlphaBox = modifyDescriptor(params.method,'cellFilter','box');
 
         % Triangle and box beta:
-        methodBetaTri = modifyDescriptor(params.method,'cellFilter','triangle');
-        methodBetaBox = modifyDescriptor(params.method,'cellFilter','box');
+        methodBetaTri = modifyDescriptor(params.method,'binFilter','triangle');
+        methodBetaBox = modifyDescriptor(params.method,'binFilter','box');
 
         % Run alpha and beta dense
         zoomOptimizeParameter(setNumTrain,methodAlphaTri,params.diaryFile,params.loggerParameterResults, ...
@@ -68,7 +68,7 @@ for j = 1:numel(names)
         enumOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults, ...
             'normType', {'pixel','none'});
         enumOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults, ...
-            'cellNormStrategy', {0,3});
+            'cellNormStrategy', {0,4});
         enumOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults, ...
             'rescale', {0.5,1});
         enumOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults, ...
