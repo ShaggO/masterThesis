@@ -1,4 +1,4 @@
-function [matches, dims] = imageCorrespondence( ...
+function [matches, dimsM] = imageCorrespondence( ...
     setNum, imNum, liNum, mFunc, mName, matchCache, desSave)
 
 if nargin < 6
@@ -16,7 +16,7 @@ imNumKey = 25;
 liNumKey = 0;
 N = numel(setNum)*numel(imNum)*numel(liNum)*numel(mFunc);
 imSize = size(loadDtuImage(setNum(1),imNum(1),liNum(1)));
-dims = zeros(1,numel(mFunc));
+dimsM = zeros(1,numel(mFunc));
 
 n = 0;
 for s = setNum
@@ -43,7 +43,12 @@ for s = setNum
                 if loaded && ismember('match',fieldnames(matchLoad))
                     disp('Matches loaded');
                     match = matchLoad.match;
-                    dims = matchLoad.dims;
+                    if numel(matchLoad.dims) > 1
+                        matchLoad.dims = matchLoad.dims(m);
+                        save(matchPath,'-struct','matchLoad');
+                    else
+                        dimsM(m) = matchLoad.dims;
+                    end
                 else
                     match.setNum = s;
                     match.imNum = i;
@@ -52,7 +57,8 @@ for s = setNum
 
                     [X1,D1] = dtuFeatures(match.setNum,match.imNum,match.liNum,mFunc{m},desSave);
                     match.coord = X1(:,1:2);
-                    dims(m) = size(D1,2);
+                    dims = size(D1,2);
+                    dimsM(m) = dims;
                     [X2,D2] = dtuFeatures(match.setNum,imNumKey,liNumKey,mFunc{m},true);
                     match.coordKey = X2(:,1:2);
 

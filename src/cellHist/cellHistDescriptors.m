@@ -144,7 +144,10 @@ else
     % Compute and choose max magnitude across colour channels
     for i = 1:size(I,3)
         [L(:,i),Isizes] = dGaussScaleSpace(I(:,:,i),d,scales,rescale,smooth);
-        Mscales(:,i) = cells2vector(mFunc(L(:,i),scales));
+        Mi = mFunc(L(:,i),scales);
+%         figure
+%         imshow(Mi{1},[])
+        Mscales(:,i) = cells2vector(Mi);
     end
     [Mscales,mIdx] = max(Mscales,[],2);
     mIdx = sub2ind([numel(Mscales) size(I,3)],(1:numel(mIdx))',mIdx);
