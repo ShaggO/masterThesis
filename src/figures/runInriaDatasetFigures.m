@@ -3,7 +3,7 @@ clc, clear all
 d = kJetCoeffs(2);
 scales = 1;
 rescale = 1;
-smooth = 1;
+smooth = 0;
 
 binCountT = 100;
 periodT = 2*pi;
