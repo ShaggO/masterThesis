@@ -8,7 +8,9 @@ runInParallel = true;
 splits = 6;
 for i = 1:splits
     go(i) = load(['results/optimize/parameterStudyGo_' num2str(i) '-of-' num2str(splits) '.mat']);
+    go(i).method = modifyDescriptor(go(i).method,'rescale',1,'colour','opponent');
     si(i) = load(['results/optimize/parameterStudySi_' num2str(i) '-of-' num2str(splits) '.mat']);
+    si(i).method = modifyDescriptor(si(i).method,'rescale',1,'colour','opponent');
 end
 
 GoSi = [go.method];
@@ -33,4 +35,4 @@ for i = 1:numel(methods)
 end
 
 % Save results
-save('results/optimize/DTUparamsTestFinal');
+save('results/optimize/DTUparamsTestFinalOpponent');
