@@ -1,0 +1,29 @@
+INRIA parameter results:
+	gridType (1:2): triangle, square
+	gridType dimensions (1:2): triangle, square
+
+	cellSigma (3,8,9): gaussian, triangle, box
+	binSigma (4,10,11): gaussian triangle, box
+	binCount (5)
+	binCount dimensions (5)
+	normSigma (6)
+	logc (7)
+	normType (12): pixel, none
+	cellNormStrategy (13): 0, 4
+	smooth (14): 1,0
+	colour (15): gray, highest magnitude across RGB
+
+
+DTU parameter results:
+	gridRadius (1)
+	gridRadius dimensions (1)
+	centerSigma (2)
+	cellSigma (3,7,8): gaussian, triangle, box
+	binSigma (4,9,10): gaussian, triangle, box
+	binCount (5)
+	binCount dimensions (5)
+	normSigma (6)
+	normType (11): pixel, none
+	cellNormStrategy (12): 0, 4
+	rescale (13): 0.5,1
+	colour (14): gray, highest magnitude across RGB, opponent, c-colour
