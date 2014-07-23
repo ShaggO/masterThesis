@@ -3,7 +3,6 @@ clc, clear all
 data = inriaData;
 
 names = {'Go','Si'};
-names = {'Go'};
 for i = 1:numel(names)
     params = load(['results/optimize/inriaParameters' names{i}]);
 
