@@ -24,7 +24,7 @@ where
 \item[] $B$ is a binning aperture function.
 \end{itemize}
 %
-Note that we have kept this definition similar to the galaxy descriptor \cite{pedersen2013shape}, except we consider several histograms with their own aperture functions $A_j$ and add the additional center aperture function $P$. The descriptor $\d$ is constructed by concatenating all $n$ bin values of all $m$ cell histograms:
+We will use the above terminology throughout this chapter. Note that we have kept this definition similar to the galaxy descriptor \cite{pedersen2013shape}, except we consider several histograms with their own aperture functions $A_j$ and add the additional center aperture function $P$. The descriptor $\d$ is constructed by concatenating all $n$ bin values of all $m$ cell histograms:
 %
 \begin{align}
 \label{eq:proposed_descriptor}
@@ -47,10 +47,10 @@ In \Cref{sec:illumination} we described the problem of handling illumination in 
 The pixel normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
 %
 \begin{align}
-F_\text{norm}(\x) = \frac{F(\x)}{\int F(\y) G(\y - \x; \eta) \,\text{d} \y}
+F_\text{norm}(\x) = \frac{F(\x)}{\int F(\y) G(\y - \x; \eta \sigma_0) \,\text{d} \y}
 \end{align}
 %
-The idea behind this scheme is that an image is locally affected by light changes according to the affine illumination model. In order to estimate $a$ on a pixel-level, we use intensity information from the surrounding pixels. Using a Gaussian filter we are able to weight the surrounding intensities based on their spatial distance to the pixel in question. The rationale for this is, that pixels close to one another has a higher probability of being affected by equal light conditions than pixels further away from one another. By dividing the pixel value by the sum of all these weighted intensities (estimation of $a$), we remove the affine coefficient from the pixel.
+where $\eta$ is the normalization scale, defined relative to the interest point scale $\sigma_0$. The idea behind this scheme is that an image is locally affected by light changes according to the affine illumination model. In order to estimate $a$ on a pixel-level, we use intensity information from the surrounding pixels. Using a Gaussian filter we are able to weight the surrounding intensities based on their spatial distance to the pixel in question. The rationale for this is, that pixels close to one another has a higher probability of being affected by equal light conditions than pixels further away from one another. By dividing the pixel value by the sum of all these weighted intensities (estimation of $a$), we remove the affine coefficient from the pixel.
 
 Having applied the pixel normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
 \Cref{fig:pixelNormalizationExample} shows two examples of images containing shadows, their gradient magnitudes, their pixel normalized magnitudes with $\eta = 2$, and their pixel normalized magnitudes with $\eta = 10$. These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images, the shadows have a dampening effect on the gradient magnitude. By using a small $\eta$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\eta$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well. The choice of optimal $\eta$ is part of our parameter studies.
@@ -109,11 +109,19 @@ An alternative technique for handling local illumination is normalizing each cel
 The purpose of the cell aperture functions $A_j$ is to weight points closer to each cell center higher in their respective cell histograms. We define a cell aperture function as
 %
 \begin{align}
-A_j(\x) = K(\x - \c_j; \alpha_j)
+A_j(\x) = K(\x - (\x_0 + r \sigma_0 \c_j); \alpha k_j r \sigma_0),
 \end{align}
 %
-where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}, $\c_j$ is the cell center for cell $j$, and $\alpha_j$ is the scale, or standard deviation, of cell $j$.
-
+where
+%
+\begin{itemize}
+\item[] $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions},
+\item[] $\c_j$ is the relative cell center position for cell $j$,
+\item[] $\alpha$ is the cell scale across all cells,
+\item[] $k_j$ is a cell scale specific to cell $j$, and
+\item[] $r$ is a radius parameter defined below according to the cell layout, scaling both cell scales and relative positions.
+\end{itemize}
+%
 The cell aperture function is defined for all cells of the feature. Having defined $A_j$ we are now able to define the \emph{grid layouts} that define the cell centers $\boldsymbol{c}_j$ for each feature. \Cref{fig:gridType} shows examples of the six different grid layouts that we propose for describing the local area around an interest point: polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance}, Irregular SIFT \cite{cui2009scale}, and DAISY \cite{tola2008fast} layouts. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the Cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into Cartesian coordinates afterwards. The two log-polar grids both use Cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 rings. The two ``central'' and log-polar grids additionally have a single central cell.
 
 All these layouts are defined relative to the \emph{grid radius}, which is defined as a constant times the detection scale of the feature. In other words the grid radius defines the span of the feature. The grid layouts are defined such that by default the 1 standard deviation curves of the outer-most cells in the feature touch the grid radius. Each ring consists of $n$ cells dividing the ring equally in the angular direction. Furthermore the following holds for each of the specific layouts:
@@ -212,17 +220,17 @@ For the grid layout examples in this section, we have simply chosen a grid size 
 Similarly to $A_j$, the purpose of the center aperture function $P$ is to weight points closer to the detected interest point higher, since they are of greater importance to the local structure. We define it as
 %
 \begin{align}
-P(\x) = K(\x - \x_0; \rho)
+P(\x) = K(\x - \x_0; \rho r \sigma_0)
 \end{align}
 %
-where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}, $\x_0$ is the interest point, and $\rho$ is the scale, or standard deviation, of the center aperture function. $\rho$ is by default equal to the grid radius but can be scaled both up and down to achieve the best performance. The center aperture function is inspired by SIFT \cite{lowe2004distinctive} and DAISY \cite{tola2008fast} which similarly use a center aperture function. For SIFT the standard deviation of the corresponding function is however pre-defined to have a $\sigma$ 1.5 times its square-grid width and height, whereas we choose to find the optimal $\rho$ by adding it to our parameterstudies.
+where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}, and $\rho$ is the scale of the center aperture function. $\rho$ is by default equal to the grid radius but can be scaled both up and down to achieve the best performance. The center aperture function is inspired by SIFT \cite{lowe2004distinctive} and DAISY \cite{tola2008fast} which similarly use a center aperture function. For SIFT the standard deviation of the corresponding function is however pre-defined to have a $\sigma$ 1.5 times its square-grid width and height, whereas we choose to find the optimal $\rho$ by adding it to our parameter studies.
 %
 \section{Binning aperture function}
 \label{sec:binningApertureFunction}
 %
 As mentioned in the introduction to the proposed descriptor, we use smooth histograms as described in \Cref{sec:histograms} for our descriptor. The binning aperture function decides the shape of the smooth histograms that make up our descriptor. We define it as
 \begin{align}
-	B(f_i, \x; f) = K(f(\x) - f_i; \dot{\beta})
+	B(f_i, \x; f) = K \left( f(\x) - f_i; \beta \frac{f_\text{max} - f_\text{min}}{2n} \right)
 \end{align}
 where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}, and $\beta$ is the scale, or standard deviation, of each bin.
 
