@@ -1,15 +1,12 @@
 clc, clear all, close all
 
 names = {'inriaParametersGo','inriaParametersSi'};
-yRanges = {[0.985 1],[0.935 1]};
+yRanges = {[0.985 1],[0.94 1]};
 yRangeDims = {[0 12000],[0 11000]};
 yRangeCellSigmaAlt = {[0.992 1],[0.96 1]};
 yRangeBinSigmaAlt = {[0.996 1],[0.978 1]};
 
 for i = 1:numel(names)
-    if i == 1
-        continue;
-    end
     name = names{i};
     yRange = yRanges{i};
     yRangeDim = yRangeDims{i};

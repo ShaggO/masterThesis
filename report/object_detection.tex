@@ -240,68 +240,82 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 \begin{figure}[p]
 \centering
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParameters_cellSpacing.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_cellSpacing.pdf}
 		\caption{Cell spacing $r$}
-		\label{fig:inriaParameters_cellSpacing}
+		\label{fig:inriaParametersGo_cellSpacing}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParameters_binCount.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_binCount.pdf}
 		\caption{Bin count $n$}
-		\label{fig:inriaParameters_binCount}
+		\label{fig:inriaParametersGo_binCount}
 	\end{subfigure}}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParameters_cellSigma.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_cellSigma.pdf}
 		\caption{Cell scale $\alpha$}
-		\label{fig:inriaParameters_cellSigma}
+		\label{fig:inriaParametersGo_cellSigma}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParameters_binSigma.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_binSigma.pdf}
 		\caption{Bin scale $\beta$}
-		\label{fig:inriaParameters_binSigma}
+		\label{fig:inriaParametersGo_binSigma}
 	\end{subfigure}}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParameters_normSigma.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_normSigma.pdf}
 		\caption{Normalization scale $\eta$}
-		\label{fig:inriaParameters_normSigma}
+		\label{fig:inriaParametersGo_normSigma}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParameters_logC.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_logC.pdf}
 		\caption{SVM weight $C$}
-		\label{fig:inriaParameters_logC}
+		\label{fig:inriaParametersGo_logC}
 		\vspace{2mm}
 	\end{subfigure}}
 	\caption{Parameter study results for GO.}
-	\label{fig:inriaParametersAuc}
+	\label{fig:inriaParametersGoAuc}
 	\vspace{1cm}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParameters_cellSpacingDims.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_cellSpacingDims.pdf}
 		\caption{Cell spacing $r$}
-		\label{fig:inriaParameters_cellSpacingDims}
+		\label{fig:inriaParametersGo_cellSpacingDims}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParameters_binCountDims.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_binCountDims.pdf}
 		\caption{Bin count $n$}
-		\label{fig:inriaParameters_binCountDims}
+		\label{fig:inriaParametersGo_binCountDims}
 		\vspace{2mm}
 	\end{subfigure}}
 	\caption{Parameter study results for GO.}
-	\label{fig:inriaParametersDims}
+	\label{fig:inriaParametersGoDims}
+\end{figure}
+%
+\begin{figure}[tb]
+	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_cellSigmaAlt.pdf}
+		\caption{Cell scale $\alpha$}
+		\label{fig:inriaParametersGo_cellSigmaAlt}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_binSigmaAlt.pdf}
+		\caption{Bin scale $\beta$}
+		\label{fig:inriaParametersGo_binSigmaAlt}
+	\end{subfigure}}
+	\caption{Alternative choices of cell and bin filters for GO.}
 \end{figure}
 %
 \begin{figure}[p]
 \centering
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParametersSi_gridSize.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersSi_cellSpacing.pdf}
 		\caption{Cell spacing $r$}
-		\label{fig:inriaParametersSi_gridSize}
+		\label{fig:inriaParametersSi_cellSpacing}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaParametersSi_cellSigma.pdf}
@@ -330,14 +344,45 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParametersSi_logc.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersSi_logC.pdf}
 		\caption{SVM weight $C$}
-		\label{fig:inriaParametersSi_logc}
+		\label{fig:inriaParametersSi_logC}
 		\vspace{2mm}
 	\end{subfigure}}
 	\caption{Parameter study results for SI.}
-	\label{fig:imageCorrespondenceCurvesSi}
+	\label{fig:inriaParametersSiAuc}
+	\vspace{1cm}
+	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/inriaParametersSi_cellSpacingDims.pdf}
+		\caption{Cell spacing $r$}
+		\label{fig:inriaParametersSi_cellSpacingDims}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.593\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/inriaParametersSi_binCountDims.pdf}
+		\caption{Bin count $n$}
+		\label{fig:inriaParametersSi_binCountDims}
+		\vspace{2mm}
+	\end{subfigure}}
+	\caption{Parameter study results for SI.}
+	\label{fig:inriaParametersSiDims}
 \end{figure}
+%
+\begin{figure}[tb]
+	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaParametersSi_cellSigmaAlt.pdf}
+		\caption{Cell scale $\alpha$}
+		\label{fig:inriaParametersSi_cellSigmaAlt}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaParametersSi_binSigmaAlt.pdf}
+		\caption{Bin scale $\beta$}
+		\label{fig:inriaParametersSi_binSigmaAlt}
+	\end{subfigure}}
+	\caption{Alternative choices of cell and bin filters for SI.}
+\end{figure}
+
 %
 %\begin{table}[tb]
 %\centering

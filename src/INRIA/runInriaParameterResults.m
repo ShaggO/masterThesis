@@ -36,9 +36,9 @@ for i = 1:numel(names)
         'gridSize', gridSizeSquare');
     % Other optimal
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
-        'cellSigma', repmat((0.5:0.1:2)',[1 2]));
+        'cellSigma', repmat((0.5:0.1:3)',[1 2]));
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
-        'binSigma', (0.5:0.1:2.5)');
+        'binSigma', (0.5:0.1:3)');
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'binCount', (4:16)');
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
@@ -57,13 +57,13 @@ for i = 1:numel(names)
 
     % Run alpha and beta dense
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodAlphaTri,params.svmArgs, ...
-        'cellSigma', repmat((0.5:0.1:2)',[1 2]));
+        'cellSigma', repmat((0.5:0.1:3)',[1 2]));
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodAlphaBox,params.svmArgs, ...
-        'cellSigma', repmat((0.5:0.1:2)',[1 2]));
+        'cellSigma', repmat((0.5:0.1:3)',[1 2]));
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodBetaTri,params.svmArgs, ...
-        'binSigma', (0.5:0.1:2.5)');
+        'binSigma', (0.5:0.1:3)');
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodBetaBox,params.svmArgs, ...
-        'binSigma', (0.5:0.1:2.5)');
+        'binSigma', (0.5:0.1:3)');
 
     %% Additional parameter choice tests
     inriaOptimizeEnum(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
