@@ -66,6 +66,6 @@ end
 if ~isempty(legendArgs)
     legend(legendArgs{:})
 end
-export_fig('-r300',['../report/img/inriaParameters_' name '.pdf']);
+export_fig('-r300',['../report/img/' name '.pdf']);
 
 end

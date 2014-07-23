@@ -1,19 +1,21 @@
 clc, clear all, close all
 
-for i = 1:6
-    params = load(['results/optimize/parameterStudyGo_' num2str(i) '-of-6.mat']);
-    logger(:,i) = params.loggerParameterResults.data;
-end
-
+name = 'dtuParametersGo';
 yRange = [0.7 0.8];
 
-% plotLoggerResults(logger(1,:),'r','gridRadius',{},false,yRange)
-% plotLoggerResults(logger(2,:),'\rho','centerSigma',{},false,yRange)
-% plotLoggerResults(logger(3,:),'\alpha','cellSigma',{},false,yRange)
-% plotLoggerResults(logger(4,:),'\beta','binSigma',{},false,yRange)
-% plotLoggerResults(logger(5,:),'n','binCount',{},false,yRange)
-plotLoggerResults(logger(5,:),'n','binCount',{},true,yRange)
-plotLoggerResults(logger(6,:),'\eta','normSigma',{},false,yRange)
+for j = 1:6
+    params = load(['results/optimize/parameterStudyGo_' num2str(j) '-of-6.mat']);
+    logger(:,j) = params.loggerParameterResults.data;
+end
+
+plotLoggerResults(logger(1,:),'r',[name 'gridRadius'],{},false,yRange)
+plotLoggerResults(logger(1,:),'r',[name 'gridRadius'],{},true,yRange)
+% plotLoggerResults(logger(2,:),'\rho',[name 'centerSigma'],{},false,yRange)
+% plotLoggerResults(logger(3,:),'\alpha',[name 'cellSigma'],{},false,yRange)
+% plotLoggerResults(logger(4,:),'\beta',[name 'binSigma'],{},false,yRange)
+% plotLoggerResults(logger(5,:),'n',[name 'binCount'],{},false,yRange)
+% plotLoggerResults(logger(5,:),'n',[name 'binCount'],{},true,yRange)
+% plotLoggerResults(logger(6,:),'\eta',[name 'normSigma'],{},false,yRange)
 % 
 % plotLoggerResults(logger(2:-1:1),'r','cellSpacing',{'Square','Triangle','location','best'},false)
 % plotLoggerResults(logger(2:-1:1),'r','cellSpacing',{'Square','Triangle','location','best'},true)
