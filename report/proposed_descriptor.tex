@@ -129,7 +129,7 @@ For the grid layout examples in this section, we have simply chosen a grid size 
 
 \Cref{fig:gridTypeWindow} shows examples of the two grid layouts that we propose for describing sliding windows, where we wish to have a more uniform description across the whole window. Following the same logic as before, we construct the grids such that by default the 1 standard deviation curves of neighbouring cells are tangent to each other, and allow a scaling of these by $\alpha_j$.
 
-\begin{figure}[p]
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}[t]{\textwidth}
 		\centering
@@ -147,39 +147,40 @@ For the grid layout examples in this section, we have simply chosen a grid size 
 	\end{subfigure}
 	\caption{The two types of Gaussian cell aperture functions plotted in 3-D. The black curves are placed 1 standard deviation $\sigma$ from the cell centers. The yellow curves are placed $3 \sigma$ from the cell centers and confine the regions used to calculate the cell histograms.}
 	\label{fig:gridWindow}
-	\vspace{2mm}
+\end{figure}
+\begin{figure}[tb]
+	\centering
 	\begin{subfigure}[t]{\textwidth}
-		\centering
 		\includegraphics[width=\textwidth]{img/gridType_legend.pdf}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_polar_gaussian.pdf}
-		\caption{Polar}
+		\caption{Polar (P)}
 		\label{fig:gridTypeP}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_polar_central_polar_gaussian.pdf}
-		\caption{Polar central}
+		\caption{Polar central (PC)}
 		\label{fig:gridTypePc}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_log-polar.pdf}
-		\caption{Log-polar}
+		\caption{Log-polar (LP)}
 		\label{fig:gridTypeLp}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_polar_gaussian.pdf}
-		\caption{Concentric polar}
+		\caption{Concentric polar (CP)}
 		\label{fig:gridTypeCp}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_polar_central_polar_gaussian.pdf}
-		\caption{\footnotesize Concentric polar central}
+		\caption{Concentric polar central (CPC)}
 		\label{fig:gridTypeCpc}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_concentric_log-polar.pdf}
-		\caption{Concentric log-polar}
+		\caption{Concentric log-polar (CLP)}
 		\label{fig:gridTypeClp}
 	\end{subfigure}
 	\caption{Examples of grid layouts centered around a detected interest point, showing cell centers, 1 standard deviation curves (see \Cref{fig:gridWindow}), detection scales, and grid radii. The grid size is chosen to be $8 \times 2$ (8 cells in each of 2 rings) and the grid radius is set to 10 times detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use Cartesian Gaussian aperture cell functions.}
