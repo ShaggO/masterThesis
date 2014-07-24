@@ -1,4 +1,4 @@
-function [] = plotLoggerResults(logger,xlab,name,legendArgs,dimsFlag,yRange,height)
+function [] = plotLoggerResults(logger,xlab,name,legendArgs,dimsFlag,yRange,height,showStd)
 
 if nargin < 4
     legendArgs = {};
@@ -15,6 +15,9 @@ if nargin < 6
 end
 if nargin < 7
     height = 3;
+end
+if nargin < 8
+    showStd = false;
 end
 
 fig('unit','inches','width',7,'height',height,'fontsize',8);
@@ -49,7 +52,11 @@ for j = 1:size(logger,2)
             dims{i} = logger(i,j).dims(idxv);
             plot(v{i},dims{i},colours{i})
         else
-            plot(v{i},auc{i},colours{i})
+            if showStd
+                errorbar(v{i},auc{i},logger(i,j).stdPRAUC(idxv),colours{i})
+            else
+                plot(v{i},auc{i},colours{i})
+            end
         end
     end
     
