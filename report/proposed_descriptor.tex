@@ -244,16 +244,16 @@ where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}
 %
 As mentioned in the introduction to the proposed descriptor, we use smooth histograms as described in \Cref{sec:histograms} for our descriptor. The binning aperture function decides the shape of the smooth histograms that make up our descriptor. We define it as
 \begin{align}
-	B(f_i, \x; f) = K \left( f(\x) - f_i; \beta \frac{f_\text{max} - f_\text{min}}{2n} \right)
+	B(\x; f_i, f) = K \left( f(\x) - f_i; \beta \frac{f_\text{max} - f_\text{min}}{2n} \right)
 \end{align}
 where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}, and $\beta$ is the scale, or standard deviation, of each bin.
 
-For our proposed descriptor value function $f$ is either the gradient orientation or the shape index. The number $n_\text{bins}$ of bin centers $f_i$ for $i = 1,\hdots,n_\text{bins}$ is variable and hence we need to define the bin centers as a function of $n_\text{bins}$. Given an interval $[a,b]$, we define the bin centers $f_i$
+For our proposed descriptor value function $f$ is either the gradient orientation or the shape index. The number $n$ of bin centers $f_i$ for $i = 1,\hdots,n_\text{bins}$ is variable and hence we need to define the bin centers as a function of $n$. Given an interval $[f_\text{min},f_\text{max}]$, we define the bin centers $f_i$
 \begin{align}
 	\label{eq:binCenters}
-	f_i &= a + \frac{b-a}{n_\text{bins}} \left(i - \frac{1}{2} \right)
+	f_i &= f_\text{min} + \frac{f_\text{max}-f_\text{min}}{n} \left(i - \frac{1}{2} \right)
 \end{align}
-which corresponds to splitting the interval into $n_\text{bins}$ equally sized parts and placing the bin centers $f_i$ in each of the $n_\text{bins}$ centers of these parts.
+which corresponds to splitting the interval into $n$ equally sized parts and placing the bin centers $f_i$ in each of the $n$ centers of these parts.
 
 The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:binCenters} their areas will integrate to different values. This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{apx:gaussianKernel}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area and hence we choose to omit re-normalization when computing the gradient orientation to save computations. The perodicity is implemented by using simple wrap-around of the distance $f(\x) - f_i$.
 %
