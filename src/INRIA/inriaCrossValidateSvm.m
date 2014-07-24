@@ -34,9 +34,8 @@ for k = 1:nSplit*nMethod
         [~,D,~] = data.getDescriptors(method(km),desSave,'posTrain','all',true);
         svmLoad.dims = size(D,2);
         save(svmPath,'-struct','svmLoad');
-    else
-        dims(km) = svmLoad.dims;
     end
+    dims(km) = svmLoad.dims;
 end
 
 % pre-calculate descriptors
@@ -62,7 +61,7 @@ else
         [~,PRAUC(k)] = inriaValidateSvm(data,nSplit,ks,method(km),svmArgs,desSave);
     end
 end
-PRAUC = mean(PRAUC,1);
 stdPRAUC = std(PRAUC,0,1);
+PRAUC = mean(PRAUC,1);
 
 end
