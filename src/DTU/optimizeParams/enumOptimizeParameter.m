@@ -25,6 +25,8 @@ end
 [matchROCAUC, matchPRAUC, dims] = dtuTest(setNum,paramMethods,pathTypes,false,runInParallel,'train');
 ROCAUC = mean(matchROCAUC,1);
 PRAUC = mean(matchPRAUC,1)
+stdPRAUC = std(matchPRAUC,0,1);
+
 [optimalPRAUC,optimal] = max(PRAUC);
 method = paramMethods(optimal);
 
@@ -52,9 +54,9 @@ disp(['Optimal PRAUC: ' num2str(optimalPRAUC) sprintf('\n')]);
 diary off
 
 if numel(parameters) > 1
-    logger.data(end+1) = struct('parameter',{parameters},'iteration',1,'values',{values},'PRAUC',PRAUC,'dims',dims);
+    logger.data(end+1) = struct('parameter',{parameters},'iteration',1,'values',{values},'PRAUC',PRAUC,'stdPRAUC',stdPRAUC,'dims',dims);
 else
-    logger.data(end+1) = struct('parameter',parameters,'iteration',1,'values',values,'PRAUC',PRAUC,'dims',dims);
+    logger.data(end+1) = struct('parameter',parameters,'iteration',1,'values',values,'PRAUC',PRAUC,'stdPRAUC',stdPRAUC,'dims',dims);
 end
 
 end

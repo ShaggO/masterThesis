@@ -1,4 +1,4 @@
-function [PRAUC, dims] = inriaCrossValidateSvm(data,nSplit,method,svmArgs,runInParallel)
+function [PRAUC, dims, stdPRAUC] = inriaCrossValidateSvm(data,nSplit,method,svmArgs,runInParallel)
 
 desSave = true;
 nMethod = numel(method);
@@ -29,6 +29,14 @@ for k = 1:nSplit*nMethod
         allExist = false;
         break;
     end
+    if ~ismember('dims',fieldnames(svmLoad))
+        disp('Compute and save dimensions to svm file');
+        [~,D,~] = data.getDescriptors(method(km),desSave,'posTrain','all',true);
+        svmLoad.dims = size(D,2);
+        save(svmPath,'-struct','svmLoad');
+    else
+        dims(km) = svmLoad.dims;
+    end
 end
 
 % pre-calculate descriptors
@@ -55,5 +63,6 @@ else
     end
 end
 PRAUC = mean(PRAUC,1);
+stdPRAUC = std(PRAUC,0,1);
 
 end

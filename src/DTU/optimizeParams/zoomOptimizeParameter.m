@@ -34,6 +34,7 @@ for i = 1:numel(varargin)+1
     [matchROCAUC, matchPRAUC, dims] = dtuTest(setNum,methodV,pathTypes,false,runInParallel,'train');
     ROCAUC = mean(matchROCAUC,1);
     PRAUC = mean(matchPRAUC,1)
+    stdPRAUC = std(matchPRAUC,0,1);
     [optimalPRAUC,optimalInd] = max(PRAUC);
     optimalV = values(optimalInd,:);
     methodBest = methodV(optimalInd);
@@ -43,7 +44,7 @@ for i = 1:numel(varargin)+1
     disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
     diary off
     
-    logger.data(end+1) = struct('parameter',parameter,'iteration',i,'values',values,'PRAUC',PRAUC,'dims',dims);
+    logger.data(end+1) = struct('parameter',parameter,'iteration',i,'values',values,'PRAUC',PRAUC,'stdPRAUC',stdPRAUC,'dims',dims);
 
     load paths;
     optDir = [dtuResults '/optimize'];

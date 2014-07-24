@@ -38,14 +38,15 @@ for i = 1:numel(varargin)+1
     end
     PRAUC = zeros(1,size(values,1));
     dims = PRAUC;
+    stdPRAUC = PRAUC;
     for v = 1:size(values,1)
         if isSvmArg
             svmArgsV(v) = svmArgs;
             svmArgsV(v).(parameter) = values(v,:);
-            [PRAUC(v),dims(v)] = inriaCrossValidateSvm(data,splits,method,svmArgsV(v),runInParallel);
+            [PRAUC(v),dims(v),stdPRAUC(v)] = inriaCrossValidateSvm(data,splits,method,svmArgsV(v),runInParallel);
         else
             methodV(v) = modifyDescriptor(methodBest,parameter,values(v,:));
-            [PRAUC(v),dims(v)] = inriaCrossValidateSvm(data,splits,methodV(v),svmArgs,runInParallel);
+            [PRAUC(v),dims(v),stdPRAUC(v)] = inriaCrossValidateSvm(data,splits,methodV(v),svmArgs,runInParallel);
         end
     end
     
@@ -66,7 +67,7 @@ for i = 1:numel(varargin)+1
     disp(['Optimal PRAUC: ' num2str(optimalPRAUC)]);
     diary off
     
-    logger.data(end+1) = struct('parameter',parameter,'iteration',i,'values',values,'PRAUC',PRAUC,'dims',dims);
+    logger.data(end+1) = struct('parameter',parameter,'iteration',i,'values',values,'PRAUC',PRAUC,'stdPRAUC',stdPRAUC,'dims',dims);
 
     if i <= numel(varargin)
         r = varargin{i};
