@@ -1,4 +1,8 @@
-function displayDtuReportResults(plotROCAUC,plotPRAUC,pathTypes,testType,plotParams,mNames)
+function displayDtuReportResults(plotROCAUC,plotPRAUC,pathTypes,testType,plotParams,mNames,resName)
+
+if nargin < 7
+    resName = '';
+end
 
 [imNumKey,liNumKey,imNum,liNum,pathNames,pathX,pathXlabel] = dtuPaths(testType);
 
@@ -14,7 +18,7 @@ set(gca,'visible','off');
 l = legend(gca,mNames{:},'Orientation','Horizontal');
 set(l,'interpreter','none');
 set(l,'OuterPosition',[0 0  1 1],'color',[0.95, 0.95, 0.95]);
-export_fig('-r300','../report/img/dtuResults_legend_cropped.pdf');
+export_fig('-r300',['../report/img/dtuResults_' resName 'legend_cropped.pdf']);
 
 
 % Display results
@@ -59,7 +63,7 @@ for k = pathTypes % Generate figure for each image path
     grid on;
     box on;
     %title(['PR AUC ' pathNames{k} ]);
-    export_fig('-r300',['../report/img/dtuResultsPR_' num2str(k) '.pdf']);
+    export_fig('-r300',['../report/img/dtuResultsPR_' resName num2str(k) '.pdf']);
 
 end
 

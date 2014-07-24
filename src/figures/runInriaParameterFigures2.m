@@ -2,7 +2,7 @@ clc, clear all, close all
 
 names = {'inriaParametersGo','inriaParametersSi'};
 yRanges = {[0.985 1],[0.94 1]};
-yRangeDims = {[0 12000],[0 11000]};
+yRangeDims = {[0 12000],[0 12000]};
 yRangeCellSigmaAlt = {[0.992 1],[0.96 1]};
 yRangeBinSigmaAlt = {[0.996 1],[0.978 1]};
 
@@ -26,6 +26,6 @@ for i = 1:numel(names)
     plotLoggerResults(logger(2:-1:1),'r',[name '_cellSpacing'],{'Square','Triangle','location','best'},false,yRanges{i})
     plotLoggerResults(logger(2:-1:1),'r',[name '_cellSpacing'],{'Square','Triangle','location','best'},true,yRangeDims{i})
 
-    plotLoggerResults(logger([3 8 9]),'\alpha',[name '_cellSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,yRangeCellSigmaAlt{i},6)
-    plotLoggerResults(logger([4 10 11]),'\beta',[name '_binSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,yRangeBinSigmaAlt{i},6)
+    plotLoggerResults(logger([3 8 9]),'\alpha',[name '_cellSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,yRangeCellSigmaAlt{i},6,false)
+    plotLoggerResults(logger([4 10 11]),'\beta',[name '_binSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,yRangeBinSigmaAlt{i},6,false)
 end
