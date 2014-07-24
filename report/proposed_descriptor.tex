@@ -129,7 +129,7 @@ The cell aperture function is defined for all cells of the feature. Having defin
 
 \subsection{Interest point cell layouts}
 \label{sec:cellApertureFunctionPoint}
-When describing an interest point the structure surrounding the interest point is of great importance. The innermost cells of the cell layouts are therefore spatially smaller than the cells further away, in order to capture the structural variations close to the interest point in greater detail. Given the nature of the layouts as structured grids, we refer to them as \emph{grid types}.
+When describing an interest point the structure surrounding the interest point is of great importance. Interest points are usually found using a detector as described in \Cref{sec:interestPointDetectors}. The innermost cells of the cell layouts are therefore spatially smaller than the cells further away, in order to capture the structural variations close to the interest point in greater detail. Given the nature of the layouts as structured grids, we refer to them as \emph{grid types}.
 
 \Cref{fig:gridType} shows examples of the six different grid types that we propose for describing the local area around an interest point: polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance}, Irregular SIFT \cite{cui2009scale}, and DAISY \cite{tola2008fast} layouts. Circular grids are chosen in order to retrieve an even amount of information around the interest point. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the Cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into Cartesian coordinates afterwards. The two log-polar grids both use Cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 rings. The two ``central'' and log-polar grids additionally have a single central cell.
 
@@ -146,8 +146,8 @@ For the grid type examples in this section, we have simply chosen a grid size an
 \subsection{Region cell layouts}
 \label{sec:cellApertureFunctionRegion}
 
-The goal of a region cell layout is to describe an entire region of an image with no bias towards any reference point, and hence achieve a somewhat uniform distribution of cells. Like the interest point cell layouts, the region cell layouts are structured in grids and hence we likewise refer to these as grid types.
-\Cref{fig:gridTypeWindow} shows examples of the two grid types: square and triangle; that we propose for describing rectangular regions.
+The goal of a region cell layout is to describe a specified region of an image with no bias towards any reference point. These layouts are typically used in conjunction with a sliding window approach as described in \Cref{sec:slidingWindow}. The region specification depends on the application and dataset. Regions are specified from a central point $\x_0$ at scale $\sigma_0$ similar to the interest point layouts. Like the interest point cell layouts, the region cell layouts are structured in grids and hence we likewise refer to these as grid types.
+\Cref{fig:gridTypeWindow} shows examples of the two grid types that we propose for describing rectangular regions: square and triangle.
 
 By default the 1 standard deviations of neighbouring cells are tangent to each other. The size of the 1 standard deviation, and hence also the spacing of the cells, is defined as the cell spacing $r$. Following the logic from the interest point grid types, the 1 standard deviations can be scaled to allow for additional or less overlap between the cells using the cell scale parameter $\alpha$.
 The layouts are however only defined for a limited region, which causes problems when using the grid types in practice. Upscaling the overlap changes the support radius of each cell, which means that some cells span outside the defined region. In order to avoid this problem, we define another scaling parameter $k_j$ for each cell $j$. For cells with support radius inside the defined region, we define $k_j = 1$. For the remaining cells we define $k_j$ such that the support radius of each cell is tangent to the closest region boundary.
@@ -278,8 +278,9 @@ To summarize, our descriptor has the following parameters that will be part of o
 \item Grid size
 \item Grid radius $r$ 
 \end{itemize}
-\item Region specific parameter: (\Cref{sec:cellApertureFunctionRegion})
+\item Region specific parameters: (\Cref{sec:cellApertureFunctionRegion})
 \begin{itemize}
+\item Grid type
 \item Cell spacing $r$
 \end{itemize}
 \item Center scale $\rho$ (\Cref{sec:centerApertureFunction})
@@ -289,9 +290,9 @@ To summarize, our descriptor has the following parameters that will be part of o
 %
 \section{Example} \label{sec:proposedDescriptorExample}
 %
-In order to visualize the construction of our descriptor, we will show an example of the whole process. As value and magnitude functions we choose the standard gradient orientation with gradient magnitude. We start by extracting interest points from an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
+In order to visualize the construction of our descriptor, we will show an example of the whole process using an interest point detector. The example would however not differ much if we had used a sliding window approach with a region layout instead of an interest point layout. We illustrate both the GO and SI descriptor. At first we extract interest points from an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
 
-The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} based on the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which causes all features to have the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points that are too close to the edge: if any cell support radius (shown in \Cref{fig:gridWindow}) belonging to a feature would span outside the image border, we discard the feature. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images with their respective features, and which of these are discarded.
+The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} based on the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which causes all features to have the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points that are too close to the edge: if any cell support radius (shown in \Cref{fig:gridWindow}) belonging to a feature spans outside the image border, we discard the feature. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images with their respective features, and which of the features that are discarded.
 
 \begin{figure}[p]
     \centering
@@ -346,13 +347,14 @@ The next step is to construct the scale space images as described in \Cref{sec:v
 	\label{fig:cellHistScaleSpacesSC}
 \end{figure}
 
-From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In this case only $x$ and $y$-derivatives are needed, which are used to compute gradient orientation and magnitude images. We then apply our pixel normalization scheme to the magnitudes. These images are shown in \Cref{fig:cellHistScaleSpacesVM}.
+From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In the case of GO $x$- and $y$-derivatives are needed, whereas $xx$-, $xy$-, and $yy$-derivatives are needed for SI. The derivatives are used to compute bin value and magnitude functions over the entire image. We then apply our pixel normalization scheme to the magnitudes. These images are shown in \Cref{fig:cellHistScaleSpacesVM,fig:cellHistScaleSpacesSC} for GO and SI respectively.
 
-We need to compute the cell and center weights for pixels in every cell according to the chosen cell layout parameters. In order to save computation time, we confine the support radius of the Gaussian cell aperture filters to $3 \alpha_j$, ignoring pixels outside this distance to each cell center. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, though since many cells overlap we show the maximal weight for each pixel.
-The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and then simply look up the value when needed in a cell.
+We need to compute the cell and center weights for pixels in every cell according to the chosen cell layout parameters. In order to save computation time, we confine the support radius of the Gaussian cell aperture filters to $3$ times the cell radius, ignoring pixels outside this distance to each cell center. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, but since many cells overlap we show the maximal weight for each pixel.
+
+The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The purpose of these images is to illustrate the bin weighting and hence we have left out the corresponding SI examples. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and then simply look up the value when needed in a cell.
 
 
-Finally the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigureGoM} illustrates one grid of these for a single feature. We see that there is a correspondence between the dominating orientations of the histograms and the gradient field of the underlying image. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor.
+Finally the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigureGoM,fig:cellHistFigureSiC} illustrates one grid of these for a single feature for GO and SI respectively. We see that there is a correspondence between the dominating orientations of the GO histograms and the gradient field of the underlying image. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor. For SI the correspondence between the histograms and the underlying image is harder to see.
 
 \begin{figure}[tb]
     \centering
@@ -380,7 +382,7 @@ Finally the four weights are multiplied in order to construct the cell histogram
 \begin{figure}[tb]
     \centering
     \includegraphics[width=0.65\textwidth]{img/cellHistFigureGo.pdf}
-    \caption{The cell histograms for a single feature that make up our descriptor. For each cell center (yellow), the weighted histogram values (red) are drawn in the direction of the corresponding bin center orientations. We see that the cell histograms generally point towards larger intensities.}
+    \caption{The cell histograms for a single feature that make up our GO descriptor. For each cell center (yellow), the weighted histogram values (red) are drawn in the direction of the corresponding bin center orientations. We see that the cell histograms generally point towards larger intensities.}
     \label{fig:cellHistFigureGoM}
 \end{figure}
 
@@ -388,14 +390,18 @@ Finally the four weights are multiplied in order to construct the cell histogram
    	\centering
 	\begin{subfigure}[t]{0.65\textwidth}
 	    \includegraphics[width=\textwidth]{img/cellHistFigureSi.pdf}
+	    \caption{}
+   	    \label{fig:cellHistFigureSiCfeature}
     \end{subfigure}
     \begin{subfigure}[t]{0.65\textwidth}
     	\centering
     	\includegraphics[width=\textwidth]{img/cellHistFigureSiExample.pdf}
 %   	\end{subfigure}
 %   	\begin{subfigure}[t]{0.1\textwidth}
+		\caption{}
+		\label{fig:cellHistFigureSiChist}
    	\end{subfigure}
-   	\caption{The shape index cell histograms for a single feature.}
+   	\caption{The cell histograms for a single feature that make up our SI descriptor \subref{fig:cellHistFigureSiCfeature}. For each cell center (yellow), the weighted histogram values (red) are drawn. \subref{fig:cellHistFigureSiChist} illustrates the central histogram of \subref{fig:cellHistFigureSiCfeature} where the images at each bin show examples of the corresponding structure.}
     \label{fig:cellHistFigureSiC}
 \end{figure}
 %
