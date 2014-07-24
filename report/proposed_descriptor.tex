@@ -240,7 +240,7 @@ Similarly to $A_j$, the purpose of the center aperture function $P$ is to weight
 P(\x) = K(\x - \x_0; \rho r \sigma_0)
 \end{align}
 %
-where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}, and $\rho$ is the scale of the center aperture function. $\rho$ is by default equal to the grid radius but can be scaled both up and down to achieve the best performance. The center aperture function is inspired by SIFT \cite{lowe2004distinctive} and DAISY \cite{tola2008fast} which similarly use a center aperture function. For SIFT the standard deviation of the corresponding function is however pre-defined to have a $\sigma$ 1.5 times its square-grid width and height, whereas we choose to find the optimal $\rho$ by adding it to our parameter studies.
+where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}, and $\rho$ is the scale of the center aperture function. When $\rho = 1$, the standard deviation of the center aperture function is equal to the grid radius scaled by the detection scale. This function is inspired by SIFT \cite{lowe2004distinctive} and DAISY \cite{tola2008fast} which use a similarly defined center aperture function. For SIFT the standard deviation of the corresponding function is pre-defined to have a scale half its square-grid width and height, whereas we search for the optimal $\rho$ by adding it to our parameter studies.
 %
 \section{Binning aperture function}
 \label{sec:binningApertureFunction}
