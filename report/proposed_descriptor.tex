@@ -146,11 +146,11 @@ For the grid type examples in this section, we have simply chosen a grid size an
 \subsection{Region cell layouts}
 \label{sec:cellApertureFunctionRegion}
 
-The goal of a region cell layout is to describe an entire region of an image with no bias towards any reference point, and hence achieve a somewhat uniform distribution of cells.
-\Cref{fig:gridTypeWindow} shows examples of the two cell layouts: square and triangle; that we propose for describing rectangular regions.
+The goal of a region cell layout is to describe an entire region of an image with no bias towards any reference point, and hence achieve a somewhat uniform distribution of cells. Like the interest point cell layouts, the region cell layouts are structured in grids and hence we likewise refer to these as grid types.
+\Cref{fig:gridTypeWindow} shows examples of the two grid types: square and triangle; that we propose for describing rectangular regions.
 
-By default the 1 standard deviations of neighbouring cells are tangent to each other. The size of the 1 standard deviation, and hence also the spacing of the cells, is defined as the cell spacing $r$. Following the logic from the interest point cell layouts, the standard deviations can be scaled to allow for additional or less overlap between the cells using the cell scale parameter $\alpha$.
-The layout is however only defined for a limited region, which causes problems when using the cell layout in practice. Upscaling the overlap changes the support radius of each cell, which means that some cells span outside the defined region. In order to avoid this problem, we define another scaling parameter $k_j$ for each cell $j$. For cells with support radius inside the defined region, we define $k_j = 1$. For the remaining cells we define $k_j$ such that the support radius of each cell is tangent to the closest region boundary.
+By default the 1 standard deviations of neighbouring cells are tangent to each other. The size of the 1 standard deviation, and hence also the spacing of the cells, is defined as the cell spacing $r$. Following the logic from the interest point grid types, the 1 standard deviations can be scaled to allow for additional or less overlap between the cells using the cell scale parameter $\alpha$.
+The layouts are however only defined for a limited region, which causes problems when using the grid types in practice. Upscaling the overlap changes the support radius of each cell, which means that some cells span outside the defined region. In order to avoid this problem, we define another scaling parameter $k_j$ for each cell $j$. For cells with support radius inside the defined region, we define $k_j = 1$. For the remaining cells we define $k_j$ such that the support radius of each cell is tangent to the closest region boundary.
 By increasing $\alpha$, the boundary cells will therefore keep their original scale defined by $r$, whereas the cells further away from the boundary will have increased overlap.
 %
 \begin{figure}[p]
@@ -207,7 +207,7 @@ By increasing $\alpha$, the boundary cells will therefore keep their original sc
 		\caption{Concentric log-polar (CLP)}
 		\label{fig:gridTypeClp}
 	\end{subfigure}
-	\caption{Examples of cell layouts centered around a detected interest point, showing cell centers, 1 standard deviation curves (see \Cref{fig:gridWindow}), detection scales, and grid radii. The grid size here is $8 \times 2$ (8 cells in each of 2 rings) and the grid radius $r$ is set to 10, which is relative to the detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use Cartesian Gaussian aperture cell functions.}
+	\caption{Examples of cell grid types centered around a detected interest point, showing cell centers, 1 standard deviation curves (see \Cref{fig:gridWindow}), detection scales, and grid radii. The grid size here is $8 \times 2$ (8 cells in each of 2 rings) and the grid radius $r$ is set to 10, which is relative to the detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use Cartesian Gaussian aperture cell functions.}
 	\label{fig:gridType}
 \end{figure}
 %
@@ -227,7 +227,7 @@ By increasing $\alpha$, the boundary cells will therefore keep their original sc
 		\caption{Triangular grid}
 		\label{fig:gridTypeTriangle}
 	\end{subfigure}
-	\caption{Examples of cell layouts used for sliding windows, where we are interested in describing a larger area rather than the local area surrounding a detected point.}
+	\caption{Examples of grid types used for sliding windows, where we are interested in describing a larger area rather than the local area surrounding a detected point.}
 \label{fig:gridTypeWindow}
 \end{figure}
 %
