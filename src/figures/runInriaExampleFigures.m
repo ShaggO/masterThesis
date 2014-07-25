@@ -6,14 +6,18 @@ Irgb = images(330).image;
 
 vars = load('cellHistExampleGoInria.mat');
 test = load('results/inriaTestSvmGoFinal');
-maxSvmW = max(reshape(test.svm.w,16,[]),[],1);
-minSvmW = -min(reshape(test.svm.w,16,[]),[],1);
+maxSvmW = max(reshape(test.svm.w,vars.binCount,[]),[],1);
+minSvmW = -min(reshape(test.svm.w,vars.binCount,[]),[],1);
 
 figure
 imshow(Irgb)
 set(gcf,'position',[600 250 70*3 134*3])
 hold on
-drawCircle(vars.cells(:,1)+vars.F(1),vars.cells(:,2)+vars.F(2),vars.gridSize,'b')
+if ismember(vars.cellFilter,{'box','triangle'})
+    drawSquare(vars.cells(:,1)+vars.F(1),vars.cells(:,2)+vars.F(2),vars.gridSize,'b')
+else
+    drawCircle(vars.cells(:,1)+vars.F(1),vars.cells(:,2)+vars.F(2),vars.gridSize,'b')
+end
 saveTightFigure(gcf,'../report/img/inriaExampleCells.pdf')
 
 GO = visualizeGoHist(vars.cells+repmat(vars.F(1:2),size(vars.cells,1),1),vars.binC,vars.gridSize);
@@ -66,9 +70,12 @@ saveTightFigure(gcf,'../report/img/inriaExampleDescriptorSvmNeg.pdf')
 %% Positive SVM weights
 figure
 Isvm = zeros(size(Irgb,1),size(Irgb,2));
-for i = 1:size(vars.C.data{1},3)
-    Isvm(vars.C.data{1}(:,:,i)) = Isvm(vars.C.data{1}(:,:,i)) + ...
-        vars.Wcell.data{1}(:,:,i) .* maxSvmW(i);
+for j = (1:numel(vars.C.data))
+    idx = find(vars.C.map == j);
+    for i = 1:numel(idx)
+        Isvm(vars.C.data{j}(:,:,i)) = Isvm(vars.C.data{j}(:,:,i)) + ...
+            vars.Wcell.data{j}(:,:,i) .* maxSvmW(idx(i));
+    end
 end
 imshow(Isvm,[])
 set(gcf,'position',[600 250 70*3 134*3])
@@ -77,9 +84,12 @@ saveTightFigure(gcf,'../report/img/inriaExampleDescriptorSvmMax.pdf')
 %% Negative SVM weights
 figure
 Isvm = zeros(size(Irgb,1),size(Irgb,2));
-for i = 1:size(vars.C.data{1},3)
-    Isvm(vars.C.data{1}(:,:,i)) = Isvm(vars.C.data{1}(:,:,i)) + ...
-        vars.Wcell.data{1}(:,:,i) .* minSvmW(i);
+for j = (1:numel(vars.C.data))
+    idx = find(vars.C.map == j);
+    for i = 1:numel(idx)
+        Isvm(vars.C.data{j}(:,:,i)) = Isvm(vars.C.data{j}(:,:,i)) + ...
+            vars.Wcell.data{j}(:,:,i) .* minSvmW(idx(i));
+    end
 end
 imshow(Isvm,[])
 set(gcf,'position',[600 250 70*3 134*3])

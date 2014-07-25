@@ -1,26 +1,31 @@
 clc, clear all, close all
 
 name = 'Go';
-yRange = [0.7 0.8];
+aucRange = [0.7 0.8];
+dimRange = [0 450];
 
 for j = 1:6
     params = load(['results/optimize/parameterStudy' name '_' num2str(j) '-of-6.mat']);
     logger(:,j) = params.loggerParameterResults.data;
 end
 
-% plotLoggerResults(logger(1,:),'r',['dtuParameters' name '_gridRadius'],{},false,yRange)
-% plotLoggerResults(logger(2,:),'\rho',['dtuParameters' name '_centerSigma'],{},false,yRange)
-% plotLoggerResults(logger(3,:),'\alpha',['dtuParameters' name '_cellSigma'],{},false,yRange)
-% plotLoggerResults(logger(4,:),'\beta',['dtuParameters' name '_binSigma'],{},false,yRange)
-% plotLoggerResults(logger(5,:),'n',['dtuParameters' name '_binCount'],{},false,yRange)
-% plotLoggerResults(logger(5,:),'n',['dtuParameters' name '_binCount'],{},true,yRange)
-% plotLoggerResults(logger(6,:),'\eta',['dtuParameters' name '_normSigma'],{},false,yRange)
-% 
-% plotLoggerResults(logger(2:-1:1),'r',['dtuParameters' name '_cellSpacing'],{'Square','Triangle','location','best'},false)
-% plotLoggerResults(logger(2:-1:1),'r',['dtuParameters' name '_cellSpacing'],{'Square','Triangle','location','best'},true)
-% 
-% plotLoggerResults(logger([3 8 9]),'\alpha',['dtuParameters' name '_cellSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,[0.992 1],6)
-% plotLoggerResults(logger([4 10 11]),'\beta',['dtuParameters' name '_binSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,[0.996 1],6)
+loggerMean = logger(:,1);
+for i = 1:size(logger,1)
+    PRAUCi = reshape([logger(i,:).PRAUC],[],6)';
+    loggerMean(i).PRAUC = mean(PRAUCi,1);
+    loggerMean(i).stdPRAUC = std(PRAUCi,0,1);
+end
+
+plotLoggerResults(loggerMean(1,:),'r',['dtuParameters' name '_gridRadius'],{},false,aucRange)
+plotLoggerResults(loggerMean(2,:),'\rho',['dtuParameters' name '_centerSigma'],{},false,aucRange)
+plotLoggerResults(loggerMean(3,:),'\alpha',['dtuParameters' name '_cellSigma'],{},false,aucRange)
+plotLoggerResults(loggerMean(4,:),'\beta',['dtuParameters' name '_binSigma'],{},false,aucRange)
+plotLoggerResults(loggerMean(5,:),'n',['dtuParameters' name '_binCount'],{},false,aucRange)
+plotLoggerResults(loggerMean(5,:),'n',['dtuParameters' name '_binCount'],{},true,dimRange)
+plotLoggerResults(loggerMean(6,:),'\eta',['dtuParameters' name '_normSigma'],{},false,aucRange)
+
+plotLoggerResults(loggerMean([3 7 8]),'\alpha',['dtuParameters' name '_cellSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,aucRange,6)
+plotLoggerResults(loggerMean([4 9 10]),'\beta',['dtuParameters' name '_binSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,aucRange,6)
 
 %% Grid layout table
 params.logger.data = reshape(params.logger.data,[29 6]);

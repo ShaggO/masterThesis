@@ -4,7 +4,7 @@ load('results/optimize/inriaParametersGo.mat')
 % method = modifyDescriptor(method,'gridSize',4,'cellFilter','triangle');
 % method = modifyDescriptor(method,'cellSigma',[10 10]);
 % method = modifyDescriptor(method,'colour','none');
-method = modifyDescriptor(method,'smooth',true);
+method = modifyDescriptor(method,'cellFilter','box','cellSigma',[3.3 3.3],'binFilter','triangle','binSigma',1);
 
 [mFunc, mName] = parseMethod(method);
 profile off, profile on
