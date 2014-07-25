@@ -204,7 +204,13 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 \end{figure}
 %\restoregeometry
 
-%\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+%
+To get an idea of the types of images our trained SVM is best and worst at classifying, we find some of the pedestrian and non-pedestrian images with the highest and lowest classification scores. We call the pedestrian images with high classification scores true positives, as we are more likely to classify them correctly. Whether we do so of course depends on the exact threshold chosen. Similar statements can be said for false positives, true negatives, and false negatives. The images are shown in \Cref{fig:ownDescriptorExample}.
+
+Generally the true positive images show pedestrians in standard up-right poses, with clothing clearly distinctive from the background, and having little to no occlusions. The false negatives are quite the opposite, and many have dim lighting with the person hard to make out. The true negative examples are all sky, with very little gradient structure. The false positives are quite varied; some have vertical lines at places a person could stand, but it is not obvious to see how they could be classified as pedestrians.
+
+\todo{Add examples of edge case classifications with their visualized descriptors?}
+%
 \begin{figure}
 	\begin{subfigure}[t]{\textwidth}
 		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionTP.png}}
@@ -213,15 +219,15 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionTN.png}}
-		\caption{True negatives}
-		\label{fig:objectDetectionTN}
-		\vspace{2mm}
-	\end{subfigure}
-	\begin{subfigure}[t]{\textwidth}
 		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionFN.png}}
 		\caption{False negatives}
 		\label{fig:objectDetectionFN}
+		\vspace{2mm}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionTN.png}}
+		\caption{True negatives}
+		\label{fig:objectDetectionTN}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
