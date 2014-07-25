@@ -7,7 +7,7 @@ disp('Optimization of parameters for SI started.');
 %% Default settings across optimization parameters
 oldParams = load('results/optimize/inriaParametersSi.mat');
 svmArgs = oldParams.svmArgs;
-method = modifyDescriptor(oldParams.method,'cellFilter','box','cellSigma',3.3,'binFilter','triangle','binSigma',0.8);
+method = modifyDescriptor(oldParams.method,'cellFilter','box','cellSigma',[3.3 3.3],'binFilter','triangle','binSigma',0.8);
 
 data = inriaData(40,10^4);
 startTime = tic;
@@ -45,11 +45,11 @@ for i = 1:iters
     binMethod(2) = modifyDescriptor(method,'binFilter','triangle');
     binMethod(3) = modifyDescriptor(method,'binFilter','gaussian');
     [binMethod(1),~,~,binAUC(1)] = inriaOptimizeZoom(data,diaryFile,logger,binMethod(1),svmArgs,'binSigma', ...
-           repmat((1:0.5:3)',[1 2]),repmat((-0.2:0.1:0.2)',[1 2]));
+        (1:0.5:3)',(-0.2:0.1:0.2)');
     [binMethod(2),~,~,binAUC(2)] = inriaOptimizeZoom(data,diaryFile,logger,binMethod(2),svmArgs,'binSigma', ...
-           repmat((0.5:0.5:1.5)',[1 2]),repmat((-0.2:0.1:0.2)',[1 2]));
+        (0.5:0.5:1.5)',(-0.2:0.1:0.2)');
     [binMethod(3),~,~,binAUC(3)] = inriaOptimizeZoom(data,diaryFile,logger,binMethod(3),svmArgs,'binSigma', ...
-        repmat((0.5:0.5:1.5)',[1 2]),repmat((-0.2:0.1:0.2)',[1 2]));
+        (0.5:0.5:1.5)',(-0.2:0.1:0.2)');
     [~,binInd] = max(binAUC);
     diary(diaryFile)
     disp(['Bin filters: box (' num2str(binAUC(1)) '), triangle (' num2str(binAUC(2)) '), Gaussian (' num2str(binAUC(3)) ')']);
