@@ -1,6 +1,7 @@
 clc, clear all;
 
 names = {'Go','Si'};
+names = {'Si'};
 splits = 1:6;
 for j = 1:numel(names)
     % leave out one sixth as test, rest as train
@@ -29,13 +30,13 @@ for j = 1:numel(names)
             (5:0.5:20)');
 
         zoomOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults,'centerSigma', ...
-            repmat((0.5:0.1:2)',[1 2]));
+            repmat((0.5:0.1:3)',[1 2]));
 
         zoomOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults,'cellSigma', ...
-            repmat((0.5:0.1:2)',[1 2]));
+            repmat((0.5:0.1:3)',[1 2]));
 
         zoomOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults,'binSigma', ...
-            (0.5:0.1:2)');
+            (0.5:0.1:3.5)');
         zoomOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults,'binCount', ...
             (4:16)');
         zoomOptimizeParameter(setNumTrain,params.method,params.diaryFile,params.loggerParameterResults,'normSigma', ...
@@ -54,13 +55,13 @@ for j = 1:numel(names)
 
         % Run alpha and beta dense
         zoomOptimizeParameter(setNumTrain,methodAlphaTri,params.diaryFile,params.loggerParameterResults, ...
-            'cellSigma', repmat((0.5:0.1:2)',[1 2]));
+            'cellSigma', repmat((0.5:0.1:3)',[1 2]));
         zoomOptimizeParameter(setNumTrain,methodAlphaBox,params.diaryFile,params.loggerParameterResults, ...
-            'cellSigma', repmat((0.5:0.1:2)',[1 2]));
+            'cellSigma', repmat((0.5:0.1:3)',[1 2]));
         zoomOptimizeParameter(setNumTrain,methodBetaTri,params.diaryFile,params.loggerParameterResults, ...
-            'binSigma', (0.5:0.1:2.5)');
+            'binSigma', (0.5:0.1:3.5)');
         zoomOptimizeParameter(setNumTrain,methodBetaBox,params.diaryFile,params.loggerParameterResults, ...
-            'binSigma', (0.5:0.1:2.5)');
+            'binSigma', (0.5:0.1:3.5)');
 
         save(paramFile,'-struct','params');
 
