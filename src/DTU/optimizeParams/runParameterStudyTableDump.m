@@ -11,8 +11,8 @@ for i = 1:splits
     siTable(i) = struct('binFilter','gaussian',si(i).method.descriptorArgs{:});
 end
 
-goTable(end+1) = goTable(end)
-siTable(end+1) = siTable(end)
+goTable(end+1) = goTable(1)
+siTable(end+1) = siTable(4)
 
 goTable = rmfield(goTable,{'colour','contentType','magnitudeType','rescale','normType','cellNormStrategy'});
 siTable = rmfield(siTable,{'colour','contentType','magnitudeType','rescale','normType','cellNormStrategy'});
@@ -33,12 +33,13 @@ for i = 1:numel(tables)
 end
 
 % Choose additional parameters manually
-tables{2}.gridRadius(end) = 13.5;
+%tables{2}.gridRadius(end) = 13.5;
 tables{1}.centerSigma(end) = 1.6;
-tables{2}.centerSigma(end) = 2;
-tables{2}.cellSigma(end) = 1.1;
-tables{1}.binSigma(end) = 1.3;
-tables{1}.binCount(end) = 14;
+%tables{2}.centerSigma(end) = 2;
+%tables{2}.cellSigma(end) = 1.1;
+%tables{1}.binSigma(end) = 1.3;
+%tables{1}.normSigma(end) = 1.6;
+%tables{1}.binCount(end) = 14;
 
 tables{1}
 tables{2}

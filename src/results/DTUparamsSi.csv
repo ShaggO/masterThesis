@@ -5,4 +5,4 @@ Row,Grid type,Grid size,Grid radius $r$,Center scale $\ESCAPE\rho$,Cell kernel,C
 4,CPC,$12 \times 2$,14,2,G,1,8,G,2,2.6
 5,CPC,$12 \times 2$,14,2,G,1,8,G,2,2.6
 6,CPC,$12 \times 2$,14,2,G,1,8,G,2,2.6
-chosen,CPC,$\mathbf{12 \times 2}$,13.5,2,G,1.1,8,G,2,2.6
+chosen,CPC,$\mathbf{12 \times 2}$,14,2,G,1,8,G,2,2.6
