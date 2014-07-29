@@ -1,8 +1,8 @@
-Row,Grid type,Grid size,Grid radius $r$,Center scale,Cell scale $\ESCAPE\alpha$,Norm. scale $\ESCAPE\eta$,Bin scale $\ESCAPE\beta$,Bin count $n$
-1,PC,$12 \times 2$,13.5,1.4,0.8,1.6,1.3,12
-2,CPC,$12 \times 2$,13,1.9,0.9,1.6,1.3,12
-3,PC,$12 \times 2$,13.5,1.5,0.8,1.6,1.3,12
-4,PC,$12 \times 2$,13.5,1.4,0.8,1.6,1.3,14
-5,PC,$12 \times 2$,13.5,1.7,0.8,1.6,1.3,12
-6,PC,$12 \times 2$,13.5,1.5,0.8,1.8,1.3,14
-chosen,PC,$\mathbf{12 \times 2}$,13.5,1.6,0.8,1.8,1.3,14
+Row,Grid type,Grid size,Grid radius $r$,Center scale $\ESCAPE\rho$,Cell kernel,Cell scale $\ESCAPE\alpha$,Bin count $n$,Bin kernel,Bin scale $\ESCAPE\beta$,Norm. scale $\ESCAPE\eta$
+1,PC,$12 \times 2$,13.5,1.4,G,0.8,12,G,1.3,1.6
+2,CPC,$12 \times 2$,13,1.9,G,0.9,12,G,1.3,1.6
+3,PC,$12 \times 2$,13.5,1.5,G,0.8,12,G,1.3,1.6
+4,PC,$12 \times 2$,13.5,1.4,G,0.8,14,G,1.3,1.6
+5,PC,$12 \times 2$,13.5,1.7,G,0.8,12,G,1.3,1.6
+6,PC,$12 \times 2$,13.5,1.5,G,0.8,14,G,1.3,1.8
+chosen,PC,$\mathbf{12 \times 2}$,13.5,1.6,G,0.8,14,G,1.3,1.8

@@ -16,6 +16,9 @@ table = struct2table(table,'RowNames',upper(names));
 table.cellSigma = table.cellSigma(:,1);
 table.normSigma = table.normSigma(:,1);
 
+table.cellFilter = cellfun(@kernel2name,table.cellFilter,'UniformOutput',0);
+table.binFilter = cellfun(@kernel2name,table.binFilter,'UniformOutput',0);
+
 table = table(:,{'gridSize','cellFilter','cellSigma','binCount','binFilter','binSigma','normSigma'});
 writetable(table,'results/INRIAparams.csv','Delimiter',',','WriteRowNames',true);
 
