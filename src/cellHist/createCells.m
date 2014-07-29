@@ -29,6 +29,10 @@ switch cellFilter
         support = max(cellSigma);
     case 'polar gaussian'
         support = 3*max(cellSigma);
+    case 'polar triangle'
+        support = 2*max(cellSigma);
+    case 'polar box'
+        support = max(cellSigma);
 end
 [cen,cenPol,cellSize] = createCellOffsets(gridType,gridSize,gridRadius,support);
 nCen = size(cen,1);
@@ -40,7 +44,7 @@ else
     Wcen = fCen(cen);
 end
 
-polarCells = strcmp(cellFilter,'polar gaussian');
+polarCells = strncmp(cellFilter,'polar',5);
 
 % offsets for each scale image
 idxScales = [0; cumsum(prod(Isizes,2))];

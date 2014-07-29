@@ -239,7 +239,7 @@ switch lower(m.descriptor)
             'log-polar','concentric log-polar'};
         fTypes = {'gaussian','triangle','box'};
         fTypesCenter = [fTypes {'none'}];
-        fTypesCell = [fTypes {'polar gaussian'}];
+        fTypesCell = [fTypes cellfun(@(s) ['polar ' s],fTypes, 'uniformoutput',false)];
         nTypes = {'cell','block','pixel','pixelvar','none'};
         magnitudeTypes = {'m','c','j2','m-c','1'};
         addParameter(p,'contentType','go');
