@@ -5,7 +5,7 @@ nWindows = [1 2 5 10 20 40 60];
 seed = (6:10)*10^4;
 %nWindows = 40;
 %seed = 2*10^4;
-name = {'Go','Si','GoSi','Hog','HogDT'};
+name = {'Go','Si','GoSi','Hog'};
 
 start = tic;
 for i = 1:numel(name)

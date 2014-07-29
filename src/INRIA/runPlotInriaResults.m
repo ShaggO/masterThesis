@@ -44,7 +44,7 @@ svmPath{end+1} = 'results/inriaTestSvmHogFinal';
 
 svmPath{end+1} = 'results/inriaTestSvmGoChosenSmall';
 svmPath{end+1} = 'results/inriaTestSvmGoChosenBig';
-svmPath{end+1} = 'results/inriaTestSvmHogColourFinal';
+%svmPath{end+1} = 'results/inriaTestSvmHogColourFinal';
 
 
 % svmPath{end+1} = 'results/inriaTestSvmGoTriangleFinal';
