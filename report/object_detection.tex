@@ -101,6 +101,7 @@ The second problem is the presence of people in some of the negatives.
 \Cref{fig:inriaNegativePersons} show two examples of persons in the negative images of the INRIA dataset. The people are however either too small to fit correctly into the sliding window at any of the used scales or partially occluded by the image bounds to such an extent that we shouldn't be able to detect them anyway.
 
 \section{Experimental setup}
+\label{sec:inriaExperimentalSetup}
 %
 We have two experimental setups for evaluating descriptors on the INRIA dataset. The first is a validation setup for evaluating parameters during our parameter study using only the training data, and the second is a more complex test setup for evaluating the optimized or alternative descriptors on test data.
 
@@ -111,9 +112,27 @@ Our test setup is a modification of the one described by \citet{dalal2005histogr
 Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per image as opposed to 10) and add a lot more hard negatives ($10^5$ as opposed to just the positive classification scores). The old amounts of training examples were caused by hardware limitations of only having $1.7$ GB of RAM for SVM training. We also prefer using a fixed number of hard negatives in order to train the SVM on the same number of images for each descriptor.
 
 \section{Example}
+%
+In this section we will show an example of our proposed GO descriptor calculated from a positive pedestrian image. Furthermore we illustrate the connection between the GO descriptor and the weights of a SVM classifier trained using the test setup in \Cref{sec:inriaExperimentalSetup}.
+Finally we will show examples of the positive and negative images whose SVM classification we have most and least confidence in.
+
+\Cref{fig:hogExample} shows a descriptor example from \citet{dalal2005histograms}, and \Cref{fig:inriaExample} shows the corresponding images reproduced for our GO descriptor. Naturally the average gradient images over the training data in \subref{fig:inriaPosTrainMeanM} are similar to one another, as they both are computed using central difference filters without smoothing.
+
+1. introduce and explain the HOG example briefly (blocks)
+2. introduce own example. Differences: Cells shown instead of blocks, $\alpha$ not illustrated
+3. Explain differences
+4. Profit!
+
+Assume: Region descriptor of image. Svm classifier trained.
+
+Positive: (b,f)
+Negative: (c,g)
+
+Edge cases of classification
+
+%
 %\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
-\begin{figure}
-	\centering
+\begin{figure}[tb]
 	\centerline{
 	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/hogExample1.jpg}
@@ -156,51 +175,58 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 		\caption{}
 		\label{fig:hogExample7}
 		\vspace{2mm}
-	\end{subfigure}
-	%
-	}
+	\end{subfigure}}
+	\caption{Example of the HOG descriptor taken from \cite[Figure 6]{dalal2005histograms}. \subref{fig:hogExample1} shows the average gradient image over training data. \subref{fig:hogExample2} and \subref{fig:hogExample3} show the maximal positive and minimal negative SVM weights for each block centered at the pixels, respectively. \subref{fig:hogExample4} shows a test image. \subref{fig:hogExample5} shows its computed descriptor. \subref{fig:hogExample6} and \subref{fig:hogExample7} show the descriptor weighted by positive and negative SVM weights, respectively.}
+	\label{fig:hogExample}
+%	\stepcounter{figure}
+	\vspace*{\floatsep}
 	\setcounter{subfigure}{0}
-	%
+	\centering
 	\centerline{
 	\begin{subfigure}[t]{0.1635\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaPosTrainMeanM.png}
 		\caption{}
+		\label{fig:inriaPosTrainMeanM}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptorSvmMax.pdf}
 		\caption{}
+		\label{fig:inriaExampleDescriptorSvmMax}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptorSvmMin.pdf}
 		\caption{}
+		\label{fig:inriaExampleDescriptorSvmMin}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleCells.pdf}
 		\caption{}
+		\label{fig:inriaExampleCells}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptor.pdf}
 		\caption{}
+		\label{fig:inriaExampleDescriptor}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptorSvm.pdf}
 		\caption{}
+		\label{fig:inriaExampleDescriptorSvm}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.17\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaExampleDescriptorSvmNeg.pdf}
 		\caption{}
-		\label{fig:inriaExampleDescriptorSvm}
+		\label{fig:inriaExampleDescriptorSvmNeg}
 		\vspace{2mm}
-	\end{subfigure}
-	}
-	\caption{Figure taken from HOG \citep{dalal2005histograms} (top) reproduced for our GO descriptor (bottom). \subref{fig:hogExample1} shows the average gradient image over training data. \subref{fig:hogExample2} and \subref{fig:hogExample3} show the maximal positive and minimal negative SVM weights for each cell, respectively. \subref{fig:hogExample4} shows a test image, where we have overlaid our grid layout. \subref{fig:hogExample5} shows its computed descriptor. \subref{fig:hogExample6} and \subref{fig:hogExample7} show the descriptor weighted by positive and negative SVM weights, respectively.}
-	\label{fig:hogDescriptorExample}
+	\end{subfigure}}
+	\caption{Example of our GO descriptor following the same procedure as \Cref{fig:hogExample}. \subref{fig:inriaExampleDescriptorSvmMax} and \subref{fig:inriaExampleDescriptorSvmMin} are however shown for each cell instead of the HOG blocks, and upon \subref{fig:inriaExampleCells} we have illustrated out grid layout using the cell spacing $r$.}
+	\label{fig:inriaExample}
 \end{figure}
 %\restoregeometry
 

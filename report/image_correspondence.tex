@@ -364,6 +364,70 @@ We wish to optimize the following parameters:
 \label{fig:ICparamsSi}
 \end{table}
 
+
+
+\begin{figure}[p]
+\centering
+	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_gridRadius.pdf}
+		\caption{Grid radius $r$}
+		\label{fig:dtuParametersGo_gridRadius}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.593\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_binCount.pdf}
+		\caption{Bin count $n$}
+		\label{fig:dtuParametersGo_binCount}
+	\end{subfigure}}
+	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_cellSigma.pdf}
+		\caption{Cell scale $\alpha$}
+		\label{fig:dtuParametersGo_cellSigma}
+		\vspace{2mm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.593\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_binSigma.pdf}
+		\caption{Bin scale $\beta$}
+		\label{fig:dtuParametersGo_binSigma}
+	\end{subfigure}}
+	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_normSigma.pdf}
+		\caption{Normalization scale $\eta$}
+		\label{fig:dtuParametersGo_normSigma}
+		\vspace{2mm}
+	\end{subfigure}}
+	\caption{Parameter study results for GO.}
+	\label{fig:dtuParametersGoAuc}
+	\vspace{1cm}
+	\centerline{
+	\begin{subfigure}[t]{0.593\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_binCountDims.pdf}
+		\caption{Bin count $n$}
+		\label{fig:dtuParametersGo_binCountDims}
+		\vspace{2mm}
+	\end{subfigure}}
+	\caption{Parameter study results for GO.}
+	\label{fig:dtuParametersGoDims}
+\end{figure}
+%
+\begin{figure}[tb]
+	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_cellSigmaAlt.pdf}
+		\caption{Cell scale $\alpha$}
+		\label{fig:dtuParametersGo_cellSigmaAlt}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.593\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_binSigmaAlt.pdf}
+		\caption{Bin scale $\beta$}
+		\label{fig:dtuParametersGo_binSigmaAlt}
+	\end{subfigure}}
+	\caption{Alternative choices of cell and bin filters for GO.}
+	\label{fig:dtuParametersGoAlt}
+\end{figure}
+
 Test: 6 fold cross validation.
 Tune on 5 folds, test on 1.
 %
