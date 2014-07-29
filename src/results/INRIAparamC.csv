@@ -1,6 +1,5 @@
 Row,C
-GO,$6.3\cdot 10^{-4}$
-SI,$6.3\cdot 10^{-4}$
-GO+SI,$5\cdot 10^{-3}$
-Hog (UoccTI),$1.3\cdot 10^{-3}$
-Hog (DalalTriggs),$2.5\cdot 10^{-3}$
+GO,$1.3\cdot 10^{-3}$
+SI,$2.5\cdot 10^{-3}$
+GO+SI,$1.6\cdot 10^{-3}$
+HOG,$1.3\cdot 10^{-3}$
