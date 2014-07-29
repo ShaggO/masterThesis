@@ -1,44 +1,31 @@
 clc, clear all, close all
 
-parameters = {'gridSize','cellSigma','normSigma','binSigma','binCount','logc'};
-symbols = {'r','\alpha','\eta','\beta','n','log(C)'};
-name = {'Go','Si'};
-minAuc = [0.98 0.96];
+names = {'inriaParametersGo'}; % ,'inriaParametersSi'
+yRanges = {[0.99 1],[0.94 1]};
+yRangeDims = {[0 12000],[0 12000]};
+yRangeCellSigmaAlt = {[0.992 1],[0.96 1]};
+yRangeBinSigmaAlt = {[0.996 1],[0.978 1]};
 
-for i = 1:numel(name)
-    params = load(['results/optimize/inriaParameters' name{i}]);
-    for j = 1:numel(parameters)
-        idx = find(strcmp({params.loggerParameterResults.data.parameter},parameters{j}));
-%         idx = idx(end-1:end);
-        v = cell2mat({params.loggerParameterResults.data(idx).values}');
-        [v,idxv] = sort(v(:,1)');
-        auc = cell2mat({params.loggerParameterResults.data(idx).PRAUC});
-        auc = auc(idxv);
-        [maxauc,idxmaxauc] = max(auc);
-        fig('unit','inches','width',7,'height',3,'fontsize',8);
-        plot(v,auc)
-        axis([v(1) v(end) minAuc(i) 1])
-        set(gcf,'color','white')
-        box on
-        hold on
-        xlabel(symbols{j})
-        ylabel('PR AUC')
-        plot(v(idxmaxauc),maxauc,'x','markersize',10)
-        export_fig('-r300',['../report/img/inriaParameters' name{i} '_' parameters{j} '.pdf']);
-        
-%         fig('unit','inches','width',7,'height',3,'fontsize',8);
-%         plot(v,auc)
-    end
+for i = 1:numel(names)
+    name = names{i};
+    yRange = yRanges{i};
+    yRangeDim = yRangeDims{i};
+    params = load(['results/optimize/' name ]);
+    logger = params.loggerParameterResults.data';
+
+    logger(1).values(end) = [];
+    logger(2).values(end) = [];
+
+    plotLoggerResults(logger(6),'\alpha',[name '_cellSigma'],{},false,yRanges{i})
+    plotLoggerResults(logger(9),'\beta',[name '_binSigma'],{},false,yRanges{i})
+    plotLoggerResults(logger(3),'n',[name '_binCount'],{},false,yRanges{i})
+    plotLoggerResults(logger(3),'n',[name '_binCount'],{},true,yRangeDims{i})
+    plotLoggerResults(logger(4),'\eta',[name '_normSigma'],{},false,yRanges{i})
+    plotLoggerResults(logger(5),'log(C)',[name '_logC'],{},false,yRanges{i})
+
+    plotLoggerResults(logger(2:-1:1),'r',[name '_cellSpacing'],{'Square','Triangle','location','best'},false,yRanges{i})
+    plotLoggerResults(logger(2:-1:1),'r',[name '_cellSpacing'],{'Square','Triangle','location','best'},true,yRangeDims{i})
+
+    plotLoggerResults(logger([6 7 8]),'\alpha',[name '_cellSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,yRangeCellSigmaAlt{i},6,false)
+    plotLoggerResults(logger([9 10 11]),'\beta',[name '_binSigmaAlt'],{'Gaussian','Triangle','Box','location','southeast'},false,yRangeBinSigmaAlt{i},6,false)
 end
-
-% for i = 1:numel(name)
-%     params = load(['results/optimize/inriaParameters' name{i}]);
-%     auc = [];
-%     for j = 1:numel(params.logger.data)
-%         if j < numel(params.logger.data) && params.logger.data(j).iteration >= params.logger.data(j+1).iteration
-%             auc(end+1) = max(params.logger.data(j).PRAUC);
-%         end
-%     end
-%     plot(1:numel(auc),auc)
-%     axis([1 numel(auc) 0.98 1])
-% end
