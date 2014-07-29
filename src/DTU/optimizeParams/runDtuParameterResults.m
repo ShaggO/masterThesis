@@ -1,14 +1,13 @@
 clc, clear all;
 
 names = {'Go','Si'};
-names = {'Si'};
 splits = 1:6;
 for j = 1:numel(names)
     % leave out one sixth as test, rest as train
     for split = splits
 
         %% Default settings across optimization parameters
-        paramFile = ['results/optimize/parameterStudyGo_' num2str(split) '-of-' num2str(numel(splits))];
+        paramFile = ['results/optimize/parameterStudy' names{j} '_' num2str(split) '-of-' num2str(numel(splits))];
         params = load(paramFile);
 
         setNumTrain = dtuSplitSets(6,splits(splits ~= split));

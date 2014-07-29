@@ -3,6 +3,7 @@ clc, clear all
 data = inriaData;
 
 names = {'Go','Si'};
+names = {'Si'};
 for i = 1:numel(names)
     params = load(['results/optimize/inriaParameters' names{i}]);
 
@@ -35,10 +36,6 @@ for i = 1:numel(names)
         'gridSize', gridSizeSquare');
     % Other optimal
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
-        'cellSigma', repmat((0.5:0.1:5)',[1 2]));
-    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
-        'binSigma', (0.5:0.1:3)');
-    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'binCount', (4:16)');
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,params.method,params.svmArgs, ...
         'normSigma', repmat((3:0.2:10)',[1 2]));
@@ -47,18 +44,24 @@ for i = 1:numel(names)
 
     %% Alpha and beta tests
     % Triangle and box alpha:
+    methodAlphaGau = modifyDescriptor(params.method,'cellFilter','gaussian');
     methodAlphaTri = modifyDescriptor(params.method,'cellFilter','triangle');
     methodAlphaBox = modifyDescriptor(params.method,'cellFilter','box');
 
     % Triangle and box beta:
+    methodBetaGau = modifyDescriptor(params.method,'binFilter','gaussian');
     methodBetaTri = modifyDescriptor(params.method,'binFilter','triangle');
     methodBetaBox = modifyDescriptor(params.method,'binFilter','box');
 
     % Run alpha and beta dense
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodAlphaGau,params.svmArgs, ...
+        'cellSigma', repmat((0.5:0.1:5)',[1 2]));
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodAlphaTri,params.svmArgs, ...
         'cellSigma', repmat((0.5:0.1:5)',[1 2]));
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodAlphaBox,params.svmArgs, ...
         'cellSigma', repmat((0.5:0.1:5)',[1 2]));
+    inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodBetaGau,params.svmArgs, ...
+        'binSigma', (0.5:0.1:3)');
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodBetaTri,params.svmArgs, ...
         'binSigma', (0.5:0.1:3)');
     inriaOptimizeZoom(data,params.diaryFile,params.loggerParameterResults,methodBetaBox,params.svmArgs, ...
