@@ -116,20 +116,17 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 In this section we will show an example of our proposed GO descriptor calculated from a positive pedestrian image. Furthermore we illustrate the connection between the GO descriptor and the weights of a SVM classifier trained using the test setup in \Cref{sec:inriaExperimentalSetup}.
 Finally we will show examples of the positive and negative images whose SVM classification we have most and least confidence in.
 
-\Cref{fig:hogExample} shows a descriptor example from \citet{dalal2005histograms}, and \Cref{fig:inriaExample} shows the corresponding images reproduced for our GO descriptor. Naturally the average gradient images over the training data in \subref{fig:inriaPosTrainMeanM} are similar to one another, as they both are computed using central difference filters without smoothing.
+\Cref{fig:hogExample} shows a descriptor example from \citet{dalal2005histograms}, and \Cref{fig:inriaExample} shows the corresponding images reproduced for our GO descriptor. Since HOG has each histogram of gradients ``repeated'' by using block normalization, only the blocks centered at each pixel are illustrated. Our descriptor is illustrated for each cell of the descriptor. The average gradient images over the training data in \subref{fig:inriaPosTrainMeanM} are similar to one another, as they both are computed using central difference filters without smoothing. Likewise we clearly see the silhouette of a pedestrian in these average images.
 
-1. introduce and explain the HOG example briefly (blocks)
-2. introduce own example. Differences: Cells shown instead of blocks, $\alpha$ not illustrated
-3. Explain differences
-4. Profit!
+The maximal positive and minimal negative SVM weights in \subref{fig:inriaExampleDescriptorSvmMax} and \subref{fig:inriaExampleDescriptorSvmMin} differ quite a lot since our descriptor has a much more dense grid. There are however some overall similarities such as large weights around the head and foot regions of the positive weights, at large weights inside the chest region of the negative SVM weights. In other words structure around the head and foot regions count towards a pedestrian detection and structure inside the chest region counts against a pedestrian detection.
 
-Assume: Region descriptor of image. Svm classifier trained.
+Having described the SVM weights, we now look at the descriptors in \subref{fig:inriaExampleDescriptor} computed from the images in \subref{fig:inriaExampleCells}. The descriptors weighted by the positive and negative SVM weights are illustrated in \subref{fig:inriaExampleDescriptorSvm} and \subref{fig:inriaExampleDescriptorSvmNeg} respectively. Both HOG and our descriptor clearly visualize the pedestrian in \subref{fig:inriaExampleDescriptorSvm}. From \subref{fig:inriaExampleDescriptorSvmNeg} we see that vertical lines inside the pedestrian count against a pedestrian detection. The HOG example however weights these lines higher than our SVM, which for some reason weights the horizontal lines in the border high.
 
-Positive: (b,f)
-Negative: (c,g)
+To get an idea of the types of images our trained SVM is best and worst at classifying, we find some of the pedestrian and non-pedestrian images with the highest and lowest classification scores. We call the pedestrian images with high classification scores true positives, as we are more likely to classify them correctly. Whether we do so of course depends on the exact threshold chosen. Similar statements can be said for false positives, true negatives, and false negatives. The images are shown in \Cref{fig:ownDescriptorExample}.
 
-Edge cases of classification
+Generally the true positive images show pedestrians in standard up-right poses, with clothing clearly distinctive from the background, and having little to no occlusions. The false negatives are quite the opposite, and many have dim lighting with the person hard to make out. The true negative examples are all sky, with very little gradient structure. The false positives are quite varied; some have vertical lines at places a person could stand, but it is not obvious to see how they could be classified as pedestrians.
 
+\todo{If time permits: Add examples of edge case classifications with their visualized descriptors?}
 %
 %\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
 \begin{figure}[tb]
@@ -229,13 +226,7 @@ Edge cases of classification
 	\label{fig:inriaExample}
 \end{figure}
 %\restoregeometry
-
 %
-To get an idea of the types of images our trained SVM is best and worst at classifying, we find some of the pedestrian and non-pedestrian images with the highest and lowest classification scores. We call the pedestrian images with high classification scores true positives, as we are more likely to classify them correctly. Whether we do so of course depends on the exact threshold chosen. Similar statements can be said for false positives, true negatives, and false negatives. The images are shown in \Cref{fig:ownDescriptorExample}.
-
-Generally the true positive images show pedestrians in standard up-right poses, with clothing clearly distinctive from the background, and having little to no occlusions. The false negatives are quite the opposite, and many have dim lighting with the person hard to make out. The true negative examples are all sky, with very little gradient structure. The false positives are quite varied; some have vertical lines at places a person could stand, but it is not obvious to see how they could be classified as pedestrians.
-
-\todo{Add examples of edge case classifications with their visualized descriptors?}
 %
 \begin{figure}
 	\begin{subfigure}[t]{\textwidth}
