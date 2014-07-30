@@ -180,7 +180,7 @@ See \citet{aanaes2010recall,aanaes2010ground} for more information about the dat
 In order to be able to classify matches between two images $A$ and $B$ as true or false, we need an evaluation method. In other words we need to compute/generate the match ground truth. The DTU dataset has been scanned using \emph{structured light} generating point clouds for the surfaces in each image. Using these points and the known camera positions for each image we are able to check if a matching of two points from $A$ and $B$ indeed correspond to 3D points close enough to one another to be true. \citet{aanaes2010recall} defined three evaluation criteria, of which we will be using the two first: Epipolar and surface geometry. We first define the property of being 3D reconstructable: an image point is said to be 3D reconstructable if there exists a point from the surface point cloud within a 10 pixel window in the image plane. This corresponds to a pixel within approximately 6 mm in the surface point cloud. Sometimes a matching is made for a point which is not 3D reconstructable. In this case no ground truth can be calculated, and the matching is ignored in the performance evaluation. The following two criteria (illustrated in \Cref{fig:icEvalGT}) determine the matching correspondence ground truth of the two points:
 \begin{itemize}
 	\item \textbf{Epipolar geometry consistency:} Given a point in the first image, the point in the second image should be within a 2.5 pixel orthogonal distance to the epipolar line of the first point as illustrated in \Cref{fig:icEval1GT}.
-	\item \textbf{Surface geometry consistency:} The points need to be 3D reconstructable and they need to be within 3 mm of each other in the surface point cloud as illustrated in \Cref{fig:icEval2GT}.
+	\item \textbf{Surface geometry consistency:} The points need to be 3D reconstructible and they need to be within 3 mm of each other in the surface point cloud as illustrated in \Cref{fig:icEval2GT}.
 \end{itemize}
 
 \todo{Should we refer to \cite{larsen2012in}?}
@@ -276,7 +276,7 @@ The DTU dataset is constructed using four different camera movement paths: Arc 1
 
 Since the DTU dataset is not split in a test and a train part, there is no pre-defined way of training and testing an algorithm on the dataset. \citet{larsen2012jet} used the Oxford Affine Covariance Region\footnote{\url{http://www.robots.ox.ac.uk/~vgg/research/affine}} dataset for manual parameter optimization of their Jet-based local image descriptors. This dataset is however very small and limited and hence we risk severe overfitting to the dataset if used for training. Instead we choose to split the DTU dataset with respect to the scenes into six parts for the purpose of (leave-one-out) cross-validation.
 
-Testing is done on the full dataset, wheras we only perform training on a subset of the camera and light positions, since the dataset contains quite a large amount of images to be processed. \Cref{fig:dtu_overview} shows the camera positions of the dataset as described in \Cref{sec:dtuDataset}. In this illustration the training camera positions for the three arcs and the linear path are marked with red. The camera positions for the light experiments are marked with arrows, where only the ones marked with blue arrows are used for training. \Cref{fig:dtu_light_overview} shows the light positions for the light experiments. The red plusses and circles mark the x- and z-axis light path images used for training respectively.
+Testing is done on the full dataset, whereas we only perform training on a subset of the camera and light positions, since the dataset contains quite a large amount of images to be processed. \Cref{fig:dtu_overview} shows the camera positions of the dataset as described in \Cref{sec:dtuDataset}. In this illustration the training camera positions for the three arcs and the linear path are marked with red. The camera positions for the light experiments are marked with arrows, where only the ones marked with blue arrows are used for training. \Cref{fig:dtu_light_overview} shows the light positions for the light experiments. The red pluses and circles mark the x- and z-axis light path images used for training respectively.
 %
 \section{Parameter study}
 \label{sec:icParameterStudy}
@@ -299,7 +299,23 @@ We wish to optimize the descriptor parameters listed in \Cref{sec:descriptorPara
 Our actual parameter optimization is problematic because we need to optimize ten parameters at once, and each evaluation is computationally heavy. Thus our basic strategy is to cycle through each parameter and optimize it separately while fixing the other parameters. We do this a number of iterations with the hope of reaching convergence.
 The risk of this strategy is getting stuck in local optima. To avoid this, recall that we have defined the parameters to reduce correlation: e.g. when bin count $n$ is increased, the scale of the bins is automatically reduced to compensate. We also select certain correlated parameters to optimize together: grid type with grid size, as well as cell and bin kernels with their respective scales. Furthermore we optimize continuous parameters in two steps: first a coarse search and then a finer search around the best result.
 
-The results of our parameter study for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively.
+The optimal parameters of our parameter study for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively.
+
+
+------------- NOTES ---------------
+Generally: Parameters quite stable across splits. GO center scale $\rho$ a bit unstable.
+
+GO - SI parameter comparison
+Same grid size. Close to the same grid radius. Other parameters differ.
+
+-----
+Grid layout notes:
+------
+Grid radius big compared to SIFT.
+Concentric and "normal": Very small difference
+Centrals slightly better
+Log polar generally worse than polar.
+12x2 many angular cells compared to GLOH and DAISY
 %
 \begin{table}[tb]
 \pgfplotstableset{
@@ -387,17 +403,24 @@ The results of our parameter study for our GO and SI descriptors are shown in \C
 	\end{subfigure}}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
 		\includegraphics[width=\textwidth]{img/dtuParametersGo_cellSigma.pdf}
-		\caption{Cell scale $\alpha$}
+		\caption{Cell scale $\alpha$ (Gaussian kernel)}
 		\label{fig:dtuParametersGo_cellSigma}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{img/dtuParametersGo_binSigma.pdf}
-		\caption{Bin scale $\beta$}
+		\caption{Bin scale $\beta$ (Gaussian kernel)}
 		\label{fig:dtuParametersGo_binSigma}
 	\end{subfigure}}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/dtuParametersGo_centerSigma.pdf}
+		\caption{Center scale $\rho$}
+		\label{fig:dtuParametersGo_centerSigma}
+		\vspace{2mm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{img/dtuParametersGo_normSigma.pdf}
 		\caption{Normalization scale $\eta$}
@@ -407,15 +430,8 @@ The results of our parameter study for our GO and SI descriptors are shown in \C
 	\caption{Parameter study results for GO.}
 	\label{fig:dtuParametersGoAuc}
 	\vspace{1cm}
-	\centerline{
-	\begin{subfigure}[t]{0.593\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{img/dtuParametersGo_binCountDims.pdf}
-		\caption{Bin count $n$}
-		\label{fig:dtuParametersGo_binCountDims}
-		\vspace{2mm}
-	\end{subfigure}}
-	\caption{Parameter study results for GO.}
+	\includegraphics[width=0.593\textwidth]{img/dtuParametersGo_binCountDims.pdf}
+	\caption{Dimensionality of GO based on bin count $n$}
 	\label{fig:dtuParametersGoDims}
 \end{figure}
 %
@@ -469,25 +485,25 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 \caption{Grid layout parameter study for SI}
 \label{tbl:dtuLayoutParametersSi}
 \end{table}
-
-Generally: Parameters quite stable across splits. GO center scale $\rho$ a bit unstable.
-
-GO - SI parameter comparison
-Same grid size. Close to the same grid radius. Other parameters differ.
-
------
-Grid layout notes:
-------
-Grid radius big compared to SIFT.
-Concentric and "normal": Very small difference
-Centrals slightly better
-Log polar generally worse than polar.
-12x2 many angular cells compared to GLOH and DAISY
 %
 \section{Results}
 %
-PR results: \Cref{fig:dtuResultsPR}
-ROC results: \Cref{fig:dtuResultsROC}
+Having found the optimal parameters for each of the 6 splits in the previous section, we are now able to compute test results for each split and report the performance of our descriptors. \Cref{fig:dtuResultsPR,fig:dtuResultsROC} show the mean PR and ROC AUC test results for the DTU dataset respectively. For both these measures the GO (red), SI (green), Go+SI (blue) and SIFT (dashed grey) results are shown. In \Cref{sec:performance_measures} we wrote that we gave the PR measure more importance than ROC. Furthermore as noted in \Cref{sec:binaryClassificationMeasures}, an algorithm which optimizes PR AUC does not necessarily optimize ROC AUC. This is likely the reason why our performance compared to the SIFT descriptor is lower for ROC AUC than PR AUC. The following comparison of performance between the descriptors is therefore based on the PR AUC figures.
+
+
+
+Notes: PR-curves better than the corresponding ROC-curves. Use PR curves for the discussion below:
+Linear path: Generally worse than SIFT
+Arcs: better at higher perspective distortion degrees. Effect correlated with distance results.
+Light paths: Generally better than SIFT.
+
+Statistics 95 confidence interval: Only significantly better than SIFT on the outermost $x$-axis light positions. Same for GO and SIFT.
+GO, GO+SI significantly better than SI.
+SIFT not significantly better than any.
+
+SI always worse than GO and often worse than SIFT.
+
+GO+SI marginally better than GO on light variations but almost identical to GO otherwise.
 
 \begin{figure}[tb]
 	\centerline{
@@ -535,47 +551,6 @@ ROC results: \Cref{fig:dtuResultsROC}
 %
 \begin{figure}[tb]
 	\centerline{
-	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsStats_1.pdf}
-		\caption{Arc 1}
-		\label{fig:dtuResultsStatsarc1}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsStats_2.pdf}
-		\caption{Arc 2}
-		\label{fig:dtuResultsStatsarc2}
-	\end{subfigure}
-	}
-	\centerline{
-	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsStats_3.pdf}
-		\caption{Arc 3}
-		\label{fig:dtuResultsStatsarc3}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsStats_4.pdf}
-		\caption{Linear path}
-		\label{fig:dtuResultsStatslinear}
-	\end{subfigure}
-	}
-	\centerline{
-	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsStats_5.pdf}
-		\caption{Light path, $x$-axis}
-		\label{fig:dtuResultsStatsxAxis}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsStats_6.pdf}
-		\caption{Light path, $z$-axis}
-		\label{fig:dtuResultsStatszAxis}
-	\end{subfigure}
-	}
-	\caption{Confidence intervals on the PR AUC difference between our GO descriptor and SIFT. A positive difference denotes that our GO descriptor outperforms SIFT. If the confidence interval for a position contains zero, there is no significant difference in performance.}
-	\label{fig:dtuResultsStats}
-\end{figure}
-%
-\begin{figure}[tb]
-	\centerline{
 		\includegraphics[width=1.2\textwidth]{img/dtuResults_legend_cropped.pdf}
 	}	
 	\centerline{
@@ -617,7 +592,48 @@ ROC results: \Cref{fig:dtuResultsROC}
 	\caption{Mean ROC AUC test results on the DTU dataset paths.}
 	\label{fig:dtuResultsROC}
 \end{figure}
-
+%
+\begin{figure}[tb]
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGoSi_Sift_1.pdf}
+		\caption{Arc 1}
+		\label{fig:dtuResultsStatsarc1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGoSi_Sift_2.pdf}
+		\caption{Arc 2}
+		\label{fig:dtuResultsStatsarc2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGoSi_Sift_3.pdf}
+		\caption{Arc 3}
+		\label{fig:dtuResultsStatsarc3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGoSi_Sift_4.pdf}
+		\caption{Linear path}
+		\label{fig:dtuResultsStatslinear}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGoSi_Sift_5.pdf}
+		\caption{Light path, $x$-axis}
+		\label{fig:dtuResultsStatsxAxis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGoSi_Sift_6.pdf}
+		\caption{Light path, $z$-axis}
+		\label{fig:dtuResultsStatszAxis}
+	\end{subfigure}
+	}
+	\caption{95\% confidence intervals on the PR AUC difference between our GO+SI descriptor and SIFT. A positive difference denotes that our GO+SI descriptor outperforms SIFT. If the confidence interval for a position contains zero, there is no significant difference in performance.}
+	\label{fig:dtuResultsStats}
+\end{figure}
+%
 %
 \subbibliography
 \end{document}
