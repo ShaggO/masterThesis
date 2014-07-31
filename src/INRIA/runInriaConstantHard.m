@@ -9,7 +9,7 @@ svmPath = cell(numel(nHard),numel(name));
 PRAUC = zeros(numel(nHard),numel(name));
 for j = 1:numel(nHard)
     for i = 1:numel(name)
-        if strcmp(name{i},'GoSi') && nHard{j} > 50*10^3
+        if strcmp(name{i},'GoSi') && nHard(j) > 50*10^3
             PRAUC(j,i) = NaN;
             svmPath{j,i} = '';
             continue
