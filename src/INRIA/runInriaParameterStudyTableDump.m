@@ -8,7 +8,7 @@ for i = 1:numel(names)
     table(i) = struct(parameters.method.descriptorArgs{:});
 end
 
-table = rmfield(table,{'colour','contentType','magnitudeType','rescale','centerFilter','normType','cellNormStrategy','gridRadius','scaleBase','scaleOffset','gridType','smooth'});
+table = rmfield(table,{'colour','contentType','magnitudeType','rescale','centerFilter','normType','cellNormStrategy','gridRadius','scaleBase','scaleOffset','smooth'});
 
 table = struct2table(table,'RowNames',upper(names));
 
@@ -16,13 +16,14 @@ table = struct2table(table,'RowNames',upper(names));
 table.cellSigma = table.cellSigma(:,1);
 table.normSigma = table.normSigma(:,1);
 
+table.gridType = cellfun(@window2name,table.gridType,'UniformOutput',0);
 table.cellFilter = cellfun(@kernel2name,table.cellFilter,'UniformOutput',0);
 table.binFilter = cellfun(@kernel2name,table.binFilter,'UniformOutput',0);
 
-table = table(:,{'gridSize','cellFilter','cellSigma','binCount','binFilter','binSigma','normSigma'});
+table = table(:,{'gridType','gridSize','cellFilter','cellSigma','binCount','binFilter','binSigma','normSigma'});
 writetable(table,'results/INRIAparams.csv','Delimiter',',','WriteRowNames',true);
 
-colNames = 'Row,Cell spacing $r$,Cell kernel,Cell scale $\ESCAPE\alpha$,Bin count $n$,Bin kernel,Bin scale $\ESCAPE\beta$,Normalization scale $\ESCAPE\eta$';
+colNames = 'Row,Grid type,Cell spacing $r$,Cell kernel,Cell scale $\ESCAPE\alpha$,Bin count $n$,Bin kernel,Bin scale $\ESCAPE\beta$,Normalization scale $\ESCAPE\eta$';
 csvContent = fileread('results/INRIAparams.csv');
 [~,csvData] = strtok(csvContent,char(10));
 csvFile = fopen('results/INRIAparams.csv','w');
