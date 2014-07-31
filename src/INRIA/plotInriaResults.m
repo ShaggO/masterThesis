@@ -6,7 +6,7 @@ end
 
 % colours = {'r-','b-','c-','k-','r:','b:','c:','k:'};
 % colours = {'b-','g-','c-','r-','m-','b:','g:','c:','r:','m:'};
-colours = {'r-','g-','b-','k-','r--','r-.','k--'};
+colours = {'r-','g-','b-','m-','k-','r-.','k--'};
 
 ROC = cell(1,numel(svmPath));
 PR = ROC;
@@ -34,10 +34,12 @@ for i = 1:numel(svmPath)
 	loglog(ROC{i}(:,1)+eps,1-ROC{i}(:,2)+eps,colours{i});
     hold on
 end
-grid on
 xlabel('FPR');
 ylabel('1-TPR');
 axis([1e-6 1e-1 0.01 0.5])
+set(gca,'ytick',[0.01 0.02 0.05 0.1 0.2 0.5])
+grid on
+grid minor
 % legend(labels,'interpreter','none','location','southwest')
 % for i = 1:numel(svmPath)
 %     loglog(ROC{i}(idx{i},1)+eps,1-ROC{i}(idx{i},2)+eps,[colours{i} 'o']);

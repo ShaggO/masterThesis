@@ -260,6 +260,8 @@ Generally the true positive images show pedestrians in standard up-right poses, 
 \section{Parameter study}
 \label{sec:odParameterStudy}
 %
+We follow the same setup as the image correspondence parameter study.
+%
 \begin{figure}[p]
 \centering
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
@@ -322,12 +324,12 @@ Generally the true positive images show pedestrians in standard up-right poses, 
 \begin{figure}[tb]
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaParametersGo_cellSigmaAlt.pdf}
-		\caption{Cell scale $\alpha$}
+		\caption{Cell scale $\alpha$ (box kernel)}
 		\label{fig:inriaParametersGo_cellSigmaAlt}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaParametersGo_binSigmaAlt.pdf}
-		\caption{Bin scale $\beta$}
+		\caption{Bin scale $\beta$ (box kernel)}
 		\label{fig:inriaParametersGo_binSigmaAlt}
 	\end{subfigure}}
 	\caption{Alternative choices of cell and bin filters for GO.}
@@ -451,23 +453,6 @@ Generally the true positive images show pedestrians in standard up-right poses, 
 }
 \end{table}
 % 
-% \begin{table}[tb]
-% \centering
-% \begin{tabular}{ l l l }
-% \toprule
-% {} & \multicolumn{2}{c}{Methods}  \\
-% Variable & GO & SI \\ \midrule
-% Cell spacing & $2$ & $2.5$ \\
-% Cell scale $\alpha$ & $0.9$ & $1.1$ \\
-% Normalization scale $\eta$ & $7.4$ & $9.0$ \\
-% Bin scale $\beta$ & $1.1$ & $0.8$ \\
-% Bin count $n$ & $16$ & $13$ \\
-% \bottomrule
-% \end{tabular}
-% \caption{Parameter study optimal C parameter from 6-fold cross validation for GO, SI, GO+SI, Hog, and HogDT}
-% \label{fig:INRIAparams}
-% \end{table}
-% 
 \begin{table}
 \centerline{%
 \pgfplotstableread[col sep=comma]{../src/results/INRIAparamC.csv}\loadedtable
@@ -489,18 +474,24 @@ Generally the true positive images show pedestrians in standard up-right poses, 
     col sep=comma
 ]\loadedtable
 }
-\caption{Parameter study optimal C parameter from 6-fold cross validation for GO, SI, GO+SI, Hog, and HogDT}
+\caption{Parameter study optimal C parameter from 6-fold cross validation for GO, SI, GO+SI, and HOG}
 \label{fig:INRIAparamC}
 \end{table}
 %
 \section{Results}
+%
+Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
+
+\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
+
+\todo{Table of PR AUC, ROC AUC, recall at $10^{-4}$ FPR}
 %
 \begin{figure}[tb]
 \centering
 	\centerline{\includegraphics[width=1.2\textwidth]{img/inriaTestResultsLegend.pdf}}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaTestResultsROC.pdf}
-		\caption{ROC-curve}
+		\caption{Log-log ROC-curve}
 		\label{fig:inriaTestResultsROC}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
@@ -508,8 +499,39 @@ Generally the true positive images show pedestrians in standard up-right poses, 
 		\caption{PR-curve}
 		\label{fig:inriaTestResultsPR}
 	\end{subfigure}}
-	\caption{HOG sucks.}
+	\caption{INRIA test results for the following descriptors (dimensions in parenthesis): GO (11115), SI (6669), GO+SI (17784), Compact GO (4185), and HOG (4743).}
 	\label{fig:inriaTestResults}
+\end{figure}
+%
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramGoFinal.pdf}
+		\caption{GO}
+		\label{fig:inriaHistogramGoFinal}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramSiFinal.pdf}
+		\caption{SI}
+		\label{fig:inriaHistogramSiFinal}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramGoSiFinal.pdf}
+		\caption{GO+SI}
+		\label{fig:inriaHistogramGoSiFinal}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramGoChosenSmall.pdf}
+		\caption{Compact GO}
+		\label{fig:inriaHistogramGoChosenSmall}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramHog.pdf}
+		\caption{HOG}
+		\label{fig:inriaHistogramHog}
+	\end{subfigure}
+	\caption{Histograms of classification scores on INRIA test data for various descriptors. The negative and positive results are individually normalized due to the large skew in amount of images.}
+	\label{fig:inriaHistogram}
 \end{figure}
 %
 \subbibliography

@@ -126,27 +126,26 @@ Note that the cell aperture function is simply a kernel function centered at eac
 
 The cell aperture function is defined for all cells of the feature. Having defined $A_j$ we are now able to define the \emph{cell layouts} that define the cell centers $\c_j$ for each feature. The layouts depend on the application, and hence we split our proposed cell layouts into two categories: interest point and region layouts.
 
-
 \subsection{Interest point cell layouts}
 \label{sec:cellApertureFunctionPoint}
 When describing an interest point the structure surrounding the interest point is of great importance. Interest points are usually found using a detector as described in \Cref{sec:interestPointDetectors}. The innermost cells of the cell layouts are therefore spatially smaller than the cells further away, in order to capture the structural variations close to the interest point in greater detail. Given the nature of the layouts as structured grids, we refer to them as \emph{grid types}.
 
-\Cref{fig:gridType} shows examples of the six different grid types that we propose for describing the local area around an interest point: polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance}, Irregular SIFT \cite{cui2009scale}, and DAISY \cite{tola2008fast} layouts. Circular grids are chosen in order to retrieve an even amount of information around the interest point. The four polar grids all rely on polar Gaussian aperture cell functions where $G$ is replaced by a polar Gaussian function converting the Cartesian coordinates into polar coordinates before applying the Gaussian function and converting back into Cartesian coordinates afterwards. The two log-polar grids both use Cartesian Gaussian aperture cell functions. The examples are shown for the \emph{grid size} $8\times 2$ meaning that each layout has 8 cells in each of their 2 rings. The two ``central'' and log-polar grids additionally have a single central cell.
+\Cref{fig:gridType} shows examples of the six different grid types that we propose for describing the local area around an interest point: polar, polar central, log-polar, concentric polar, concentric polar central, and concentric log-polar. These layouts are inspired by the GLOH \cite{mikolajczyk2005performance}, Irregular SIFT \cite{cui2009scale}, and DAISY \cite{tola2008fast} layouts. Circular grids are chosen in order to retrieve an even amount of information around the interest point. The four polar grids use polar cell kernels, where points are converted from Cartesian coordinates into polar coordinates before applying the kernel. The two log-polar grids both use standard Cartesian kernels. The examples are shown for the \emph{grid size} $8 \times 2$ meaning that each layout has 8 cells in each of their 2 rings. The two ``central'' and log-polar grids additionally have a single central cell. The two types of cells are illustrated in \Cref{fig:gridWindow} for a Gaussian kernel.
 
 All these layouts are defined relative to the \emph{grid radius} $r$ and interest point scale $\sigma_0$. In other words the grid radius defines the span of the feature. The grid types are defined such that by default the 1 standard deviation curves of the outer-most cells in the feature touch the grid radius. Each ring consists of $n$ cells dividing the ring equally in the angular direction. The cells have varying size depending on their position in the grid, and hence each cell $j$ has its 1 standard deviation defined by a cell scale parameter $k_j$ relative to $r$ and $\sigma_0$. The following holds for each of the specific grid types:
 
-For log-polar grid types the radial span of each ring is defined such that the 1 standard deviation of each cell $j$ touches the 1 standard deviation curves of the neighbouring rings and neighbouring angles by default. This results in different default cell sigmas for the normal and concentric log-polar grid types since the concentric log-polar grid type can pack the cells more densely without overlapping cells as seen in \Cref{fig:gridTypeLp,fig:gridTypeClp}.
+For log-polar grid types the radial span of each ring is defined such that the 1 standard deviation of each cell $j$ touches the 1 standard deviation curves of the neighbouring rings and neighbouring angles by default. This results in different default cell scales for the normal and concentric log-polar grid types since the concentric log-polar grid type can pack the cells more densely without overlapping cells as seen in \Cref{fig:gridTypeLp,fig:gridTypeClp}.
 For polar grid types the radial span is divided equally between the rings. The polar central grid types are furthermore having a central cell of half the radial span of the rings. The polar Gaussian cell aperture function combined with positioning of the cell centers $\c_j$ are shown in \Cref{fig:gridTypeP,fig:gridTypePc,fig:gridTypeCp,fig:gridTypeCpc}.
 See \Cref{apx:gridLayouts} for more information on how to compute the grid type cell positions.
 
-As mentioned in the descriptions above, the grids are defined with default cell sigmas. All these cell sigmas can be scaled both up and down by varying $\alpha$ to allow for additional or less overlap between the cells. This will however not change the positioning of the cell centers $\c_j$.
+As mentioned in the descriptions above, the grids are defined with default cell scales. These cell scales can be scaled both up and down by varying $\alpha$ to allow for additional or less overlap between the cells. This will however not change the positioning of the cell centers $\c_j$.
 
-For the grid type examples in this section, we have simply chosen a grid size and a grid radius. These two variables have a major impact on the dimensionality and final outcome of the descriptor along with $\alpha_j$, and hence these three parameters are tuned in our parameter studies in order to get the optimal descriptor grid type and overlap.
+For the grid type examples in this section, we have simply chosen a grid size and a grid radius. These two variables have a major impact on the dimensionality and final outcome of the descriptor along with the cell kernel and its scale $\alpha$, and hence these parameters are tuned in our parameter studies in order to get the optimal descriptor grid type and overlap.
 
 \subsection{Region cell layouts}
 \label{sec:cellApertureFunctionRegion}
 
-The goal of a region cell layout is to describe a specified region of an image with no bias towards any reference point. These layouts are typically used in conjunction with a sliding window approach as described in \Cref{sec:slidingWindow}. The region specification depends on the application and dataset. Regions are specified from a central point $\x_0$ at scale $\sigma_0$ similar to the interest point layouts. Like the interest point cell layouts, the region cell layouts are structured in grids and hence we likewise refer to these as grid types.
+The goal of a region cell layout is to describe a specified region of an image with no bias towards any reference point. These layouts are typically used in conjunction with a sliding window approach as described in \Cref{sec:slidingWindow}. The shape of the region depends on the application and dataset. Regions are specified by a central point $\x_0$ with scale $\sigma_0$ similar to the interest point layouts. Like the interest point cell layouts, the region cell layouts are structured in grids and hence we likewise refer to these as grid types.
 \Cref{fig:gridTypeWindow} shows examples of the two grid types that we propose for describing rectangular regions: square and triangle.
 
 By default the 1 standard deviations of neighbouring cells are tangent to each other. The size of the 1 standard deviation, and hence also the spacing of the cells, is defined as the cell spacing $r$. Following the logic from the interest point grid types, the 1 standard deviations can be scaled to allow for additional or less overlap between the cells using the cell scale parameter $\alpha$.
@@ -155,25 +154,6 @@ By increasing $\alpha$, the boundary cells will therefore keep their original sc
 %
 \begin{figure}[p]
 	\centering
-	\begin{subfigure}[t]{\textwidth}
-		\centering
-		\includegraphics[width=0.5\textwidth]{img/cellWindow_legend.pdf}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.40\textwidth}
-		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{img/cellWindow.pdf}
-		\caption{Gaussian}
-		\label{fig:cellWindow}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.40\textwidth}
-		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{img/cellWindowPolar.pdf}
-		\caption{Polar Gaussian}
-		\label{fig:cellWindowPolar}
-	\end{subfigure}
-	\caption{The two types of Gaussian cell aperture functions plotted in 3-D. The black curves are placed 1 standard deviation $\sigma$ from the cell centers. The yellow curves are placed $3 \sigma$ from the cell centers and confine the regions used to calculate the cell histograms.}
-	\label{fig:gridWindow}
-%\end{figure}
-%\begin{figure}[p]
-	\vspace{5mm}
 	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_legend.pdf}
 	\end{subfigure}
@@ -209,6 +189,23 @@ By increasing $\alpha$, the boundary cells will therefore keep their original sc
 	\end{subfigure}
 	\caption{Examples of cell grid types centered around a detected interest point, showing cell centers, 1 standard deviation curves (see \Cref{fig:gridWindow}), detection scales, and grid radii. The grid size here is $8 \times 2$ (8 cells in each of 2 rings) and the grid radius $r$ is set to 10, which is relative to the detection scale. The polar grids utilize polar Gaussian aperture cell functions while the log-polar use Cartesian Gaussian aperture cell functions.}
 	\label{fig:gridType}
+	\vspace{5mm}
+		\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=0.5\textwidth]{img/cellWindow_legend.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.40\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{img/cellWindow.pdf}
+		\caption{Gaussian}
+		\label{fig:cellWindow}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.40\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{img/cellWindowPolar.pdf}
+		\caption{Polar Gaussian}
+		\label{fig:cellWindowPolar}
+	\end{subfigure}
+	\caption{The two types of Gaussian cell aperture functions plotted in 3-D. The black curves are placed 1 standard deviation $\sigma$ from the cell centers. The yellow curves are placed $3 \sigma$ from the cell centers and confine the regions used to calculate the cell histograms.}
+	\label{fig:gridWindow}
 \end{figure}
 %
 \begin{figure}[tb]

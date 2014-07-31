@@ -26,31 +26,39 @@ for s = setNum
     end
 end
 
+names = {'Go','Si','GoSi','Sift'};
+data = {dtu.PR{1},dtu.PR{2},dtu.PR{3},sift.PR(:,1)};
+%data = {dtu.ROC{1},dtu.ROC{2},dtu.ROC{3},sift.ROC(:,1)};
+combinations = [1 4;2 4;3 4]';
+combinations = [3 4]';
+exportFigures = false;
+
 %% Stats
 
+for i = combinations
 % Create a nicely formatted cell of confidence intervals
 ci = cell(1,numel(pathTypes));
 for p = pathTypes
     % Retrieve results for path from result matrix
     pIdx = idx2spil(:,2) == p;
-    prGo = reshape(dtu.PR{1}(pIdx),[numel(liNum{p}) numel(imNum{p}) numel(setNum)]);
-    prSift = reshape(sift.PR(pIdx,1),[numel(liNum{p}) numel(imNum{p}) numel(setNum)]);
+    prData1 = reshape(data{combinations(1)}(pIdx),[numel(liNum{p}) numel(imNum{p}) numel(setNum)]);
+    prData2 = reshape(data{combinations(2)}(pIdx),[numel(liNum{p}) numel(imNum{p}) numel(setNum)]);
     
     % Compute means based on number of lightings per image
     if numel(liNum{p}) > 1
         % Light path
-        prGo = reshape(prGo,numel(liNum{p}),[]);
-        prSift = reshape(prSift,numel(liNum{p}),[]);
+        prData1 = reshape(prData1,numel(liNum{p}),[]);
+        prData2 = reshape(prData2,numel(liNum{p}),[]);
     else
         % Viewpoint path (arc/linear)
-        prGo = reshape(prGo,numel(imNum{p}),[]);
-        prSift = reshape(prSift,numel(imNum{p}),[]);
+        prData1 = reshape(prData1,numel(imNum{p}),[]);
+        prData2 = reshape(prData2,numel(imNum{p}),[]);
     end
     
     % Compute confidence intervals
-    ci{p} = zeros(size(prGo,1),2);
-    for i = 1:size(prGo,1)
-        [h,~,ci{p}(i,:)] = ttest(prGo(i,:),prSift(i,:));
+    ci{p} = zeros(size(prData1,1),2);
+    for i = 1:size(prData1,1)
+        [h,~,ci{p}(i,:)] = ttest(prData1(i,:),prData2(i,:));
     end
 end
 
@@ -86,7 +94,10 @@ for k = pathTypes % Generate figure for each image path
     end
     grid on;
     box on;
-    export_fig('-r300',['../report/img/dtuResultsStats_' num2str(k) '.pdf']);
+    if exportFigures
+        export_fig('-r300',['../report/img/dtuResultsStats' names{combinations(1)} '_' names{combinations(2)} '_' num2str(k) '.pdf']);
+    end
+end
 end
 
 % disp('GO+SI vs SIFT:')
