@@ -421,14 +421,14 @@ Now that we have computed optimal parameters on the training data, we can evalua
 %
 \begin{table}[tb]
 \centering
-\begin{tabular}{ l c c c }
+\begin{tabular}{ l c c c c }
 \toprule
-Descriptor & PR AUC & ROC AUC & Recall at $10^{-4}$ FPR \\ \midrule
-GO+SI & $0.9937$ & $0.999980$ & $0.982$ \\ 
-GO & $0.9911$ & $0.999978$ & $0.982$ \\ 
-Compact GO & $0.9874$ & $0.999962$ & $0.965$ \\ 
-SI & $0.9668$ & $0.999803$ & $0.920$ \\ 
-HOG & $0.9210$ & $0.998721$ & $0.854$ \\ 
+Descriptor & Dimensions & PR AUC & ROC AUC & Recall at $10^{-4}$ FPR \\ \midrule
+GO+SI & $17784$ & $0.9937$ & $0.999980$ & $0.982$ \\ 
+GO & $11115$ & $0.9911$ & $0.999978$ & $0.982$ \\ 
+Compact GO & $4185$ & $0.9874$ & $0.999962$ & $0.965$ \\ 
+SI & $6669$ & $0.9668$ & $0.999803$ & $0.920$ \\ 
+HOG & $4743$ & $0.9210$ & $0.998721$ & $0.854$ \\ 
 \bottomrule
 \end{tabular}
 \caption{Results}
@@ -448,7 +448,7 @@ HOG & $0.9210$ & $0.998721$ & $0.854$ \\
 		\caption{PR-curve}
 		\label{fig:inriaTestResultsPR}
 	\end{subfigure}}
-	\caption{INRIA test results for the following descriptors (dimensions in parenthesis): GO (11115), SI (6669), GO+SI (17784), Compact GO (4185), and HOG (4743).}
+	\caption{INRIA test results.}
 	\label{fig:inriaTestResults}
 \end{figure}
 %

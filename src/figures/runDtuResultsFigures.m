@@ -73,3 +73,11 @@ for p = pathTypes
 end
 
 displayDtuReportResults(plotROCAUC,plotPRAUC,pathTypes,'test',plotArgs,legends);
+
+%% Results table
+fid = fopen('table.txt','w');
+dims = {'300/350','200','500/550','128'};
+for i = 1:size(matchPRAUC,2)
+    s = [legends{i} ' & $' num2str(dims{i}) '$ & $' sprintf('%.3f',mean(matchPRAUC(:,i))) '$ & $' sprintf('%.3f',mean(matchROCAUC(:,i))) '$ \\\\ \n'];
+    fprintf(fid,s);
+end

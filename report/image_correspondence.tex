@@ -458,6 +458,8 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 \label{tbl:dtuLayoutParametersSi}
 \end{table}
 %
+We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data. It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces mean PR AUC from $0.781$ to $0.779$. Doubling the image resolution improves the AUC to $0.790$. Computing the descriptor on opponent colour channels improves the AUC to $0.795$.
+%
 \section{Results}
 %
 Having found the optimal parameters for each of the 6 splits in the previous section, we are now able to compute test results for each split and report the performance of our descriptors. \Cref{fig:dtuResultsPR,fig:dtuResultsROC} show the mean PR and ROC AUC test results for the DTU dataset respectively. For both these measures the GO (red), SI (green), Go+SI (blue) and SIFT (dashed grey) results are shown. In \Cref{sec:performance_measures} we wrote that we gave the PR measure more importance than ROC. Furthermore as noted in \Cref{sec:binaryClassificationMeasures}, an algorithm which optimizes PR AUC does not necessarily optimize ROC AUC. This is likely the reason why our performance compared to the SIFT descriptor is lower for ROC AUC than PR AUC. The following comparison of performance between the descriptors is therefore based on the PR AUC figures.
@@ -475,6 +477,22 @@ Performing Welch's $t$-tests between other combinations of the GO, SI, GO+SI, an
 GO+SI: 2+2
 GO: 1+2
 SI: 0+1
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ l c c c }
+\toprule
+Descriptor & Dimensions & PR AUC & ROC AUC \\ \midrule
+GO & $300/350$ & $0.839$ & $0.884$ \\ 
+SI & $200$ & $0.816$ & $0.878$ \\ 
+GO+SI & $500/550$ & $0.841$ & $0.885$ \\ 
+SIFT & $128$ & $0.825$ & $0.883$ \\ 
+\bottomrule
+\end{tabular}
+\caption{Overall results. Note that GO has a variable number of dimensions because different bin counts were found optimal across the cross-validation splits.}
+\label{tbl:dtuOverallResults}
+\end{table}
+%
 \begin{figure}[tb]
 	\centerline{
 		\includegraphics[width=1.2\textwidth]{img/dtuResults_legend_cropped.pdf}

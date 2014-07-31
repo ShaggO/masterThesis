@@ -19,8 +19,8 @@ for i = 1:numel(names)
     logger(1).values(end) = [];
     logger(2).values(end) = [];
 
-    plotLoggerResults(logger(8),'\alpha',[name '_cellSigma'],{},false,yRanges{i},height)
-    plotLoggerResults(logger(betas(i)),'\beta',[name '_binSigma'],{},false,yRanges{i},height)
+%     plotLoggerResults(logger(8),'\alpha',[name '_cellSigma'],{},false,yRanges{i},height)
+%     plotLoggerResults(logger(betas(i)),'\beta',[name '_binSigma'],{},false,yRanges{i},height)
     plotLoggerResults(logger(3),'n',[name '_binCount'],{},false,yRanges{i},height)
     plotLoggerResults(logger(3),'n',[name '_binCount'],{},true,yRangeDims{i},heightDims)
     plotLoggerResults(logger(4),'\eta',[name '_normSigma'],{},false,yRanges{i},height)

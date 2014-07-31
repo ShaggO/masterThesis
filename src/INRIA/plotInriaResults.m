@@ -82,8 +82,9 @@ export_fig('-r300','../report/img/inriaTestResultsLegend.pdf');
 
 %% Table
 fid = fopen('table.txt','w');
+dims = {'11115','6669','17784','4185','4743'};
 for i = order
-    s = [labels{i} ' & $' sprintf('%.4f',PRAUC(i)) '$ & $' sprintf('%.6f',ROCAUC(i)) '$ & $' sprintf('%.3f',recall(i)) '$ \\\\ \n'];
+    s = [labels{i} ' & $' num2str(dims{i}) '$ & $' sprintf('%.4f',PRAUC(i)) '$ & $' sprintf('%.6f',ROCAUC(i)) '$ & $' sprintf('%.3f',recall(i)) '$ \\\\ \n'];
     fprintf(fid,s);
 end
 
