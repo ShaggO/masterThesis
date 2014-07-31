@@ -1,6 +1,6 @@
 clc, clear, close all
 
-names = {'GoFinal','SiFinal','GoSiFinal','GoChosenSmall','HogFinal'};
+names = {'GoSiFinal','GoFinal','GoChosenSmall','SiFinal','HogFinal'};
 for i = 1:numel(names)
     load(['results/inriaTestSvm' names{i}])
     

@@ -1,4 +1,4 @@
-clear all;
+clc, clear all;
 
 %% Load Go and Si splits
 splits = 6;

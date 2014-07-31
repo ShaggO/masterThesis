@@ -276,15 +276,15 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersGo_binCount}
 	\end{subfigure}}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParametersGo_cellSigma.pdf}
-		\caption{Cell scale $\alpha$ (triangle kernel)}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_cellSigmaAlt.pdf}
+		\caption{Cell scale $\alpha$}
 		\label{fig:inriaParametersGo_cellSigma}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParametersGo_binSigma.pdf}
-		\caption{Bin scale $\beta$ (box kernel)}
+		\includegraphics[width=\textwidth]{img/inriaParametersGo_binSigmaAlt.pdf}
+		\caption{Bin scale $\beta$}
 		\label{fig:inriaParametersGo_binSigma}
 	\end{subfigure}}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
@@ -301,7 +301,7 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersGo_logC}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for GO.}
+	\caption{Parameter study results for GO. We plot the cross-validation PR AUC for various parameter values, and mark the optimal values with a cross.}
 	\label{fig:inriaParametersGoAuc}
 	\vspace{1cm}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
@@ -317,22 +317,8 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersGo_binCountDims}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for GO.}
+	\caption{Dimensionality of our GO descriptor for various parameter values.}
 	\label{fig:inriaParametersGoDims}
-\end{figure}
-%
-\begin{figure}[tb]
-	\centerline{\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParametersGo_cellSigmaAlt.pdf}
-		\caption{Cell scale $\alpha$ (box kernel)}
-		\label{fig:inriaParametersGo_cellSigmaAlt}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParametersGo_binSigmaAlt.pdf}
-		\caption{Bin scale $\beta$ (box kernel)}
-		\label{fig:inriaParametersGo_binSigmaAlt}
-	\end{subfigure}}
-	\caption{Alternative choices of cell and bin filters for GO.}
 \end{figure}
 %
 \begin{figure}[p]
@@ -349,14 +335,14 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersSi_binCount}
 	\end{subfigure}}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParametersSi_cellSigma.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersSi_cellSigmaAlt.pdf}
 		\caption{Cell scale $\alpha$}
 		\label{fig:inriaParametersSi_cellSigma}
 		\vspace{2mm}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.593\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{img/inriaParametersSi_binSigma.pdf}
+		\includegraphics[width=\textwidth]{img/inriaParametersSi_binSigmaAlt.pdf}
 		\caption{Bin scale $\beta$}
 		\label{fig:inriaParametersSi_binSigma}
 	\end{subfigure}}
@@ -374,7 +360,7 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersSi_logC}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for SI.}
+	\caption{Parameter study results for SI. We plot the cross-validation PR AUC for various parameter values, and mark the optimal values with a cross.}
 	\label{fig:inriaParametersSiAuc}
 	\vspace{1cm}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
@@ -390,24 +376,9 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersSi_binCountDims}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for SI.}
+	\caption{Dimensionality of our SI descriptor for various parameter values.}
 	\label{fig:inriaParametersSiDims}
 \end{figure}
-%
-\begin{figure}[tb]
-	\centerline{\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParametersSi_cellSigmaAlt.pdf}
-		\caption{Cell scale $\alpha$}
-		\label{fig:inriaParametersSi_cellSigmaAlt}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.593\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaParametersSi_binSigmaAlt.pdf}
-		\caption{Bin scale $\beta$}
-		\label{fig:inriaParametersSi_binSigmaAlt}
-	\end{subfigure}}
-	\caption{Alternative choices of cell and bin filters for SI.}
-\end{figure}
-
 
 \begin{table}[tb]
 \centering
@@ -483,8 +454,22 @@ We follow the same setup as the image correspondence parameter study.
 Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
 
 \Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
-
-\todo{Table of PR AUC, ROC AUC, recall at $10^{-4}$ FPR}
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ l c c c }
+\toprule
+Descriptor & PR AUC & ROC AUC & Recall at $10^{-4}$ FPR \\ \midrule
+GO+SI & $0.9937$ & $0.999980$ & $0.982$ \\ 
+GO & $0.9911$ & $0.999978$ & $0.982$ \\ 
+Compact GO & $0.9874$ & $0.999962$ & $0.965$ \\ 
+SI & $0.9668$ & $0.999803$ & $0.920$ \\ 
+HOG & $0.9210$ & $0.998721$ & $0.854$ \\ 
+\bottomrule
+\end{tabular}
+\caption{Results}
+\label{tbl:inriaResults}
+\end{table}
 %
 \begin{figure}[tb]
 \centering
@@ -506,24 +491,24 @@ Now that we have computed optimal parameters on the training data, we can evalua
 \begin{figure}
 	\centering
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaHistogramGoFinal.pdf}
-		\caption{GO}
-		\label{fig:inriaHistogramGoFinal}
-	\end{subfigure}
-	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaHistogramSiFinal.pdf}
-		\caption{SI}
-		\label{fig:inriaHistogramSiFinal}
-	\end{subfigure}
-	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaHistogramGoSiFinal.pdf}
 		\caption{GO+SI}
 		\label{fig:inriaHistogramGoSiFinal}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramGoFinal.pdf}
+		\caption{GO}
+		\label{fig:inriaHistogramGoFinal}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaHistogramGoChosenSmall.pdf}
 		\caption{Compact GO}
 		\label{fig:inriaHistogramGoChosenSmall}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramSiFinal.pdf}
+		\caption{SI}
+		\label{fig:inriaHistogramSiFinal}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaHistogramHog.pdf}
