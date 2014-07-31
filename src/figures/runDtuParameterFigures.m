@@ -62,6 +62,3 @@ for k = 1:numel(names)
         fprintf(fid,s);
     end
 end
-
-% fid = fopen('table.txt','w');
-% fprintf(fid,'');
