@@ -406,9 +406,18 @@ Note that PR-curves are used when the positive class is the main class of intere
 
 The choice between using the ROC- or PR-curves and their AUCs are discussed in the individual application sections \Cref{sec:od,sec:ic}.
 %
-\section{Paired $t$-test}
+\section{Welch's $t$-test}
+\label{sec:welchsTtest}
 
 \todo{Write short section about paired $t$-tests}
+
+http://en.wikipedia.org/wiki/Student's_t-test#Paired_samples
+
+Welch's $t$-test (unequal variance):
+\begin{align*}
+	t = \frac{\bar{X_1} - \bar{X_2}}{\sqrt{\frac{s^2_1}}{n_1} - \frac{s^2_2}}{n_2}}}
+\end{align*}
+where $\bar{X_1}$ and $\bar{X_2}$ are the means of the samples $X_1$ and $X_2$, $s^2_1$ and $s^2_2$ are the unbiased estimated variances of the samples, and $n_1$ and $n_2$ are the number of samples in each group.
 
 \section{Interest point detectors}
 \label{sec:interestPointDetectors}

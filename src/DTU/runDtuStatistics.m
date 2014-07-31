@@ -58,7 +58,7 @@ for p = pathTypes
     % Compute confidence intervals
     ci{p} = zeros(size(prData1,1),2);
     for i = 1:size(prData1,1)
-        [h,~,ci{p}(i,:)] = ttest(prData1(i,:),prData2(i,:));
+        [h,~,ci{p}(i,:)] = ttest2(prData1(i,:),prData2(i,:),'vartype','unequal');
     end
 end
 
