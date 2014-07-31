@@ -490,20 +490,15 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 %
 Having found the optimal parameters for each of the 6 splits in the previous section, we are now able to compute test results for each split and report the performance of our descriptors. \Cref{fig:dtuResultsPR,fig:dtuResultsROC} show the mean PR and ROC AUC test results for the DTU dataset respectively. For both these measures the GO (red), SI (green), Go+SI (blue) and SIFT (dashed grey) results are shown. In \Cref{sec:performance_measures} we wrote that we gave the PR measure more importance than ROC. Furthermore as noted in \Cref{sec:binaryClassificationMeasures}, an algorithm which optimizes PR AUC does not necessarily optimize ROC AUC. This is likely the reason why our performance compared to the SIFT descriptor is lower for ROC AUC than PR AUC. The following comparison of performance between the descriptors is therefore based on the PR AUC figures.
 
+The first thing we notice when looking at all the graphs in \Cref{fig:dtuResultsPR} is, that our GO+SI descriptor is marginally better than GO on light variations, but they have identical performance on the rest of the variations. Furthermore we notice that our SI descriptor is worse than GO and GO+SI.
 
+When looking at the three arc graphs (\Cref{fig:dtuResultsPRarc1,fig:dtuResultsPRarc2,fig:dtuResultsPRarc3}), we see that GO and GO+SI performance drops less than SIFT when the camera is moved towards the outermost positions. The advantage over SIFT is however lower for arc 2 and 3 than arc 1. This is likely caused by a correlation with the performance over scaling variations as shown in \Cref{fig:dtuResultPRlinear}, where SIFT performs better than any of our descriptors.
 
-Notes: PR-curves better than the corresponding ROC-curves. Use PR curves for the discussion below:
-Linear path: Generally worse than SIFT
-Arcs: better at higher perspective distortion degrees. Effect correlated with distance results.
-Light paths: Generally better than SIFT.
+For light variations (\Cref{fig:dtuResultsPRxAxis,fig:dtuResultsPRzAxis}) our GO and GO+SI descriptors are better than SIFT.
 
-Statistics 95 confidence interval: Only significantly better than SIFT on the outermost $x$-axis light positions. Same for GO and SIFT.
-GO, GO+SI significantly better than SI.
-SIFT not significantly better than any.
+Having inspected the graphs for mean PR AUCs, we are now interested in knowing whether the descriptors are statistically significantly different. We therefore perform a paired $t$-test as described in \Cref{sec:pairedTtest} on each of the path positions. The resulting 95\% confidence interval graphs on the difference between our GO+SI descriptor and SIFT are show in \Cref{fig:dtuResultsStats}. As we see from the graphs, the confidence intervals cross 0 for all positions apart from the outermost positions of the $x$-light path. In other words we cannot conclude that GO+SI and SIFT are significantly different except on the three outermost positions of the $x$-light path (one on the left and two on the right side).
 
-SI always worse than GO and often worse than SIFT.
-
-GO+SI marginally better than GO on light variations but almost identical to GO otherwise.
+Performing paired $t$-tests between other combinations of the GO, SI, GO+SI, and SIFT descriptors reveal that GO and GO+SI are significantly better than SI, and that we cannot conclude that neither SIFT is significantly better than any of our descriptors nor that GO and GO+SI are significantly different.
 
 \begin{figure}[tb]
 	\centerline{
