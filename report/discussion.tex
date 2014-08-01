@@ -3,6 +3,14 @@
 
 \chapter{Discussion}
 
+- Is it worth adding shape index?
+- Importance of different parameters and design choices, relate these results to other articles
+- Optimal parameters are very different for the two applications, hard to choose a good overall descriptor. Biggest differences: smooth, kernels, norm. scale, final descriptor normalization
+- Considered using multi-scale descriptors as the galaxy descriptor, but it doesn't seem like a good idea
+- Dimensionality of descriptors, worth using compact GO?
+- Running time: we have not focused on running time, optionally run a profiler, where can we save time? (don't use MATLAB)
+- Overall results and comparison of descriptor design with SIFT/HOG. SIFT: not much difference, HOG: we beat them by using a dense descriptor with pixel normalization instead of block normalization
+
 \section{Parameter study}
 
 
@@ -10,7 +18,13 @@
 - Improved pixel normalization:
 	- normalize by the area which we integrated over to avoid boundary conditions
 	- Some way of removing noise from dark areas
-
+- PCA to reduce dimensionality of GO+SI?
+- Two-way matching could improve matching results, but not important for comparing descriptors
+- Object detection could be evaluated on harder datasets, as we have almost perfect classification on INRIA
+- Higher level descriptors using our descriptor for better object classification
+- Higher (than 2) order differential information
+- Computing histograms at original scales, causing infeasible computation time. Maybe possible to limit the size and get good results?
+- Distribution of shape index is not uniform, maybe changing bin locations could help. Reference "Shape index 2009"
 
 \section{Conclusion}
 

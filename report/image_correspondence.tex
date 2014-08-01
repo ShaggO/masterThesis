@@ -322,7 +322,7 @@ Log polar generally worse than polar.
 \begin{tabular}{ l c c c c c c c}
 \toprule
 {} & \multicolumn{6}{c}{Splits} \\
-Variable & 1 & 2 & 3 & 4 & 5 & 6 & chosen \\ \midrule
+Parameter & 1 & 2 & 3 & 4 & 5 & 6 & chosen \\ \midrule
 Grid type & PC & CPC & PC & PC & PC & PC & \textbf{PC} \\
 Grid size & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & \textbf{$\mathbf{12 \times 2}$} \\
 Grid radius $r$ & $13.5$ & $13.0$ & $13.5$ & $13.5$ & $13.5$ & $13.5$ & $\mathbf{13.5}$ \\
@@ -343,7 +343,7 @@ Norm. scale $\eta$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.8$ & $\mathbf{1.
 \begin{tabular}{ l c c c c c c c}
 \toprule
 {} & \multicolumn{6}{c}{Splits} \\
-Variable & 1 & 2 & 3 & 4 & 5 & 6 & chosen \\ \midrule
+Parameter & 1 & 2 & 3 & 4 & 5 & 6 & chosen \\ \midrule
 Grid type & CPC & CPC & CPC & CPC & CPC & CPC & \textbf{CPC} \\
 Grid size & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & \textbf{$\mathbf{12 \times 2}$} \\
 Grid radius $r$ & $13.5$ & $14.0$ & $13.5$ & $14.0$ & $14.0$ & $14.0$ & $\mathbf{14.0}$ \\
@@ -505,7 +505,7 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 \label{tbl:dtuLayoutParametersSi}
 \end{table}
 %
-We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data. It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces mean PR AUC from $0.781$ to $0.779$. Doubling the image resolution improves the AUC to $0.790$. Computing the descriptor on opponent colour channels improves the AUC to $0.795$.
+We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.781$: It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces the AUC by $0.002$. Doubling the image resolution improves the AUC by $0.009$. Computing the descriptor on opponent colour channels improves the AUC by $0.014$. Omitting pixel normalization reduces the AUC by $0.023$. Omitting the center filter reduces the AUC by $0.002$.
 %
 \section{Results}
 %
