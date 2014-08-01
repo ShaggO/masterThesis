@@ -304,7 +304,7 @@ Our actual parameter optimization is problematic because we need to optimize ten
 The risk of this strategy is getting stuck in local optima. To avoid this, recall that we have defined the parameters to reduce correlation: e.g. when bin count $n$ is increased, the width of the bins is automatically reduced to compensate. We also select certain correlated parameters to optimize together: grid type with grid size, as well as cell and bin kernels with their respective scales. Furthermore we optimize continuous parameters in two steps: first a coarse search and then a finer search around the best result.
 
 The optimal parameters of our parameter study for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively.
-
+From these results we see that most of the parameters are quite stable across the splits.
 
 ------------- NOTES ---------------
 Generally: Parameters quite stable across splits. GO center scale $\rho$ a bit unstable.
@@ -322,7 +322,7 @@ Log polar generally worse than polar.
 12x2 many angular cells compared to GLOH and DAISY
 %
 \begin{table}[p]
-\centering
+\centerline{
 \begin{tabular}{ l c c c c c c c}
 \toprule
 {} & \multicolumn{6}{c}{Splits} \\
@@ -338,12 +338,13 @@ Bin kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \t
 Bin scale $\beta$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $\mathbf{1.3}$ \\
 Norm. scale $\eta$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.8$ & $\mathbf{1.6}$ \\
 \bottomrule
-\end{tabular}
-\caption{Parameter study optimal parameters from 6-fold cross validation using gradient orientation as bin value and gradient magnitude as magnitude type}
+\end{tabular}}
+\caption{Parameter study optimal parameters from 6-fold cross validation of GO}
 \label{fig:ICparamsGo}
 %
 \vspace{1cm}
 %
+\centerline{
 \begin{tabular}{ l c c c c c c c}
 \toprule
 {} & \multicolumn{6}{c}{Splits} \\
@@ -359,9 +360,45 @@ Bin kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \t
 Bin scale $\beta$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $\mathbf{2.0}$ \\
 Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.6}$ \\
 \bottomrule
-\end{tabular}
-\caption{Parameter study optimal parameters from 6-fold cross validation using gradient orientation as bin value and gradient magnitude as magnitude type}
+\end{tabular}}
+\caption{Parameter study optimal parameters from 6-fold cross validation of SI}
 \label{fig:ICparamsSi}
+\end{table}
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ c c c c c c c }
+\toprule
+Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
+$6 \times 2$ & $0.756$ & $0.756$ & $0.759$ & $0.759$ & $0.700$ & $0.732$ \\ 
+$8 \times 2$ & $0.767$ & $0.767$ & $0.770$ & $0.770$ & $0.759$ & $0.763$ \\ 
+$10 \times 2$ & $0.772$ & $0.772$ & $0.776$ & $0.776$ & $0.769$ & $0.769$ \\ 
+$12 \times 2$ & $0.775$ & $0.775$ & $\mathbf{0.779}$ & $0.779$ & $0.770$ & $0.767$ \\ 
+$6 \times 3$ & $0.763$ & $0.764$ & $0.770$ & $0.770$ & - & - \\ 
+$8 \times 3$ & $0.771$ & $0.771$ & $0.777$ & $0.777$ & - & - \\ 
+$6 \times 4$ & $0.758$ & $0.759$ & $0.767$ & $0.767$ & - & - \\ 
+\bottomrule
+\end{tabular}
+\caption{Grid layout parameter study for GO}
+\label{tbl:dtuLayoutParametersGo}
+\end{table}
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ c c c c c c c }
+\toprule
+Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
+$6 \times 2$ & $0.684$ & $0.685$ & $0.691$ & $0.692$ & $0.633$ & $0.664$ \\ 
+$8 \times 2$ & $0.712$ & $0.713$ & $0.720$ & $0.721$ & $0.707$ & $0.712$ \\ 
+$10 \times 2$ & $0.729$ & $0.731$ & $0.739$ & $0.739$ & $0.726$ & $0.727$ \\ 
+$12 \times 2$ & $0.738$ & $0.739$ & $0.748$ & $\mathbf{0.749}$ & $0.732$ & $0.729$ \\ 
+$6 \times 3$ & $0.711$ & $0.713$ & $0.717$ & $0.718$ & - & - \\ 
+$8 \times 3$ & $0.731$ & $0.733$ & $0.736$ & $0.738$ & - & - \\ 
+$6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
+\bottomrule
+\end{tabular}
+\caption{Grid layout parameter study for SI}
+\label{tbl:dtuLayoutParametersSi}
 \end{table}
 %
 \begin{figure}[p]
@@ -451,7 +488,7 @@ Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.
 		\vspace{2mm}
 	\end{subfigure}}
 	\caption{Parameter study results for SI.}
-	\label{fig:dtuParametersGoAuc}
+	\label{fig:dtuParametersSiAuc}
 	\vspace{1cm}
 	\includegraphics[width=0.593\textwidth]{img/dtuParametersSi_binCountDims.pdf}
 	\caption{Dimensionality of SI based on bin count $n$}
@@ -472,42 +509,6 @@ Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.
 %	\caption{Alternative choices of cell and bin filters for GO.}
 %	\label{fig:dtuParametersGoAlt}
 %\end{figure}
-%
-\begin{table}[tb]
-\centering
-\begin{tabular}{ c c c c c c c }
-\toprule
-Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
-$6 \times 2$ & $0.756$ & $0.756$ & $0.759$ & $0.759$ & $0.700$ & $0.732$ \\ 
-$8 \times 2$ & $0.767$ & $0.767$ & $0.770$ & $0.770$ & $0.759$ & $0.763$ \\ 
-$10 \times 2$ & $0.772$ & $0.772$ & $0.776$ & $0.776$ & $0.769$ & $0.769$ \\ 
-$12 \times 2$ & $0.775$ & $0.775$ & $\mathbf{0.779}$ & $0.779$ & $0.770$ & $0.767$ \\ 
-$6 \times 3$ & $0.763$ & $0.764$ & $0.770$ & $0.770$ & - & - \\ 
-$8 \times 3$ & $0.771$ & $0.771$ & $0.777$ & $0.777$ & - & - \\ 
-$6 \times 4$ & $0.758$ & $0.759$ & $0.767$ & $0.767$ & - & - \\ 
-\bottomrule
-\end{tabular}
-\caption{Grid layout parameter study for GO}
-\label{tbl:dtuLayoutParametersGo}
-\end{table}
-%
-\begin{table}[tb]
-\centering
-\begin{tabular}{ c c c c c c c }
-\toprule
-Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
-$6 \times 2$ & $0.684$ & $0.685$ & $0.691$ & $0.692$ & $0.633$ & $0.664$ \\ 
-$8 \times 2$ & $0.712$ & $0.713$ & $0.720$ & $0.721$ & $0.707$ & $0.712$ \\ 
-$10 \times 2$ & $0.729$ & $0.731$ & $0.739$ & $0.739$ & $0.726$ & $0.727$ \\ 
-$12 \times 2$ & $0.738$ & $0.739$ & $0.748$ & $\mathbf{0.749}$ & $0.732$ & $0.729$ \\ 
-$6 \times 3$ & $0.711$ & $0.713$ & $0.717$ & $0.718$ & - & - \\ 
-$8 \times 3$ & $0.731$ & $0.733$ & $0.736$ & $0.738$ & - & - \\ 
-$6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
-\bottomrule
-\end{tabular}
-\caption{Grid layout parameter study for SI}
-\label{tbl:dtuLayoutParametersSi}
-\end{table}
 %
 We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.781$: It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces the AUC by $0.002$. Doubling the image resolution improves the AUC by $0.009$. Computing the descriptor on opponent colour channels improves the AUC by $0.014$. Omitting pixel normalization reduces the AUC by $0.023$. Omitting the center filter reduces the AUC by $0.002$.
 %
