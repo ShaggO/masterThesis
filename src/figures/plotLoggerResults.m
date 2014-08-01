@@ -41,7 +41,7 @@ end
 
 for j = 1:size(logger,2)
     for i = 1:size(logger,1)
-        [v{i},idxv] = sort(logger(i,j).values(:,1)');
+        [v{i},idxv] = sort(logger(i,j).values(1:end-1,1)');
         minv(i) = min(v{i});
         maxv(i) = max(v{i});
         auc{i} = logger(i,j).PRAUC(idxv);

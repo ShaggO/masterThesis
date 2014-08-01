@@ -1,8 +1,8 @@
 clc, clear all, close all
 
-names = {'Go'}; % ,'Si'
-aucRange = [0.7 0.8];
-dimRange = [0 450];
+names = {'Go','Si'}; % ,'Si'
+aucRange = [0.66 0.79;0.66 0.79];
+dimRange = [0 450;0 450];
 height = 3.5;
 heightDims = 3;
 
@@ -23,18 +23,18 @@ for k = 1:numel(names)
     radiusLogger.values = radiusLogger.values(5:end,:);
     radiusLogger.PRAUC = radiusLogger.PRAUC(:,5:end);
     radiusLogger.stdPRAUC = radiusLogger.stdPRAUC(:,5:end);
-    plotLoggerResults(radiusLogger,'r',['dtuParameters' names{k} '_gridRadius'],{},false,aucRange,height)
-    plotLoggerResults(loggerMean(2,:),'\rho',['dtuParameters' names{k} '_centerSigma'],{},false,aucRange,height)
+    plotLoggerResults(radiusLogger,'r',['dtuParameters' names{k} '_gridRadius'],{},false,aucRange(k,:),height)
+    plotLoggerResults(loggerMean(2,:),'\rho',['dtuParameters' names{k} '_centerSigma'],{},false,aucRange(k,:),height)
     alphaLogger = loggerMean(3,:);
     alphaLogger.values = alphaLogger.values(1:end-11,:);
-%     plotLoggerResults(alphaLogger,'\alpha',['dtuParameters' names{k} '_cellSigma'],{},false,aucRange,height)
-%     plotLoggerResults(loggerMean(4,:),'\beta',['dtuParameters' names{k} '_binSigma'],{},false,aucRange,height)
-    plotLoggerResults(loggerMean(5,:),'n',['dtuParameters' names{k} '_binCount'],{},false,aucRange,height)
-    plotLoggerResults(loggerMean(5,:),'n',['dtuParameters' names{k} '_binCount'],{},true,dimRange,heightDims)
-    plotLoggerResults(loggerMean(6,:),'\eta',['dtuParameters' names{k} '_normSigma'],{},false,aucRange,height)
+%     plotLoggerResults(alphaLogger,'\alpha',['dtuParameters' names{k} '_cellSigma'],{},false,aucRange(k,:),height)
+%     plotLoggerResults(loggerMean(4,:),'\beta',['dtuParameters' names{k} '_binSigma'],{},false,aucRange(k,:),height)
+    plotLoggerResults(loggerMean(5,:),'n',['dtuParameters' names{k} '_binCount'],{},false,aucRange(k,:),height)
+    plotLoggerResults(loggerMean(5,:),'n',['dtuParameters' names{k} '_binCount'],{},true,dimRange(k,:),heightDims)
+    plotLoggerResults(loggerMean(6,:),'\eta',['dtuParameters' names{k} '_normSigma'],{},false,aucRange(k,:),height)
 
-    plotLoggerResults(loggerMean([3 7 8]),'\alpha',['dtuParameters' names{k} '_cellSigmaAlt'],{'G','Tri','Box','location','northeast'},false,aucRange,height)
-    plotLoggerResults(loggerMean([4 9 10]),'\beta',['dtuParameters' names{k} '_binSigmaAlt'],{'G','Tri','Box','location','southeast'},false,aucRange,height)
+    plotLoggerResults(loggerMean([3 7 8]),'\alpha',['dtuParameters' names{k} '_cellSigmaAlt'],{'G','Tri','Box','location','northeast'},false,aucRange(k,:),height)
+    plotLoggerResults(loggerMean([4 9 10]),'\beta',['dtuParameters' names{k} '_binSigmaAlt'],{'G','Tri','Box','location','southeast'},false,aucRange(k,:),height)
 
     %% Grid layout table
     params.logger.data = reshape(params.logger.data,[29 6]);
