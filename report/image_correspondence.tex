@@ -182,8 +182,9 @@ In order to be able to classify matches between two images $A$ and $B$ as true o
 	\item \textbf{Epipolar geometry consistency:} Given a point in the first image, the point in the second image should be within a 2.5 pixel orthogonal distance to the epipolar line of the first point as illustrated in \Cref{fig:icEval1GT}.
 	\item \textbf{Surface geometry consistency:} The points need to be 3D reconstructible and they need to be within 3 mm of each other in the surface point cloud as illustrated in \Cref{fig:icEval2GT}.
 \end{itemize}
+The evaluation described in this section has been implemented by \citet{aanaes2010recall}. In this thesis we have used and improved their implementation for our evaluation of descriptor performance.
 
-\todo{Should we refer to \cite{larsen2012in}?}
+\mycomment[MSN]{Should we refer to \cite{larsen2012in}?}
 
 \begin{figure}[tb]
 	\centering
@@ -446,11 +447,11 @@ Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.
 		\label{fig:dtuParametersSi_normSigma}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for GO.}
+	\caption{Parameter study results for SI.}
 	\label{fig:dtuParametersGoAuc}
 	\vspace{1cm}
 	\includegraphics[width=0.593\textwidth]{img/dtuParametersSi_binCountDims.pdf}
-	\caption{Dimensionality of GO based on bin count $n$}
+	\caption{Dimensionality of SI based on bin count $n$}
 	\label{fig:dtuParametersSiDims}
 \end{figure}
 %
@@ -509,17 +510,21 @@ We have also experimented with various other parts of our descriptor that are no
 %
 \section{Results}
 %
-Having found the optimal parameters for each of the 6 splits in the previous section, we are now able to compute test results for each split and report the performance of our descriptors. \Cref{fig:dtuResultsPR,fig:dtuResultsROC} show the mean PR and ROC AUC test results for the DTU dataset respectively. For both these measures the GO (red), SI (green), Go+SI (blue) and SIFT (dashed grey) results are shown. In \Cref{sec:performance_measures} we wrote that we gave the PR measure more importance than ROC. Furthermore as noted in \Cref{sec:binaryClassificationMeasures}, an algorithm which optimizes PR AUC does not necessarily optimize ROC AUC. This is likely the reason why our performance compared to the SIFT descriptor is lower for ROC AUC than PR AUC. The following comparison of performance between the descriptors is therefore based on the PR AUC figures.
+Having found the optimal parameters for each of the 6 splits in the previous section, we are now able to compute test results for each split and report the performance of our descriptors.
+We have chosen to compare our descriptor performance against the SIFT descriptor since \citet{dahl2011finding} found the combination of DoG and SIFT to perform well. We are however using the opponent colour space for our descriptors, and since \citet{dahl2012interest} found Opponent SIFT (see \Cref{sec:SIFT}) to perform well against other SIFT variants, this is the descriptor we will test our performance against.
 
-The first thing we notice when looking at all the graphs in \Cref{fig:dtuResultsPR} is, that our GO+SI descriptor is marginally better than GO on light variations, but they have identical performance on the rest of the variations. Furthermore we notice that our SI descriptor is worse than GO and GO+SI.
+\Cref{fig:dtuResultsPR,fig:dtuResultsROC} show the mean PR and ROC AUC test results for the DTU dataset respectively. For both these measures the GO (red), SI (green), GO+SI (blue) and SIFT (dashed grey) results are shown. Recall from \Cref{sec:binaryClassificationMeasures} that an algorithm which optimizes PR AUC does not necessarily optimize ROC AUC. Despite this fact, the mean ROC AUCs for our descriptors compared to the SIFT ROC AUC are somewhat equal to the corresponding comparisons of mean PR AUCs. SI however has a slight advantage over GO and GO+SI when visually inspecting the mean ROC AUC figures. In \Cref{sec:performance_measures} we wrote that we gave the PR measure more importance than ROC, and hence The following comparison of performance between the descriptors is based on the PR AUC figures.
 
-When looking at the three arc graphs (\Cref{fig:dtuResultsPRarc1,fig:dtuResultsPRarc2,fig:dtuResultsPRarc3}), we see that GO and GO+SI performance drops less than SIFT when the camera is moved towards the outermost positions. The advantage over SIFT is however lower for arc 2 and 3 than arc 1. This is likely caused by a correlation with the performance over scaling variations as shown in \Cref{fig:dtuResultsPRlinear}, where SIFT performs better than any of our descriptors.
+The first thing we notice when looking at all the graphs in \Cref{fig:dtuResultsPR} is, that our GO+SI descriptor is marginally better than GO on arc 1, but they have identical performance on the rest of the variations. Furthermore we notice that our SI descriptor is worse than GO and GO+SI.
 
-For light variations (\Cref{fig:dtuResultsPRxAxis,fig:dtuResultsPRzAxis}) our GO and GO+SI descriptors are better than SIFT.
+When looking at the three arc graphs (\Cref{fig:dtuResultsPRarc1,fig:dtuResultsPRarc2,fig:dtuResultsPRarc3}), we see that GO and GO+SI performance drops less than SIFT when the camera is moved towards the outermost camera positions. The advantage over SIFT is however lower for arc 2 and 3 than arc 1. This difference could be caused by smaller perspective distortions at arc 2 and 3 since the distance to the camera is increased and the angular differences are smaller than for arc 1.
+This hypothesis is likewise supported by the fact that all four descriptors have roughly equal performance over scale variations as shown in \Cref{fig:dtuResultsPRlinear}.
 
-Having inspected the graphs for mean PR AUCs, we are now interested in knowing whether the descriptors are statistically significantly different. We therefore perform Welch's $t$-test as described in \Cref{sec:welchsTtest} on each of the path positions. The resulting 95\% confidence interval graphs on the difference between our GO+SI descriptor and SIFT are show in \Cref{fig:dtuResultsStats}. As we see from the graphs, the confidence intervals cross 0 for all positions apart from the outermost positions of the $x$-light path. In other words we cannot conclude that GO+SI and SIFT are significantly different except on the two outermost positions of each side of the $x$-light path.
+For light variations (\Cref{fig:dtuResultsPRxAxis,fig:dtuResultsPRzAxis}) our descriptors perform better than SIFT.
 
-Performing Welch's $t$-tests between other combinations of the GO, SI, GO+SI, and SIFT descriptors reveal that pairwise none of our descriptors are significantly different. Furthermore we cannot conclude that SIFT is significantly better than any of our descriptors. SI is however significantly better than SIFT on the right-most position of the light $x$-path. The marginal difference in performance between GO and GO+SI on the light paths is confirmed since GO and SIFT only have significantly different performance on 3 of the 4 outermost points of light $x$-path. Since the graphs are both space-consuming and not too informative once we have the above conclusions, we have chosen to omit them. \mycomment[MSN]{Should we include all the combination statistic figures in an appendix?}
+Having inspected the graphs for mean PR AUCs, we are now interested in knowing whether the descriptors are statistically significantly different. We therefore perform Welch's $t$-test as described in \Cref{sec:welchsTtest} on each of the path positions. The resulting 95\% confidence interval graphs on the difference between our GO+SI descriptor and SIFT are show in \Cref{fig:dtuResultsStats}. As we see from the graphs, the confidence intervals cross 0 for all positions apart from position 1, 7, 8, and 9 of the $x$-axis light path and position 16 of the $z$-axis light path. In other words we cannot conclude that GO+SI and SIFT are significantly different except on these outermost positions of the light paths.
+
+Performing Welch's $t$-tests between other combinations of the GO, SI, GO+SI, and SIFT descriptors reveal that pairwise none of our descriptors are significantly different apart from GO, which is significantly better than SIFT on position 6 to 9 of the $x$-axis light path and position 16 of the $z$-axis light path. Furthermore we cannot conclude that SIFT is significantly better than any of our descriptors. Since the graphs for all these combinations are both space-consuming and not too informative once we have the above conclusions, we have chosen to omit them. \mycomment[MSN]{Should we include all the combination statistic figures in an appendix?}
 %
 \begin{table}[tb]
 \centering

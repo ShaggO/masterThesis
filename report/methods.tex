@@ -441,6 +441,7 @@ In practice we need to create $s+3$ Gaussian images of the same size for each oc
 To prevent extracting too many interest points, we can select only the most significant points by placing a threshold on the magnitude of $\Gamma$.
 
 An example of DoG images is shown in \Cref{fig:dogExample}, which is based on the scale-space images from \Cref{fig:scaleSpaceExample}. We see that the two different scales locate dark and light blobs of different sizes.
+\todo{Mention that we use vl feat. implementation}
 %
 \begin{figure}[p]
 	\centering
@@ -490,7 +491,7 @@ $4 \times 4$ cells each consisting of $4 \times 4$ pixels, with 8 histogram
 bins for each cell. This results in a dimensionality of $4 \times 4 \times 8 =
 128$.
 
-NOTE: \Citet{van2010evaluating} Opponent SIFT improves performance.
+NOTE: \Citet{van2010evaluating} Opponent SIFT improves performance, we use the vl feat. implementation
 
 
 \subsection{HOG}
@@ -519,7 +520,7 @@ Furthermore parts models using the HOG descriptor have been developed
 \cite{felzenszwalb2008discriminatively} in order to improve upon the accuracy
 of object detection.
 
-Notes: Smoothing removed since small variations are needed.
+Notes: Smoothing removed since small variations are needed, we use the vl feat. implementation
 
 
 %
