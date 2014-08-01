@@ -1,13 +1,15 @@
 clc, clear all
 
-nHard = [0 1 2 5 10 20 35 50 75 100] * 10^3;
-nHard = [{[]}, mat2cell(nHard,1,ones(1,numel(nHard)))];
+nHard = {[],[0]};
 windowSize = [134 70];
 
-name = {'GoSi','Go','Si','Hog'};
+name = {'GoSi','Go','GoChosenSmall','Si','Hog'};
 
 svmPath = cell(numel(nHard),numel(name));
 PRAUC = zeros(numel(nHard),numel(name));
+ROCAUC = PRAUC;
+recall = PRAUC;
+
 nHardAuto = zeros(1,numel(name));
 for j = 1:numel(nHard)
     for i = 1:numel(name)
@@ -20,10 +22,12 @@ for j = 1:numel(nHard)
         svmPath{j,i} = inriaTestSvm(params.method,params.svmArgs,true,nHard{j});
         test = load(svmPath{j,i});
         PRAUC(j,i) = test.PRAUC;
+        ROCAUC(j,i) = test.ROCAUC;
+        recall(j,i) = test.ROC(find(test.ROC(:,2) >= 10^-4,1),2);
         if isempty(nHard{j})
             nHardAuto(i) = test.nNegTrainHard;
         end
     end
 end
 
-save('results/inriaConstantHard','svmPath','PRAUC','name','nHardAuto')
+save('results/inriaHardNegatives','svmPath','name','PRAUC','ROCAUC','recall','nHardAuto')

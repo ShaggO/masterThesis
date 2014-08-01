@@ -27,9 +27,9 @@ else
 end
 
 svmPath = [desDir '/svm_test_' svmArgs2string(svmArgs) sHard '_' num2str(data.nWindows) '_' num2str(data.seed) '.mat'];
-svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC','svm','idxNeg','Xneg'};
+svmVars = {'probPos','probNeg','ROC','PR','ROCAUC','PRAUC','svm','idxNeg','Xneg','nNegTrainHard'};
 [loaded,svmLoad] = loadIfExist(svmPath,'file');
-if loaded && all(ismember(svmVars,fieldnames(svmLoad)))
+if loaded
     disp('Loaded svm file.')
 else
     diaryFile = [desDir '/inriaTestSvm_' strrep(datestr(now),':','-') '.out'];
@@ -51,7 +51,7 @@ else
     diary off
 
     %% Add hard negative training data
-    if ~isempty(nHard) && nHard > 0
+    if isempty(nHard) || nHard > 0
         DnegTrainHard = cell(nNegTrainFull,1);
         totalNegTrain = zeros(nNegTrainFull,1);
         probNeg = cell(nNegTrainFull,1);
@@ -107,6 +107,7 @@ else
         diary(diaryFile)
         disp([timestamp() ' Classified negative training data: ' num2str(size(DnegTrainHard,1)) ' hard negatives out of ' num2str(totalNegTrain) '.'])
         diary off
+        nNegTrainHard = size(DnegTrainHard,1);
 
         %% Retraining with hard negatives
         ratio = (numel(LnegTrainCutouts) + numel(LnegTrainHard)) / numel(LposTrain);
@@ -115,6 +116,8 @@ else
         diary(diaryFile)
         disp([timestamp() ' Retraining done.'])
         diary off
+    else
+        nNegTrainHard = 0;
     end
 
     %% Test on positive test data
