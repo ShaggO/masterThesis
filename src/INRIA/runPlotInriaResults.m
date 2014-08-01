@@ -40,7 +40,7 @@ svmPath = {};
 svmPath{end+1} = 'results/inriaTestSvmGoFinal';
 svmPath{end+1} = 'results/inriaTestSvmSiFinal';
 svmPath{end+1} = 'results/inriaTestSvmGoSiFinal';
-svmPath{end+1} = 'results/inriaTestSvmGoChosenSmall';
+svmPath{end+1} = 'results/inriaTestSvmGoChosenSmallFinal';
 svmPath{end+1} = 'results/inriaTestSvmHogFinal';
 
 %svmPath{end+1} = 'results/inriaTestSvmGoChosenBig';
