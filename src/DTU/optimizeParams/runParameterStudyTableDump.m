@@ -41,18 +41,29 @@ tables{1}.centerSigma(end) = 1.6;
 %tables{1}.normSigma(end) = 1.6;
 %tables{1}.binCount(end) = 14;
 
-tables{1}
-tables{2}
+% cols = {'gridType','gridSize','gridRadius','centerSigma','cellFilter','cellSigma','binCount','binFilter','binSigma','normSigma'};
+% writetable(tables{1}(:,cols),'results/DTUparamsGo.csv','Delimiter',',','WriteRowNames',true);
+% writetable(tables{2}(:,cols),'results/DTUparamsSi.csv','Delimiter',',','WriteRowNames',true);
+% 
+% for name = names
+%     colNames = 'Row,Grid type,Grid size,Grid radius $r$,Center scale $\ESCAPE\rho$,Cell kernel,Cell scale $\ESCAPE\alpha$,Bin count $n$,Bin kernel,Bin scale $\ESCAPE\beta$,Norm. scale $\ESCAPE\eta$';
+%     csvContent = fileread(['results/DTUparams' name{:} '.csv']);
+%     [~,csvData] = strtok(csvContent,char(10));
+%     csvFile = fopen(['results/DTUparams' name{:} '.csv'],'w');
+%     fprintf(csvFile,'%s',[colNames csvData]);
+%     fclose(csvFile);
+% end
 
-cols = {'gridType','gridSize','gridRadius','centerSigma','cellFilter','cellSigma','binCount','binFilter','binSigma','normSigma'};
-writetable(tables{1}(:,cols),'results/DTUparamsGo.csv','Delimiter',',','WriteRowNames',true);
-writetable(tables{2}(:,cols),'results/DTUparamsSi.csv','Delimiter',',','WriteRowNames',true);
+%% Latex tables
 
-for name = names
-    colNames = 'Row,Grid type,Grid size,Grid radius $r$,Center scale $\ESCAPE\rho$,Cell kernel,Cell scale $\ESCAPE\alpha$,Bin count $n$,Bin kernel,Bin scale $\ESCAPE\beta$,Norm. scale $\ESCAPE\eta$';
-    csvContent = fileread(['results/DTUparams' name{:} '.csv']);
-    [~,csvData] = strtok(csvContent,char(10));
-    csvFile = fopen(['results/DTUparams' name{:} '.csv'],'w');
-    fprintf(csvFile,'%s',[colNames csvData]);
-    fclose(csvFile);
-end
+T = tables{1}(:,[2 3 4 6 7 8 11 1 10 9])
+varNames = {'Grid type','Grid size','Grid radius $r$','Center scale $\rho$','Cell kernel','Cell scale $\alpha$','Bin count $n$','Bin kernel','Bin scale $\beta$','Norm. scale $\eta$'};
+precision = [0 0 1 1 0 1 0 0 1 1];
+bold = [zeros(height(T)-1,width(T)); ones(1,width(T))];
+table2latex(T,varNames,precision,bold)
+
+T = tables{2}(:,[2 3 4 6 7 8 11 1 10 9])
+varNames = {'Grid type','Grid size','Grid radius $r$','Center scale $\rho$','Cell kernel','Cell scale $\alpha$','Bin count $n$','Bin kernel','Bin scale $\beta$','Norm. scale $\eta$'};
+precision = [0 0 1 1 0 1 0 0 1 1];
+bold = [zeros(height(T)-1,width(T)); ones(1,width(T))];
+table2latex(T,varNames,precision,bold)

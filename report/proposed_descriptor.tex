@@ -6,7 +6,7 @@
 \begin{document}
 \chapter{Proposed descriptor}
 %
-Given an interest point $\x_0$ at scale $\sigma_0$, we wish to effectively describe the surrounding area. Our proposed descriptor consists of weighted smooth histograms computed for $m$ \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
+Given an interest point $\x_0$ in an image at scale $\sigma_0$, we wish to effectively describe the surrounding area. Our proposed descriptor consists of weighted smooth histograms computed for $m$ \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
 %
 \begin{align}
 \label{eq:proposed_histogram}
@@ -231,7 +231,7 @@ By increasing $\alpha$, the boundary cells will therefore keep their original sc
 \section{Center aperture function}
 \label{sec:centerApertureFunction}
 %
-Similarly to $A_j$, the purpose of the center aperture function $P$ is to weight points closer to the detected interest point higher, since they are of greater importance to the local structure. We define it as
+Similarly to $A_j$, the purpose of the center aperture function $P$ is to weight points closer to the detected interest point higher, since they are of greater importance to the local structure. The function is thus omitted for region descriptors. We define it as
 %
 \begin{align}
 P(\x) = K(\x - \x_0; \rho r \sigma_0)
@@ -275,13 +275,13 @@ To summarize, our descriptor has the following parameters that will be part of o
 \item Grid type
 \item Grid size
 \item Grid radius $r$ 
+\item Center scale $\rho$ (\Cref{sec:centerApertureFunction})
 \end{itemize}
 \item Region specific parameters: (\Cref{sec:cellApertureFunctionRegion})
 \begin{itemize}
 \item Grid type
 \item Cell spacing $r$
 \end{itemize}
-\item Center scale $\rho$ (\Cref{sec:centerApertureFunction})
 \item Bin kernel (\Cref{sec:binningApertureFunction})
 \item Bin scale $\beta$ (\Cref{sec:binningApertureFunction})
 \item Bin count $n$ (\Cref{sec:binningApertureFunction})
@@ -289,7 +289,7 @@ To summarize, our descriptor has the following parameters that will be part of o
 %
 \section{Example} \label{sec:proposedDescriptorExample}
 %
-In order to visualize the construction of our descriptor, we will show an example of the whole process using an interest point detector. The example would however not differ much if we had used a sliding window approach with a region layout instead of an interest point layout. We illustrate both the GO and SI descriptor. At first we extract interest points from an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
+In order to visualize the construction of our descriptor, we will show an example of the whole process using an interest point detector. The example would however not differ much if we had used a sliding window approach with a region layout instead of an interest point layout. We illustrate both the GO and SI descriptor. At first we convert the image to grayscale and extract interest points from an image with a multi-scale DoG detector, as shown in \Cref{fig:cellHistDetector}.
 
 The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} based on the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which causes all features to have the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points that are too close to the edge: if any cell support radius (shown in \Cref{fig:gridWindow}) belonging to a feature spans outside the image border, we discard the feature. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images with their respective features, and which of the features that are discarded.
 

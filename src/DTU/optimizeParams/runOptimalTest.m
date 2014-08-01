@@ -26,11 +26,13 @@ setNums = {[go.setNumTest],[si.setNumTest],[go.setNumTest]};
 % Compute ROC and PR on test
 ROC  = cell(size(methods));
 PR   = ROC;
+dims = ROC;
 for i = 1:numel(methods)
     for j = 1:numel(methods{i})
-        [ROCi,PRi] = dtuTest(setNums{i}(:,j),methods{i}(j),pathTypes,display,runInParallel,'test');
+        [ROCi,PRi,dimsi] = dtuTest(setNums{i}(:,j),methods{i}(j),pathTypes,display,runInParallel,'test');
         ROC{i} = [ROC{i};ROCi];
         PR{i} = [PR{i};PRi];
+        dims(i) = [dims{i};dimsi];
     end
 end
 

@@ -47,7 +47,7 @@ for k = pathTypes % Generate figure for each image path
     grid on;
     box on;
     %title(['ROC AUC ' pathNames{k} ]);
-    export_fig('-r300',['../report/img/dtuResultsROC_' num2str(k) '.pdf']);
+    export_fig('-r300',['../report/img/dtuResultsROC_' resName num2str(k) '.pdf']);
 
     fig('width',width,'height',4.5,'unit','in','fontsize',10)
     hold on;

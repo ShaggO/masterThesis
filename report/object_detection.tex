@@ -379,73 +379,37 @@ We follow the same setup as the image correspondence parameter study.
 	\caption{Dimensionality of our SI descriptor for various parameter values.}
 	\label{fig:inriaParametersSiDims}
 \end{figure}
-
+% 
 \begin{table}[tb]
 \centering
-\pgfplotstableset{
-   highlight/.append style={
-       postproc cell content/.append code={
-               \pgfkeysalso{@cell content=\textbf{##1}}%
-       },
-   }
-}
-\let\ESCAPE=\string
-\pgfplotstableread[col sep=comma]{../src/results/INRIAparams.csv}\loadedtable
-\pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
-\pgfplotstabletypeset[
-	string type,
-	every head row/.style={
-		before row={%
-			 \toprule {} & \multicolumn{2}{c}{Methods} \\
-			 \global\let\ESCAPE=\relax
-			},
-		after row={\midrule}
-	},
-	every last row/.style={after row=\bottomrule},
-   columns/colnames/.style={
-       string type,
-       column name={Variable},
-       column type={l}
-   },
-   col sep=comma
-]\loadedtable
-\caption{Parameter study optimal parameters from 6-fold cross validation for GO and SI methods.}
-\label{fig:INRIAparams}
-%
-\vspace{1cm}
-%
-\centering
-\pgfplotstableset{
-   highlight/.append style={
-       postproc cell content/.append code={
-               \pgfkeysalso{@cell content=\textbf{##1}}%
-       },
-   }
-}
+\begin{tabular}{ l c c }
+\toprule
+{} & \multicolumn{2}{c}{Methods} \\
+Variable & GO & SI \\ \midrule
+Grid type & Square & Square \\
+Cell spacing $r$ & $1.6$ & $1.6$ \\
+Cell kernel & \textit{Box} & \textit{Box} \\
+Cell scale $\alpha$ & $3.3$ & $3.5$ \\
+Bin count $n$ & $15$ & $9$ \\
+Bin kernel & \textit{Tri} & \textit{Box} \\
+Bin scale $\beta$ & $1.0$ & $1.5$ \\
+Normalization scale $\eta$ & $6.0$ & $5.0$ \\
+\bottomrule
+\end{tabular}
+\caption{Parameter study from 6-fold cross validation for GO and SI}
+\label{fig:INRIAparamC}
 \end{table}
-% 
-\begin{table}
-\centerline{%
-\pgfplotstableread[col sep=comma]{../src/results/INRIAparamC.csv}\loadedtable
-\pgfplotstabletranspose[colnames from=Row]{\loadedtable}\loadedtable
-\pgfplotstabletypeset[
-	string type,
-	every head row/.style={
-		before row={%
-			 \toprule {} & \multicolumn{4}{c}{Methods} \\
-			},
-		after row={\midrule}
-	},
-	every last row/.style={after row=\bottomrule},
-    columns/colnames/.style={
-        string type,
-        column name={Variable},
-        column type={l}
-    },
-    col sep=comma
-]\loadedtable
-}
-\caption{Parameter study optimal C parameter from 6-fold cross validation for GO, SI, GO+SI, and HOG}
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ l c c c c }
+\toprule
+{} & \multicolumn{4}{c}{Methods} \\
+Variable & GO & SI & GO+SI & HOG \\ \midrule
+$\log C$ & $1.3\cdot 10^{-3}$ & $2.5\cdot 10^{-3}$ & $1.6\cdot 10^{-3}$ & $1.3\cdot 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\caption{Parameter study for optimal C parameter from 6-fold cross validation for GO, SI, GO+SI, and HOG}
 \label{fig:INRIAparamC}
 \end{table}
 %
@@ -457,14 +421,14 @@ Now that we have computed optimal parameters on the training data, we can evalua
 %
 \begin{table}[tb]
 \centering
-\begin{tabular}{ l c c c }
+\begin{tabular}{ l c c c c }
 \toprule
-Descriptor & PR AUC & ROC AUC & Recall at $10^{-4}$ FPR \\ \midrule
-GO+SI & $0.9937$ & $0.999980$ & $0.982$ \\ 
-GO & $0.9911$ & $0.999978$ & $0.982$ \\ 
-Compact GO & $0.9874$ & $0.999962$ & $0.965$ \\ 
-SI & $0.9668$ & $0.999803$ & $0.920$ \\ 
-HOG & $0.9210$ & $0.998721$ & $0.854$ \\ 
+Descriptor & Dimensions & PR AUC & ROC AUC & Recall at $10^{-4}$ FPR \\ \midrule
+GO+SI & $17784$ & $0.9937$ & $0.999980$ & $0.982$ \\ 
+GO & $11115$ & $0.9911$ & $0.999978$ & $0.982$ \\ 
+Compact GO & $4185$ & $0.9874$ & $0.999962$ & $0.965$ \\ 
+SI & $6669$ & $0.9668$ & $0.999803$ & $0.920$ \\ 
+HOG & $4743$ & $0.9210$ & $0.998721$ & $0.854$ \\ 
 \bottomrule
 \end{tabular}
 \caption{Results}
@@ -484,7 +448,7 @@ HOG & $0.9210$ & $0.998721$ & $0.854$ \\
 		\caption{PR-curve}
 		\label{fig:inriaTestResultsPR}
 	\end{subfigure}}
-	\caption{INRIA test results for the following descriptors (dimensions in parenthesis): GO (11115), SI (6669), GO+SI (17784), Compact GO (4185), and HOG (4743).}
+	\caption{INRIA test results.}
 	\label{fig:inriaTestResults}
 \end{figure}
 %

@@ -24,6 +24,7 @@ fig('unit','inches','width',7,'height',height,'fontsize',8);
 set(gcf,'color','white')
 box on
 hold on
+grid on
 xlabel(xlab)
 if dimsFlag
     ylabel('Dimensions')
