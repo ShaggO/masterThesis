@@ -1,7 +1,7 @@
 clc, clear all
 
-dtu = load('results/optimize/DTUparamsTestFinal.mat');
-sift = load('results/optimize/fullsift_dogsift_test.mat');
+dtu = load('results/optimize/DTUparamsTestFinalOpponent.mat');
+sift = load('results/optimize/dogsift_opponent_test.mat');
 
 pathTypes = 1:6;
 [imNumKey,liNumKey,imNum,liNum,pathNames,pathX,pathXlabel] = dtuPaths('test');
@@ -27,7 +27,7 @@ for s = setNum
 end
 
 names = {'Go','Si','GoSi','Sift'};
-data = {dtu.PR{1},dtu.PR{2},dtu.PR{3},sift.PR(:,1)};
+data = {dtu.PR{1},dtu.PR{2},dtu.PR{3},sift.PR};
 %data = {dtu.ROC{1},dtu.ROC{2},dtu.ROC{3},sift.ROC(:,1)};
 combinations = [1 4;2 4;3 4]';
 combinations = [3 4]';

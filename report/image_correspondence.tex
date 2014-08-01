@@ -466,17 +466,13 @@ Having found the optimal parameters for each of the 6 splits in the previous sec
 
 The first thing we notice when looking at all the graphs in \Cref{fig:dtuResultsPR} is, that our GO+SI descriptor is marginally better than GO on light variations, but they have identical performance on the rest of the variations. Furthermore we notice that our SI descriptor is worse than GO and GO+SI.
 
-When looking at the three arc graphs (\Cref{fig:dtuResultsPRarc1,fig:dtuResultsPRarc2,fig:dtuResultsPRarc3}), we see that GO and GO+SI performance drops less than SIFT when the camera is moved towards the outermost positions. The advantage over SIFT is however lower for arc 2 and 3 than arc 1. This is likely caused by a correlation with the performance over scaling variations as shown in \Cref{fig:dtuResultPRlinear}, where SIFT performs better than any of our descriptors.
+When looking at the three arc graphs (\Cref{fig:dtuResultsPRarc1,fig:dtuResultsPRarc2,fig:dtuResultsPRarc3}), we see that GO and GO+SI performance drops less than SIFT when the camera is moved towards the outermost positions. The advantage over SIFT is however lower for arc 2 and 3 than arc 1. This is likely caused by a correlation with the performance over scaling variations as shown in \Cref{fig:dtuResultsPRlinear}, where SIFT performs better than any of our descriptors.
 
 For light variations (\Cref{fig:dtuResultsPRxAxis,fig:dtuResultsPRzAxis}) our GO and GO+SI descriptors are better than SIFT.
 
 Having inspected the graphs for mean PR AUCs, we are now interested in knowing whether the descriptors are statistically significantly different. We therefore perform Welch's $t$-test as described in \Cref{sec:welchsTtest} on each of the path positions. The resulting 95\% confidence interval graphs on the difference between our GO+SI descriptor and SIFT are show in \Cref{fig:dtuResultsStats}. As we see from the graphs, the confidence intervals cross 0 for all positions apart from the outermost positions of the $x$-light path. In other words we cannot conclude that GO+SI and SIFT are significantly different except on the two outermost positions of each side of the $x$-light path.
 
 Performing Welch's $t$-tests between other combinations of the GO, SI, GO+SI, and SIFT descriptors reveal that pairwise none of our descriptors are significantly different. Furthermore we cannot conclude that SIFT is significantly better than any of our descriptors. SI is however significantly better than SIFT on the right-most position of the light $x$-path. The marginal difference in performance between GO and GO+SI on the light paths is confirmed since GO and SIFT only have significantly different performance on 3 of the 4 outermost points of light $x$-path. Since the graphs are both space-consuming and not too informative once we have the above conclusions, we have chosen to omit them. \mycomment[MSN]{Should we include all the combination statistic figures in an appendix?}
-
-GO+SI: 2+2
-GO: 1+2
-SI: 0+1
 %
 \begin{table}[tb]
 \centering
@@ -495,40 +491,40 @@ SIFT & $128$ & $0.825$ & $0.883$ \\
 %
 \begin{figure}[tb]
 	\centerline{
-		\includegraphics[width=1.2\textwidth]{img/dtuResults_legend_cropped.pdf}
+		\includegraphics[width=1.2\textwidth]{img/dtuResults_opponent_legend_cropped.pdf}
 	}	
 	\centerline{
 	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsPR_1.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_1.pdf}
 		\caption{Arc 1}
 		\label{fig:dtuResultsPRarc1}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsPR_2.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_2.pdf}
 		\caption{Arc 2}
 		\label{fig:dtuResultsPRarc2}
 	\end{subfigure}
 	}
 	\centerline{
 	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsPR_3.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_3.pdf}
 		\caption{Arc 3}
 		\label{fig:dtuResultsPRarc3}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsPR_4.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_4.pdf}
 		\caption{Linear path}
 		\label{fig:dtuResultsPRlinear}
 	\end{subfigure}
 	}
 	\centerline{
 	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsPR_5.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_5.pdf}
 		\caption{Light path, $x$-axis}
 		\label{fig:dtuResultsPRxAxis}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsPR_6.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_6.pdf}
 		\caption{Light path, $z$-axis}
 		\label{fig:dtuResultsPRzAxis}
 	\end{subfigure}
@@ -539,40 +535,40 @@ SIFT & $128$ & $0.825$ & $0.883$ \\
 %
 \begin{figure}[tb]
 	\centerline{
-		\includegraphics[width=1.2\textwidth]{img/dtuResults_legend_cropped.pdf}
+		\includegraphics[width=1.2\textwidth]{img/dtuResults_opponent_legend_cropped.pdf}
 	}	
 	\centerline{
 	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsROC_1.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_opponent_1.pdf}
 		\caption{Arc 1}
 		\label{fig:dtuResultsROCarc1}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsROC_2.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_opponent_2.pdf}
 		\caption{Arc 2}
 		\label{fig:dtuResultsROCarc2}
 	\end{subfigure}
 	}
 	\centerline{
 	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsROC_3.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_opponent_3.pdf}
 		\caption{Arc 3}
 		\label{fig:dtuResultsROCarc3}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsROC_4.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_opponent_4.pdf}
 		\caption{Linear path}
 		\label{fig:dtuResultsROClinear}
 	\end{subfigure}
 	}
 	\centerline{
 	\begin{subfigure}[t]{0.6242\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsROC_5.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_opponent_5.pdf}
 		\caption{Light path, $x$-axis}
 		\label{fig:dtuResultsROCyAxis}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5618\textwidth}
-		\includegraphics[width=\textwidth]{img/dtuResultsROC_6.pdf}
+		\includegraphics[width=\textwidth]{img/dtuResultsROC_opponent_6.pdf}
 		\caption{Light path, $z$-axis}
 		\label{fig:dtuResultsROCzAxis}
 	\end{subfigure}

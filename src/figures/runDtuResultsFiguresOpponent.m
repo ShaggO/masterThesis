@@ -21,7 +21,7 @@ matchPRAUC = [own.PR{:} sifts.PR];
 %matchROCAUC = [own.ROC{:} sifts.ROC(:,1)];
 %matchPRAUC = [own.PR{:} sifts.PR(:,1)];
 plotArgs = {{'-r'},{'-g'},{'-b'},{'--','Color',[0.6 0.6 0.6]}};
-legends = {'GO','SI','GO-SI','SIFT'};
+legends = {'GO','SI','GO+SI','SIFT'};
 %legends = {'Optimal GO','Chosen GO','Optimal SI','Chosen SI','"Optimal" Go-Si','Chosen Go-Si','DoG + sift','full-sift'};
 
 pathTypes = 1:6;
