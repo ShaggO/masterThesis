@@ -23,7 +23,7 @@ for j = 1:numel(nHard)
         test = load(svmPath{j,i});
         PRAUC(j,i) = test.PRAUC;
         ROCAUC(j,i) = test.ROCAUC;
-        recall(j,i) = test.ROC(find(test.ROC(:,2) >= 10^-4,1),2);
+        recall(j,i) = test.ROC(find(test.ROC(:,1) >= 10^-4,1),2);
         if isempty(nHard{j})
             nHardAuto(i) = test.nNegTrainHard;
         end
