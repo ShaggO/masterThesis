@@ -13,9 +13,11 @@
 \chapter{Image correspondence}
 \label{sec:ic}
 
-In this chapter we explain the image correspondence problem and the application of our descriptor to solve the problem.
+In this chapter we explain the image correspondence problem and the application of our descriptor to solve it.
 
-The image correspondence problem is the problem of matching features across two images $A$ and $B$ of the same object. A match should ideally indicate that the two features correspond to the same physical point or object. The two images of the object can be captured under different lighting conditions, taken from different positions, and have varying tilt, rotation, zoom, and focus; hence the images will differ based on these variables. By using an interest point detector in combination with a descriptor, we are able to find interest points in $A$ and $B$, describe each interest point with a descriptor algorithm, and compare these descriptors across the two images by a given similarity measure to estimate whether the points match.
+Image correspondence is the problem of matching features across two images $A$ and $B$ of the same object. A match should ideally indicate that the two features correspond to the same physical point or object. The two images of the object can be captured under different lighting conditions, taken from different positions, and have varying tilt, rotation, zoom, and focus; hence the images will differ based on these variables. By using an interest point detector in combination with a descriptor, we are able to find interest points in $A$ and $B$, describe each interest point with a descriptor algorithm, and compare these descriptors across the two images by a given similarity measure to estimate whether the points match.
+
+The chapter is structured as follows. First we describe the steps of our approach: the strategy to select matches between images, the similarity measure used for this, and the the measure used to evaluate matching performance. We then describe the dataset and how to determine the correctness of potential matches. In order to visualize our approach, we then extend the earlier example with image correspondence. Finally, we describe our experimental setup and present our parameter optimization and test results.
 
 \section{Matching strategies}
 \label{sec:matching_strategies}
@@ -90,15 +92,16 @@ The dataset we use for training and evaluation of our descriptor is called the \
 
 The camera is positioned around each scene using an industrial robot arm, which has automatically captured each scene from 119 positions. These positions are defined from a fixed frontal view varying the viewpoint $\theta$ in three arcs at different distance $d$ to the scene. Arc 1 has $d = \SI{0.5}{\meter}$ to the scene and $\theta$ spans $\SI{\pm40}{\degree}$, arc 2 has $d = \SI{0.65}{\meter}$ and $\theta$ spans $\SI{\pm25}{\degree}$, and arc 3 has $d = \SI{0.8}{\meter}$ and $\theta$ spans $\SI{\pm20}{\degree}$. Furthermore a linear path is captured by moving the camera away from the scene, which corresponds to zooming or scaling the scene. This is done at $\theta = \SI{0}{\degree}$ and $d$ spans $[\SI{0.5}{\meter};\SI{0.8}{\meter} ]$. At each of the 119 camera positions 19 individual images $I_i$ are taken with each of the LED lights $i,~\text{for}~i = 1,\hdots,19$ turned on. Using the given camera positions we get four camera paths: three arc paths and one linear path. \Cref{fig:dtu_overview} shows an overview of the four camera paths just described. When computing the performance across the paths we wish to solve the image correspondence problem for matching each image in each path with the \emph{keyframe} image (middle position on arc 1), since this gives us the performance when varying the viewing angle and scale in a structured manner.
 %
-\begin{figure}[tb]
+\begin{figure}[p]
 	\centering
-	\includegraphics[width=0.8\textwidth]{img/CameraPosbOwn.pdf}
+	\includegraphics[width=0.9\textwidth]{img/CameraPosbOwn.pdf}
 	\caption{Overview of camera positions and paths in the DTU dataset. The red positions mark training camera positions, the arrows mark camera positions of the light path experiments where only the ones marked with blue are used for training. Reconstructed and improved illustration from \citet[Figure 3, pp. 3]{aanaes2010recall}.}
 	\label{fig:dtu_overview}
-\end{figure}
-\begin{figure}[tb]
+%\end{figure}
+%\begin{figure}[tb]
+	\vspace{1cm}
 	\centering
-	\includegraphics[width=0.6\textwidth]{img/dtu_light_overview.pdf}
+	\includegraphics[width=0.7\textwidth]{img/dtu_light_overview.pdf}
 	\caption{Light positions of the x- and z-axis light paths. Training light light positions marked with red. Reproduced and improved figure from \citet[Fig. 1, pp. 644]{larsen2012in}.}
 	\label{fig:dtu_light_overview}
 \end{figure}
@@ -112,7 +115,7 @@ Given a light position ${\boldsymbol{x}}$ in the spatial domain of the LED posit
 \begin{align}
 	I_{x} = \sum_{i = 1}^{19} G(\boldsymbol{x} - \boldsymbol{x}_i,\sigma) I_{i}
 \end{align}
-In order to get a somewhat general measurement for the robustness against light variations there are light paths generated for the following four image positions: 12 (arc 1), 25 (arc 1), 60 (linear path), and 87 (arc 2).
+\Cref{fig:dtu_light_overview} shows the selected light positions. In order to get a somewhat general measurement for the robustness against light variations there are light paths generated for the following four image positions: 12 (arc 1), 25 (arc 1), 60 (linear path), and 87 (arc 2).
 See \citet{aanaes2010recall,aanaes2010ground} for more information about the dataset and the generated light paths.
 
 \Cref{fig:light_example} show 6 of the different light images for scene 4 at camera position 60. \Cref{fig:light_example_02,fig:light_example_17,fig:light_example_08} show the images taken with individual LED lighting (numbers 2, 17, and 8 respectively), and \Cref{fig:light_example_00} shows the diffuse light image. We here notice the significant difference in cast shadows using the three LEDs individually compared to the diffuse light image. The diffuse light image is however quite dark compared to the LED 8 light image, which could potentially cause problems in some scenes generating too few interest points. Such an issue could however be handled by adapting detection thresholds or by using histogram stretching/equalization.
@@ -533,7 +536,7 @@ Performing Welch's $t$-tests between other combinations of the GO, SI, GO+SI, an
 Descriptor & Dimensions & PR AUC & ROC AUC \\ \midrule
 GO & $900/1050$ & $0.850$ & $0.888$ \\ 
 SI & $600$ & $0.839$ & $0.890$ \\ 
-GO-SI & $1500/1650$ & $0.851$ & $0.889$ \\ 
+GO+SI & $1500/1650$ & $0.851$ & $0.889$ \\ 
 SIFT & $384$ & $0.831$ & $0.880$ \\ 
 \bottomrule
 \end{tabular}
