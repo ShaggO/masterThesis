@@ -1,9 +1,10 @@
 clc, clear all
 
-nHard = 10^5;
+nHard = [];
 nWindows = 40;
 seed = 1*10^4;
 name = {'Go','GoTriangle','Si','SiTriangle','GoSi','Hog','HogDT','HogColour'};
+name = {'GoSi','Go','GoChosenSmall','Si','Hog'};
 
 start = tic;
 for i = 1:numel(name)
