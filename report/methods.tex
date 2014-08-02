@@ -423,6 +423,7 @@ As mentioned in \Cref{sec:introduction} interest point detectors are used for fi
 The focus of this report is to study higher order descriptors and hence we simply choose to use the multi-scale DoG blob detector from SIFT \cite{lowe2004distinctive} described below.
 
 \subsection{Multiscale Difference of Gaussians}
+\label{sec:multiscaleDoG}
 
 Recall from \Cref{sec:GaussianScaleSpace} that our scale-space representation removes image details below a given scale $\sigma$. The idea of the Difference of Gaussians (DoG) blob detector is that by computing the difference of two scale-space images for $\sigma_1$ and $\sigma_2$, we also remove the details at a higher scale, leaving only details between $\sigma_1$ and $\sigma_2$. Formally we define
 %
@@ -440,8 +441,7 @@ In practice we need to create $s+3$ Gaussian images of the same size for each oc
 
 To prevent extracting too many interest points, we can select only the most significant points by placing a threshold on the magnitude of $\Gamma$.
 
-An example of DoG images is shown in \Cref{fig:dogExample}, which is based on the scale-space images from \Cref{fig:scaleSpaceExample}. We see that the two different scales locate dark and light blobs of different sizes.
-\todo{Mention that we use vl feat. implementation}
+An example of DoG images is shown in \Cref{fig:dogExample}, which is based on the scale-space images from \Cref{fig:scaleSpaceExample}. We see that the two different scales locate dark and light blobs of different sizes. In our work we have been using the VLFeat implementation of the multi-scale DoG detector \citet{vedaldi2008vlfeat}.
 %
 \begin{figure}[p]
 	\centering
@@ -472,28 +472,32 @@ Sliding windows are an alternative approach to selecting image regions for which
 
 \section{Descriptors}
 
-Other descriptors as described in the literature study. We choose SIFT to compare against.
+The field of descriptors and their applications is wide, and hence we have chosen a descriptor for each of our applications to compare our performance against. In this section we will go through the methods of computing the SIFT and HOG descriptors, which were introduced in the literature study and have proven to perform well on our applications.
 
 \subsection{SIFT}
 
-Gradients of an image are often used to describe the region around interest points, since they describe the changes in intensities in the image plane.
-The \emph{scale-invariant feature transform} (SIFT) descriptor
-\cite{lowe2004distinctive} is the most popular descriptor based on this
-approach. It works by dividing the image regions surrounding interest
-points into square cells and constructing a histogram of gradient
-orientations for the pixels in each cell. The interest points are detected
-using a multi-scale DoG detector. By computing the gradient orientations
-at detection scale, the descriptor becomes scale invariant. The descriptor
-is also rotation invariant as the cell grid is rotated according to the
-dominating gradient orientation. Finally the descriptor achieves illumination
-invariance by normalizing the histograms. The SIFT descriptor uses a grid of
-$4 \times 4$ cells each consisting of $4 \times 4$ pixels, with 8 histogram
-bins for each cell. This results in a dimensionality of $4 \times 4 \times 8 =
-128$.
+We shortly described the SIFT descriptor in the literature study. Here we will explain the details of the descriptor.
+
+SIFT utilizes gradient information on grayscale images to compute distinctive interest point descriptors. SIFT was originally proposed in combination with the multi-scale DoG detector described in \Cref{sec:multiscaleDoG}. Apart from the DoG detection steps, the algorithm first determines the orientations of the interest point in question. This is done by computing gradient magnitudes and orientations for a local area around the interest point in the associated scale space $L$. From the orientations a histogram of 36 bins is created, where each orientation is weighted by its magnitude and scaled by a Gaussian weight computed from the distance to the interest point. This Gaussian window has $\sigma$ equal to $1.5$ times the detection scale $\sigma_0$. A descriptor is created for the highest peak of the histogram as well as for each of the peaks that have a weight within 80\% of the maximum histogram weight. Finally, the chosen orientations are refined by fitting of a parabola to the three points around each orientation.
+
+Having determined the orientation of an interest point, the local area surrounding the interest point is divided into a grid of $4 \times 4$ cells, each spanning $4 \times 4$ pixels in the $\sigma_0$ scale space. For each of these cells a gradient orientation histogram with 8 bins is created. Each sample is weighted its gradient magnitude. The magnitude is however subject to a trilinear interpolation between adjacent cell- and bin centers. Furthermore all magnitudes are multiplied by a Gaussian window centered at the interest point and having $\sigma$ half the width of the descriptor window.
+
+Once the histograms are computed, the descriptor vector is normalized, all values thresholded to a maximum value of 0.2 followed by another normalization to unit vector length.
+The result is a descriptor of 16 histograms with 8 bins using a total of 128 dimensions. In our work we have been using the VLFeat implementation of SIFT \cite{vedaldi2008vlfeat}.
 
 \subsection{Opponent SIFT}
 \label{sec:opponentColourSpace}
-NOTE: \Citet{van2010evaluating} Opponent SIFT improves performance, we use the vl feat. implementation
+
+The \emph{Opponent SIFT} proposed by \citet{van2010evaluating} is an extension of the original SIFT. Where SIFT is computed on the gradients of a grayscale image, the Opponent SIFT is computed on the opponent colour space:
+\begin{align*}
+	\begin{pmatrix} O_1 \\ O_2 \\ O_3 \end{pmatrix} =
+		\begin{pmatrix}
+			\frac{R-G}{\sqrt{2}} \\
+			\frac{R+G-2B}{\sqrt{6}} \\
+			\frac{R+G+B}{\sqrt{3}}
+		\end{pmatrix}
+\end{align*}
+To compute the Opponent SIFT descriptor for a point in an RGB image, the opponent colour space is first computed. The SIFT descriptor is then computed for each of the three colour channels $O_1,~O_2$, and $O_3$ and combined into a single descriptor. In total this descriptor is three times as big as the original SIFT and hence has 384 dimensions.
 
 
 \subsection{HOG}
