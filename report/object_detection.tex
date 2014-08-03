@@ -8,14 +8,15 @@
 
 \chapter{Pedestrian detection}
 \label{sec:od}
+%
 In this chapter we describe the pedestrian detection problem and how we apply our descriptor to solve it.
 
-Object detection is the problem of locating specified objects in images. One application of this is pedestrian detection, which we have decided to focus on as it is simple and has extensive datasets. A common approach to object detection is to extract regions from the image, reducing the problem to binary classification of the presence of the specified object in each region. Using this approach, we are able to compute one descriptor for each region. We furthermore assume fixed size regions in scale-space, allowing us to directly compare our descriptors. The classification of pedestrians is done using a linear SVM.
+Object detection is the problem of locating specified objects in images. One application of this is pedestrian detection, which we have decided to focus on as it is simple and has extensive datasets. A common approach to object detection is to extract regions from the image, reducing the problem to binary classification of the presence of the specified object in each region. Using this approach, we are able to compute one descriptor for each region. We furthermore assume fixed size regions in scale-space, allowing us to directly compare our descriptors. The classification of pedestrians is done using a linear support vector machine.
 
-The chapter is structured as follows...
-
+The chapter is structured as follows. First we describe support vector machines, and how to evaluate their classification performance. We then describe the dataset and specify our experimental setup. Next, we show an example of the use of our descriptor for pedestrian detection and how it relates to HOG, including some example classifications of dataset images. Finally, present our parameter optimization and test results, which include a comparison with HOG.
+%
 \section{Support vector machine}
-
+%
 Suppose we have some training data split into positive and negative elements. In our case these are $n$-dimensional descriptors of regions with and without pedestrians. We wish to construct a binary classifier which accurately assigns a classification score denoting how confident we are that there is or isn't a pedestrian present. The approach of a linear support vector machine (SVM) is to place a $(n-1)$-dimensional hyperplane in descriptor space which separates the two classes. The hyperplane $(\w,b)$ is defined as the points $\x$ satisfying
 %
 \begin{align*}

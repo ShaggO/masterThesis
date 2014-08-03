@@ -12,16 +12,16 @@
 \begin{document}
 \chapter{Image correspondence}
 \label{sec:ic}
-
+%
 In this chapter we explain the image correspondence problem and the application of our descriptor to solve it.
 
 Image correspondence is the problem of matching features across two images $A$ and $B$ of the same object. A match should ideally indicate that the two features correspond to the same physical point or object. The two images of the object can be captured under different lighting conditions, taken from different positions, and have varying tilt, rotation, zoom, and focus; hence the images will differ based on these variables. By using an interest point detector in combination with a descriptor, we are able to find interest points in $A$ and $B$, describe each interest point with a descriptor algorithm, and compare these descriptors across the two images by a given similarity measure to estimate whether the points match.
 
-The chapter is structured as follows. First we describe the steps of our approach: the strategy to select matches between images, the similarity measure used for this, and the the measure used to evaluate matching performance. We then describe the dataset and how to determine the correctness of potential matches. In order to visualize our approach, we then extend the earlier example with image correspondence. Finally, we describe our experimental setup and present our parameter optimization and test results.
-
+The chapter is structured as follows. First we describe the steps of our approach: the strategy to select matches between images, the similarity measure used for this, and the the measure used to evaluate matching performance. We then describe the dataset and how to use it to determine correctness of matches, and specify our experimental setup. In order to visualize our approach, we then extend the earlier example with image correspondence. Finally, we present our parameter optimization and test results, which include a comparison with SIFT.
+%
 \section{Matching strategies}
 \label{sec:matching_strategies}
-
+%
 The matching performance depends on the matching strategy. \citet{mikolajczyk2005performance} described the following three matching strategies that are used when solving the image correspondence problem:
 Simple \emph{thresholding} compares each descriptor in image $A$ with each descriptor in image $B$. Any two descriptors having a mutual distance below a threshold $t$ are classified as matches (positive). \emph{Best-thresholding} finds the best matching descriptor in $B$ for each descriptor in $A$. If the distance is below a threshold $t$, it is a match (positive), and otherwise it is rejected (negative). \emph{Ratio-thresholding} finds the two best matching descriptors in $B$ with distances $B_1$ and $B_2$ for each descriptor in $A$. If the ratio between the two distances ($\frac{B_1}{B_2}$) to the descriptor in $A$ is below a threshold $t$, it is a match (positive). Otherwise the match is rejected (negative). In other words a distance ratio close to 0 is a good match.
 
@@ -231,6 +231,14 @@ The automatic capturing of images using a robot arm combined with the individual
 	\label{fig:dtu_problems}
 \end{figure}
 %
+\section{Experimental setup}
+%
+The DTU dataset is constructed using four different camera movement paths: Arc 1 through 3 and the linear path described in \Cref{sec:dtuDataset}. We therefore choose to perform one experiment for each of these paths, where we average across the different scenes for each camera position. These four experiments are all conducted using the diffuse light images. Furthermore we conduct two light experiments, where we move the light in the x- and z-axis respectively. For these experiments we both average across scenes and a fixed set of camera positions. In total we have six different experiments with perspective, scale and light transformations.
+
+Since the DTU dataset is not split in a test and a train part, there is no pre-defined way of training and testing an algorithm on the dataset. \citet{larsen2012jet} used the Oxford Affine Covariance Region\footnote{\url{http://www.robots.ox.ac.uk/~vgg/research/affine}} dataset for manual parameter optimization of their Jet-based local image descriptors. This dataset is however very small and limited and hence we risk severe overfitting to the dataset if used for training. Instead we choose to split the DTU dataset with respect to the scenes into six parts for the purpose of (leave-one-out) cross-validation.
+
+Testing is done on the full dataset, whereas we only perform training on a subset of the camera and light positions, since the dataset contains quite a large amount of images to be processed. \Cref{fig:dtu_overview} shows the camera positions of the dataset as described in \Cref{sec:dtuDataset}. In this illustration the training camera positions for the three arcs and the linear path are marked with red. The camera positions for the light experiments are marked with arrows, where only the ones marked with blue arrows are used for training. \Cref{fig:dtu_light_overview} shows the light positions for the light experiments. The red pluses and circles mark the x- and z-axis light path images used for training respectively.
+%
 \section{Example}
 %
 In this section we will continue the example from \Cref{sec:proposedDescriptorExample} by extending it to show the results of solving the image correspondence problem between the image of the example and the corresponding keyframe image from the DTU robot dataset.
@@ -273,14 +281,6 @@ When having computed the distance ratios of all matches, we are able to construc
 	\caption{Examples of evaluation measure curves}
 	\label{fig:imageCorrespondenceCurves}
 \end{figure}
-%
-\section{Experimental setup}
-%
-The DTU dataset is constructed using four different camera movement paths: Arc 1 through 3 and the linear path described in \Cref{sec:dtuDataset}. We therefore choose to perform one experiment for each of these paths, where we average across the different scenes for each camera position. These four experiments are all conducted using the diffuse light images. Furthermore we conduct two light experiments, where we move the light in the x- and z-axis respectively. For these experiments we both average across scenes and a fixed set of camera positions. In total we have six different experiments with perspective, scale and light transformations.
-
-Since the DTU dataset is not split in a test and a train part, there is no pre-defined way of training and testing an algorithm on the dataset. \citet{larsen2012jet} used the Oxford Affine Covariance Region\footnote{\url{http://www.robots.ox.ac.uk/~vgg/research/affine}} dataset for manual parameter optimization of their Jet-based local image descriptors. This dataset is however very small and limited and hence we risk severe overfitting to the dataset if used for training. Instead we choose to split the DTU dataset with respect to the scenes into six parts for the purpose of (leave-one-out) cross-validation.
-
-Testing is done on the full dataset, whereas we only perform training on a subset of the camera and light positions, since the dataset contains quite a large amount of images to be processed. \Cref{fig:dtu_overview} shows the camera positions of the dataset as described in \Cref{sec:dtuDataset}. In this illustration the training camera positions for the three arcs and the linear path are marked with red. The camera positions for the light experiments are marked with arrows, where only the ones marked with blue arrows are used for training. \Cref{fig:dtu_light_overview} shows the light positions for the light experiments. The red pluses and circles mark the x- and z-axis light path images used for training respectively.
 %
 \section{Parameter study}
 \label{sec:icParameterStudy}
