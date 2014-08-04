@@ -502,31 +502,39 @@ To compute the Opponent SIFT descriptor for a point in an RGB image, the opponen
 
 \subsection{HOG}
 
-The \emph{Histograms of Oriented Gradient} (HOG) descriptor is another
-alternative to SIFT proposed in \cite{dalal2005histograms} for pedestrian
-detection. Contrary to SIFT which is computed individually at specified
-interest points, the HOG descriptors are computed in a dense grid over a
-detection window and each block descriptor is a part of a larger descriptor
-usually trained using an SVM. The Gradients are first computed using simple
-1D masks. Secondly magnitude and spatially weighted histograms of the
-orientations (0-180$^{\circ}$) of the gradients are computed for spatial
-regions named cells\todo{Add note about interpolation of votes}. The cells are
-then grouped together into blocks of cells for normalization to accomodate
-for local illumination changes. These blocks can either be rectangular with
-rectangular cells (R-HOG), or circular using a log-polar partitioning as the
-DAISY descriptor. The normalization is performed using either the L2-norm,
-a clipped and re-normalized L2-norm, or the square root of the L1-norm for
-best performance. HOG descriptors are able to work directly on RGB images
-unlike the original SIFT descriptor. This is done by computing the gradients
-for each colour channel and choosing the gradient with the highest magnitude
-for each pixel. For R-HOG the optimal bin number is found to be 9, optimal
-block size $3\times3$ cell blocks and optimal cell size $6\times6$ pixels
-with block spacing 8.\todo{Should optimal parameters for C-HOG be mentioned?}
-Furthermore parts models using the HOG descriptor have been developed
-\cite{felzenszwalb2008discriminatively} in order to improve upon the accuracy
-of object detection.
+The HOG descriptor is similar to the SIFT descriptor, but describes a rectangular region of an image rather than a local area around an interest point. It has a number of parameters for various components of the descriptor; we will here describe the original HOG descriptor optimized for pedestrian detection.
 
-Notes: Smoothing removed since small variations are needed, we use the vl feat. implementation
+Gradient orientation and magnitude is computed for the image by central differences. Unlike SIFT, the images are not smoothed. The image is then divided into $8 \times 8$ pixel cells, each for which a gradient orientation histogram weighted by gradient magnitude is created. Like SIFT, pixels contribute to multiple histogram bins by trilinear interpolation with respect to the cell and bin centers. Though, HOG differs by using 9 histogram bins of unsigned gradient orientations.
+
+Neighbouring cells are then grouped into overlapping $2 \times 2$ blocks. An additional weight is applied to each pixel in a block before assembling the histograms, based on a Gaussian window centered at the block center with $\sigma = 8$. The purpose of this is to reduce the importance of pixels near the edges of the block. Each block is then normalized to $L2$-norm unit length, followed by clipping values to $0.2$ from SIFT. The resulting block normalized histograms are concatenated to make up the final HOG descriptor. Note that the block overlap causes each cell to be represented up to $4$ times with different local normalizations. Dalal and Triggs report that while this may seem redundant, it is critical to obtaining good performance.
+
+We also use the VLFeat implementation of HOG. This includes a variant called UoCTTI, which computes both directed and undirected gradients as well as a four dimensional texture-energy feature, and projects this down to 31 dimensions by PCA. This variant achieves slightly better pedestrian detection results, and thus we will use it for our comparison.
+%
+%The \emph{Histograms of Oriented Gradient} (HOG) descriptor is another
+%alternative to SIFT proposed in \cite{dalal2005histograms} for pedestrian
+%detection. Contrary to SIFT which is computed individually at specified
+%interest points, the HOG descriptors are computed in a dense grid over a
+%detection window and each block descriptor is a part of a larger descriptor
+%usually trained using an SVM. The Gradients are first computed using simple
+%1D masks. Secondly magnitude and spatially weighted histograms of the
+%orientations (0-180$^{\circ}$) of the gradients are computed for spatial
+%regions named cells\todo{Add note about interpolation of votes}. The cells are
+%then grouped together into blocks of cells for normalization to accomodate
+%for local illumination changes. These blocks can either be rectangular with
+%rectangular cells (R-HOG), or circular using a log-polar partitioning as the
+%DAISY descriptor. The normalization is performed using either the L2-norm,
+%a clipped and re-normalized L2-norm, or the square root of the L1-norm for
+%best performance. HOG descriptors are able to work directly on RGB images
+%unlike the original SIFT descriptor. This is done by computing the gradients
+%for each colour channel and choosing the gradient with the highest magnitude
+%for each pixel. For R-HOG the optimal bin number is found to be 9, optimal
+%block size $3\times3$ cell blocks and optimal cell size $6\times6$ pixels
+%with block spacing 8.\todo{Should optimal parameters for C-HOG be mentioned?}
+%Furthermore parts models using the HOG descriptor have been developed
+%\cite{felzenszwalb2008discriminatively} in order to improve upon the accuracy
+%of object detection.
+%
+%Notes: Smoothing removed since small variations are needed, we use the vl feat. implementation
 
 
 %
