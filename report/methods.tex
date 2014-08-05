@@ -478,11 +478,11 @@ The field of descriptors and their applications is wide, and hence we have chose
 
 We shortly described the SIFT descriptor in the literature study. Here we will explain the details of the descriptor.
 
-SIFT utilizes gradient information on grayscale images to compute distinctive interest point descriptors. SIFT was originally proposed in combination with the multi-scale DoG detector described in \Cref{sec:multiscaleDoG}. Apart from the DoG detection steps, the algorithm first determines the orientations of the interest point in question. This is done by computing gradient magnitudes and orientations for a local area around the interest point in the associated scale space $L$. From the orientations a histogram of 36 bins is created, where each orientation is weighted by its magnitude and scaled by a Gaussian weight computed from the distance to the interest point. This Gaussian window has $\sigma$ equal to $1.5$ times the detection scale $\sigma_0$. A descriptor is created for the highest peak of the histogram as well as for each of the peaks that have a weight within 80\% of the maximum histogram weight. Finally, the chosen orientations are refined by fitting of a parabola to the three points around each orientation.
+SIFT utilizes gradient information on grayscale images to compute distinctive interest point descriptors. SIFT was originally proposed in combination with the multi-scale DoG detector described in \Cref{sec:multiscaleDoG}. Apart from the DoG detection steps, the algorithm first determines the orientations of the interest point in question. This is done by computing gradient magnitudes and orientations for a local area around the interest point in the associated scale-space image $L$. From the orientations a histogram of 36 bins is created, where each orientation is weighted by its magnitude and scaled by a Gaussian weight computed from the distance to the interest point. This Gaussian window has $\sigma$ equal to $1.5$ times the detection scale $\sigma_0$. A descriptor is created for the highest peak of the histogram as well as for each of the peaks that have a weight within 80\% of the maximum histogram weight. Finally, the chosen orientations are refined by fitting of a parabola to the three points around each orientation.
 
-Having determined the orientation of an interest point, the local area surrounding the interest point is divided into a grid of $4 \times 4$ cells, each spanning $4 \times 4$ pixels in the $\sigma_0$ scale-space. For each of these cells a gradient orientation histogram with 8 bins is created. Each sample is weighted its gradient magnitude. The magnitude is however subject to a trilinear interpolation between adjacent cell- and bin centers. Furthermore all magnitudes are multiplied by a Gaussian window centered at the interest point and having $\sigma$ half the width of the descriptor window.
+Having determined the orientation of an interest point, the local area surrounding the interest point is divided into a grid of $4 \times 4$ cells, each spanning $4 \times 4$ pixels in the $\sigma_0$ scale-space image. For each of these cells a gradient orientation histogram with 8 bins is created. Each sample is weighted by its gradient magnitude. The magnitude is however subject to a trilinear interpolation between adjacent cell- and bin centers. Furthermore all magnitudes are multiplied by a Gaussian window centered at the interest point and having $\sigma$ half the width of the descriptor window.
 
-Once the histograms are computed, the descriptor vector is normalized, all values thresholded to a maximum value of 0.2 followed by another normalization to unit vector length.
+Once the histograms are computed, the descriptor vector is normalized, all values thresholded to a maximum value of 0.2, and normalized to unit vector length again.
 The result is a descriptor of 16 histograms with 8 bins using a total of 128 dimensions. In our work we have been using the VLFeat implementation of SIFT \cite{vedaldi2008vlfeat}.
 
 \subsection{Opponent SIFT}
@@ -498,7 +498,6 @@ The \emph{Opponent SIFT} proposed by \citet{van2010evaluating} is an extension o
 		\end{pmatrix}
 \end{align*}
 To compute the Opponent SIFT descriptor for a point in an RGB image, the opponent colour space is first computed. The SIFT descriptor is then computed for each of the three colour channels $O_1,~O_2$, and $O_3$ and combined into a single descriptor. In total this descriptor is three times as big as the original SIFT and hence has 384 dimensions.
-
 
 \subsection{HOG}
 
