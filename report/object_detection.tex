@@ -13,7 +13,7 @@ In this chapter we describe the pedestrian detection problem and how we apply ou
 
 Object detection is the problem of locating specified objects in images. One application of this is pedestrian detection, which we have decided to focus on as it is simple and has extensive datasets. A common approach to object detection is to extract regions from the image, reducing the problem to binary classification of the presence of the specified object in each region. Using this approach, we are able to compute one descriptor for each region. We furthermore assume fixed size regions in scale-space, allowing us to directly compare our descriptors. The classification of pedestrians is done using a linear support vector machine.
 
-The chapter is structured as follows. First we describe support vector machines, and how to evaluate their classification performance. We then describe the dataset and specify our experimental setup. Next, we show an example of the use of our descriptor for pedestrian detection and how it relates to HOG, including some example classifications of dataset images. Finally, present our parameter optimization and test results, which include a comparison with HOG.
+The chapter is structured as follows. First we describe support vector machines, and how to evaluate their classification performance. We then describe the dataset and specify how we apply our descriptor to the problem as well as our experimental setup. Next, we show an example of the use of our descriptor for pedestrian detection and how it relates to HOG, including some example classifications of dataset images. Finally, we present our parameter optimization and test results, which include a comparison with HOG.
 %
 \section{Support vector machine}
 %
@@ -100,7 +100,17 @@ We have found two minor problems with the INRIA dataset which could affect the r
 
 The second problem is the presence of people in some of the negatives.
 \Cref{fig:inriaNegativePersons} show two examples of persons in the negative images of the INRIA dataset. The people are however either too small to fit correctly into the sliding window at any of the used scales or partially occluded by the image bounds to such an extent that we shouldn't be able to detect them anyway.
+%
+\section{Application of descriptors}
+\label{sec:inriaDescriptorApplication}
+%
+As in the image correspondence problem, we will evaluate the performance of the GO, SI, GO+SI and HOG descriptors. Furthermore we will propose a suboptimal compact GO descriptor, which has lower dimensionality than HOG.
+Our descriptors are using the region cell layouts described in \Cref{sec:cellApertureFunctionRegion}, since we are interested in a general region description.
 
+When computing descriptors on images that are larger than the $134 \times 70$ pixel regions (including boundary pixels), we use a sliding window (see \Cref{sec:slidingWindow}) with 10 pixel stride and scales at $2^{\nicefrac{n}{3}},~n=1,\hdots,m$ where $m$ is the largest number such that the entire window is inside the image. 
+
+\citet{dalal2005histograms} showed that smoothing of the pedestrian images resulted in worse performance than without smoothing. We therefore refrain from smoothing the images in our scale-space pyramids. As mentioned in \Cref{sec:hog}, we use grayscale images for HOG. This is likewise the case for our descriptors.
+%
 \section{Experimental setup}
 \label{sec:inriaExperimentalSetup}
 %
@@ -421,9 +431,19 @@ We have also experimented with various other parts of our descriptor that are no
 Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
 
 \Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
+
+\Cref{tbl:inriaResults} shows a performance summary for the five descriptors both with and without hard training. The first thing we notice is the large variation in dimensionality.
 %
+
+
+Notes: Ordering the same on all perf. measures.
+Dimensions: Compact GO lower than HOG. GO+SI probably too big for most purposes.
+Hard training: Many hard negatives on HOG compared to our descriptors. Improved performance greatly for HOG. Generally a substantial improvement by using hard negatives. Initially 40 windows pr. negative ~ 48k windows. 1024 not many compared to this number, but great improvement.
+
+Generally: Compact GO better than SI.
+
 \begin{table}[tb]
-\centering
+\centerline{
 \begin{tabular}{ l c c c c c }
 \toprule
 Measure & GO+SI & GO & Compact GO & SI & HOG \\ \midrule
@@ -434,8 +454,8 @@ PR AUC & 0.9943 & 0.9919 & 0.9873 & 0.9656 & 0.9227 \\
 ROC AUC & 0.999981 & 0.999979 & 0.999959 & 0.99975 & 0.998375 \\
 Recall at $10^{-4}$ FPR & 0.989 & 0.984 & 0.966 & 0.919 & 0.859 \\
 \bottomrule
-\end{tabular}
-\caption{Results}
+\end{tabular}}
+\caption{Summary of test results on the INRIA dataset.}
 \label{tbl:inriaResults}
 \end{table}
 %
