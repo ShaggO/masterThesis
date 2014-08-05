@@ -430,17 +430,10 @@ We have also experimented with various other parts of our descriptor that are no
 %
 Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
 
-\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
+\Cref{tbl:inriaResults} shows a performance summary for the five descriptors both with and without hard training. By looking at all the performance measures, we see an independence between the measures and the ordering of the descriptors as indicated by the ROC- and PR-curves. When looking at the dimensionality of the descriptors, we see that our GO and GO+SI descriptors are 3.7 and 2.3 times the size of HOG respectively. The SI descriptor is 1.4 times the size of HOG, whereas our Compact GO is 0.9 times the size of HOG. This is not a problem when computing single descriptors, but it could potentially become a problem when using a sliding window with low stride and many scales on large images. An interesting observation is that Compact GO is better than SI despite having 0.62 times lower dimensionality.
 
-\Cref{tbl:inriaResults} shows a performance summary for the five descriptors both with and without hard training. The first thing we notice is the large variation in dimensionality.
-%
-
-
-Notes: Ordering the same on all perf. measures.
-Dimensions: Compact GO lower than HOG. GO+SI probably too big for most purposes.
-Hard training: Many hard negatives on HOG compared to our descriptors. Improved performance greatly for HOG. Generally a substantial improvement by using hard negatives. Initially 40 windows pr. negative ~ 48k windows. 1024 not many compared to this number, but great improvement.
-
-Generally: Compact GO better than SI.
+From the table we furthermore see, that hard training always improves descriptor performance. HOG however adds quite a lot more hard negatives to the existing 48.720 negative windows than any of our descriptors. Even though GO+SI only adds 1024 hard negatives, the increase in performance is still substantial.
+\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors, and why there is a large difference in the amount of hard negatives added. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
 
 \begin{table}[tb]
 \centerline{
