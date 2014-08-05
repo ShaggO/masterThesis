@@ -2,7 +2,7 @@ clc, clear all
 
 load('results/inriaSlidingWindowCompactGo')
 
-t = 0;
+t = -0.5;
 idx = s > t;
 
 figure

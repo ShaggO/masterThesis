@@ -27,6 +27,7 @@ for i = 1:numel(svmPath)
     % compute recall at 10^-4 FPR
     recall(i) = ROC{i}(find(ROC{i}(:,1) >= 10^-4,1),2);
 end
+PRAUC
 [~,order] = sort(PRAUC,'descend');
 
 %% ROC
