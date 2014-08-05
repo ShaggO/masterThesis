@@ -28,7 +28,7 @@ Simple \emph{thresholding} compares each descriptor in image $A$ with each descr
 We choose the ratio-thresholding strategy since this is the one favoured in previous image correspondence evaluations \cite{mikolajczyk2005performance,dahl2011finding,larsen2012jet,lowe2004distinctive}. Additionally this matching strategy is more general since it uses the ratio between the distance to the two best matching features instead of the absolute values giving less dependence on the descriptor in question. The two following cases give a good rationale for choosing this matching strategy: The first case is when two descriptors are good matches. In this case the descriptors will be very similar, and their difference could be caused by noise or other small variations. Due to this fact the algorithm shouldn't choose one over the other and hence the matching is negative since the distance ratio is close to 1. The second case is when only poorly matching descriptors are present. In this case the distance to both of the best matching descriptors will be high and the distance ratio close to 1 giving us a negative match as desired.
 
 
-\section{Similarity measure}
+\section{Similarity measures}
 \label{sec:similarity_measure}
 We need a similarity measure in order to compute the distance between two descriptors. The Euclidean distance is widely used as similarity measure in the literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance}. \citet{larsen2012in} evaluated the following different similarity measures: $L_1$ distance, Euclidean distance, $\chi^2$ distance, Kullback-Leibler divergence, and Jensen-Shannon divergence, and he found no notable difference in performance for his locally orderless-based descriptor. Based on this and some preliminary tests of our descriptor, where Euclidean distance ($L_2$) slightly outperformed $L_1$-distance, we choose to use Euclidean distance.
 
@@ -247,12 +247,7 @@ Testing is done on the full dataset, whereas we only perform training on a subse
 %
 In this section we will continue the example from \Cref{sec:proposedDescriptorExample} by extending it to show the results of solving the image correspondence problem between the image of the example and the corresponding keyframe image from the DTU robot dataset.
 \Cref{fig:imageCorrespondenceMatches} shows matches between the descriptors from the two images with score $s$ below threshold $t = 0.8$. The green and red lines indicate true and false positive classifications respectively. The images contain several similar beer cans and hence many of the false positive classifications are caused by patterns that are visible in multiple of the cans.
-
-\Cref{fig:imageCorrespondenceCorrectMatch,fig:imageCorrespondenceIncorrectMatch} show two examples of a true positive match and a true negative match respectively. The green line shows a condition positive match and the red lines show condition negative matches. In \Cref{fig:imageCorrespondenceCorrectMatch} we see that there indeed is a correspondence between the best match of the two images with distance 0.083, and that our matching strategy results in a distance ratio (score) $s$ of 0.92. In \Cref{fig:imageCorrespondenceIncorrectMatch} we see that there is no match between the best matching descriptors of each image with distance 0.081. For this match $s$ is computed to 0.97. If we wanted to classify both matches correctly we should therefore set our threshold $t$ between 0.92 and 0.97. If we had used the distance as similarity measure we would not have been able to classify both correctly since the distance of the condition negative match is lower than the distance of the condition positive match.
-
-When having computed the distance ratios of all matches, we are able to construct the ROC- and PR-curves giving us two measures of the performance of the descriptor matching. \Cref{fig:imageCorrespondenceCurves} shows the ROC-curve \subref{fig:imageCorrespondenceROC} and PR-curve \subref{fig:imageCorrespondencePR} as well as the area under the two curves. The match has a ROC AUC of 0.72 and PR AUC of 0.63. From the ROC plot wee see that the descriptor matching performs better than a random classification since the ROC-curve (blue line) lies above the curve of no predictive value (dashed line). This is likewise indicated by the ROC AUC which is above the random classification ROC AUC of 0.5.
-
-%\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+%
 \begin{figure}[p]
 	\centerline{\includegraphics[width=1.1\textwidth]{img/imageCorrespondenceMatches.pdf}}
 	\caption{Matches with score $s$ below threshold $t = 0.8$. Condition positive and negative matches are shown in green and red, respectively.}
@@ -268,7 +263,6 @@ When having computed the distance ratios of all matches, we are able to construc
 	\caption{Example of an condition negative match. First (1) and second (2) best matches have descriptor distances $0.079$ and $0.081$, respectively, resulting in a distance ratio of $0.97$.}
 	\label{fig:imageCorrespondenceIncorrectMatch}
 \end{figure}
-%\restoregeometry
 %
 \begin{figure}[tb]
 	\centering
@@ -285,6 +279,10 @@ When having computed the distance ratios of all matches, we are able to construc
 	\caption{Examples of evaluation measure curves}
 	\label{fig:imageCorrespondenceCurves}
 \end{figure}
+
+\Cref{fig:imageCorrespondenceCorrectMatch,fig:imageCorrespondenceIncorrectMatch} show two examples of a true positive match and a true negative match respectively. The green line shows a condition positive match and the red lines show condition negative matches. In \Cref{fig:imageCorrespondenceCorrectMatch} we see that there indeed is a correspondence between the best match of the two images with distance 0.083, and that our matching strategy results in a distance ratio (score) $s$ of 0.92. In \Cref{fig:imageCorrespondenceIncorrectMatch} we see that there is no match between the best matching descriptors of each image with distance 0.081. For this match $s$ is computed to 0.97. If we wanted to classify both matches correctly we should therefore set our threshold $t$ between 0.92 and 0.97. If we had used the distance as similarity measure we would not have been able to classify both correctly since the distance of the condition negative match is lower than the distance of the condition positive match.
+
+When having computed the distance ratios of all matches, we are able to construct the ROC- and PR-curves giving us two measures of the performance of the descriptor matching. \Cref{fig:imageCorrespondenceCurves} shows the ROC-curve \subref{fig:imageCorrespondenceROC} and PR-curve \subref{fig:imageCorrespondencePR} as well as the area under the two curves. The match has a ROC AUC of 0.72 and PR AUC of 0.63. From the ROC plot wee see that the descriptor matching performs better than a random classification since the ROC-curve (blue line) lies above the curve of no predictive value (dashed line). This is likewise indicated by the ROC AUC which is above the random classification ROC AUC of 0.5.
 %
 \section{Parameter study}
 \label{sec:icParameterStudy}
@@ -329,7 +327,7 @@ Log polar generally worse than polar.
 \centerline{
 \begin{tabular}{ l c c c c c c c}
 \toprule
-{} & \multicolumn{6}{c}{Splits} \\
+{} & \multicolumn{6}{c}{Cross-validation fold} \\
 Parameter & 1 & 2 & 3 & 4 & 5 & 6 & chosen \\ \midrule
 Grid type & PC & CPC & PC & PC & PC & PC & \textbf{PC} \\
 Grid size & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & \textbf{$\mathbf{12 \times 2}$} \\
@@ -343,7 +341,7 @@ Bin scale $\beta$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $\mathbf{1.3
 Norm. scale $\eta$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.8$ & $\mathbf{1.6}$ \\
 \bottomrule
 \end{tabular}}
-\caption{Parameter study optimal parameters from 6-fold cross validation of GO}
+\caption{Optimized parameters from our parameter study for GO. Separate sets of parameters are found for each fold, and we manually choose a set of recommended parameters based on these.}
 \label{fig:ICparamsGo}
 %
 \vspace{1cm}
@@ -351,7 +349,7 @@ Norm. scale $\eta$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.8$ & $\mathbf{1.
 \centerline{
 \begin{tabular}{ l c c c c c c c}
 \toprule
-{} & \multicolumn{6}{c}{Splits} \\
+{} & \multicolumn{6}{c}{Cross-validation fold} \\
 Parameter & 1 & 2 & 3 & 4 & 5 & 6 & chosen \\ \midrule
 Grid type & CPC & CPC & CPC & CPC & CPC & CPC & \textbf{CPC} \\
 Grid size & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & \textbf{$\mathbf{12 \times 2}$} \\
@@ -365,44 +363,8 @@ Bin scale $\beta$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $\mathbf{2.0
 Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.6}$ \\
 \bottomrule
 \end{tabular}}
-\caption{Parameter study optimal parameters from 6-fold cross validation of SI}
+\caption{Optimized parameters from our parameter study for SI.}
 \label{fig:ICparamsSi}
-\end{table}
-%
-\begin{table}[tb]
-\centering
-\begin{tabular}{ c c c c c c c }
-\toprule
-Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
-$6 \times 2$ & $0.756$ & $0.756$ & $0.759$ & $0.759$ & $0.700$ & $0.732$ \\ 
-$8 \times 2$ & $0.767$ & $0.767$ & $0.770$ & $0.770$ & $0.759$ & $0.763$ \\ 
-$10 \times 2$ & $0.772$ & $0.772$ & $0.776$ & $0.776$ & $0.769$ & $0.769$ \\ 
-$12 \times 2$ & $0.775$ & $0.775$ & $\mathbf{0.779}$ & $0.779$ & $0.770$ & $0.767$ \\ 
-$6 \times 3$ & $0.763$ & $0.764$ & $0.770$ & $0.770$ & - & - \\ 
-$8 \times 3$ & $0.771$ & $0.771$ & $0.777$ & $0.777$ & - & - \\ 
-$6 \times 4$ & $0.758$ & $0.759$ & $0.767$ & $0.767$ & - & - \\ 
-\bottomrule
-\end{tabular}
-\caption{Grid layout parameter study for GO}
-\label{tbl:dtuLayoutParametersGo}
-\end{table}
-%
-\begin{table}[tb]
-\centering
-\begin{tabular}{ c c c c c c c }
-\toprule
-Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
-$6 \times 2$ & $0.684$ & $0.685$ & $0.691$ & $0.692$ & $0.633$ & $0.664$ \\ 
-$8 \times 2$ & $0.712$ & $0.713$ & $0.720$ & $0.721$ & $0.707$ & $0.712$ \\ 
-$10 \times 2$ & $0.729$ & $0.731$ & $0.739$ & $0.739$ & $0.726$ & $0.727$ \\ 
-$12 \times 2$ & $0.738$ & $0.739$ & $0.748$ & $\mathbf{0.749}$ & $0.732$ & $0.729$ \\ 
-$6 \times 3$ & $0.711$ & $0.713$ & $0.717$ & $0.718$ & - & - \\ 
-$8 \times 3$ & $0.731$ & $0.733$ & $0.736$ & $0.738$ & - & - \\ 
-$6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
-\bottomrule
-\end{tabular}
-\caption{Grid layout parameter study for SI}
-\label{tbl:dtuLayoutParametersSi}
 \end{table}
 %
 \begin{figure}[p]
@@ -444,11 +406,11 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 		\label{fig:dtuParametersGo_normSigma}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for GO.}
+	\caption{Average matching performance on training data for GO when adjusting the parameters. Optimal parameter values are marked with a cross.}
 	\label{fig:dtuParametersGoAuc}
 	\vspace{1cm}
 	\includegraphics[width=0.593\textwidth]{img/dtuParametersGo_binCountDims.pdf}
-	\caption{Dimensionality of GO based on bin count $n$}
+	\caption{Dimensionality of GO when adjusting bin count $n$.}
 	\label{fig:dtuParametersGoDims}
 \end{figure}
 %
@@ -491,13 +453,49 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 		\label{fig:dtuParametersSi_normSigma}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for SI.}
+	\caption{Average matching performance on training data for GO when adjusting the parameters. Optimal parameter values are marked with a cross.}
 	\label{fig:dtuParametersSiAuc}
 	\vspace{1cm}
 	\includegraphics[width=0.593\textwidth]{img/dtuParametersSi_binCountDims.pdf}
-	\caption{Dimensionality of SI based on bin count $n$}
+	\caption{Dimensionality of SI when adjusting bin count $n$.}
 	\label{fig:dtuParametersSiDims}
 \end{figure}
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ c c c c c c c }
+\toprule
+Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
+$6 \times 2$ & $0.756$ & $0.756$ & $0.759$ & $0.759$ & $0.700$ & $0.732$ \\ 
+$8 \times 2$ & $0.767$ & $0.767$ & $0.770$ & $0.770$ & $0.759$ & $0.763$ \\ 
+$10 \times 2$ & $0.772$ & $0.772$ & $0.776$ & $0.776$ & $0.769$ & $0.769$ \\ 
+$12 \times 2$ & $0.775$ & $0.775$ & $\mathbf{0.779}$ & $0.779$ & $0.770$ & $0.767$ \\ 
+$6 \times 3$ & $0.763$ & $0.764$ & $0.770$ & $0.770$ & - & - \\ 
+$8 \times 3$ & $0.771$ & $0.771$ & $0.777$ & $0.777$ & - & - \\ 
+$6 \times 4$ & $0.758$ & $0.759$ & $0.767$ & $0.767$ & - & - \\ 
+\bottomrule
+\end{tabular}
+\caption{Average matching performance on training data for GO when adjusting the cell layout parameters. Optimal performance is marked in bold.}
+\label{tbl:dtuLayoutParametersGo}
+\end{table}
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ c c c c c c c }
+\toprule
+Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
+$6 \times 2$ & $0.684$ & $0.685$ & $0.691$ & $0.692$ & $0.633$ & $0.664$ \\ 
+$8 \times 2$ & $0.712$ & $0.713$ & $0.720$ & $0.721$ & $0.707$ & $0.712$ \\ 
+$10 \times 2$ & $0.729$ & $0.731$ & $0.739$ & $0.739$ & $0.726$ & $0.727$ \\ 
+$12 \times 2$ & $0.738$ & $0.739$ & $0.748$ & $\mathbf{0.749}$ & $0.732$ & $0.729$ \\ 
+$6 \times 3$ & $0.711$ & $0.713$ & $0.717$ & $0.718$ & - & - \\ 
+$8 \times 3$ & $0.731$ & $0.733$ & $0.736$ & $0.738$ & - & - \\ 
+$6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
+\bottomrule
+\end{tabular}
+\caption{Average matching performance on training data for SI when adjusting the cell layout parameters.}
+\label{tbl:dtuLayoutParametersSi}
+\end{table}
 %
 %\begin{figure}[tb]
 %	\centerline{\begin{subfigure}[t]{0.593\textwidth}
