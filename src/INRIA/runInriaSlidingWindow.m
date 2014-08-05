@@ -8,7 +8,7 @@ params.method.detectorArgs = {'type','square','scales',2.^(0:0.1:2),'spacing',5}
 
 % images = data.loadCache('negTestFull');
 % I = images(1);
-I.image = imread([paths.inriaDataSet '/Test/pos/person_204.png']);
+I.image = imread([paths.inriaDataSet '/Test/pos/crop001573.png']);
 
 [mFunc, mName] = parseMethod(params.method);
 profile off, profile on
