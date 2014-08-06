@@ -4,17 +4,15 @@ params = load('results/optimize/inriaParametersHog.mat');
 test = load('results/inriaTestSvmHogFinal.mat');
 paths = load('paths');
 
-params.method.detectorArgs = {'type','square','scales',2.^(0:0.1:2),'spacing',5};
+% params.method.detectorArgs = {'type','square','scales',2.^(0:0.1:2),'spacing',1};
+params.method.detectorArgs = {'type','square','scales',2.^(1.32:0.005:1.58),'spacing',1};
 
-% images = data.loadCache('negTestFull');
-% I = images(1);
-I.image = imread([paths.inriaDataSet '/Test/pos/crop001573.png']);
+% I.image = imread([paths.inriaDataSet '/Test/pos/crop001573.png']);
+I.image = imread('results/debugImage.png');
 
 [mFunc, mName] = parseMethod(params.method);
 profile off, profile on
 tic
-
-data = inriaData;
 
 [X,D] = inriaDescriptors(I,mFunc);
 
@@ -25,7 +23,8 @@ profile off
 s = D * test.svm.w';
 clear D;
 
-save('results/inriaSlidingWindowHog');
+% save('results/inriaSlidingWindowHog')
+save('results/debugImageHog')
 
 % t = -1;
 % idx = s > t;

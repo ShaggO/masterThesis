@@ -2,41 +2,29 @@ clc, clear all
 
 params = load('results/optimize/inriaParametersGoChosenSmall.mat');
 test = load('results/inriaTestSvmGoChosenSmallFinal.mat');
-% params = load('results/optimize/inriaParametersHog.mat');
-% test = load('results/inriaTestSvmHogFinal.mat');
 paths = load('paths');
 
- params.method.detectorArgs = {'type','square','scales',2.^(0:0.1:2),'spacing',5};
+% params.method.detectorArgs = {'type','square','scales',2.^(0:0.1:2),'spacing',1};
+params.method.detectorArgs = {'type','square','scales',2.^(1.32:0.005:1.58),'spacing',1};
 
-data = inriaData;
-%images = data.loadCache('posTest');
-I.image = imread([paths.inriaDataSet '/Test/pos/crop001573.png']);
-%I.image = imread([paths.inriaDataSet '/test_64x128_H96/pos/person_293f.png']);
+% I.image = imread([paths.inriaDataSet '/Test/pos/crop001573.png']);
+I.image = imread('results/debugImage.png');
 
 [mFunc, mName] = parseMethod(params.method);
 profile off, profile on
 tic
 
 [X,D] = inriaDescriptors(I,mFunc);
-% [L2,D2] = data.getDescriptors(params.method,false,'posTest',84,false);
-
-%% Test on positive test data
-%[LposTest,DposTest] = data.getDescriptors(params.method,false,'posTest','all',false);
-%DposTest = sparse(double(DposTest));
-%[~,~,probPos] = linearpredict(LposTest,DposTest,test.svm);
-
-%[probPos test.probPos]
 
 toc
 profile off
 % profile viewer
 
-% s = D * test.svm.w'
-% 
-[~,~,s] = linearpredict(1,sparse(double(D)),test.svm)
+s = D * test.svm.w';
+clear D;
 
- clear D;
- save('results/inriaSlidingWindowCompactGo')
+% save('results/inriaSlidingWindowCompactGo')
+save('results/debugImageCompactGo')
 
 % t = -1;
 % idx = s > t;
