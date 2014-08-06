@@ -127,19 +127,6 @@ Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per 
 In this section we will show an example of our proposed GO descriptor calculated from a positive pedestrian image. Furthermore we illustrate the connection between the GO descriptor and the weights of a SVM classifier trained using the test setup in \Cref{sec:inriaExperimentalSetup}.
 Finally we will show examples of the positive and negative images whose SVM classification we have most and least confidence in.
 
-\Cref{fig:hogExample} shows a descriptor example from \citet{dalal2005histograms}, and \Cref{fig:inriaExample} shows the corresponding images reproduced for our GO descriptor. Since HOG has each histogram of gradients ``repeated'' by using block normalization, only the blocks centered at each pixel are illustrated. Our descriptor is illustrated for each cell of the descriptor. The average gradient images over the training data in \subref{fig:inriaPosTrainMeanM} are similar to one another, as they both are computed using central difference filters without smoothing. Likewise we clearly see the silhouette of a pedestrian in these average images.
-
-The maximal positive and minimal negative SVM weights in \subref{fig:inriaExampleDescriptorSvmMax} and \subref{fig:inriaExampleDescriptorSvmMin} differ quite a lot since our descriptor has a much more dense grid. There are however some overall similarities such as large weights around the head and foot regions of the positive weights, at large weights inside the chest region of the negative SVM weights. In other words structure around the head and foot regions count towards a pedestrian detection and structure inside the chest region counts against a pedestrian detection.
-
-Having described the SVM weights, we now look at the descriptors in \subref{fig:inriaExampleDescriptor} computed from the images in \subref{fig:inriaExampleCells}. The descriptors weighted by the positive and negative SVM weights are illustrated in \subref{fig:inriaExampleDescriptorSvm} and \subref{fig:inriaExampleDescriptorSvmNeg} respectively. Both HOG and our descriptor clearly visualize the pedestrian in \subref{fig:inriaExampleDescriptorSvm}. From \subref{fig:inriaExampleDescriptorSvmNeg} we see that vertical lines inside the pedestrian count against a pedestrian detection. The HOG example however weights these lines higher than our SVM, which for some reason weights the horizontal lines in the border high.
-
-To get an idea of the types of images our trained SVM is best and worst at classifying, we find some of the pedestrian and non-pedestrian images with the highest and lowest classification scores. We call the pedestrian images with high classification scores true positives, as we are more likely to classify them correctly. Whether we do so of course depends on the exact threshold chosen. Similar statements can be said for false positives, true negatives, and false negatives. The images are shown in \Cref{fig:ownDescriptorExample}.
-
-Generally the true positive images show pedestrians in standard up-right poses, with clothing clearly distinctive from the background, and having little to no occlusions. The false negatives are quite the opposite, and many have dim lighting with the person hard to make out. The true negative examples are all sky, with very little gradient structure. The false positives are quite varied; some have vertical lines at places a person could stand, but it is not obvious to see how they could be classified as pedestrians.
-
-\todo{If time permits: Add examples of edge case classifications with their visualized descriptors?}
-%
-%\newgeometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
 \begin{figure}[tb]
 	\centerline{
 	\begin{subfigure}[t]{0.17\textwidth}
@@ -236,10 +223,8 @@ Generally the true positive images show pedestrians in standard up-right poses, 
 	\caption{Example of our GO descriptor following the same procedure as \Cref{fig:hogExample}. \subref{fig:inriaExampleDescriptorSvmMax} and \subref{fig:inriaExampleDescriptorSvmMin} are however shown for each cell instead of the HOG blocks, and upon \subref{fig:inriaExampleCells} we have illustrated out grid layout using the cell spacing $r$.}
 	\label{fig:inriaExample}
 \end{figure}
-%\restoregeometry
 %
-%
-\begin{figure}
+\begin{figure}[p]
 	\begin{subfigure}[t]{\textwidth}
 		\centerline{\includegraphics[width=1.2\textwidth]{img/objectDetectionTP.png}}
 		\caption{True positives}
@@ -263,15 +248,67 @@ Generally the true positive images show pedestrians in standard up-right poses, 
 		\caption{False positives}
 		\label{fig:objectDetectionFP}
 	\end{subfigure}
-	\caption{Example classifications of INRIA cut-outs.}
+	\caption{Example classifications of INRIA cut-outs by our GO descriptor. This shows the types of images our trained SVM is best and worst at classifying.}
 	\label{fig:ownDescriptorExample}
 \end{figure}
-%\restoregeometry
+%
+\Cref{fig:hogExample} shows a descriptor example from \citet{dalal2005histograms}, and \Cref{fig:inriaExample} shows the corresponding images reproduced for our GO descriptor. Since HOG has each histogram of gradients ``repeated'' by using block normalization, only the blocks centered at each pixel are illustrated. Our descriptor is illustrated for each cell of the descriptor. The average gradient images over the training data in \subref{fig:inriaPosTrainMeanM} are similar to one another, as they both are computed using central difference filters without smoothing. Likewise we clearly see the silhouette of a pedestrian in these average images.
 
+The maximal positive and minimal negative SVM weights in \subref{fig:inriaExampleDescriptorSvmMax} and \subref{fig:inriaExampleDescriptorSvmMin} differ quite a lot since our descriptor has a much more dense grid. There are however some overall similarities such as large weights around the head and foot regions of the positive weights, at large weights inside the chest region of the negative SVM weights. In other words structure around the head and foot regions count towards a pedestrian detection and structure inside the chest region counts against a pedestrian detection.
+
+Having described the SVM weights, we now look at the descriptors in \subref{fig:inriaExampleDescriptor} computed from the images in \subref{fig:inriaExampleCells}. The descriptors weighted by the positive and negative SVM weights are illustrated in \subref{fig:inriaExampleDescriptorSvm} and \subref{fig:inriaExampleDescriptorSvmNeg} respectively. Both HOG and our descriptor clearly visualize the pedestrian in \subref{fig:inriaExampleDescriptorSvm}. From \subref{fig:inriaExampleDescriptorSvmNeg} we see that vertical lines inside the pedestrian count against a pedestrian detection. The HOG example however weights these lines higher than our SVM, which for some reason weights the horizontal lines in the border high.
+
+To get an idea of the types of images our trained SVM is best and worst at classifying, we find some of the pedestrian and non-pedestrian images with the highest and lowest classification scores. We call the pedestrian images with high classification scores true positives, as we are more likely to classify them correctly. Whether we do so of course depends on the exact threshold chosen. Similar statements can be said for false positives, true negatives, and false negatives. The images are shown in \Cref{fig:ownDescriptorExample}.
+
+Generally the true positive images show pedestrians in standard up-right poses, with clothing clearly distinctive from the background, and having little to no occlusions. The false negatives are quite the opposite, and many have dim lighting with the person hard to make out. The true negative examples are all sky, with very little gradient structure. The false positives are quite varied; some have vertical lines at places a person could stand, but it is not obvious to see how they could be classified as pedestrians.
+%
 \section{Parameter study}
 \label{sec:odParameterStudy}
 %
-We follow the same setup as the image correspondence parameter study.
+%We wish to optimize the descriptor parameters listed in \Cref{sec:descriptorParameters} with the objective of maximizing average matching PR AUC. We do this separately for GO and SI as they may have different optimal parameters, and simply combine these to create the GO+SI descriptor. As mentioned in the experimental setup, we have split the DTU dataset into six parts to reduce overfitting by cross-validation. For each iteration we optimize parameters on five parts and test the optimized descriptor on the final part. This means we obtain six sets of parameters and a single PR AUC for each image, where the images are evaluated without optimizing across their respective scenes. To save time evaluating parameters, we scale the images to half size and convert them to grayscale. The testing is done on the full scale images converted to opponent colour space as mentioned in \Cref{sec:opponentColourSpace}.
+%
+%Our actual parameter optimization is problematic because we need to optimize ten parameters at once, and each evaluation is computationally heavy. Our basic strategy is thus to cycle through each parameter and optimize it separately while fixing the other parameters. We do this a number of iterations with the hope of reaching convergence.
+%The risk of this strategy is getting stuck in local optima. To avoid this, recall that we have defined the parameters to reduce correlation: e.g. when bin count $n$ is increased, the width of the bins is automatically reduced to compensate. We also select certain correlated parameters to optimize together: grid type with grid size, as well as cell and bin kernels with their respective scales. Furthermore we optimize continuous parameters in two steps: first a coarse search and then a finer search around the best result.
+%
+%The optimal parameters of our parameter study for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively.
+
+We follow the same setup as our image correspondence parameter study in \Cref{sec:icParameterStudy}, with a couple exceptions. Since the dataset has a pre-defined split into training and test data, we only run the parameter study once (with 6-fold cross validation) on training data and obtain a single set of parameters. The parameters are also slightly different of the region cell layout and the addition of the SVM-weight $C$, which we also wish to optimize for each descriptor.
+
+The optimal parameters for our GO and SI descriptors are shown in \Cref{tbl:INRIAparams}, and the optimal $C$ values for all descriptors are shown in \Cref{tbl:INRIAparamC}. The effect of adjusting the parameters relative to the optimized parameters can be seen for GO in \Cref{fig:inriaParametersGoAuc} and SI in \Cref{fig:inriaParametersSiAuc}. Cell spacing $r$ seems to the most important parameter: Decreasing it improves performance greatly, but the increased number of cells also results in a much higher dimensionality. We decided not to allow $r$ values lower than the current $1.6$, because the current dimensionality is already almost too high to work with. Most of the other parameters have a large range of values that produce good results. Box filters outperform the alternatives as cell kernels, while the choice of bin kernel is not very important.
+
+Due to the high dimensionality we construct a compact version of our GO descriptor based on these training results. We keep the same optimal parameters, except we increase cell spacing $r = 1.94$ and reduce bin count $n = 9$. This reduces the dimensionality below HOG. We will go into further detail in the results section.
+
+\begin{table}[p]
+\centering
+\begin{tabular}{ l c c }
+\toprule
+{} & \multicolumn{2}{c}{Methods} \\
+Parameter & GO & SI \\ \midrule
+Grid type & Square & Square \\
+Cell spacing $r$ & $1.6$ & $1.6$ \\
+Cell kernel & \textit{Box} & \textit{Box} \\
+Cell scale $\alpha$ & $3.3$ & $3.5$ \\
+Bin count $n$ & $15$ & $9$ \\
+Bin kernel & \textit{Tri} & \textit{Box} \\
+Bin scale $\beta$ & $1.0$ & $1.5$ \\
+Normalization scale $\eta$ & $6.0$ & $5.0$ \\
+\bottomrule
+\end{tabular}
+\caption{Optimized parameters from our parameter study for GO and SI.}
+\label{tbl:INRIAparams}
+%
+\vspace{5mm}
+%
+\begin{tabular}{ l c c c c }
+\toprule
+{} & \multicolumn{4}{c}{Methods} \\
+Parameter & GO & SI & GO+SI & HOG \\ \midrule
+$\log C$ & $1.3\cdot 10^{-3}$ & $2.5\cdot 10^{-3}$ & $1.6\cdot 10^{-3}$ & $1.3\cdot 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\caption{Optimized SVM weight C for GO, SI, GO+SI, and HOG. TODO: Add compact GO}
+\label{tbl:INRIAparamC}
+\end{table}
 %
 \begin{figure}[p]
 \centering
@@ -312,7 +349,7 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersGo_logC}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for GO. We plot the cross-validation PR AUC for various parameter values, and mark the optimal values with a cross.}
+	\caption{Average classification performance on training data for GO when adjusting the parameters. Optimal parameter values are marked with a cross.}
 	\label{fig:inriaParametersGoAuc}
 	\vspace{1cm}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
@@ -328,7 +365,7 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersGo_binCountDims}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Dimensionality of our GO descriptor for various parameter values.}
+	\caption{Dimensionality of GO when adjusting the parameters.}
 	\label{fig:inriaParametersGoDims}
 \end{figure}
 %
@@ -371,7 +408,7 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersSi_logC}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Parameter study results for SI. We plot the cross-validation PR AUC for various parameter values, and mark the optimal values with a cross.}
+	\caption{Average classification performance on training data for SI when adjusting the parameters. Optimal parameter values are marked with a cross.}
 	\label{fig:inriaParametersSiAuc}
 	\vspace{1cm}
 	\centerline{\begin{subfigure}[t]{0.593\textwidth}
@@ -387,42 +424,9 @@ We follow the same setup as the image correspondence parameter study.
 		\label{fig:inriaParametersSi_binCountDims}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Dimensionality of our SI descriptor for various parameter values.}
+	\caption{Dimensionality of SI when adjusting the parameters.}
 	\label{fig:inriaParametersSiDims}
 \end{figure}
-% 
-\begin{table}[tb]
-\centering
-\begin{tabular}{ l c c }
-\toprule
-{} & \multicolumn{2}{c}{Methods} \\
-Parameter & GO & SI \\ \midrule
-Grid type & Square & Square \\
-Cell spacing $r$ & $1.6$ & $1.6$ \\
-Cell kernel & \textit{Box} & \textit{Box} \\
-Cell scale $\alpha$ & $3.3$ & $3.5$ \\
-Bin count $n$ & $15$ & $9$ \\
-Bin kernel & \textit{Tri} & \textit{Box} \\
-Bin scale $\beta$ & $1.0$ & $1.5$ \\
-Normalization scale $\eta$ & $6.0$ & $5.0$ \\
-\bottomrule
-\end{tabular}
-\caption{Parameter study from 6-fold cross validation for GO and SI}
-\label{fig:INRIAparamC}
-\end{table}
-%
-\begin{table}[tb]
-\centering
-\begin{tabular}{ l c c c c }
-\toprule
-{} & \multicolumn{4}{c}{Methods} \\
-Parameter & GO & SI & GO+SI & HOG \\ \midrule
-$\log C$ & $1.3\cdot 10^{-3}$ & $2.5\cdot 10^{-3}$ & $1.6\cdot 10^{-3}$ & $1.3\cdot 10^{-3}$ \\
-\bottomrule
-\end{tabular}
-\caption{Parameter study for optimal C parameter from 6-fold cross validation for GO, SI, GO+SI, and HOG}
-\label{fig:INRIAparamC}
-\end{table}
 %
 We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.9996$: Normalizing the final descriptors before training the SVMs reduces the AUC by $0.072$. Omitting pixel normalization reduces the AUC by $0.326$. Smoothing images at scale $\sigma = 1$ reduces the AUC by $0.044$.
 %
@@ -430,10 +434,17 @@ We have also experimented with various other parts of our descriptor that are no
 %
 Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
 
-\Cref{tbl:inriaResults} shows a performance summary for the five descriptors both with and without hard training. By looking at all the performance measures, we see an independence between the measures and the ordering of the descriptors as indicated by the ROC- and PR-curves. When looking at the dimensionality of the descriptors, we see that our GO and GO+SI descriptors are 3.7 and 2.3 times the size of HOG respectively. The SI descriptor is 1.4 times the size of HOG, whereas our Compact GO is 0.9 times the size of HOG. This is not a problem when computing single descriptors, but it could potentially become a problem when using a sliding window with low stride and many scales on large images. An interesting observation is that Compact GO is better than SI despite having 0.62 times lower dimensionality.
+\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
 
-From the table we furthermore see, that hard training always improves descriptor performance. HOG however adds quite a lot more hard negatives to the existing 48.720 negative windows than any of our descriptors. Even though GO+SI only adds 1024 hard negatives, the increase in performance is still substantial.
-\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors, and why there is a large difference in the amount of hard negatives added. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
+\Cref{tbl:inriaResults} shows a performance summary for the five descriptors both with and without hard training. The first thing we notice is the large variation in dimensionality.
+%
+
+
+Notes: Ordering the same on all perf. measures.
+Dimensions: Compact GO lower than HOG. GO+SI probably too big for most purposes.
+Hard training: Many hard negatives on HOG compared to our descriptors. Improved performance greatly for HOG. Generally a substantial improvement by using hard negatives. Initially 40 windows pr. negative ~ 48k windows. 1024 not many compared to this number, but great improvement.
+
+Generally: Compact GO better than SI.
 
 \begin{table}[tb]
 \centerline{
@@ -448,7 +459,7 @@ ROC AUC & 0.999981 & 0.999979 & 0.999959 & 0.99975 & 0.998375 \\
 Recall at $10^{-4}$ FPR & 0.989 & 0.984 & 0.966 & 0.919 & 0.859 \\
 \bottomrule
 \end{tabular}}
-\caption{Summary of test results on the INRIA dataset.}
+\caption{Summary of test results on the INRIA dataset. The descriptors are ordered from best to worst. For each descriptor we report the dimensionality, number of hard negatives added to the training data, test PR AUC without added hard negatives, and test PR AUC, ROC AUC, and recall at $10^{-4}$ FPR after the hard negatives are added. The latter measure is the one used by \Citet{dalal2005histograms}.}
 \label{tbl:inriaResults}
 \end{table}
 %
