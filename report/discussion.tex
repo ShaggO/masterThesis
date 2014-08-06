@@ -5,6 +5,13 @@
 
 - Is it worth adding shape index?
 - Importance of different parameters and design choices, relate these results to other articles
+	- DTU
+		- grid radius: 13.5 (area 572.5), SIFT: (area 256, 24x24 give 576)
+		Grid size:
+		We wish to compare our layout to that of GLOH and DAISY. Using our terminology, GLOH has size $8\times2$ with a central cell, and DAISY has size $8 \times 3$ with a central cell. Compared to these grids, we have more angular cells but the same amount of rings as GLOH. All the descriptors are however using a central cell.
+		
+		
+		
 - Optimal parameters are very different for the two applications, hard to choose a good overall descriptor. Biggest differences: smooth, kernels, norm. scale, final descriptor normalization
 - Considered using multi-scale descriptors as the galaxy descriptor, but it doesn't seem like a good idea
 - Dimensionality of descriptors, worth using compact GO?
