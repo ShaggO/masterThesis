@@ -1,4 +1,4 @@
-function [L,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth)
+function [L,Isizes,file] = dGaussScaleSpace(I,d,scales,rescale,smooth)
 %SCALESPACE Gaussian derivative scale space
 % Input:
 %   I           image
@@ -15,6 +15,7 @@ hash = num2str(imageHash(I(:)));
 load('paths.mat')
 sPath = [dtuResults '/scaleSpaces/' hash '.mat'];
 [loaded,file] = loadIfExist(sPath,'file');
+loaded = false;
 if loaded
     [b,idx] = ismember(round(100*scales),round(100*file.scales));
     if ~all(b)

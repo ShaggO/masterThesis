@@ -305,23 +305,21 @@ We wish to optimize the descriptor parameters listed in \Cref{sec:descriptorPara
 Our actual parameter optimization is problematic because we need to optimize ten parameters at once, and each evaluation is computationally heavy. Our basic strategy is thus to cycle through each parameter and optimize it separately while fixing the other parameters. We do this a number of iterations with the hope of reaching convergence.
 The risk of this strategy is getting stuck in local optima. To avoid this, recall that we have defined the parameters to reduce correlation: e.g. when bin count $n$ is increased, the width of the bins is automatically reduced to compensate. We also select certain correlated parameters to optimize together: grid type with grid size, as well as cell and bin kernels with their respective scales. Furthermore we optimize continuous parameters in two steps: first a coarse search and then a finer search around the best result.
 
-The optimal parameters for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively.
-From these results we see that most of the parameters are quite stable across the splits.
+The optimal parameters of our parameter study for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively.
+From these results we see that most of the parameters are quite stable across the folds.
 
-------------- NOTES ---------------
-Generally: Parameters quite stable across splits. GO center scale $\rho$ a bit unstable.
+When comparing the parameters of GO and SI to one another, we first look at the grid type and size. SI and a single of the GO folds use the concentric polar central (CPC) grid, whereas the five other GO folds use the polar central (PC) grid. Both descriptors use grid size $12 \times 2$. \Cref{tbl:dtuLayoutParametersGo,tbl:dtuLayoutParametersSi} show the average PR AUC on training data for GO and SI respectively for various choices of grid parameters. We see that the $12\times2$ PC and CPC grids have nearly equal average PR AUC for both GO and SI, and hence the choice between these two grid types only gives a marginal performance difference. By looking at the grid results, we see that the performance difference between a concentric grid and the corresponding non-concentric grid is very small. The difference between log-polar (LP) and concentric log-polar (CLP) is however significant, which is caused by a more dense grid when using CLP than LP.
+The polar grids with a central cell perform slightly better than their corresponding polar grids without a central cell. Furthermore log-polar grids are always worse than the corresponding polar grids.
 
-GO - SI parameter comparison
-Same grid size. Close to the same grid radius. Other parameters differ.
+\Cref{fig:dtuParametersGoAuc,fig:dtuParametersSiAuc} show average PR AUC on training data for GO and SI respectively when adjusting the parameters relative to the optimized parameters. Furthermore \Cref{fig:dtuParametersGoDims,fig:dtuParametersSiDims} show the dimensionality of GO and SI respectively when varying the bin count $n$. On each of these graphs, the optimal choice of each parameter is marked with a cross. From the figures we see that the grid radius $r$ as well as cell and bin kernels and scales are the parameters that affect performance the most for both GO and SI.
 
------
-Grid layout notes:
-------
-Grid radius big compared to SIFT.
-Concentric and "normal": Very small difference
-Centrals slightly better
-Log polar generally worse than polar.
-12x2 many angular cells compared to GLOH and DAISY
+% The bin count $n$ parameters for GO (\Cref{fig:dtuParametersGo_binCount}) and SI (\Cref{fig:dtuParametersSi_binCount}) behave differently. For GO the performance increases for increasing $n$ and flattens out around 12-13, whereas performance drops significantly when going in either direction from $n = 8$ for SI.
+
+Looking at the cell and bin kernels, we see that both GO and SI use Gaussian kernels. From \Cref{fig:dtuParametersGo_cellSigma,fig:dtuParametersGo_binSigma} we see that the differences in maximum performance between Gaussian and triangle kernels are very small. By choosing the triangle kernel instead of the Gaussian, we could save computations, since the two kernels have different support radius in practice. This alternative choice is viable since the optimal $\alpha$ and $\beta$ for the triangle kernel are only slightly higher than for the Gaussian kernel.
+This holds for SI as well as seen in \Cref{fig:dtuParametersSi_cellSigma,fig:dtuParametersSi_binSigma}.
+
+For both descriptors the center scale $\rho$ has little importance once it reaches a certain minimal value for each descriptor as can be seen in \Cref{fig:dtuParametersGo_centerSigma,fig:dtuParametersSi_centerSigma} for GO and SI respectively. This is the reason why the optimal $\rho$ is unstable across the folds for GO.
+
 %
 \begin{table}[p]
 \centerline{
@@ -363,8 +361,44 @@ Bin scale $\beta$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $\mathbf{2.0
 Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.6}$ \\
 \bottomrule
 \end{tabular}}
-\caption{Optimized parameters from our parameter study for SI.}
+\caption{Optimized parameters from our parameter study for SI. Separate sets of parameters are found for each fold, and we manually choose a set of recommended parameters based on these.}
 \label{fig:ICparamsSi}
+\end{table}
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ c c c c c c c }
+\toprule
+Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
+$6 \times 2$ & $0.756$ & $0.756$ & $0.759$ & $0.759$ & $0.700$ & $0.732$ \\ 
+$8 \times 2$ & $0.767$ & $0.767$ & $0.770$ & $0.770$ & $0.759$ & $0.763$ \\ 
+$10 \times 2$ & $0.772$ & $0.772$ & $0.776$ & $0.776$ & $0.769$ & $0.769$ \\ 
+$12 \times 2$ & $0.775$ & $0.775$ & $\mathbf{0.779}$ & $0.779$ & $0.770$ & $0.767$ \\ 
+$6 \times 3$ & $0.763$ & $0.764$ & $0.770$ & $0.770$ & - & - \\ 
+$8 \times 3$ & $0.771$ & $0.771$ & $0.777$ & $0.777$ & - & - \\ 
+$6 \times 4$ & $0.758$ & $0.759$ & $0.767$ & $0.767$ & - & - \\ 
+\bottomrule
+\end{tabular}
+\caption{Average matching performance (PR AUC) on training data for GO when adjusting the grid parameters. Optimal performance is marked in bold.}
+\label{tbl:dtuLayoutParametersGo}
+\end{table}
+%
+\begin{table}[tb]
+\centering
+\begin{tabular}{ c c c c c c c }
+\toprule
+Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
+$6 \times 2$ & $0.684$ & $0.685$ & $0.691$ & $0.692$ & $0.633$ & $0.664$ \\ 
+$8 \times 2$ & $0.712$ & $0.713$ & $0.720$ & $0.721$ & $0.707$ & $0.712$ \\ 
+$10 \times 2$ & $0.729$ & $0.731$ & $0.739$ & $0.739$ & $0.726$ & $0.727$ \\ 
+$12 \times 2$ & $0.738$ & $0.739$ & $0.748$ & $\mathbf{0.749}$ & $0.732$ & $0.729$ \\ 
+$6 \times 3$ & $0.711$ & $0.713$ & $0.717$ & $0.718$ & - & - \\ 
+$8 \times 3$ & $0.731$ & $0.733$ & $0.736$ & $0.738$ & - & - \\ 
+$6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
+\bottomrule
+\end{tabular}
+\caption{Average matching performance (PR AUC) on training data for SI when adjusting the grid parameters. Optimal performance is marked in bold.}
+\label{tbl:dtuLayoutParametersSi}
 \end{table}
 %
 \begin{figure}[p]
@@ -406,7 +440,7 @@ Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.
 		\label{fig:dtuParametersGo_normSigma}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Average matching performance on training data for GO when adjusting the parameters. Optimal parameter values are marked with a cross.}
+	\caption{Average matching performance (PR AUC) on training data for GO when adjusting the parameters. Optimal parameter values are marked with a cross.}
 	\label{fig:dtuParametersGoAuc}
 	\vspace{1cm}
 	\includegraphics[width=0.593\textwidth]{img/dtuParametersGo_binCountDims.pdf}
@@ -453,49 +487,13 @@ Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.
 		\label{fig:dtuParametersSi_normSigma}
 		\vspace{2mm}
 	\end{subfigure}}
-	\caption{Average matching performance on training data for GO when adjusting the parameters. Optimal parameter values are marked with a cross.}
+	\caption{Average matching performance (PR AUC) on training data for GO when adjusting the parameters. Optimal parameter values are marked with a cross.}
 	\label{fig:dtuParametersSiAuc}
 	\vspace{1cm}
 	\includegraphics[width=0.593\textwidth]{img/dtuParametersSi_binCountDims.pdf}
 	\caption{Dimensionality of SI when adjusting bin count $n$.}
 	\label{fig:dtuParametersSiDims}
 \end{figure}
-%
-\begin{table}[tb]
-\centering
-\begin{tabular}{ c c c c c c c }
-\toprule
-Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
-$6 \times 2$ & $0.756$ & $0.756$ & $0.759$ & $0.759$ & $0.700$ & $0.732$ \\ 
-$8 \times 2$ & $0.767$ & $0.767$ & $0.770$ & $0.770$ & $0.759$ & $0.763$ \\ 
-$10 \times 2$ & $0.772$ & $0.772$ & $0.776$ & $0.776$ & $0.769$ & $0.769$ \\ 
-$12 \times 2$ & $0.775$ & $0.775$ & $\mathbf{0.779}$ & $0.779$ & $0.770$ & $0.767$ \\ 
-$6 \times 3$ & $0.763$ & $0.764$ & $0.770$ & $0.770$ & - & - \\ 
-$8 \times 3$ & $0.771$ & $0.771$ & $0.777$ & $0.777$ & - & - \\ 
-$6 \times 4$ & $0.758$ & $0.759$ & $0.767$ & $0.767$ & - & - \\ 
-\bottomrule
-\end{tabular}
-\caption{Average matching performance on training data for GO when adjusting the cell layout parameters. Optimal performance is marked in bold.}
-\label{tbl:dtuLayoutParametersGo}
-\end{table}
-%
-\begin{table}[tb]
-\centering
-\begin{tabular}{ c c c c c c c }
-\toprule
-Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
-$6 \times 2$ & $0.684$ & $0.685$ & $0.691$ & $0.692$ & $0.633$ & $0.664$ \\ 
-$8 \times 2$ & $0.712$ & $0.713$ & $0.720$ & $0.721$ & $0.707$ & $0.712$ \\ 
-$10 \times 2$ & $0.729$ & $0.731$ & $0.739$ & $0.739$ & $0.726$ & $0.727$ \\ 
-$12 \times 2$ & $0.738$ & $0.739$ & $0.748$ & $\mathbf{0.749}$ & $0.732$ & $0.729$ \\ 
-$6 \times 3$ & $0.711$ & $0.713$ & $0.717$ & $0.718$ & - & - \\ 
-$8 \times 3$ & $0.731$ & $0.733$ & $0.736$ & $0.738$ & - & - \\ 
-$6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
-\bottomrule
-\end{tabular}
-\caption{Average matching performance on training data for SI when adjusting the cell layout parameters.}
-\label{tbl:dtuLayoutParametersSi}
-\end{table}
 %
 %\begin{figure}[tb]
 %	\centerline{\begin{subfigure}[t]{0.593\textwidth}
@@ -516,7 +514,7 @@ We have also experimented with various other parts of our descriptor that are no
 %
 \section{Results}
 %
-Having found the optimal parameters for each of the 6 splits in the previous section, we are now able to compute test results for each split and report the performance of our descriptors.
+Having found the optimal parameters for each of the 6 folds in the previous section, we are now able to compute test results for each fold and report the performance of our descriptors.
 We have chosen to compare our descriptor performance against the SIFT descriptor since \citet{dahl2011finding} found the combination of DoG and SIFT to perform well. We are however using the opponent colour space for our descriptors, and since \citet{dahl2012interest} found Opponent SIFT (see \Cref{sec:SIFT}) to perform well against other SIFT variants, this is the descriptor we will test our performance against.
 
 \Cref{fig:dtuResultsPR,fig:dtuResultsROC} show the mean PR and ROC AUC test results for the DTU dataset respectively. For both these measures the GO (red), SI (green), GO+SI (blue) and SIFT (dashed grey) results are shown. Recall from \Cref{sec:binaryClassificationMeasures} that an algorithm which optimizes PR AUC does not necessarily optimize ROC AUC. Despite this fact, the mean ROC AUCs for our descriptors compared to the SIFT ROC AUC are somewhat equal to the corresponding comparisons of mean PR AUCs. SI however has a slight advantage over GO and GO+SI when visually inspecting the mean ROC AUC figures. In \Cref{sec:performance_measures} we wrote that we gave the PR measure more importance than ROC, and hence The following comparison of performance between the descriptors is based on the PR AUC figures.
@@ -531,6 +529,8 @@ For light variations (\Cref{fig:dtuResultsPRxAxis,fig:dtuResultsPRzAxis}) our de
 Having inspected the graphs for mean PR AUCs, we are now interested in knowing whether the descriptors are statistically significantly different. We therefore perform Welch's $t$-test as described in \Cref{sec:welchsTtest} on each of the path positions. The resulting 95\% confidence interval graphs on the difference between our GO+SI descriptor and SIFT are show in \Cref{fig:dtuResultsStats}. As we see from the graphs, the confidence intervals cross 0 for all positions apart from position 1, 7, 8, and 9 of the $x$-axis light path and position 16 of the $z$-axis light path. In other words we cannot conclude that GO+SI and SIFT are significantly different except on these outermost positions of the light paths.
 
 Performing Welch's $t$-tests between other combinations of the GO, SI, GO+SI, and SIFT descriptors reveal that pairwise none of our descriptors are significantly different apart from GO, which is significantly better than SIFT on position 6 to 9 of the $x$-axis light path and position 16 of the $z$-axis light path. Furthermore we cannot conclude that SIFT is significantly better than any of our descriptors. Since the graphs for all these combinations are both space-consuming and not too informative once we have the above conclusions, we have chosen to omit them. \mycomment[MSN]{Should we include all the combination statistic figures in an appendix?}
+
+\todo{Comment on \Cref{tbl:dtuOverallResults}}
 %
 \begin{table}[tb]
 \centering
@@ -543,7 +543,7 @@ GO+SI & $1500/1650$ & $0.851$ & $0.889$ \\
 SIFT & $384$ & $0.831$ & $0.880$ \\ 
 \bottomrule
 \end{tabular}
-\caption{Average performance across all test images for the various descriptors. Note that GO has a variable number of dimensions because different bin counts were found optimal across the cross-validation splits.}
+\caption{Average performance across all test images for the various descriptors. Note that GO has a variable number of dimensions because different bin counts were found optimal across the cross-validation folds.}
 \label{tbl:dtuOverallResults}
 \end{table}
 %

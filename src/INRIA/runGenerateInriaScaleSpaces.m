@@ -26,9 +26,10 @@ if ~exist(sDir,'dir')
 end
 
 before = numel(dir(sDir));
-start = tic
+start = tic;
 
-parfor i = 1:numel(images)
+%parfor i = 1:numel(images)
+for i = 2:2
     img = images(i);
     if mod(i,100) == 0
         disp([timestamp(start) ' Image ' num2str(i) '/' num2str(numel(images))]);
@@ -37,15 +38,20 @@ parfor i = 1:numel(images)
     hash = num2str(imageHash(I(:)));
 
     sPath = [sDir '/' hash '.mat'];
-    [S,Isizes] = dGaussScaleSpace(I,d,scales,rescale,smooth);
-    parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,...
-        'scaleBase',scaleBase,'scaleOffset',scaleOffset,...
-        'sigmaRange',sigmaRange,'colour',colour,'d',d,...
-        'rescale',rescale,'chain',chain,'pixelDiff',pixelDiff,...
-        'smooth',smooth,'imgPath',img.path);
+    [S,Isizes,file] = dGaussScaleSpace(I,d,scales,rescale,smooth);
+%    parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,...
+%        'scaleBase',scaleBase,'scaleOffset',scaleOffset,...
+%        'sigmaRange',sigmaRange,'colour',colour,'d',d,...
+%        'rescale',rescale,'chain',chain,'pixelDiff',pixelDiff,...
+%        'smooth',smooth,'imgPath',img.path);
 end
 after = numel(dir(sDir));
 
 disp(['Number of images: ' num2str(numel(images))]);
 disp(['Number of files created: ' num2str(after - before)]);
-toc
+
+figure, imshow(S(3).xx);
+figure, imshow(file.S(3).xx)
+figure, imshow(S(3).yy);
+figure, imshow(file.S(3).yy)
+toc(start)
