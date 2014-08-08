@@ -262,23 +262,8 @@ The periodicity of the domain means that there are multiple distances between an
 where $d$ is the distance $x - \mu$ from a point $x$ to a bin center $\mu$, and $\min$ is the function that chooses the lowest of its arguments.
 
  \Cref{fig:1dFilterGaussianPeriodic,fig:1dFilterTrianglePeriodic,fig:1dFilterBoxPeriodic} show 1D examples of four periodic Gaussian, triangle and box kernels respectively on the interval $[-1,1]$. Notice how the wrap-around affects the kernels at both ends of the periods.
-
-\subsection{Renormalization}
-When making histograms over a non-periodic domain, the weight function will be cropped by the histogram bounds $f_\text{min}$ and $f_\text{max}$. We therefore risk biasing the weights towards the central bins of the domain, since the cropped filters will have. In order to avoid this, we view the bins as probability densities, and hence the area under each bin's weight function has to integrate to 1. This is done by renormalizing the functions based on their areas. Given a bin aperture function $B$ and a bin center $f_i$, for which $f_\text{min} \leq f_i \leq f_\text{max}$ we calculate the bounds $a$ and $b$ when $B$ is centered around $f_i$:
-\begin{align*}
-	a = f_\text{min} - f_i,\hspace{1cm}
-	b = f_\text{max} - f_i,\hspace{1cm}
-\end{align*}
-We notice that $a \leq 0 \leq b$. The renormalized bin aperture function $B_\text{renorm}$ is obtained by dividing $B$ with its definite integral:
-\begin{align*}
-	B_\text{renorm}\left( f(\x;\sigma)-f_i;\beta \right) = \frac{B \left(f(\x;\sigma)-f_i;\beta \right)}{\int_a^b B \left( z;\beta \right)\,\text{d}z}
-\end{align*}
-Notice how the bounds $a$ and $b$ of the integral are offset by the bin center $f_i$. The definite integrals of our chosen kernel functions are computed in \Cref{apx:histogramRenormalization}.
-
-\Cref{fig:1dFilterGaussianRenorm,fig:1dFilterTriangleRenorm,fig:1dFilterBoxRenorm} show 1D examples of four renormalized Gaussian, triangle, and box filters respectively on the interval $[-1,1]$. Notice how the two weight functions of the outer-most bins have higher peaks than the central bins in order to integrate to 1 when being cut off at the interval bounds. For periodic histograms the renormalization step is excluded since no cut off of the filters occurs.
-\todo{Decide what to do with the poor box illustration}
-
-\begin{figure}
+%
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}[t]{0.32\textwidth}
 		\includegraphics[width=\textwidth]{img/binFilterGaussianPeriodic.pdf}
@@ -310,9 +295,23 @@ Notice how the bounds $a$ and $b$ of the integral are offset by the bin center $
 		\caption{Renorm. box}
 		\label{fig:1dFilterBoxRenorm}
 	\end{subfigure}
-	\caption{Examples of periodic and renormalized 1D Gaussian, triangle, and box functions. Each figures contains four filters centered at values $-0.75$, $-0.25$, $0.25$, and $0.75$ and with $\sigma = \nicefrac{1}{2}$.}
+	\caption{Examples of periodic and renormalized 1D Gaussian, triangle, and box functions. Each figures contains four filters centered at values $-0.75$, $-0.25$, $0.25$, and $0.75$ and with $\beta = 0.3$.}
 	\label{fig:1dFilters}
 \end{figure}
+
+\subsection{Renormalization}
+When making histograms over a non-periodic domain, the weight function will be cropped by the histogram bounds $f_\text{min}$ and $f_\text{max}$. We therefore risk biasing the weights towards the central bins of the domain, since the cropped filters will have. In order to avoid this, we view the bins as probability densities, and hence the area under each bin's weight function has to integrate to 1. This is done by renormalizing the functions based on their areas. Given a bin aperture function $B$ and a bin center $f_i$, for which $f_\text{min} \leq f_i \leq f_\text{max}$ we calculate the bounds $a$ and $b$ when $B$ is centered around $f_i$:
+\begin{align*}
+	a = f_\text{min} - f_i,\hspace{1cm}
+	b = f_\text{max} - f_i,\hspace{1cm}
+\end{align*}
+We notice that $a \leq 0 \leq b$. The renormalized bin aperture function $B_\text{renorm}$ is obtained by dividing $B$ with its definite integral:
+\begin{align*}
+	B_\text{renorm}\left( f(\x;\sigma)-f_i;\beta \right) = \frac{B \left(f(\x;\sigma)-f_i;\beta \right)}{\int_a^b B \left( z;\beta \right)\,\text{d}z}
+\end{align*}
+Notice how the bounds $a$ and $b$ of the integral are offset by the bin center $f_i$. The definite integrals of our chosen kernel functions are computed in \Cref{apx:histogramRenormalization}.
+
+\Cref{fig:1dFilterGaussianRenorm,fig:1dFilterTriangleRenorm,fig:1dFilterBoxRenorm} show 1D examples of four renormalized Gaussian, triangle, and box filters respectively on the interval $[-1,1]$. Notice how the two weight functions of the outer-most bins have higher peaks than the central bins in order to integrate to 1 when being cut off at the interval bounds. For periodic histograms the renormalization step is excluded since no cut off of the filters occurs.
 %
 \section{Invariants and robustness}
 When describing interest points and their local regions in real world images, we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the interest point without any (or a predefined set) of these transformations applied, in which case we have a better chance of recognizing the interest point in other images.
@@ -320,19 +319,19 @@ When describing interest points and their local regions in real world images, we
 Apart from invariance to various transformations we also want to be robust to small changes in some of the transformations. This robustness should give us nearly equal descriptors despite having small errors in our estimation of the transformations.
 In this section we will go through a list of transformations that we wish for our descriptor to be invariant and possibly also robust to.
 
-\begin{table}[H]
+\begin{table}[tb]
 	\centering
-	\begin{tabular}{@{}l|ll@{}}
-	%\toprule
+	\begin{tabular}{l c c}
+	\toprule
 	Measure & Rotation & Illumination \\
-	\hline
+	\midrule
 	$\Theta$ & $\Theta - \theta $ & $\Theta$ \\
 	$M$ & $M$ & $a M$ \\
 	$S$ & $S$ & $S$ \\
 	$C$ & $C$ & $a C$ \\
-	%\bottomrule
+	\bottomrule
 	\end{tabular}
-	\caption{The transformation of various measures by rotation and illumination. The derivations are included in \cref{apx:image_transformations}.}
+	\caption{The transformation of various measures by rotation and illumination. The derivations are included in \cref{apx:image_transformations}. The rotation column corresponds to an image, which is rotated by $\theta$, and the illumination column corresponds to an affine transformation $aI+b$ of each pixel in image $I$.}
 	\label{tbl:measureInvariances}
 \end{table}
 
@@ -526,7 +525,7 @@ Note that PR-curves are used when the positive class is the main class of intere
 
 The choice between using the ROC- or PR-curves and their AUCs are discussed in the individual application sections \Cref{sec:od,sec:ic}.
 %
-\section{Welch's $t$-test}
+\section{Welch's \emph{t}-test}
 \label{sec:welchsTtest}
 
 Assume we have two sets of samples $X_1$ and $X_2$ from two normal distributions with unequal variances $\sigma_1$ and $\sigma_2$. \emph{Welch's $t$-test} is used for estimating the difference between the two sample means and their distribution intervals. It is defined as
