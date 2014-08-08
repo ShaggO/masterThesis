@@ -14,6 +14,7 @@ wRenorm = renormWeights(binType,binSigma,left,right,period > 0,binC);
 
 x = linspace(left,right,100000)';
 
+box on
 hold on
 for i = 1:binCount
     d = abs(x-binC(i));
@@ -23,7 +24,7 @@ for i = 1:binCount
     y(:,i) = wRenorm(i)*binF(d);
     plot(x,y(:,i),colour{i})
 end
-axis([left right 0 1.2*binCount/(right-left)])
+axis([left right 0 1*binCount/(right-left)])
 xlabel('value');
 ylabel('weight');
 
