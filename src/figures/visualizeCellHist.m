@@ -12,7 +12,7 @@ switch type
         v = repmat(sin(binC),[1 size(cells,1)]) .* H;
     case 'si'
         x = repmat(cells(:,1)',[numel(binC) 1]) + ...
-            repmat(linspace(-1.5,1.5,numel(binC))',[1 size(cells,1)])
+            repmat(linspace(-1.2,1.2,numel(binC))',[1 size(cells,1)])
         y = repmat(cells(:,2)',[numel(binC) 1]);
         u = zeros([numel(binC) size(cells,1)]);
         v = -H

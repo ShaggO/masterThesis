@@ -3,38 +3,42 @@
 
 \chapter{Discussion}
 
-- Is it worth adding shape index?
+Introduce discussion structure
+
+\section{Optimal parameters}
+
 - Importance of different parameters and design choices, relate these results to other articles
 	- DTU
 		- grid radius: 13.5 (area 572.5), SIFT: (area 256, 24x24 give 576)
 		Grid size:
 		We wish to compare our layout to that of GLOH and DAISY. Using our terminology, GLOH has size $8\times2$ with a central cell, and DAISY has size $8 \times 3$ with a central cell. Compared to these grids, we have more angular cells but the same amount of rings as GLOH. All the descriptors are however using a central cell.
-		
-		
-		
 - Optimal parameters are very different for the two applications, hard to choose a good overall descriptor. Biggest differences: smooth, kernels, norm. scale, final descriptor normalization
+
+\section{Design choices}
+
+- Is it worth adding shape index?
 - Considered using multi-scale descriptors as the galaxy descriptor, but it doesn't seem like a good idea
 - Dimensionality of descriptors, worth using compact GO?
-- Running time: we have not focused on running time, optionally run a profiler, where can we save time? (don't use MATLAB)
+		
+\section{Overall results}
+
 - Overall results and comparison of descriptor design with SIFT/HOG. SIFT: not much difference, HOG: we beat them by using a dense descriptor with pixel normalization instead of block normalization
 
-\section{Parameter study}
+\section{Running time}
 
+- Running time: we have not focused on running time, optionally run a profiler, where can we save time? (don't use MATLAB)
 
 \section{Future work} % rename to alternative approaches?
-- Improved pixel normalization:
-	- normalize by the area which we integrated over to avoid boundary conditions
-	- Some way of removing noise from dark areas
-- PCA to reduce dimensionality of GO+SI?
-- Two-way matching could improve matching results, but not important for comparing descriptors
-- Object detection could be evaluated on harder datasets, as we have almost perfect classification on INRIA
-- Higher level descriptors using our descriptor for better object classification
-- Higher (than 2) order differential information
-- Computing histograms at original scales, causing infeasible computation time. Maybe possible to limit the size and get good results?
-- Distribution of shape index is not uniform, maybe changing bin locations could help. Reference "Shape index 2009"
-- Better parameter optimization approaches. Simulated annealing?
+%
+Our pixel normalization scheme, while significantly improving results over no normalization, has the downside of boosting noise in dark areas. An example of this can be seen in \Cref{fig:pixelNormalizationExample}. It may be possible to create a clever scheme to keep the increased robustness to local illumination changes while removing the noise from dark areas.
 
-As mentioned in \Cref{sec:icParameterStudy}, our scheme for optimizing parameters risks getting stuck in local optima. We defined our parameters to be as uncorrelated as possible, but it could still be the case that modifying several of the parameters together could give a better result. A possible way to improve our parameter optimization, while still being able to evaluate it in a reasonable time frame, is a simulated annealing approach
+We decided to resize scale-space images respective to their scales, such that histograms are computed across the same pixel area regardless of detection scale. This means that potentially a lot of information is lost from downsampling the large scale images. It is possible to omit the resizing step and compute histograms at their original scales, but while experimenting with this we quickly ran into time and memory problems. The problem is even medium size features at $\sigma = 8$ multiply the computation time and memory by $8^2 = 64$. Another problem is whether the bin scales should be compensated for changing the number of pixels in histograms. While the approach was infeasible for us to use, there may be ways to overcome these issues.
+
+A possible issue with constructing our shape index histograms is the non-uniformity of the distribution of shape indices in natural images, which is reported in \citep[Fig. 3]{lillholm2009statistics}. This figure shows large peaks at what is equivalent to $S = \pm 1/2$ and very few shape indices around $S = \pm 1$, which is consistent with our own findings, e.g. \Cref{fig:cellHistFigureSiCfeature}. The result of this is that some of the histogram bins have very little affect on our distance measure. One could investigate ways of adjusting the histograms to be more uniform, possibly by moving the bin positions and scales and/or weighting them differently.
+
+As mentioned in \Cref{sec:icParameterStudy}, our scheme for optimizing parameters risks getting stuck in local optima. We defined our parameters to be as uncorrelated as possible, but it could still be the case that modifying several of the parameters together would give a better result. A possible way to improve our parameter optimization, while still being able to evaluate it in a reasonable time frame, is a simulated annealing approach. This is a probabilistic method designed to find approximated global optima in a large search space. 
+
+There are also many approaches used in literature that could potentially improve our descriptor. PCA could be used to reduce the dimensionality, allowing for a higher number of cells and bins. Higher than second order differential structure could possibly be used as bin value and magnitude functions, but we were unable to get good results as reported in \Cref{sec:valueMagnitudeFunctions}. Two-way matching, where we consider the distance ratio between best matches in both images, could improve image correspondence results. However, it is not important for comparing the performance of descriptors to each other. Higher level descriptors such as bag-of-words models or Fisher vectors \cite{sanchez2013image} could be used to perform object detection based on distributions of our descriptors rather than the descriptors themselves.
 
 \section{Conclusion}
 
