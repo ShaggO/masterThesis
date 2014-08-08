@@ -59,7 +59,7 @@ end
 grid on
 xlabel('Recall');
 ylabel('Precision');
-axis([0.75 1 0 1])
+axis([0.5 1 0 1])
 % legend(labels,'interpreter','none','location','southwest')
 % for i = 1:numel(svmPath)
 %     loglog(PR{i}(idx{i},2)+eps,1-PR{i}(idx{i},1),[colours{i} 'o']);
