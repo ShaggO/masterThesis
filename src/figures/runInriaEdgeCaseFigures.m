@@ -1,14 +1,14 @@
 clc, clear all
 
-idxTP = [1 3 4 5 8 11 13 15 17 19];
-idxFN = [1 3 4 5 6 7 13 15 16 18];
-idxTN = [1 2 4 5 7 8 9 16 17 23];
-idxFP = [1 4 7 8 10 14 20 21 22 23];
+idxTP = [1 3 4 12 13 7 8 9 10 12];
+idxFN = [1 2 4 5 6 7 8 9 10 11];
+idxTN = [1 2 4 6 7 9 10 11 14 15];
+idxFP = [1:9 11];
 idxEP = [4 29 76 154 320 441 498 567 624 811];
 idxEN1 = [50 3 11];
 idxEN2 = [27 78 70];
 
-test = load('results/inriaTestSvmGoSiFinal'); % settings
+test = load('results/inriaTestSvmGoFinal'); % settings
 
 data = inriaData(10,1*10^5);
 pos = data.loadCache('posTest');
