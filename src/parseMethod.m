@@ -155,9 +155,17 @@ switch lower(m.descriptor)
         desName = 'none';
         desFunc = @(I,F) deal(F(:,1:2),zeros(size(F,1),1));
     case 'sift'
+        addParameter(p,'Orientations',false)
         r = parseResults(p,m.descriptorArgs);
-        desName = ['sift-' r.colour];
-        desFunc = @(I,F) siftDescriptor(I,F);
+        if r.Orientations
+            extras = ';o';
+            params = {'Orientations'};
+        else
+            extras = '';
+            params = {};
+        end
+        desName = ['sift-' r.colour extras];
+        desFunc = @(I,F) siftDescriptor(I,F,params{:});
     case 'full-sift'
         addParameter(p,'PeakThresh',0)
         addParameter(p,'EdgeThresh',10)
@@ -165,6 +173,7 @@ switch lower(m.descriptor)
         addParameter(p,'Magnif',3)
         addParameter(p,'WindowSize',2)
         r = parseResults(p,m.descriptorArgs);
+
         desName = sprintf(['full-sift' repmat('-%s',[1 5])],...
             num2str(r.PeakThresh),...
             num2str(r.EdgeThresh),...
@@ -184,13 +193,14 @@ switch lower(m.descriptor)
         addParameter(p,'CellSize',8)
         addParameter(p,'Variant','UoCTTI')
         addParameter(p,'NumOrientations',9)
+        addParameter(p,'Orientations',false);
         r = parseResults(p,m.descriptorArgs);
-        desName = sprintf(['hog' repmat('-%s',[1 5])],...
+        desName = [sprintf(['hog' repmat('-%s',[1 5])],...
             r.colour,...
             nums2str(r.WindowSize),...
             num2str(r.CellSize),...
             r.Variant,...
-            num2str(r.NumOrientations));
+            num2str(r.NumOrientations)) extras];
         desFunc = @(I,F) hogDescriptor(I,F,r.WindowSize,r.CellSize,...
             'Variant',r.Variant,...
             'NumOrientations',r.NumOrientations);
