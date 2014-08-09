@@ -17,7 +17,7 @@ method = methodStruct( ...
     'window',{'type','square','scales',2^(1/3).^(0:6),'spacing',10,'windowSize',windowSize}, ...
     {'cellhist','cellhist'}, ...
     {go.method.descriptorArgs,si.method.descriptorArgs}, ...
-    0,{'kx-'});
+    1,{'kx-'});
 
 data = inriaData;
 diaryFile = ['inriaParametersGoSi_' strrep(datestr(now),':','-') '.out'];
@@ -31,7 +31,7 @@ logger = handler(emptyLogger);
 
 profile off,profile on
 totalTime = tic;
-svmPath = inriaTestSvm(method,svmArgs,true);
+svmPath = inriaTestSvm(method,svmArgs,true,[],40,1*10^4);
 totalTime = toc(totalTime)
 profile off
 % profile viewer

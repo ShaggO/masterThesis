@@ -1,19 +1,14 @@
 clc, clear all
 
-windowSize = [134 70];
+nHard = [];
+nWindows = 40;
+seed = 1*10^4;
+name = {'Go'}
 
-load('paths');
-
-name = 'Go';
-load(['results/optimize/inriaParameters' name]); % SI settings
-
-profile off,profile on
-totalTime = tic;
-svmPath = inriaTestSvm(method,svmArgs,true);
-totalTime = toc(totalTime)
-profile off
-% profile viewer
-
-% plotInriaResults(svmPath,svmPath2)
-clear data;
-save(['results/optimize/inriaParameters' name]);
+start = tic;
+for i = 1:numel(name)
+    params = load(['results/optimize/inriaParameters' name{i}]); % settings
+    svmPath = inriaTestSvm(params.method,params.svmArgs,true,nHard,nWindows,seed);
+    copyfile(svmPath,['results/inriaTestSvm' name{i} 'Final.mat'])
+end
+stop = toc(start)

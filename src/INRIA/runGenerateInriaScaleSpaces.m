@@ -28,8 +28,7 @@ end
 before = numel(dir(sDir));
 start = tic;
 
-%parfor i = 1:numel(images)
-for i = 2:2
+parfor i = 1:numel(images)
     img = images(i);
     if mod(i,100) == 0
         disp([timestamp(start) ' Image ' num2str(i) '/' num2str(numel(images))]);
@@ -39,11 +38,11 @@ for i = 2:2
 
     sPath = [sDir '/' hash '.mat'];
     [S,Isizes,file] = dGaussScaleSpace(I,d,scales,rescale,smooth);
-%    parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,...
-%        'scaleBase',scaleBase,'scaleOffset',scaleOffset,...
-%        'sigmaRange',sigmaRange,'colour',colour,'d',d,...
-%        'rescale',rescale,'chain',chain,'pixelDiff',pixelDiff,...
-%        'smooth',smooth,'imgPath',img.path);
+    parSave(sPath,'S',S,'Isizes',Isizes,'scales',scales,...
+        'scaleBase',scaleBase,'scaleOffset',scaleOffset,...
+        'sigmaRange',sigmaRange,'colour',colour,'d',d,...
+        'rescale',rescale,'chain',chain,'pixelDiff',pixelDiff,...
+        'smooth',smooth,'imgPath',img.path);
 end
 after = numel(dir(sDir));
 

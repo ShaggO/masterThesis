@@ -1,22 +1,14 @@
 clc, clear all
 
-windowSize = [134 70];
+nHard = [];
+nWindows = 40;
+seed = 1*10^4;
+name = {'GoChosenSmall'};
 
-load('paths');
-
-name = 'Go';
-load(['results/optimize/inriaParameters' name]); % SI settings
-
-method = modifyDescriptor(method,'gridSize',1.94,'binCount',9);
-
-profile off,profile on
-totalTime = tic;
-svmPath = inriaTestSvm(method,svmArgs,true);
-totalTime = toc(totalTime)
-profile off
-% profile viewer
-
-% plotInriaResults(svmPath,svmPath2)
-clear data;
-save(['results/optimize/inriaParameters' name 'ChosenSmall']);
-copyfile(svmPath,['results/inriaTestSvm' name 'ChosenSmall']);
+start = tic;
+for i = 1:numel(name)
+    params = load(['results/optimize/inriaParameters' name{i}]); % settings
+    svmPath = inriaTestSvm(params.method,params.svmArgs,true,nHard,nWindows,seed);
+    copyfile(svmPath,['results/inriaTestSvm' name{i} 'Final.mat'])
+end
+stop = toc(start)

@@ -28,7 +28,7 @@ logger = handler(emptyLogger);
 
 profile off,profile on
 totalTime = tic;
-svmPath = inriaTestSvm(method,svmArgs,true);
+svmPath = inriaTestSvm(method,svmArgs,true,[],40,1*10^4);
 totalTime = toc(totalTime)
 profile off
 % profile viewer
