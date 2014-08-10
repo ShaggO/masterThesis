@@ -112,7 +112,7 @@ Our descriptors are using the region cell layouts described in \Cref{sec:cellApe
 
 When computing descriptors on images that are larger than the $134 \times 70$ pixel regions (including boundary pixels), we use a sliding window (see \Cref{sec:slidingWindow}) with 10 pixel stride and scales at $2^{\nicefrac{n}{3}},~n=1,\hdots,m$ where $m$ is the largest number such that the entire window is inside the image. 
 
-\citet{dalal2005histograms} showed that smoothing of the pedestrian images resulted in worse performance than without smoothing. We therefore refrain from smoothing the images in our scale-space pyramids. As mentioned in \Cref{sec:hog}, we use grayscale images for HOG. This is likewise the case for our descriptors.
+\citet{dalal2005histograms} showed that smoothing of the pedestrian images resulted in worse performance than without smoothing. We therefore refrain from smoothing the images in our scale-space pyramids. As mentioned in \Cref{sec:hog}, we use RGB images for HOG. During our parameter study we use grayscale images to decrease the amount of computations, whereas we use RGB images for the final classifier.
 %
 \section{Experimental setup}
 \label{sec:inriaExperimentalSetup}
