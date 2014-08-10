@@ -13,6 +13,7 @@ Introduce discussion structure
 		Grid size:
 		We wish to compare our layout to that of GLOH and DAISY. Using our terminology, GLOH has size $8\times2$ with a central cell, and DAISY has size $8 \times 3$ with a central cell. Compared to these grids, we have more angular cells but the same amount of rings as GLOH. All the descriptors are however using a central cell.
 - Optimal parameters are very different for the two applications, hard to choose a good overall descriptor. Biggest differences: smooth, kernels, norm. scale, final descriptor normalization
+- Running time of different kernels: worth using Gaussian for marginal improvement?
 
 \section{Design choices}
 
@@ -23,10 +24,6 @@ Introduce discussion structure
 \section{Overall results}
 
 - Overall results and comparison of descriptor design with SIFT/HOG. SIFT: not much difference, HOG: we beat them by using a dense descriptor with pixel normalization instead of block normalization
-
-\section{Running time}
-
-- Running time: we have not focused on running time, optionally run a profiler, where can we save time? (don't use MATLAB)
 
 \section{Future work} % rename to alternative approaches?
 %
