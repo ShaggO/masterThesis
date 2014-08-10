@@ -22,14 +22,25 @@ Introduce discussion structure
 - Dimensionality of descriptors, worth using compact GO?
 		
 \section{Comparison with SIFT}
-Recall that the image correspondence evaluation showed that our descriptors marginally outperform SIFT. The difference is larger for light variations and statistically significant in a few cases. Where SIFT uses vector normalization and clipping for illumination invariance and robustness, we use pixel normalization and normalization of the final vector. The choice of using local illumination estimation and normalization is most likely the reason for the difference in performance under light variations.
+Recall that the image correspondence evaluation showed that our descriptors marginally outperform SIFT. The difference is larger for light variations and statistically significant in a few cases. With these results in mind, we will now compare and reflect on the different design choices of SIFT and our descriptor.
 
-Another difference between SIFT and our descriptor is, that we omit the rotation estimation step. The DTU dataset does not contain rotations and hence we have omitted this step from SIFT too in order to avoid a decreased performance due to wrong rotation estimation. The rotation estimation of SIFT could easily be adopted by our descriptor as an initial step for rotation invariance.
+Where SIFT uses vector normalization and clipping for illumination invariance and robustness, we use pixel normalization and normalization of the final vector. The choice of using local illumination estimation and normalization is most likely the reason for the difference in performance under light variations.
 
- The GO+SI combination is slightly better than the individual descriptors. Our descriptors are however substantially larger than SIFT
+Another difference between SIFT and our descriptor is that we don't support rotation estimation. The DTU dataset images have fixed orientation and hence we have omitted this step from SIFT too in order to avoid a decreased performance due to wrong rotation estimation. We have verified that including this step indeed reduces performance. The rotation estimation of SIFT could easily be adopted by our descriptor as an initial step for rotation invariance. Our cell layouts would then be rotated according to the estimated orientation.
+
+- cell layouts
+
+- bin/cell kernels
+
+- addition of shape index
+
+The GO+SI combination is slightly better than the individual descriptors. Our descriptors are however substantially larger than SIFT
 
 \section{Comparison with HOG}
-HOG much better!
+- overall results
+- block normalization vs. pixel normalization
+- density/overlap of cells
+- RGB maximization
 
 \section{Future work} % rename to alternative approaches?
 %
