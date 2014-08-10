@@ -1,6 +1,6 @@
 clc, clear, close all
 
-names = {'GoSiFinal','GoFinal','GoChosenSmallFinal','SiFinal','HogFinal'};
+names = {'GoSiFinal','GoFinal','Compact3Final','SiFinal','HogFinal','HogSiFinal'};
 for i = 1:numel(names)
     load(['results/inriaTestSvm' names{i}])
     
@@ -14,9 +14,9 @@ for i = 1:numel(names)
     yPos = yPos / sum(yPos);
     
     if i == 1
-        height = 3;
+        height = 2.7;
     else
-        height = 2.5;
+        height = 2.2;
     end
     fig('unit','inches','width',12,'height',height,'fontsize',8);
     bar(x,yPos+yNeg,1,'r')

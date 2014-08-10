@@ -4,9 +4,9 @@ results = load('results/inriaHardNegatives');
 
 %% Table
 fid = fopen('table.txt','w');
-dims = [17784,11115,4185,6669,4743];
+dims = [8316,4743,4554,21346,11115,10231];
 
-fprintf(fid,'Measure & GO+SI & GO & Compact GO & SI & HOG \\\\ \\midrule\n');
+fprintf(fid,'Measure & HOG+SI & HOG & Compact GO+SI & GO+SI & GO & SI \\\\ \\midrule\n');
 
 s = 'Dimensions';
 for i = 1:5

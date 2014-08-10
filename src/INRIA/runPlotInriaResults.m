@@ -40,8 +40,9 @@ svmPath = {};
 svmPath{end+1} = 'results/inriaTestSvmGoFinal';
 svmPath{end+1} = 'results/inriaTestSvmSiFinal';
 svmPath{end+1} = 'results/inriaTestSvmGoSiFinal';
-svmPath{end+1} = 'results/inriaTestSvmGoChosenSmallFinal';
+svmPath{end+1} = 'results/inriaTestSvmCompact3Final';
 svmPath{end+1} = 'results/inriaTestSvmHogFinal';
+svmPath{end+1} = 'results/inriaTestSvmHogSiFinal';
 
 %svmPath{end+1} = 'results/inriaTestSvmGoChosenBig';
 %svmPath{end+1} = 'results/inriaTestSvmHogColourFinal';
@@ -55,5 +56,5 @@ svmPath{end+1} = 'results/inriaTestSvmHogFinal';
 %     'Go 30pw train','Si 30k train','GoSi 30k train','HOG (UoCTTI) 30k train','HOG (DalalTriggs) 30k train'};
 % labels = {'Go (old params)','Si (old params)','GoSi (old params)','HOG (UoCTTI)','HOG (DalalTriggs)', ...
 %     'Go','Si','GoSi','HOG (UoCTTI)','HOG (DalalTriggs)'};
-labels = {'GO','SI','GO+SI','Compact GO','HOG'};
+labels = {'GO','SI','GO+SI','Compact GO+SI','HOG','HOG+SI'};
 plotInriaResults(svmPath,labels);

@@ -107,7 +107,7 @@ Finally, some of the positives are originally located near image borders. In ord
 \section{Application of descriptors}
 \label{sec:inriaDescriptorApplication}
 %
-As in the image correspondence problem, we will evaluate the performance of the GO, SI, GO+SI and HOG descriptors. Furthermore we will propose a suboptimal compact GO descriptor, which has lower dimensionality than HOG.
+As in the image correspondence problem, we will evaluate the performance of the GO, SI, GO+SI and HOG descriptors. We also try combining HOG and SI into a HOG+SI descriptor, to see if adding shape index can improve on HOG. Furthermore we will propose a suboptimal compact GO+SI descriptor, which has lower dimensionality than HOG.
 Our descriptors are using the region cell layouts described in \Cref{sec:cellApertureFunctionRegion}, since we are interested in a general region description.
 
 When computing descriptors on images that are larger than the $134 \times 70$ pixel regions (including boundary pixels), we use a sliding window (see \Cref{sec:slidingWindow}) with 10 pixel stride and scales at $2^{\nicefrac{n}{3}},~n=1,\hdots,m$ where $m$ is the largest number such that the entire window is inside the image. 
@@ -279,7 +279,7 @@ We follow the same setup as our image correspondence parameter study in \Cref{se
 
 The optimal parameters for our GO and SI descriptors are shown in \Cref{tbl:INRIAparams}, and the optimal $C$ values for all descriptors are shown in \Cref{tbl:INRIAparamC}. The effect of adjusting the parameters relative to the optimized parameters can be seen for GO in \Cref{fig:inriaParametersGoAuc} and SI in \Cref{fig:inriaParametersSiAuc}. Cell spacing $r$ and bin count $n$ seem to the two most important parameters: Decreasing $r$ improves performance greatly, but the increased number of cells also results in a much higher dimensionality. For GO $n$ seems to produce better results for high odd numbers than the neighbouring even numbers, whereas 9 or 13 bins produce good results for SI. We decided not to allow $r$ values lower than the current $1.6$, because the current dimensionality is already almost too high to work with. Most of the other parameters have a large range of values that produce good results. Box filters marginally outperform the alternative kernels, except for the bin kernel of SI, where the three kernels perform almost equally well, and the triangle kernel is chosen.
 
-Due to the high dimensionality we construct a compact version of our GO descriptor based on these training results. We keep the same optimal parameters, except we increase cell spacing $r = 1.94$ and reduce bin count $n = 9$. This reduces the dimensionality below HOG. We will go into further detail in the results section.
+Due to the high dimensionality we construct a compact version of our GO+SI descriptor based on these training results. We keep the same optimal parameters, except we increase cell spacing $r = 2.54$ in a square grid, and reduce bin count to $n = 13$ for GO and $n = 5$ for SI. This reduces the dimensionality below HOG. For our HOG+SI descriptor, we reduce $r = 2.18$ and $n = 9$ to reduce the influence of the added shape index information compared to HOG. We will go into further detail about the descriptor dimensionality and performance in the results section.
 
 \begin{table}[p]
 \centering
@@ -309,7 +309,7 @@ Parameter & GO & SI & GO+SI & HOG \\ \midrule
 $\log C$ & $1.3\cdot 10^{-3}$ & $2.5\cdot 10^{-3}$ & $1.6\cdot 10^{-3}$ & $1.3\cdot 10^{-3}$ \\
 \bottomrule
 \end{tabular}
-\caption{Optimized SVM weight C for GO, SI, GO+SI, and HOG. TODO: Add compact GO}
+\caption{Optimized SVM weight C for GO, SI, GO+SI, and HOG. TODO: Add compact GO+SI}
 \label{tbl:INRIAparamC}
 \end{table}
 %
@@ -431,11 +431,11 @@ $\log C$ & $1.3\cdot 10^{-3}$ & $2.5\cdot 10^{-3}$ & $1.6\cdot 10^{-3}$ & $1.3\c
 	\label{fig:inriaParametersSiDims}
 \end{figure}
 %
-We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.972$: Normalizing the final descriptors before training the SVMs reduces the AUC by $0.539$. Computing the gradients on RGB colour channels and taking the largest magnitude improves the AUC by $0.003$. Omitting pixel normalization reduces the AUC by $0.066$. Smoothing images at scale $\sigma = 1$ reduces the AUC by $0.147$. These tendencies hold for SI as well.
+We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.972$: Normalizing the final descriptors before training the SVMs reduces the AUC by $0.539$. Computing the gradients on RGB colour channels and taking the largest magnitude improves the AUC by $0.003$. Omitting pixel normalization reduces the AUC by $0.066$. Smoothing images at scale $\sigma = 1$ reduces the AUC by $0.015$. These tendencies hold for SI as well.
 %
 \section{Results}
 %
-Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
+Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO+SI, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
 
 \Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
 
@@ -451,15 +451,9 @@ Generally: Compact GO better than SI.
 
 \begin{table}[tb]
 \centerline{
-\begin{tabular}{ l c c c c c }
+\begin{tabular}{ l c c c c c c }
 \toprule
-Measure & GO+SI & GO & Compact GO & SI & HOG \\ \midrule
-Dimensions & 17784 & 11115 & 4185 & 6669 & 4743 \\
-Hard negatives & 1024 & 1880 & 4525 & 4135 & 26368 \\
-Initial PR AUC & 0.9913 & 0.9881 & 0.9803 & 0.9582 & 0.9027 \\
-PR AUC & 0.9943 & 0.9919 & 0.9873 & 0.9656 & 0.9227 \\
-ROC AUC & 0.999981 & 0.999979 & 0.999959 & 0.99975 & 0.998375 \\
-Recall at $10^{-4}$ FPR & 0.989 & 0.984 & 0.966 & 0.919 & 0.859 \\
+Measure & HOG+SI & HOG & Compact GO+SI & GO+SI & GO & SI \\ \midrule
 \bottomrule
 \end{tabular}}
 \caption{Summary of test results on the INRIA dataset. The descriptors are ordered from best to worst. For each descriptor we report the dimensionality, number of hard negatives added to the training data, test PR AUC without added hard negatives, and test PR AUC, ROC AUC, and recall at $10^{-4}$ FPR after the hard negatives are added. The latter measure is the one used by \Citet{dalal2005histograms}.}
@@ -496,9 +490,9 @@ Recall at $10^{-4}$ FPR & 0.989 & 0.984 & 0.966 & 0.919 & 0.859 \\
 		\label{fig:inriaHistogramGoFinal}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaHistogramGoChosenSmall.pdf}
-		\caption{Compact GO}
-		\label{fig:inriaHistogramGoChosenSmall}
+		\includegraphics[width=\textwidth]{img/inriaHistogramCompact3Final.pdf}
+		\caption{Compact GO+SI}
+		\label{fig:inriaHistogramCompact3Final}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaHistogramSiFinal.pdf}
@@ -506,9 +500,14 @@ Recall at $10^{-4}$ FPR & 0.989 & 0.984 & 0.966 & 0.919 & 0.859 \\
 		\label{fig:inriaHistogramSiFinal}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaHistogramHog.pdf}
+		\includegraphics[width=\textwidth]{img/inriaHistogramHogFinal.pdf}
 		\caption{HOG}
-		\label{fig:inriaHistogramHog}
+		\label{fig:inriaHistogramHogFinal}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramHogSiFinal.pdf}
+		\caption{HOG+SI}
+		\label{fig:inriaHistogramHogSiFinal}
 	\end{subfigure}
 	\caption{Histograms of classification scores on INRIA test data for various descriptors. The negative and positive results are individually normalized due to the large skew in amount of images.}
 	\label{fig:inriaHistogram}

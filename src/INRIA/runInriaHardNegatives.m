@@ -3,7 +3,7 @@ clc, clear all
 nHard = {[],[0]};
 windowSize = [134 70];
 
-name = {'GoSi','Go','GoChosenSmall','Si','Hog'};
+name = {'HogSi','Hog','Compact3','GoSi','Go','Si'};
 
 svmPath = cell(numel(nHard),numel(name));
 PRAUC = zeros(numel(nHard),numel(name));
