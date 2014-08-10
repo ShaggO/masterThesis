@@ -15,7 +15,7 @@ Object detection is the problem of locating specified objects in images. One app
 
 The chapter is structured as follows. First we describe support vector machines, and how to evaluate their classification performance. We then describe the dataset and specify how we apply our descriptor to the problem as well as our experimental setup. Next, we show an example of the use of our descriptor for pedestrian detection and how it relates to HOG, including some example classifications of dataset images. Finally, we present our parameter optimization and test results, which include a comparison with HOG.
 %
-\section{Support vector machine}
+\section{Support vector machines}
 %
 Suppose we have some training data split into positive and negative elements. In our case these are $n$-dimensional descriptors of regions with and without pedestrians. We wish to construct a binary classifier which accurately assigns a classification score denoting how confident we are that there is or isn't a pedestrian present. The approach of a linear support vector machine (SVM) is to place a $(n-1)$-dimensional hyperplane in descriptor space which separates the two classes. The hyperplane $(\w,b)$ is defined as the points $\x$ satisfying
 %
@@ -112,7 +112,7 @@ Our descriptors are using the region cell layouts described in \Cref{sec:cellApe
 
 When computing descriptors on images that are larger than the $134 \times 70$ pixel regions (including boundary pixels), we use a sliding window (see \Cref{sec:slidingWindow}) with 10 pixel stride and scales at $2^{\nicefrac{n}{3}},~n=1,\hdots,m$ where $m$ is the largest number such that the entire window is inside the image. 
 
-\citet{dalal2005histograms} showed that smoothing of the pedestrian images resulted in worse performance than without smoothing. We therefore refrain from smoothing the images in our scale-space pyramids. As mentioned in \Cref{sec:hog}, we use grayscale images for HOG. This is likewise the case for our descriptors.
+\citet{dalal2005histograms} showed that smoothing of the pedestrian images resulted in worse performance than without smoothing. We therefore refrain from smoothing the images in our scale-space pyramids. As mentioned in \Cref{sec:hog}, we use RGB images for HOG. During our parameter study we use grayscale images to decrease the amount of computations, whereas we use RGB images for the final classifier.
 %
 \section{Experimental setup}
 \label{sec:inriaExperimentalSetup}
@@ -277,7 +277,7 @@ Generally the true positive images show pedestrians in standard up-right poses w
 
 We follow the same setup as our image correspondence parameter study in \Cref{sec:icParameterStudy}, with a couple exceptions. Since the dataset has a pre-defined split into training and test data, we only run the parameter study once (with 6-fold cross validation) on training data and obtain a single set of parameters. The parameters are also slightly different of the region cell layout and the addition of the SVM-weight $C$, which we also wish to optimize for each descriptor.
 
-The optimal parameters for our GO and SI descriptors are shown in \Cref{tbl:INRIAparams}, and the optimal $C$ values for all descriptors are shown in \Cref{tbl:INRIAparamC}. The effect of adjusting the parameters relative to the optimized parameters can be seen for GO in \Cref{fig:inriaParametersGoAuc} and SI in \Cref{fig:inriaParametersSiAuc}. Cell spacing $r$ seems to the most important parameter: Decreasing it improves performance greatly, but the increased number of cells also results in a much higher dimensionality. We decided not to allow $r$ values lower than the current $1.6$, because the current dimensionality is already almost too high to work with. Most of the other parameters have a large range of values that produce good results. Box filters outperform the alternatives as cell kernels, while the choice of bin kernel is not very important.
+The optimal parameters for our GO and SI descriptors are shown in \Cref{tbl:INRIAparams}, and the optimal $C$ values for all descriptors are shown in \Cref{tbl:INRIAparamC}. The effect of adjusting the parameters relative to the optimized parameters can be seen for GO in \Cref{fig:inriaParametersGoAuc} and SI in \Cref{fig:inriaParametersSiAuc}. Cell spacing $r$ and bin count $n$ seem to the two most important parameters: Decreasing $r$ improves performance greatly, but the increased number of cells also results in a much higher dimensionality. For GO $n$ seems to produce better results for high odd numbers than the neighbouring even numbers, whereas 9 or 13 bins produce good results for SI. We decided not to allow $r$ values lower than the current $1.6$, because the current dimensionality is already almost too high to work with. Most of the other parameters have a large range of values that produce good results. Box filters marginally outperform the alternative kernels, except for the bin kernel of SI, where the three kernels perform almost equally well, and the triangle kernel is chosen.
 
 Due to the high dimensionality we construct a compact version of our GO descriptor based on these training results. We keep the same optimal parameters, except we increase cell spacing $r = 1.94$ and reduce bin count $n = 9$. This reduces the dimensionality below HOG. We will go into further detail in the results section.
 
@@ -431,7 +431,7 @@ $\log C$ & $1.3\cdot 10^{-3}$ & $2.5\cdot 10^{-3}$ & $1.6\cdot 10^{-3}$ & $1.3\c
 	\label{fig:inriaParametersSiDims}
 \end{figure}
 %
-We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.9996$: Normalizing the final descriptors before training the SVMs reduces the AUC by $0.072$. Omitting pixel normalization reduces the AUC by $0.326$. Smoothing images at scale $\sigma = 1$ reduces the AUC by $0.044$.
+We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.972$: Normalizing the final descriptors before training the SVMs reduces the AUC by $0.539$. Computing the gradients on RGB colour channels and taking the largest magnitude improves the AUC by $0.003$. Omitting pixel normalization reduces the AUC by $0.066$. Smoothing images at scale $\sigma = 1$ reduces the AUC by $0.147$. These tendencies hold for SI as well.
 %
 \section{Results}
 %

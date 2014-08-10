@@ -31,7 +31,7 @@ We will use the above terminology throughout this chapter. Note that we have kep
 \d = \Bigl( \left(H_1(f_1) \cdots H_1(f_n)\right) \cdots (H_m(f_1) \cdots H_m(f_n)) \Bigr) ^\text{T}
 \end{align}
 %
-The five functions above can be seen as the components that make up our descriptor, and we consider different choices for each. The functions depend on numerous additional parameters, which we define and describe throughout this chapter. Most of these parameters will be subject to a parameter study for each of our applications in order to find the optimal descriptor for the specific application. The parameter studies are described in \Cref{sec:icParameterStudy,sec:odParameterStudy}.
+The five functions above can be seen as the components that make up our descriptor, and we consider different choices for each. The functions depend on numerous additional parameters, which we define and describe throughout this chapter. Most of these parameters will be subject to a parameter study for each of our applications in order to find the optimal descriptor for the specific application. The parameter studies are described in \Cref{sec:icParameterStudy,sec:odParameterStudy}. After describing the descriptor parameters, we show a detailed example of the descriptor being computed for an image.
 %
 \section{Bin value and magnitude functions}
 \label{sec:valueMagnitudeFunctions}
@@ -259,7 +259,7 @@ The shape index has values spanning the interval $[-1,1]$, and hence by placing 
 %
 \subsection{Histogram normalization}
 %
-We have now covered all the functions needed in order to compute the $j$'th histogram $H_j$, \Cref{eq:proposed_histogram}, for each cell $j$ as well as the positioning of each of these cells. To get our descriptor $\d$, \Cref{eq:proposed_descriptor}, we must concatenate all of the $H_j$ histograms. An optional final step is to view $\d$ as a single vector and normalize it by using the $L_2$-norm as \citet{lowe2004distinctive} does in his SIFT descriptor. This could potentially cause problems, e.g. when dealing with occluded interest points. We investigate the effect on our optimized descriptors for each application. \todo{Add references?}
+We have now covered all the functions needed in order to compute the $j$'th histogram $H_j$, \Cref{eq:proposed_histogram}, for each cell $j$ as well as the positioning of each of these cells. To get our descriptor $\d$, \Cref{eq:proposed_descriptor}, we must concatenate all of the $H_j$ histograms. An optional final step is to view $\d$ as a single vector and normalize it by using the $L_2$-norm as \citet{lowe2004distinctive} does in his SIFT descriptor. This could potentially cause problems, e.g. when dealing with occluded interest points. We investigate the effect on our optimized descriptors for each application in the corresponding parameter studies.
 %
 \section{Descriptor parameters}
 \label{sec:descriptorParameters}

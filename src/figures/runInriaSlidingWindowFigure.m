@@ -2,11 +2,11 @@ clc, clear all
 
 figure
 
-names = {'CompactGo','Hog'};
+names = {'Go','Hog'};
 for j = 1:numel(names)
     load(['results/debugImage' names{j}])
     
-    t = -0.5;
+    t = 1.5;
     idx = s > t;
     % idx = X(:,1) > 840 & X(:,1) < 850 & X(:,2) > 400 & X(:,2) < 410 & X(:,3) > 2.5 & X(:,3) < 2.8;
     s(idx)
