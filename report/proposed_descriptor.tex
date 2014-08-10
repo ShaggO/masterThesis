@@ -259,7 +259,7 @@ The shape index has values spanning the interval $[-1,1]$, and hence by placing 
 %
 \subsection{Histogram normalization}
 %
-We have now covered all the functions needed in order to compute the $j$'th histogram $H_j$, \Cref{eq:proposed_histogram}, for each cell $j$ as well as the positioning of each of these cells. To get our descriptor $\d$, \Cref{eq:proposed_descriptor}, we must concatenate all of the $H_j$ histograms. An optional final step is to view $\d$ as a single vector and normalize it by using the $L_2$-norm as \citet{lowe2004distinctive} does in his SIFT descriptor. This could potentially cause problems, e.g. when dealing with occluded interest points. We investigate the effect on our optimized descriptors for each application. \todo{Add references?}
+We have now covered all the functions needed in order to compute the $j$'th histogram $H_j$, \Cref{eq:proposed_histogram}, for each cell $j$ as well as the positioning of each of these cells. To get our descriptor $\d$, \Cref{eq:proposed_descriptor}, we must concatenate all of the $H_j$ histograms. An optional final step is to view $\d$ as a single vector and normalize it by using the $L_2$-norm as \citet{lowe2004distinctive} does in his SIFT descriptor. This could potentially cause problems, e.g. when dealing with occluded interest points. We investigate the effect on our optimized descriptors for each application in the corresponding parameter studies.
 %
 \section{Descriptor parameters}
 \label{sec:descriptorParameters}
