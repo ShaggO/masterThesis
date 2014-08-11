@@ -6,6 +6,9 @@ load('paths');
 go = load('results/optimize/inriaParametersGo');
 si = load('results/optimize/inriaParametersSi');
 
+go.method = modifyDescriptor(go.method,'colour','none');
+si.method = modifyDescriptor(si.method,'colour','none');
+
 % SVM arguments
 % -c cost of C-SVC (default 1)
 % -p epsilon (default 0.1)
