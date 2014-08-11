@@ -22,25 +22,25 @@ fprintf(fid,[s ' \\\\\n']);
 
 s = 'Initial PR AUC';
 for i = 1:6
-    s = [s ' & ' num2str(results.PRAUC(2,i),4)];
+    s = [s ' & ' sprintf('%.3f',results.PRAUC(2,i))];
 end
 fprintf(fid,[s ' \\\\\n']);
 
 s = 'PR AUC';
 for i = 1:6
-    s = [s ' & ' num2str(results.PRAUC(1,i),4)];
+    s = [s ' & ' sprintf('%.3f',results.PRAUC(1,i))];
 end
 fprintf(fid,[s ' \\\\\n']);
 
 s = 'ROC AUC';
 for i = 1:6
-    s = [s ' & ' num2str(results.ROCAUC(1,i),6)];
+    s = [s ' & ' sprintf('%.4f',results.ROCAUC(1,i))];
 end
 fprintf(fid,[s ' \\\\\n']);
 
 s = 'Recall at $10^{-4}$ FPR';
 for i = 1:6
-    s = [s ' & ' num2str(results.recall(1,i),3)];
+    s = [s ' & ' sprintf('%.3d',results.recall(1,i))];
 end
 fprintf(fid,[s ' \\\\\n']);
 

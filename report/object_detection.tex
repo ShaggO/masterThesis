@@ -455,10 +455,10 @@ Generally: Compact GO better than SI.
 Measure & HOG+SI & HOG & Compact GO+SI & GO+SI & GO & SI \\ \midrule
 Dimensions & 8316 & 4743 & 4554 & 21346 & 11115 & 10231 \\
 Hard negatives & 10703 & 24387 & 28528 & 13782 & 24547 & 75033 \\
-Initial PR AUC & 0.9217 & 0.9029 & 0.8393 & 0.8871 & 0.833 & 0.6084 \\
-PR AUC & 0.9506 & 0.9188 & 0.9023 & 0.9023 & 0.8813 & 0.6799 \\
-ROC AUC & 0.998996 & 0.998037 & 0.998299 & 0.997574 & 0.997074 & 0.988802 \\
-Recall at $10^{-4}$ FPR & 0.91 & 0.85 & 0.824 & 0.84 & 0.804 & 0.511 \\
+Initial PR AUC & 0.922 & 0.903 & 0.839 & 0.887 & 0.833 & 0.608 \\
+PR AUC & 0.951 & 0.919 & 0.902 & 0.902 & 0.881 & 0.680 \\
+ROC AUC & 0.9990 & 0.9980 & 0.9983 & 0.9976 & 0.9971 & 0.9888 \\
+Recall at $10^{-4}$ FPR & 0.910 & 0.850 & 0.824 & 0.840 & 0.804 & 0.511 \\
 \bottomrule
 \end{tabular}}
 \caption{Summary of test results on the INRIA dataset. The descriptors are ordered from best to worst. For each descriptor we report the dimensionality, number of hard negatives added to the training data, test PR AUC without added hard negatives, and test PR AUC, ROC AUC, and recall at $10^{-4}$ FPR after the hard negatives are added. The latter measure is the one used by \Citet{dalal2005histograms}.}
