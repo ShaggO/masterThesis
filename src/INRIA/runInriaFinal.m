@@ -3,8 +3,7 @@ clc, clear all
 nHard = [];
 nWindows = 40;
 seed = 1*10^4;
-name = {'Go','GoTriangle','Si','SiTriangle','GoSi','Hog','HogDT','HogColour'};
-name = {'GoSi','Go','GoChosenSmall','Si','Hog'};
+name = {'Go','Si','GoSi','Hog','Compact1','Compact3'};
 
 start = tic;
 for i = 1:numel(name)

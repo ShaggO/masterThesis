@@ -1,6 +1,7 @@
 clc, clear all;
 
 names = {'Go','Si'};
+names = {'Si'};
 splits = 1:6;
 for j = 1:numel(names)
     % leave out one sixth as test, rest as train
@@ -45,8 +46,8 @@ for j = 1:numel(names)
 
         %% Alpha and beta tests
         % Triangle and box alpha:
-        methodAlphaTri = modifyDescriptor(params.method,'cellFilter','triangle');
-        methodAlphaBox = modifyDescriptor(params.method,'cellFilter','box');
+        methodAlphaTri = modifyDescriptor(params.method,'cellFilter','polar triangle');
+        methodAlphaBox = modifyDescriptor(params.method,'cellFilter','polar box');
 
         % Triangle and box beta:
         methodBetaTri = modifyDescriptor(params.method,'binFilter','triangle');
