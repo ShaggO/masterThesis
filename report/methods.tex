@@ -444,7 +444,7 @@ The \emph{Opponent SIFT} proposed by \citet{van2010evaluating} is an extension o
 			\frac{R+G+B}{\sqrt{3}}
 		\end{pmatrix}
 \end{align*}
-To compute the Opponent SIFT descriptor for a point in an RGB image, the opponent colour space is first computed. The SIFT descriptor is then computed for each of the three colour channels $O_1,~O_2$, and $O_3$ and combined into a single descriptor. In total this descriptor is three times as big as the original SIFT and hence has 384 dimensions. \citet{van2010evaluating} reports that Opponent SIFT performs better than SIFT. We have verified that this holds for our descriptor as well in \Cref{sec:ICparameterStudy}, and hence we use opponent colour space images for both our own descriptor and SIFT in our comparison.
+To compute the Opponent SIFT descriptor for a point in an RGB image, the opponent colour space is first computed. The SIFT descriptor is then computed for each of the three colour channels $O_1,~O_2$, and $O_3$ and combined into a single descriptor. In total this descriptor is three times as big as the original SIFT and hence has 384 dimensions. \citet{van2010evaluating} reports that Opponent SIFT performs better than SIFT. We have verified that this holds for our descriptor as well in \Cref{sec:icParameterStudy}, and hence we use opponent colour space images for both our own descriptor and SIFT in our comparison.
 
 \subsection{HOG}
 \label{sec:hog}

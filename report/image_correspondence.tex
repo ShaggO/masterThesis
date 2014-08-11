@@ -515,7 +515,7 @@ We have also experimented with various other parts of our descriptor that are no
 \section{Results}
 %
 Having found the optimal parameters for each of the 6 folds in the previous section, we are now able to compute test results for each fold and report the performance of our descriptors.
-We have chosen to compare our descriptor performance against the SIFT descriptor since \citet{dahl2011finding} found the combination of DoG and SIFT to perform well. We are however using the opponent colour space for our descriptors, and since \citet{dahl2012interest} found Opponent SIFT (see \Cref{sec:SIFT}) to perform well against other SIFT variants, this is the descriptor we will test our performance against. Throughout this section we refer to Opponent SIFT as SIFT.
+We have chosen to compare our descriptor performance against the SIFT descriptor since \citet{dahl2011finding} found the combination of DoG and SIFT to perform well. We are however using the opponent colour space for our descriptors, and since \citet{dahl2012interest} found Opponent SIFT (see \Cref{sec:opponentColourSpace}) to perform well against other SIFT variants, this is the descriptor we will test our performance against. Throughout this section we refer to Opponent SIFT as SIFT.
 
 \Cref{tbl:dtuOverallResults} shows average performance across all test images for our GO, SI, and GO+SI as well as SIFT. We see that GO+SI only has a very small advantage over GO despite adding 600 dimensions to the existing 900/1050 (varying across cross-validation folds), and that all our descriptors are marginally better than SIFT on average but have higher dimensionality as well.
 

@@ -6,7 +6,7 @@
 Introduce discussion structure
 
 \section{Differences between applications}
-When starting the project, we had the idea, that we could create a descriptor which generalized well to different applications. However as seen in \Cref{sec:ICparameterStudy,sec:odParameterStudy} we need both different design choices and different parameters for the image correspondence and pedestrian detection applications.
+When starting the project, we had the idea, that we could create a descriptor which generalized well to different applications. However as seen in \Cref{sec:icParameterStudy,sec:odParameterStudy} we need both different design choices and different parameters for the image correspondence and pedestrian detection applications.
 
 First of all we had to construct vastly different cell layouts depending on the use of an interest point detector or a sliding window. Secondly both smoothing of scale-space images and normalization of the final descriptor adds a minor improvement to image correspondence, while greatly decreasing performance for pedestrian detection. Finally most of the optimal parameters for pedestrian detection differ significantly from image correspondence: For example the normalization scale and the overlap between cells is much larger.
 		
