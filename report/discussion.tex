@@ -21,15 +21,12 @@ The cell layouts of SIFT and our descriptors differ greatly. Our descriptors are
 
 We see that we have more cells and bins than SIFT resulting in a descriptor with larger dimensionality than SIFT. This is related to the fact that our descriptor cells are spread across a larger area, and thus the amount of samples in each cell histogram is closer to that of SIFT than the dimensionality suggests.
 
-- bin/cell kernels
- - Initial though: Gaussian kernels more robust, they are used in LOI.
- - After testing: Not much difference from triangle which sift uses. Our optimal triangle would be the same as SIFT.
- - Running time of different kernels: worth using Gaussian for marginal improvement?
- - Center sigma: Roughly the same
+Our initial idea was to base our cell histograms on locally orderless images \cite{koenderink1999structure}. This work is based on Gaussian kernels for bin and cell aperture functions rather than the triangle kernels of SIFT. Our parameter study has shown that the two kernels produce almost identical results, but the triangle kernels are less expensive to compute in practice. This is due to the complexity of the Gaussian kernels and their infinite support, which we limit to 3$\beta$, while the simple triangle kernels only have $2\beta$ support (see \Cref{sec:apertureKernelFunctions}).
 
-- addition of shape index
+The center aperture function, which SIFT likewise uses, only has a minor influence on the performance of our descriptor. Our performance gain from this function is most likely not as high as for SIFT, since our cell layouts already favour the structure closer to the interest point.
 
-The GO+SI combination is slightly better than the individual descriptors. Our descriptors are however substantially larger than SIFT
+From our test results we see that the addition of shape index to GO only increases performance marginally. The addition however adds a substantial number of dimensions to the descriptor.
+Given the tiny performance increase we recommend using the GO descriptor on its own.
 
 \section{Comparison with HOG}
 - overall results
