@@ -435,17 +435,16 @@ We have also experimented with various other parts of our descriptor that are no
 %
 \section{Results}
 %
-Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO+SI, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
+Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: HOG+SI, HOG, compact GO+SI, GO+SI, GO, SI.
 
-\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
+\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors.
+%We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
 
 \Cref{tbl:inriaResults} shows a performance summary for the five descriptors both with and without hard training. The first thing we notice is the large variation in dimensionality.
-%
-
 
 Notes: Ordering the same on all perf. measures.
 Dimensions: Compact GO lower than HOG. GO+SI probably too big for most purposes.
-Hard training: Many hard negatives on HOG compared to our descriptors. Improved performance greatly for HOG. Generally a substantial improvement by using hard negatives. Initially 40 windows pr. negative ~ 48k windows. 1024 not many compared to this number, but great improvement.
+Hard training: Improved performance greatly for HOG. Generally a substantial improvement by using hard negatives. Initially 40 windows pr. negative ~ 48k windows. 1024 not many compared to this number, but great improvement.
 
 Generally: Compact GO better than SI.
 
