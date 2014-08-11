@@ -121,7 +121,7 @@ We have two experimental setups for evaluating descriptors on the INRIA dataset.
 
 For our validation setup, we split the training data into six parts for the purpose of (leave-one-out) cross-validation. This is done by, for each split, training an SVM on five parts and testing on the other. The SVM is trained using all the given positive images and 40 random cut-outs from each negative image. The results are consolidated by computing the mean PR AUC across the six splits.
 
-Our test setup is a modification of the one described by \citet{dalal2005histograms}. First, an SVM is trained using all positive training images and 40 random cut-outs from each negative training image. A sliding window is then run across these negative training images, and these windows are classified by the SVM in order to find false positives. In other words, we search the negative training images for examples that have not been learned by the SVM from the initial random cut-outs. These images are called \emph{hard negatives}. We pick a fixed number of hard negatives by finding the images with the $10^5$ largest classification scores (out of $2.2 \cdot 10^6$ total). These are the negative images our SVM is most uncertain about. We retrain an SVM with the added hard negatives, and test on the positive test images and sliding windows across negative test images.
+Our test setup is a modification of the one described by \citet{dalal2005histograms}. First, an SVM is trained using all positive training images and 40 random cut-outs from each negative training image. A sliding window is then run across these negative training images, and these windows are classified by the SVM in order to find hard negatives (false positives). The hard negatives are defined as the negative cut-outs with classification score $s > 0$. In other words, we search the negative training images for examples that have not been learned by the SVM from the initial random cut-outs. We add the hard negatives to the set of existing negatives and retrain an SVM with the new training set. This SVM is then used for testing on the positive test images and sliding windows across negative test images.
 
 Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per image as opposed to 10) and add a lot more hard negatives ($10^5$ as opposed to just the positive classification scores). The old amounts of training examples were caused by hardware limitations of only having $1.7$ GB of RAM for SVM training. We also prefer using a fixed number of hard negatives in order to train the SVM on the same number of images for each descriptor.
 
@@ -281,7 +281,7 @@ The optimal parameters for our GO and SI descriptors are shown in \Cref{tbl:INRI
 
 Due to the high dimensionality we construct a compact version of our GO+SI descriptor based on these training results. We keep the same optimal parameters, except we increase cell spacing $r = 2.54$ in a square grid, and reduce bin count to $n = 13$ for GO and $n = 5$ for SI. This reduces the dimensionality below HOG. For our HOG+SI descriptor, we reduce $r = 2.18$ and $n = 9$ to reduce the influence of the added shape index information compared to HOG. We will go into further detail about the descriptor dimensionality and performance in the results section.
 
-\begin{table}[p]
+\begin{table}[tb]
 \centering
 \begin{tabular}{ l c c }
 \toprule
@@ -299,9 +299,9 @@ Normalization scale $\eta$ & $4.0$ & $5.0$ \\
 \end{tabular}
 \caption{Optimized parameters from our parameter study for GO and SI.}
 \label{tbl:INRIAparams}
+\end{table}
 %
-\vspace{1cm}
-%
+\begin{table}[tb]
 \centerline{
 \begin{tabular}{ l c c c c c c }
 \toprule
@@ -436,18 +436,17 @@ We have also experimented with various other parts of our descriptor that are no
 %
 \section{Results}
 %
-Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: HOG+SI, HOG, compact GO+SI, GO+SI, GO, SI.
+Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. As mentioned before, we compare our descriptor to HOG, which originally was trained and tested on the same INRIA dataset \cite{dalal2005histograms}. Recall that we use RGB images for testing.
 
-\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors.
-%We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
+\Cref{tbl:inriaResults} shows a test performance summary for the six descriptors, their dimensionality and amount of hard negatives added for retraining. We also include the test performance (initial PR AUC) when omitting retraining to see the effect of this step. Based on PR AUC the ordering of the descriptors from best to worst is: HOG+SI, HOG, compact GO+SI, GO+SI, GO, SI. The same ordering holds for recall at $10^{-4}$ FPR, which is the measure used by \citet{dalal2005histograms}, whereas HOG and compact GO+SI switch positions when looking at ROC AUC.
 
-\Cref{tbl:inriaResults} shows a performance summary for the five descriptors both with and without hard training. The first thing we notice is the large variation in dimensionality.
+Overall HOG outperforms our descriptors, but the addition of shape index is shown to be valuable for both HOG and our descriptors. The SI descriptor performs very poorly on its own. The difference between compact GO+SI and GO+SI is negligible despite the large difference in dimensionality.
 
-Notes: Ordering the same on all perf. measures.
-Dimensions: Compact GO lower than HOG. GO+SI probably too big for most purposes.
-Hard training: Improved performance greatly for HOG. Generally a substantial improvement by using hard negatives. Initially 40 windows pr. negative ~ 48k windows. 1024 not many compared to this number, but great improvement.
+By comparing the PR AUCs with and without retraining of hard negatives, we see that all descriptors benefit from retraining. Interestingly compact GO+SI starts off worse than the much larger GO+SI, but overtakes it after retraining by adding more than twice the amount of hard negatives.
 
-Generally: Compact GO better than SI.
+\Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show roughly the same ordering of descriptor performances as the PR AUCs. However the compact GO+SI, GO+SI, and GO curves cross each other multiple times, and hence their ordering depends on the chosen threshold $t$. The HOG results shown here are not quite as good as those presented by \citet{dalal2005histograms}. This may be due to the VLFeat implementation of HOG, SVM differences, or our sliding window implementation.
+
+\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. Each class is normalized with respect to the amount of images in the class. The graphs give a more intuitive understanding of the performance of the descriptors. The amount of overlap between the two classes illustrates the separability of each classifier and the effect of choosing a threshold $t$.
 
 \begin{table}[tb]
 \centerline{
@@ -479,7 +478,7 @@ Recall at $10^{-4}$ FPR & 0.910 & 0.850 & 0.824 & 0.811 & 0.804 & 0.511 \\
 		\caption{PR-curve}
 		\label{fig:inriaTestResultsPR}
 	\end{subfigure}}
-	\caption{INRIA test results.}
+	\caption{ROC- and PR-curve of the test results on the INRIA dataset. The ROC-curve is plotted in the same range as \citet{dalal2005histograms}, and the PR-curve is plotted starting from recall 0.5 for better visualization.}
 	\label{fig:inriaTestResults}
 \end{figure}
 %
@@ -496,14 +495,14 @@ Recall at $10^{-4}$ FPR & 0.910 & 0.850 & 0.824 & 0.811 & 0.804 & 0.511 \\
 		\label{fig:inriaHistogramHogFinal}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
-		\includegraphics[width=\textwidth]{img/inriaHistogramGoSiFinal.pdf}
-		\caption{GO+SI}
-		\label{fig:inriaHistogramGoSiFinal}
-	\end{subfigure}
-	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaHistogramCompact3Final.pdf}
 		\caption{Compact GO+SI}
 		\label{fig:inriaHistogramCompact3Final}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth]{img/inriaHistogramGoSiFinal.pdf}
+		\caption{GO+SI}
+		\label{fig:inriaHistogramGoSiFinal}
 	\end{subfigure}
 	\begin{subfigure}[t]{\textwidth}
 		\includegraphics[width=\textwidth]{img/inriaHistogramGoFinal.pdf}
