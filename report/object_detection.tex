@@ -287,14 +287,14 @@ Due to the high dimensionality we construct a compact version of our GO+SI descr
 \toprule
 {} & \multicolumn{2}{c}{Methods} \\
 Parameter & GO & SI \\ \midrule
-Grid type & Square & Square \\
+Grid type & Square & Triangle \\
 Cell spacing $r$ & $1.6$ & $1.6$ \\
 Cell kernel & \textit{Box} & \textit{Box} \\
-Cell scale $\alpha$ & $3.3$ & $3.5$ \\
-Bin count $n$ & $15$ & $9$ \\
-Bin kernel & \textit{Tri} & \textit{Box} \\
-Bin scale $\beta$ & $1.0$ & $1.5$ \\
-Normalization scale $\eta$ & $6.0$ & $5.0$ \\
+Cell scale $\alpha$ & $3.1$ & $3.5$ \\
+Bin count $n$ & $15$ & $13$ \\
+Bin kernel & \textit{Box} & \textit{Tri} \\
+Bin scale $\beta$ & $1.4$ & $0.8$ \\
+Normalization scale $\eta$ & $4.0$ & $5.0$ \\
 \bottomrule
 \end{tabular}
 \caption{Optimized parameters from our parameter study for GO and SI.}
@@ -435,17 +435,16 @@ We have also experimented with various other parts of our descriptor that are no
 %
 \section{Results}
 %
-Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: GO+SI, GO, compact GO+SI, SI, HOG. The long straight line segments, which appear in both graphs, occur because there are many completely blank negative cut-outs that are all given the same classification score.
+Now that we have computed optimal parameters on the training data, we can evaluate the performance of the descriptors on test data. \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show the same ordering of descriptor performances, from best to worst: HOG+SI, HOG, compact GO+SI, GO+SI, GO, SI.
 
-\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors. We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
+\Cref{fig:inriaHistogram} illustrates the distribution of classification scores for positive and negative images. This gives a more intuitive understanding of the performance of the descriptors.
+%We see for instance that GO+SI achieves a much better separation of the two classes than HOG.
 
 \Cref{tbl:inriaResults} shows a performance summary for the five descriptors both with and without hard training. The first thing we notice is the large variation in dimensionality.
-%
-
 
 Notes: Ordering the same on all perf. measures.
 Dimensions: Compact GO lower than HOG. GO+SI probably too big for most purposes.
-Hard training: Many hard negatives on HOG compared to our descriptors. Improved performance greatly for HOG. Generally a substantial improvement by using hard negatives. Initially 40 windows pr. negative ~ 48k windows. 1024 not many compared to this number, but great improvement.
+Hard training: Improved performance greatly for HOG. Generally a substantial improvement by using hard negatives. Initially 40 windows pr. negative ~ 48k windows. 1024 not many compared to this number, but great improvement.
 
 Generally: Compact GO better than SI.
 
@@ -454,6 +453,12 @@ Generally: Compact GO better than SI.
 \begin{tabular}{ l c c c c c c }
 \toprule
 Measure & HOG+SI & HOG & Compact GO+SI & GO+SI & GO & SI \\ \midrule
+Dimensions & 8316 & 4743 & 4554 & 21346 & 11115 & 10231 \\
+Hard negatives & 10703 & 24387 & 28528 & 13782 & 24547 & 75033 \\
+Initial PR AUC & 0.922 & 0.903 & 0.839 & 0.887 & 0.833 & 0.608 \\
+PR AUC & 0.951 & 0.919 & 0.902 & 0.902 & 0.881 & 0.680 \\
+ROC AUC & 0.9990 & 0.9980 & 0.9983 & 0.9976 & 0.9971 & 0.9888 \\
+Recall at $10^{-4}$ FPR & 0.910 & 0.850 & 0.824 & 0.840 & 0.804 & 0.511 \\
 \bottomrule
 \end{tabular}}
 \caption{Summary of test results on the INRIA dataset. The descriptors are ordered from best to worst. For each descriptor we report the dimensionality, number of hard negatives added to the training data, test PR AUC without added hard negatives, and test PR AUC, ROC AUC, and recall at $10^{-4}$ FPR after the hard negatives are added. The latter measure is the one used by \Citet{dalal2005histograms}.}

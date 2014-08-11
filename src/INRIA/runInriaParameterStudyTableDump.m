@@ -48,4 +48,4 @@ table2latex(table,varNames,precision)
 
 varNames = {'$\log C$'};
 precision = 1;
-table2latex(table2,varNames,precision)
+%table2latex(table2,varNames,precision)

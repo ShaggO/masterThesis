@@ -5,21 +5,10 @@
 
 Introduce discussion structure
 
-\section{Optimal parameters}
+\section{Differences between applications}
+When starting the project, we had the idea, that we could create a descriptor which generalized well to different applications. However as seen in \Cref{sec:icParameterStudy,sec:odParameterStudy} we need both different design choices and different parameters for the image correspondence and pedestrian detection applications.
 
-- Importance of different parameters and design choices, relate these results to other articles
-	- DTU
-		- grid radius: 13.5 (area 572.5), SIFT: (area 256, 24x24 give 576)
-		Grid size:
-		We wish to compare our layout to that of GLOH and DAISY. Using our terminology, GLOH has size $8\times2$ with a central cell, and DAISY has size $8 \times 3$ with a central cell. Compared to these grids, we have more angular cells but the same amount of rings as GLOH. All the descriptors are however using a central cell.
-- Optimal parameters are very different for the two applications, hard to choose a good overall descriptor. Biggest differences: smooth, kernels, norm. scale, final descriptor normalization
-- Running time of different kernels: worth using Gaussian for marginal improvement?
-
-\section{Design choices}
-
-- Is it worth adding shape index?
-- Considered using multi-scale descriptors as the galaxy descriptor, but it doesn't seem like a good idea
-- Dimensionality of descriptors, worth using compact GO?
+First of all we had to construct vastly different cell layouts depending on the use of an interest point detector or a sliding window. Secondly both smoothing of scale-space images and normalization of the final descriptor adds a minor improvement to image correspondence, while greatly decreasing performance for pedestrian detection. Finally most of the optimal parameters for pedestrian detection differ significantly from image correspondence: For example the normalization scale and the overlap between cells is much larger.
 		
 \section{Comparison with SIFT}
 Recall that the image correspondence evaluation showed that our descriptors marginally outperform SIFT. The difference is larger for light variations and statistically significant in a few cases. With these results in mind, we will now compare and reflect on the different design choices of SIFT and our descriptor.
@@ -29,8 +18,17 @@ Where SIFT uses vector normalization and clipping for illumination invariance an
 Another difference between SIFT and our descriptor is that we don't support rotation estimation. The DTU dataset images have fixed orientation and hence we have omitted this step from SIFT too in order to avoid a decreased performance due to wrong rotation estimation. We have verified that including this step indeed reduces performance. The rotation estimation of SIFT could easily be adopted by our descriptor as an initial step for rotation invariance. Our cell layouts would then be rotated according to the estimated orientation.
 
 - cell layouts
+ - Dimensionality, affect performance if 8x2
+ - Circular grids, same amount of information around the interest point. This doesn't hold for square
+ - Wrong scale estimation: \citet{cui2009scale}, polar grids better than squared ones.
+ - grid radius: 13.5 (area 572.5), SIFT: (area 256, 24x24 give 576)
+ - Using our terminology, GLOH has size $8\times2$ with a central cell, and DAISY has size $8 \times 3$ with a central cell. Compared to these grids, we have more angular cells but the same amount of rings as GLOH. All the descriptors are however using a central cell.
 
 - bin/cell kernels
+ - Initial though: Gaussian kernels more robust, they are used in LOI.
+ - After testing: Not much difference from triangle which sift uses. Our optimal triangle would be the same as SIFT.
+ - Running time of different kernels: worth using Gaussian for marginal improvement?
+ - Center sigma: Roughly the same
 
 - addition of shape index
 
@@ -41,6 +39,8 @@ The GO+SI combination is slightly better than the individual descriptors. Our de
 - block normalization vs. pixel normalization
 - density/overlap of cells
 - RGB maximization
+- Compact GoSi (13,5)
+- HOG+SI
 
 \section{Future work} % rename to alternative approaches?
 %
@@ -52,7 +52,7 @@ A possible issue with constructing our shape index histograms is the non-uniform
 
 As mentioned in \Cref{sec:icParameterStudy}, our scheme for optimizing parameters risks getting stuck in local optima. We defined our parameters to be as uncorrelated as possible, but it could still be the case that modifying several of the parameters together would give a better result. The initialization of the parameters could likewise give a suboptimal solution. A possible way to improve our parameter optimization, while still being able to evaluate it in a reasonable time frame, is a simulated annealing approach. This is a probabilistic method designed to find approximated global optima in a large search space, by trying nearby random parameter choices with gradually smaller jumps. 
 
-There are also many approaches used in the literature that could potentially improve our descriptor. PCA could be used to reduce the dimensionality, allowing for a higher number of cells and bins. Alternatives to the shape index and curvedness as mentioned in \Cref{sec:valueMagnitudeFunctions} could be thoroughly tested as well as higher than second order differential structure for use as bin value and magnitude functions. Two-way matching, where we consider the distance ratio between best matches in both images, could improve image correspondence results. However, it is not important for comparing the performance of descriptors to each other. Higher level descriptors such as bag-of-words models or Fisher vectors \cite{sanchez2013image} could be used to perform object detection based on distributions of our descriptors rather than the descriptors themselves.
+There are also many approaches used in the literature that could potentially improve our descriptor. PCA could be used to reduce the dimensionality, allowing for a higher number of cells and bins. Alternatives to the shape index and curvedness as mentioned in \Cref{sec:valueMagnitudeFunctions} could be thoroughly tested as well as higher than second order differential structure for use as bin value and magnitude functions. We could extend our descriptor to represent structure from multiple scales like the galaxy descriptor \Citet{pedersen2013shape}. This is however not necessarily a good idea in combination with omitting smoothing for pedestrian detection, since the information will largely be the same. Two-way matching, where we consider the distance ratio between best matches in both images, could improve image correspondence results. However, it is not important for comparing the performance of descriptors to each other. Higher level descriptors such as bag-of-words models or Fisher vectors \cite{sanchez2013image} could be used to perform object detection based on distributions of our descriptors rather than the descriptors themselves.
 
 \section{Conclusion}
 
