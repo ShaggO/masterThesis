@@ -40,7 +40,7 @@ fprintf(fid,[s ' \\\\\n']);
 
 s = 'Recall at $10^{-4}$ FPR';
 for i = 1:6
-    s = [s ' & ' sprintf('%.3d',results.recall(1,i))];
+    s = [s ' & ' sprintf('%.3f',results.recall(1,i))];
 end
 fprintf(fid,[s ' \\\\\n']);
 

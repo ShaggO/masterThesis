@@ -29,13 +29,13 @@ table = table(:,{'gridType','gridSize','cellFilter','cellSigma','binCount','binF
 % fprintf(csvFile,'%s',[colNames csvData]);
 % fclose(csvFile);
 
-namesLogC = {'Go','Si','GoSi','Hog'};
+namesLogC = {'Go','Si','GoSi','Compact3','Hog','HogSi'};
 for i = 1:numel(namesLogC);
     parameters = load(['results/optimize/inriaParameters' namesLogC{i}]);
     logC = parameters.svmArgs.logc;
-    table2(i) = struct('C',['$' num2str(10^(logC - floor(logC)),2) '\cdot 10^{' num2str(floor(logC)) '}$']);
+    table2(i) = struct('C',['$' sprintf('%.1f',10^(logC - floor(logC))) '\cdot 10^{' sprintf('%.0f',floor(logC)) '}$']);
 end
-namesLogC = {'GO','SI','GO+SI','HOG'};
+namesLogC = {'GO','SI','GO+SI','Compact GO+SI','HOG','HOG+SI'};
 
 table2 = struct2table(table2,'RowNames',namesLogC);
 % writetable(table2,'results/INRIAparamC.csv','Delimiter',',','WriteRowNames',true);
@@ -48,4 +48,4 @@ table2latex(table,varNames,precision)
 
 varNames = {'$\log C$'};
 precision = 1;
-%table2latex(table2,varNames,precision)
+table2latex(table2,varNames,precision)

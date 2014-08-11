@@ -17,12 +17,9 @@ Where SIFT uses vector normalization and clipping for illumination invariance an
 
 Another difference between SIFT and our descriptor is that we don't support rotation estimation. The DTU dataset images have fixed orientation and hence we have omitted this step from SIFT too in order to avoid a decreased performance due to wrong rotation estimation. We have verified that including this step indeed reduces performance. The rotation estimation of SIFT could easily be adopted by our descriptor as an initial step for rotation invariance. Our cell layouts would then be rotated according to the estimated orientation.
 
-- cell layouts
- - Dimensionality, affect performance if 8x2
- - Circular grids, same amount of information around the interest point. This doesn't hold for square
- - Wrong scale estimation: \citet{cui2009scale}, polar grids better than squared ones.
- - grid radius: 13.5 (area 572.5), SIFT: (area 256, 24x24 give 576)
- - Using our terminology, GLOH has size $8\times2$ with a central cell, and DAISY has size $8 \times 3$ with a central cell. Compared to these grids, we have more angular cells but the same amount of rings as GLOH. All the descriptors are however using a central cell.
+The cell layouts of SIFT and our descriptors differ greatly. Our descriptors are based on polar grids such as GLOH and DAISY, whereas SIFT uses a square grid. Assuming that structure close to the interest point is more important than structure further away, we see two advantages of our grids. The corner cells of SIFT are further away than the other edge cells, while our cells in each ring have equal distance to the interest point. The SIFT grid contains more outer-cells than inner-cells, while our rings have have an equal amount of cells. This gives an even distribution of cells in both angular and radial direction. According to \citet{cui2009scale} polar grids are more robust against scale estimation errors and hence this should apply to our descriptors as well. Furthermore we believe that our grids are be more robust against rotation estimation errors, since the cell areas would overlap more with the correctly rotated grid than for a squared grid. This will however need to be tested before coming to a conclusion.
+
+We see that we have more cells and bins than SIFT resulting in a descriptor with larger dimensionality than SIFT. This is related to the fact that our descriptor cells are spread across a larger area, and thus the amount of samples in each cell histogram is closer to that of SIFT than the dimensionality suggests.
 
 - bin/cell kernels
  - Initial though: Gaussian kernels more robust, they are used in LOI.
