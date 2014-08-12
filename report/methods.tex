@@ -531,12 +531,22 @@ The choice between using the ROC- or PR-curves and their AUCs are discussed in t
 \section{Welch's \emph{t}-test}
 \label{sec:welchsTtest}
 
-Assume we have two sets of samples $X_1$ and $X_2$ from two normal distributions with unequal variances $\sigma_1$ and $\sigma_2$. \emph{Welch's $t$-test} is used for estimating the difference between the two sample means and their distribution intervals. It is defined as
+Assume we have two sets of samples $X_1$ and $X_2$ from two normal distributions with possibly unequal variances $\sigma_1$ and $\sigma_2$. \emph{Welch's $t$-test} is used for estimating the difference between the two sample means and their distribution intervals. It is defined as
 \begin{align*}
 	t = \frac{\bar{X_1} - \bar{X_2}}{\sqrt{\frac{s^2_1}{n_1} - \frac{s^2_2}{n_2}}}
 \end{align*}
 where $\bar{X_1}$ and $\bar{X_2}$ are the means of the samples $X_1$ and $X_2$, $s^2_1$ and $s^2_2$ are the unbiased estimated variances of the samples, and $n_1$ and $n_2$ are the number of samples from each distribution.
+
+Furthermore we need to find the number of degrees of freedome $v$:
+\begin{align*}
+ v &\approx \frac{\left(\frac{s_1^2}{N_1} +\frac{s_2^2}{N_2} \right)^2}
+ 				 {\frac{s_1^4}{N_1^2 v_1} + \frac{s_2^4}{N_2^2 v_2}} \\
+ v_i &= N_i - 1
+\end{align*}
+Having computed both $t$ and $v$, we are able to create a null hypothesis about the two distributions and test this hypothesis
 \todo{Finish section about Welch's $t$-test}
+
+We will use this test to compare two sets of results across the same data and determine whether the difference between them is statistically significant.
 
 
 %
