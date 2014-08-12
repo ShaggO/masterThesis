@@ -244,6 +244,8 @@ G(x;\beta) &= \frac{1}{\sqrt{2\pi} \beta}
 \exp\left( -\frac{x^2}{2 \beta^2} \right)
 \end{align*}
 %
+In practice we truncate these kernels to a range $|x| < r$ given by a support radius $r$. For box and triangle kernels, we naturally set $r = \beta$ and $r = 2 \beta$ respectively. For the Gaussian kernel, which is always non-zero, we limit $r = 3 \beta$. This contains $99.7$ percent of the total area.
+
 For bin aperture functions $B$ we can use these kernels directly. The spatial aperture functions $A$ are however defined on a 2D domain; this is handled by multiplying two of the same kernel functions together, e.g:
 %
 \begin{align*}

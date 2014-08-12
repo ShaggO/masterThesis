@@ -204,7 +204,7 @@ By increasing $\alpha$, the boundary cells will therefore keep their original sc
 		\caption{Polar Gaussian}
 		\label{fig:cellWindowPolar}
 	\end{subfigure}
-	\caption{The two types of Gaussian cell aperture functions plotted in 3-D. The black curves are placed 1 standard deviation $\sigma$ from the cell centers. The yellow curves are placed $3 \sigma$ from the cell centers and confine the regions used to calculate the cell histograms.}
+	\caption{The two types of Gaussian cell aperture functions plotted in 3-D. The black curves are placed 1 standard deviation $\alpha$ from the cell centers. The yellow curves are placed $3 \alpha$ from the cell centers and confine the regions used to calculate the cell histograms.}
 	\label{fig:gridWindow}
 \end{figure}
 %
@@ -267,24 +267,25 @@ We have now covered all the functions needed in order to compute the $j$'th hist
 To summarize, our descriptor has the following parameters that will be part of our parameter studies:
 %
 \begin{itemize}
-\item Normalization scale $\eta$ (\Cref{sec:localMagnitudeNormalization})
-\item Cell kernel (\Cref{sec:cellApertureFunction})
-\item Cell scale $\alpha$ (\Cref{sec:cellApertureFunction})
-\item Interest point specific parameters: (\Cref{sec:cellApertureFunctionPoint})
+\itemsep0em
+\item Normalization scale $\eta$
+\item Cell kernel
+\item Cell scale $\alpha$
+\item Interest point specific parameters:
 \begin{itemize}
 \item Grid type
 \item Grid size
 \item Grid radius $r$ 
-\item Center scale $\rho$ (\Cref{sec:centerApertureFunction})
+\item Center scale $\rho$
 \end{itemize}
-\item Region specific parameters: (\Cref{sec:cellApertureFunctionRegion})
+\item Region specific parameters:
 \begin{itemize}
 \item Grid type
 \item Cell spacing $r$
 \end{itemize}
-\item Bin kernel (\Cref{sec:binningApertureFunction})
-\item Bin scale $\beta$ (\Cref{sec:binningApertureFunction})
-\item Bin count $n$ (\Cref{sec:binningApertureFunction})
+\item Bin kernel
+\item Bin scale $\beta$
+\item Bin count $n$
 \end{itemize}
 %
 \section{Example} \label{sec:proposedDescriptorExample}
@@ -348,7 +349,7 @@ The next step is to construct the scale space images as described in \Cref{sec:v
 
 From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In the case of GO $x$- and $y$-derivatives are needed, whereas $xx$-, $xy$-, and $yy$-derivatives are needed for SI. The derivatives are used to compute bin value and magnitude functions over the entire image. We then apply our pixel normalization scheme to the magnitudes. These images are shown in \Cref{fig:cellHistScaleSpacesVM,fig:cellHistScaleSpacesSC} for GO and SI respectively.
 
-We need to compute the cell and center weights for pixels in every cell according to the chosen cell layout parameters. In order to save computation time, we confine the support radius of the Gaussian cell aperture filters to $3$ times the cell radius, ignoring pixels outside this distance to each cell center. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, but since many cells overlap we show the maximal weight for each pixel.
+We need to compute the cell and center weights for pixels in every cell according to the chosen cell layout parameters. In this case we use Gaussian cell kernels, where the support radius is confined to $3$ times the cell radius. Pixels outside this distance to each cell center are ignored. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, but since many cells overlap we show the maximal weight for each pixel.
 
 The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The purpose of these images is to illustrate the bin weighting and hence we have left out the corresponding SI examples. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and then simply look up the value when needed in a cell.
 
