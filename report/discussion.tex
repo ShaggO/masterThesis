@@ -13,7 +13,7 @@ When starting the project, we had the idea, that we could create a descriptor wh
 First of all we had to construct vastly different cell layouts depending on the use of an interest point detector or a sliding window. Secondly both smoothing of scale-space images and normalization of the final descriptor adds a minor improvement to image correspondence, while greatly decreasing performance for pedestrian detection. Finally most of the optimal parameters for pedestrian detection differ significantly from image correspondence: For example the normalization scale and the overlap between cells is much larger.
 		
 \section{Comparison with SIFT}
-Recall that the image correspondence evaluation showed that our descriptors marginally outperform SIFT. The difference is larger for light variations and statistically significant in a few cases. With these results in mind, we will now compare and reflect on the different design choices of SIFT and our descriptor.
+Recall that the image correspondence evaluation shows that our descriptors are very close performance-wise, and marginally outperform SIFT. The difference is larger for light variations and statistically significant in a few cases. With these results in mind, we will now compare and reflect on the different design choices of SIFT and our descriptor.
 
 Where SIFT uses vector normalization and clipping for illumination invariance and robustness, we use pixel normalization and normalization of the final vector. The choice of using local illumination estimation and normalization is most likely the reason for the difference in performance under light variations.
 
@@ -31,12 +31,21 @@ From our test results we see that the addition of shape index to GO only increas
 Given the tiny performance increase we recommend using the GO descriptor on its own.
 
 \section{Comparison with HOG}
-- overall results
-- block normalization vs. pixel normalization
-- density/overlap of cells
+
+Our pedestrian detection evaluation shows that our descriptors are not as good as HOG, with our compact GO+SI descriptor right behind. SI does not work well on its own, but adding it to both GO and HOG increases performance.
+
+A big difference between GO and HOG is in the strategy of local normalization. An advantage of HOG's block normalization is that each cell contains four different normalization factors for different directions away from the cell. This information is different from the histogram bins, because it is based on relative magnitudes rather than orientations. An advantage of our pixel normalization is that the normalization region is defined per pixel instead of per block. This allows for pixels inside a cell to be normalized individually, where HOG normalizes them equally. Interestingly, our optimal normalization region defined by a Gaussian window with $\eta = 4$ is similar in size to the four overlapping $8 \times 8$ pixel block normalizations from HOG. Another difference between GO and HOG is that HOG computes both undirected and directed gradients.
+
+Looking at \Cref{tbl:INRIAparams}, we both have a larger density and cell overlap compared to HOG. This results in a large number of cells that are slightly larger than HOG's.
+- large cells+overlap = allows large translation of pedestrian
+
+- density/overlap of cells: 10x10 vs. 4x4 pixel cells
 - RGB maximization
 - Compact GoSi (13,5)
 - HOG+SI
+- hard negatives
+
+\section{Parameter study?}
 
 \section{Future work} % rename to alternative approaches?
 %

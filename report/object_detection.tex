@@ -277,27 +277,27 @@ Generally the true positive images show pedestrians in standard up-right poses w
 
 We follow the same setup as our image correspondence parameter study in \Cref{sec:icParameterStudy}, with a couple exceptions. Since the dataset has a pre-defined split into training and test data, we only run the parameter study once (with 6-fold cross validation) on training data and obtain a single set of parameters. The parameters are also slightly different of the region cell layout and the addition of the SVM-weight $C$, which we also wish to optimize for each descriptor.
 
-The optimal parameters for our GO and SI descriptors are shown in \Cref{tbl:INRIAparams}, and the optimal $C$ values for all descriptors are shown in \Cref{tbl:INRIAparamC}. The effect of adjusting the parameters relative to the optimized parameters can be seen for GO in \Cref{fig:inriaParametersGoAuc} and SI in \Cref{fig:inriaParametersSiAuc}. Cell spacing $r$ and bin count $n$ seem to the two most important parameters: Decreasing $r$ improves performance greatly, but the increased number of cells also results in a much higher dimensionality. For GO $n$ seems to produce better results for high odd numbers than the neighbouring even numbers, whereas 9 or 13 bins produce good results for SI. We decided not to allow $r$ values lower than the current $1.6$, because the current dimensionality is already almost too high to work with. Most of the other parameters have a large range of values that produce good results. Box filters marginally outperform the alternative kernels, except for the bin kernel of SI, where the three kernels perform almost equally well, and the triangle kernel is chosen.
+The optimal parameters for our GO and SI descriptors are shown in \Cref{tbl:INRIAparams}, together with the parameters for HOG translated into our framework. The optimal $C$ values for all descriptors are shown in \Cref{tbl:INRIAparamC}. The effect of adjusting the parameters relative to the optimized parameters can be seen for GO in \Cref{fig:inriaParametersGoAuc} and SI in \Cref{fig:inriaParametersSiAuc}. Cell spacing $r$ and bin count $n$ seem to the two most important parameters: Decreasing $r$ improves performance greatly, but the increased number of cells also results in a much higher dimensionality. For GO $n$ seems to produce better results for high odd numbers than the neighbouring even numbers, whereas 9 or 13 bins produce good results for SI. The optimized $r$ values are the lowest in our search range for each grid type, because the dimensionality at this point is already almost too high to work with. Most of the other parameters have a large range of values that produce good results. Box filters marginally outperform the alternative kernels, except for the bin kernel of SI, where the three kernels perform almost equally well, and the triangle kernel is chosen.
 
 Due to the high dimensionality we construct a compact version of our GO+SI descriptor based on these training results. We keep the same optimal parameters, except we increase cell spacing $r = 2.54$ in a square grid, and reduce bin count to $n = 13$ for GO and $n = 5$ for SI. This reduces the dimensionality below HOG. For our HOG+SI descriptor, we reduce $r = 2.18$ and $n = 9$ to reduce the influence of the added shape index information compared to HOG. We will go into further detail about the descriptor dimensionality and performance in the results section.
 
 \begin{table}[tb]
 \centering
-\begin{tabular}{ l c c }
+\begin{tabular}{ l c c c }
 \toprule
-{} & \multicolumn{2}{c}{Methods} \\
-Parameter & GO & SI \\ \midrule
-Grid type & Square & Triangle \\
-Cell spacing $r$ & $1.6$ & $1.6$ \\
-Cell kernel & \textit{Box} & \textit{Box} \\
-Cell scale $\alpha$ & $3.1$ & $3.5$ \\
-Bin count $n$ & $15$ & $13$ \\
-Bin kernel & \textit{Box} & \textit{Tri} \\
-Bin scale $\beta$ & $1.4$ & $0.8$ \\
-Normalization scale $\eta$ & $4.0$ & $5.0$ \\
+{} & \multicolumn{3}{c}{Methods} \\
+Parameter & GO & SI & HOG \\ \midrule
+Grid type & Square & Triangle & Square \\
+Cell spacing $r$ & $1.57$ & $1.62$ & $4$ \\
+Cell kernel & \textit{Box} & \textit{Box} & \textit{Tri} \\
+Cell scale $\alpha$ & $3.1$ & $3.5$ & $1.0$ \\
+Bin count $n$ & $15$ & $13$ & $9+18$ \\
+Bin kernel & \textit{Box} & \textit{Tri} & \textit{Tri} \\
+Bin scale $\beta$ & $1.4$ & $0.8$ & $1.0$ \\
+Normalization scale $\eta$ & $4.0$ & $5.0$ & - \\
 \bottomrule
 \end{tabular}
-\caption{Optimized parameters from our parameter study for GO and SI.}
+\caption{Optimized parameters from our parameter study for GO and SI. We also include the HOG parameters translated into our framework when possible. HOG has 9 undirected and 18 directed orientation bins, and uses a block normalization scheme instead of our pixel normalization.}
 \label{tbl:INRIAparams}
 \end{table}
 %
