@@ -39,6 +39,8 @@ A big difference between GO and HOG is in the strategy of local normalization. A
 Looking at \Cref{tbl:INRIAparams}, we both have a larger density and cell overlap compared to HOG. This results in a large number of cells that are slightly larger than HOG's.
 - large cells+overlap = allows large translation of pedestrian
 
+Assuming a fixed number of cells, increasing the overlap between cells is a trade-off between two factors: specific gradient information will be spread out to multiple cells, increasing the robustness to small changes in pedestrian postures. However, this also reduces the influence of the information to each cell. This causes the classification ability of easily recognisable pedestrians to decrease, but a larger range of harder pedestrians to score well. The same reasoning can be said for overlap between histogram bins.
+
 - density/overlap of cells: 10x10 vs. 4x4 pixel cells
 - RGB maximization
 - Compact GoSi (13,5)
