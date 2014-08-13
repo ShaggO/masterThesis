@@ -11,7 +11,7 @@
 %
 In this chapter we describe the pedestrian detection problem and how we apply our descriptor to solve it.
 
-Object detection is the problem of locating specified objects in images. One application of this is pedestrian detection, which we have decided to focus on as it is simple and has extensive datasets. A common approach to object detection is to extract regions from the image, reducing the problem to binary classification of the presence of the specified object in each region. Using this approach, we are able to compute one descriptor for each region. We furthermore assume fixed size regions in scale-space, allowing us to directly compare our descriptors. The classification of pedestrians is done using a linear support vector machine.
+Object detection is the problem of locating specified objects in images. One application of this is pedestrian detection, which we have decided to focus on as it is simple and has extensive datasets. A common approach to object detection is to extract regions from the image, reducing the problem to binary classification of the presence of a pedestrian in each region. The classification of pedestrians is done by computing a descriptor for each region and using a linear support vector machine for prediction.
 
 The chapter is structured as follows. First we describe support vector machines, and how to evaluate their classification performance. We then describe the dataset and specify how we apply our descriptor to the problem as well as our experimental setup. Next, we show an example of the use of our descriptor for pedestrian detection and how it relates to HOG, including some example classifications of dataset images. Finally, we present our parameter optimization and test results, which include a comparison with HOG.
 %
@@ -40,6 +40,9 @@ However, linear separation of the two classes is almost never feasible. Instead 
 %
 where $\xi_i$ are slack variables allowing for misplaced points.
 
+This formulation can be extended to a non-linear SVM by replacing $\w \cdot \x_i$ with a kernel function $k(\w,\x_i)$. Examples of alternative kernels are polynomials and Gaussian radial basis functions:
+\todo{Define alternative kernels}
+
 If there is a large skew in the number of elements in each class, the larger class will dominate the misplacement term, and we will be less likely to find a good separation. In order to correct this skew, the cost parameter $C$ can be defined for each of the two classes individually. The simplest approach is dividing $C$ by the number of elements in the respective classes.
 
 When using the SVM for solving the pedestrian detection problem, we use the $L_2$-regularized $L_2$ loss support vector classifier from LIBLINEAR v. 1.94\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/liblinear/}} \cite{fan2008liblinear}. The naming of this SVM type means that the $L_2$-norm is used for computing both $\| \w \|$ and $\xi_i$, as in \Cref{eq:svmDefinition}.
@@ -49,7 +52,7 @@ When using the SVM for solving the pedestrian detection problem, we use the $L_2
 Having described the method of using a SVM for binary classification, we are now able to define a performance measure for the pedestrian detection problem. Recall that the an SVM gives us the signed distances $\w \cdot \d - b$ between each descriptor $\d$ and the hyperplane dividing the two classes: positive for pedestrians and negative for non-pedestrians. Since the SVM is trained to find the best separation between the classes, we can use this distance as the classification score $s$. Following the binary classification method described in \Cref{sec:binaryClassificationMeasures}, we are able to compute both the PR- and ROC-curves and their AUCs. In other words we vary a threshold on the distance to the hyperplane to get the two measures of the performance of a descriptor.
 
 The dataset we use (described in \Cref{sec:odDataset}) has a large skew in the amount of positives and negatives. This is because the only positives are the exact cut-outs of pedestrians, while negatives can be anything else.
-Recall that the PR measure is preferred when there is a large skew towards one of the classes of a binary classification, as described in \Cref{sec:binaryClassificationMeasures}. We will therefore be using the PR measure as performance measure for our pedestrian detection parameter study as well as testing. \Citet{dalal2005histograms} use the log-log plot of the ROC-curve as performance measure, and hence we will show test results for this performance measure as well. In order for this measure to make sense, the actual plot is defined as the logarithm of $1-\text{Recall}$ versus the logarithm of $\FPR$.
+Recall that the PR measure is preferred when there is a large skew towards one of the classes of a binary classification, as described in \Cref{sec:binaryClassificationMeasures}. We will therefore be using the PR measure as performance measure for our pedestrian detection parameter study as well as testing. \Citet{dalal2005histograms} use the log-log plot of the ROC-curve as performance measure, and hence we will show test results for this performance measure as well. Since recall is very close to 1 and $\FPR$ is close to 0, the actual plot is defined as the logarithm of $1-\text{Recall}$ versus the logarithm of $\FPR$.
 %
 \section{Dataset}
 \label{sec:odDataset}
@@ -123,7 +126,7 @@ For our validation setup, we split the training data into six parts for the purp
 
 Our test setup is a modification of the one described by \citet{dalal2005histograms}. First, an SVM is trained using all positive training images and 40 random cut-outs from each negative training image. A sliding window is then run across these negative training images, and these windows are classified by the SVM in order to find hard negatives (false positives). The hard negatives are defined as the negative cut-outs with classification score $s > 0$. In other words, we search the negative training images for examples that have not been learned by the SVM from the initial random cut-outs. We add the hard negatives to the set of existing negatives and retrain an SVM with the new training set. This SVM is then used for testing on the positive test images and sliding windows across negative test images.
 
-Compared to \citet{dalal2005histograms}, we extract a lot more cut-outs (40 per image as opposed to 10) and add a lot more hard negatives ($10^5$ as opposed to just the positive classification scores). The old amounts of training examples were caused by hardware limitations of only having $1.7$ GB of RAM for SVM training. We also prefer using a fixed number of hard negatives in order to train the SVM on the same number of images for each descriptor.
+\citet{dalal2005histograms} use 10 random cut-outs per image for initial training. We found that using this amount resulted in a high variance of performance when varying the seed for choosing the cut-outs. We therefore extract 40 cut-outs per image instead. The old amounts of training examples were caused by hardware limitations of only having $1.7$ GB of RAM for SVM training.
 
 \section{Example}
 %
