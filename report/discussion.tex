@@ -5,13 +5,15 @@
 
 In this chapter we will discuss the optimal results of the work described in our report.
 First we compare our descriptors and results with SIFT and HOG individually. Secondly we discuss the differences in descriptors and their optimal parameters between the two applications.
-This is followed by a discussion of possible future work. Finally we conclude upon the work we have presented.
+Finally we discuss possible future work.
 
 \section{Image correspondence}
 \label{sec:discussionIc}
 Recall that the image correspondence evaluation shows that our descriptors are very close performance-wise, and marginally outperform SIFT. The difference is larger for light variations and statistically significant in a few cases. With these results in mind, we will now compare and reflect on the different design choices of SIFT and our descriptor.
 
-Where SIFT uses vector normalization and clipping for illumination invariance and robustness, we use pixel normalization and normalization of the final vector. The choice of using local illumination estimation and normalization is most likely the reason for the difference in performance under light variations.
+\todo{Reason about the normal distribution assumption in the statistics}
+
+Where SIFT uses vector normalization and clipping for illumination invariance and robustness, we use pixel-wise normalization and normalization of the final vector. The choice of using local illumination estimation and normalization is most likely the reason for the difference in performance under light variations.
 
 Another difference between SIFT and our descriptor is that we don't support rotation estimation. The DTU dataset images have fixed orientation and hence we have omitted this step from SIFT too in order to avoid a decreased performance due to wrong rotation estimation. We have verified that including this step indeed reduces performance. The rotation estimation of SIFT could easily be adopted by our descriptor as an initial step for rotation invariance. Our cell layouts would then be rotated according to the estimated orientation.
 
@@ -31,7 +33,7 @@ Given the tiny performance increase we recommend using the GO descriptor on its 
 
 Our pedestrian detection evaluation shows that our descriptors are not as good as HOG, with our compact GO+SI descriptor right behind. SI does not work well on its own, but adding it to both GO and HOG increases performance.
 
-A big difference between GO and HOG is in the strategy of local normalization. An advantage of HOG's block normalization is that each cell contains four different normalization factors for different directions away from the cell. This information is different from the histogram bins, because it is based on relative magnitudes rather than orientations. An advantage of our pixel normalization is that the normalization region is defined per pixel instead of per block. This allows for pixels inside a cell to be normalized individually, where HOG normalizes them equally. Interestingly, our optimal normalization region defined by a Gaussian window with $\eta = 4$ is similar in size to the four overlapping $8 \times 8$ pixel block normalizations from HOG. Another difference between GO and HOG is that HOG computes both undirected and directed gradients.
+A big difference between GO and HOG is in the strategy of local normalization. An advantage of HOG's block normalization is that each cell contains four different normalization factors for different directions away from the cell. This information is different from the histogram bins, because it is based on relative magnitudes rather than orientations. An advantage of our pixel-wise normalization is that the normalization region is defined per pixel instead of per block. This allows for pixels inside a cell to be normalized individually, where HOG normalizes them equally. Interestingly, our optimal normalization region defined by a Gaussian window with $\eta = 4$ is similar in size to the four overlapping $8 \times 8$ pixel block normalizations from HOG. Another difference between GO and HOG is that HOG computes both undirected and directed gradients.
 
 Looking at \Cref{tbl:INRIAparams}, we both have a larger density and cell overlap compared to HOG. This results in a large number of cells that are slightly larger than HOG's. Assuming a fixed number of cells, increasing the overlap between cells is a trade-off between two factors: specific gradient information will be spread out to multiple cells, increasing the robustness to small changes in pedestrian postures. However, this also reduces the influence of the information to each cell. This causes the classification ability of easily recognisable pedestrians to decrease, but a larger range of harder pedestrians to score well. The same reasoning can be said for overlap between histogram bins.
 
@@ -54,7 +56,7 @@ Some of the differences can be explained by the difference in the nature of the 
 
 \section{Future work} % rename to alternative approaches?
 %
-Our pixel normalization scheme, while significantly improving results over no normalization, has the downside of boosting noise in dark areas. An example of this can be seen in \Cref{fig:pixelNormalizationExample}. It may be possible to create a clever scheme to keep the increased robustness to local illumination changes while removing the noise from dark areas.
+Our pixel-wise normalization scheme, while significantly improving results over no normalization, has the downside of boosting noise in dark areas. An example of this can be seen in \Cref{fig:pixelNormalizationExample}. It may be possible to create a clever scheme to keep the increased robustness to local illumination changes while removing the noise from dark areas.
 
 We decided to resize scale-space images respective to their scales, such that histograms are computed across the same pixel area regardless of detection scale. This means that potentially a lot of information is lost from downsampling the large scale images. It is possible to omit the resizing step and compute histograms at their original scales, but while experimenting with this we quickly ran into time and memory problems. The problem is even medium size features at $\sigma = 8$ multiply the computation time and memory by $8^2 = 64$. Another problem is whether the bin scales should be compensated for changing the number of pixels in histograms. While the approach was infeasible for us to use, there may be ways to overcome these issues.
 
@@ -63,8 +65,6 @@ A possible issue with constructing our shape index histograms is the non-uniform
 As mentioned in \Cref{sec:icParameterStudy}, our scheme for optimizing parameters risks getting stuck in local optima. We defined our parameters to be as uncorrelated as possible, but it could still be the case that modifying several of the parameters together would give a better result. The initialization of the parameters could likewise give a suboptimal solution. A possible way to improve our parameter optimization, while still being able to evaluate it in a reasonable time frame, is a simulated annealing approach. This is a probabilistic method designed to find approximated global optima in a large search space, by trying nearby random parameter choices with gradually smaller jumps. Another potential improvement to our parameter study could be to optimize the combined GO+SI instead of optimizing GO and SI individually.
 
 There are also many approaches used in the literature that could potentially improve our descriptor. PCA could be used to reduce the dimensionality, allowing for a higher number of cells and bins. Alternatives to the shape index and curvedness as mentioned in \Cref{sec:valueMagnitudeFunctions} could be thoroughly tested as well as higher than second order differential structure for use as bin value and magnitude functions. We could extend our descriptor to represent structure from multiple scales like the galaxy descriptor \Citet{pedersen2013shape}. This is however not necessarily a good idea in combination with omitting smoothing for pedestrian detection, since the information will largely be the same. Two-way matching, where we consider the distance ratio between best matches in both images, could improve image correspondence results. However, it is not important for comparing the performance of descriptors to each other. Higher level descriptors such as bag-of-words models or Fisher vectors \cite{sanchez2013image} could be used to perform object detection based on distributions of our descriptors rather than the descriptors themselves.
-
-\section{Conclusion}
 
 \subbibliography
 

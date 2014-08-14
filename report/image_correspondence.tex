@@ -299,7 +299,7 @@ When having computed the distance ratios of all matches, we are able to construc
 %3b. Zoom: (2 iterations, initially large interval, then small zoomed in interval)
 %4. 
 %
-%1. Problems with boosting the noise when using pixel normalization?
+%1. Problems with boosting the noise when using pixel-wise normalization?
 We wish to optimize the descriptor parameters listed in \Cref{sec:descriptorParameters} with the objective of maximizing average matching PR AUC. We do this separately for GO and SI as they may have different optimal parameters, and simply combine these to create the GO+SI descriptor. As mentioned in the experimental setup, we have split the DTU dataset into six parts to reduce overfitting by 6-fold cross-validation. For each fold we optimize parameters on five parts and test the optimized descriptor on the final part. This means we obtain six sets of parameters and a single PR AUC for each image, where the images are evaluated without optimizing across their respective scenes. To save time evaluating parameters, we scale the images to half size and convert them to grayscale. The testing is done on the full scale images converted to opponent colour space as mentioned in \Cref{sec:opponentColourSpace}.
 
 Our actual parameter optimization is problematic because we need to optimize ten parameters at once, and each evaluation is computationally heavy. Our basic strategy is thus to cycle through each parameter and optimize it separately while fixing the other parameters. We do this iteratively until convergence.
@@ -510,7 +510,7 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 %	\label{fig:dtuParametersGoAlt}
 %\end{figure}
 %
-We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.781$: It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces the AUC by $0.002$. Doubling the image resolution improves the AUC by $0.009$. Computing the descriptor on opponent colour channels improves the AUC by $0.014$. Omitting pixel normalization reduces the AUC by $0.023$. Omitting the center filter reduces the AUC by $0.002$. These tendencies hold for SI as well.
+We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.781$: It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces the AUC by $0.002$. Doubling the image resolution improves the AUC by $0.009$. Computing the descriptor on opponent colour channels improves the AUC by $0.014$. Omitting pixel-wise normalization reduces the AUC by $0.023$. Omitting the center filter reduces the AUC by $0.002$. These tendencies hold for SI as well.
 %
 \section{Results}
 %

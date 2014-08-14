@@ -43,8 +43,8 @@ Recall that in order to make our descriptor scale invariant, we wish to compute 
 \subsection{Local magnitude normalization}
 \label{sec:localMagnitudeNormalization}
 %
-In \Cref{sec:illumination} we described the problem of handling illumination in images and its possible solutions. The block-normalization scheme from the HOG descriptor \cite{dalal2005histograms} is a way of locally (in blocks of $2 \times 2$ cells) estimating the affine coefficient $a$ when having assumed an affine illumination model. We wish to make this estimation even more local by estimating $a$ on a pixel-level. We propose a normalization scheme called pixel normalization, which we apply to the magnitude function $F(\x)$.
-The pixel normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
+In \Cref{sec:illumination} we described the problem of handling illumination in images and its possible solutions. The block-normalization scheme from the HOG descriptor \cite{dalal2005histograms} is a way of locally (in blocks of $2 \times 2$ cells) estimating the affine coefficient $a$ when having assumed an affine illumination model. We wish to make this estimation even more local by estimating $a$ on a pixel-level. We propose a normalization scheme called pixel-wise normalization, which we apply to the magnitude function $F(\x)$.
+The pixel-wise normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
 %
 \begin{align}
 F_\text{norm}(\x) = \frac{F(\x)}{\int F(\y) G(\y - \x; \eta \sigma_0) \,\text{d} \y}
@@ -52,10 +52,10 @@ F_\text{norm}(\x) = \frac{F(\x)}{\int F(\y) G(\y - \x; \eta \sigma_0) \,\text{d}
 %
 where $\eta$ is the normalization scale, defined relative to the interest point scale $\sigma_0$. The idea behind this scheme is that an image is locally affected by light changes according to the affine illumination model. In order to estimate $a$ on a pixel-level, we use intensity information from the surrounding pixels. Using a Gaussian filter we are able to weight the surrounding intensities based on their spatial distance to the pixel in question. The rationale for this is, that pixels close to one another has a higher probability of being affected by equal light conditions than pixels further away from one another. By dividing the pixel value by the sum of all these weighted intensities (estimation of $a$), we remove the affine coefficient from the pixel.
 
-Having applied the pixel normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
-\Cref{fig:pixelNormalizationExample} shows two examples of images containing shadows, their gradient magnitudes at $\sigma_0 = 1$, their pixel normalized magnitudes with $\eta = 2$, and their pixel normalized magnitudes with $\eta = 10$. These types of shadows are the ones we will try to handle by using pixel normalization. As seen in the gradient magnitude images, the shadows have a dampening effect on the gradient magnitude. By using a small $\eta$ for the pixel normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\eta$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well. The choice of optimal $\eta$ is part of our parameter studies.
+Having applied the pixel-wise normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
+\Cref{fig:pixelNormalizationExample} shows two examples of images containing shadows, their gradient magnitudes at $\sigma_0 = 1$, their pixel-wise normalized magnitudes with $\eta = 2$, and their pixel-wise normalized magnitudes with $\eta = 10$. These types of shadows are the ones we will try to handle by using pixel-wise normalization. As seen in the gradient magnitude images, the shadows have a dampening effect on the gradient magnitude. By using a small $\eta$ for the pixel-wise normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\eta$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well. The choice of optimal $\eta$ is part of our parameter studies.
 
-An alternative technique for handling local illumination is normalizing each cell histogram, which can be done instead of or alongside pixel normalization. This was used successfully in the DAISY descriptor \cite{tola2008fast}. We have tried various ways of incorporating this technique, but none were able to beat simple pixel normalization through preliminary tests, and hence we have refrained from pursuing these strategies further.
+An alternative technique for handling local illumination is normalizing each cell histogram, which can be done instead of or alongside pixel-wise normalization. This was used successfully in the DAISY descriptor \cite{tola2008fast}. We have tried various ways of incorporating this technique, but none were able to beat simple pixel-wise normalization through preliminary tests, and hence we have refrained from pursuing these strategies further.
 %
 \begin{figure}[p]
     \centering
@@ -99,7 +99,7 @@ An alternative technique for handling local illumination is normalizing each cel
         \caption{}
         \label{fig:pixelNormalizationExample8}
     \end{subfigure}
-    \caption{Images \subref{fig:pixelNormalizationExample1} and \subref{fig:pixelNormalizationExample2} show cut-outs of an image with leftmost and rightmost artificial lighting, respectively. Images \subref{fig:pixelNormalizationExample3} and \subref{fig:pixelNormalizationExample4} show gradient magnitudes of these images. Images \subref{fig:pixelNormalizationExample5} and \subref{fig:pixelNormalizationExample6} show pixel normalized magnitudes for normalization scale $\eta = 2$. Images \subref{fig:pixelNormalizationExample7} and \subref{fig:pixelNormalizationExample8} show pixel normalized magnitudes for $\eta = 10$.}
+    \caption{Images \subref{fig:pixelNormalizationExample1} and \subref{fig:pixelNormalizationExample2} show cut-outs of an image with leftmost and rightmost artificial lighting, respectively. Images \subref{fig:pixelNormalizationExample3} and \subref{fig:pixelNormalizationExample4} show gradient magnitudes of these images. Images \subref{fig:pixelNormalizationExample5} and \subref{fig:pixelNormalizationExample6} show pixel-wise normalized magnitudes for normalization scale $\eta = 2$. Images \subref{fig:pixelNormalizationExample7} and \subref{fig:pixelNormalizationExample8} show pixel-wise normalized magnitudes for $\eta = 10$.}
     \label{fig:pixelNormalizationExample}
 \end{figure}
 %
@@ -322,7 +322,7 @@ The next step is to construct the scale space images as described in \Cref{sec:v
     	\caption{Normalized pixel magnitude images}
     	\label{fig:cellHistScaleSpacesMnorm}
 	\end{subfigure}
-	\caption{Images \subref{fig:cellHistScaleSpacesV} and \subref{fig:cellHistScaleSpacesM} show gradient orientation and magnitude images computed at various scales. Image \subref{fig:cellHistScaleSpacesMnorm} shows the pixel normalized magnitude images, where the magnitudes are relative to a small local area.}
+	\caption{Images \subref{fig:cellHistScaleSpacesV} and \subref{fig:cellHistScaleSpacesM} show gradient orientation and magnitude images computed at various scales. Image \subref{fig:cellHistScaleSpacesMnorm} shows the pixel-wise normalized magnitude images, where the magnitudes are relative to a small local area.}
 	\label{fig:cellHistScaleSpacesVM}
 \end{figure}
 
@@ -343,11 +343,11 @@ The next step is to construct the scale space images as described in \Cref{sec:v
     	\caption{Normalized curvedness images}
     	\label{fig:cellHistScaleSpacesCnorm}
 	\end{subfigure}
-	\caption{Images \subref{fig:cellHistScaleSpacesS} and \subref{fig:cellHistScaleSpacesC} show shape index and curvedness images computed at various scales. Image \subref{fig:cellHistScaleSpacesCnorm} shows the pixel normalized curvedness images, where the curvedness is relative to a small local area.}
+	\caption{Images \subref{fig:cellHistScaleSpacesS} and \subref{fig:cellHistScaleSpacesC} show shape index and curvedness images computed at various scales. Image \subref{fig:cellHistScaleSpacesCnorm} shows the pixel-ise normalized curvedness images, where the curvedness is relative to a small local area.}
 	\label{fig:cellHistScaleSpacesSC}
 \end{figure}
 
-From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In the case of GO $x$- and $y$-derivatives are needed, whereas $xx$-, $xy$-, and $yy$-derivatives are needed for SI. The derivatives are used to compute bin value and magnitude functions over the entire image. We then apply our pixel normalization scheme to the magnitudes. These images are shown in \Cref{fig:cellHistScaleSpacesVM,fig:cellHistScaleSpacesSC} for GO and SI respectively.
+From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In the case of GO $x$- and $y$-derivatives are needed, whereas $xx$-, $xy$-, and $yy$-derivatives are needed for SI. The derivatives are used to compute bin value and magnitude functions over the entire image. We then apply our pixel-wise normalization scheme to the magnitudes. These images are shown in \Cref{fig:cellHistScaleSpacesVM,fig:cellHistScaleSpacesSC} for GO and SI respectively.
 
 We need to compute the cell and center weights for pixels in every cell according to the chosen cell layout parameters. In this case we use Gaussian cell kernels, where the support radius is confined to $3$ times the cell radius. Pixels outside this distance to each cell center are ignored. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, but since many cells overlap we show the maximal weight for each pixel.
 

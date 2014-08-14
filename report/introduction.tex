@@ -4,25 +4,18 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Computer scientists have for many years tried to make computers interpret real world images as humans do, in order to solve problems such as image correspondence \cite{dahl2011finding}, pedestrian detection \cite{felzenszwalb2008discriminatively}, and content based image retrieval \cite{smeulders2000content}. The approaches to these problems are often based on creating descriptors to represent regions of the images, and comparing these descriptors by some method depending on the application. \todo{insert examples}
+In the field of computer vision, researchers have for many years tried to make computers interpret real world images as humans do. We have chosen to focus on two problems within this field: image correspondence \cite{dahl2011finding}, where we search for correspondences between two different images taken of the same object, and pedestrian detection \cite{felzenszwalb2008discriminatively}, where locations of pedestrians are identified. The approaches to these problems are often based on creating descriptors to represent regions of the images, and comparing these descriptors by some method depending on the application. Popular and successful descriptors include the SIFT \cite{lowe2004distinctive}, GLOH \cite{mikolajczyk2005performance}, DAISY \cite{tola2008fast}, and HOG \cite{dalal2005histograms,felzenszwalb2009object}.
 
-The strategy for choosing image regions depends on the application. If a systematic search across the image is needed, we use a sliding window approach. If we only want to describe the most distinctive regions, we instead use an interest point detector. The detectors that are popular and have proven to be successful are the Harris corner detector, Hessian based detectors, the Difference of Gaussian (DoG) blob detector, and the Maximally Stable Extremal Regions (MSER) detector \cite{aanaes2012interesting,dahl2011finding}.
+The strategy for choosing image regions depends on the application. If a systematic search across the image is needed, we use a sliding window approach. If we only want to describe the most distinctive regions, we instead use an interest point detector. Commonly used detectors are the Harris corner detector, Hessian based detectors, the Difference of Gaussians (DoG) blob detector, and the Maximally Stable Extremal Regions (MSER) detector \cite{aanaes2012interesting,dahl2011finding}.
 
 An important part of descriptor design is to make them invariant to image transformations such as rotation, translation, illumination, scale, perspective, and noise. This causes real world objects to be described similarly despite being captured under different conditions. The choice of invariant properties depends on the application of the descriptor. For example rotation invariance is desired for texture description but not necessarily for recognition of pedestrians.
 
-%%%% This is our proposed solution
-% Should be changed to the final solution/what we have tried once we get that
-% far in the process
-We will try to design and implement a variant of the HOG descriptor utilizing higher order differential information.\mycomment[KSP]{Hvorfor er det interessant?} We will select a few of the following applications for testing our solution: Texture recognition, pedestrian detection, general object detection using deformable parts models, image correspondence, medical image registration, and content based image retrieval.
+The goal of this project is to study, create and evaluate our own descriptors and compare them against state of the art descriptors. Like SIFT and HOG our descriptors are based on derivative scale-space images, which describe differential structure in images at multiple scales. From these we compute histograms of gradient orientation and/or shape index weighted by gradient magnitude and curvedness respectively. The descriptor consists of histograms computed for a grid of cells over a region. To account for local illumination changes, we propose a pixel-wise normalization scheme of the derivative scale-space images.
 
-At first we will try to experiment with a HOG descriptor extended to various orders of differential information (like Jet descriptors à la \cite{larsen2012jet}) and various parameters for the number of cells per block, number of pixels per cell and number of bins per cell histogram. Furthermore we will experiment with the combination of HOG and the shape index \cite{koenderink1992surface} as well as different ways of processing the higher order information.
-%%%% /proposed solution
-
+The structure of the report is as follows: We first conduct a literature study of descriptors and their applications. Next we describe various methods used within the field of descriptors, which we need throughout the report. Hereafter we propose our descriptor framework followed by two chapters where we apply our descriptors to the image correspondence and pedestrian detection problems. Then we discuss the application results, and finally we conclude upon our work.
 
 %% Note on appendices in the report
-In this report we try to focus on the essential parts of our study of higher order descriptors. In order to keep this focus we have chosen to omit certain derivation details from the report itself and put them in appendices instead. Throughout the report there are notes when details are moved to appendices.
-
-
+In this report we try to focus on the essential parts of our study of higher order descriptors. In order to keep this focus we have chosen to omit certain derivation details and figures from the report itself and put them in appendices instead. Throughout the report there are notes when details and figures are moved to appendices.
 
 \subbibliography
 
