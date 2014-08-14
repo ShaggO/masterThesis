@@ -29,7 +29,7 @@ end
 names = {'Go','Si','GoSi','Sift'};
 data = {dtu.PR{1},dtu.PR{2},dtu.PR{3},sift.PR};
 %data = {dtu.ROC{1},dtu.ROC{2},dtu.ROC{3},sift.ROC(:,1)};
-combinations = [1 2;1 3;1 4;2 3;2 4;3 4]';
+combinations = [1 2;3 1;1 4;3 2;2 4;3 4]';
 exportFigures = true;
 
 %% Stats

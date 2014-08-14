@@ -7,7 +7,8 @@ In this chapter we will discuss the optimal results of the work described in our
 First we compare our descriptors and results with SIFT and HOG individually. Secondly we discuss the differences in descriptors and their optimal parameters between the two applications.
 This is followed by a discussion of possible future work. Finally we conclude upon the work we have presented.
 
-\section{Comparison with SIFT}
+\section{Image correspondence}
+\label{sec:discussionIc}
 Recall that the image correspondence evaluation shows that our descriptors are very close performance-wise, and marginally outperform SIFT. The difference is larger for light variations and statistically significant in a few cases. With these results in mind, we will now compare and reflect on the different design choices of SIFT and our descriptor.
 
 Where SIFT uses vector normalization and clipping for illumination invariance and robustness, we use pixel normalization and normalization of the final vector. The choice of using local illumination estimation and normalization is most likely the reason for the difference in performance under light variations.
@@ -25,7 +26,8 @@ The center aperture function, which SIFT likewise uses, only has a minor influen
 From our test results we see that the addition of shape index to GO only increases performance marginally. The addition however adds a substantial number of dimensions to the descriptor.
 Given the tiny performance increase we recommend using the GO descriptor on its own.
 
-\section{Comparison with HOG}
+\section{Pedestrian detection}
+\label{sec:discussionOd}
 
 Our pedestrian detection evaluation shows that our descriptors are not as good as HOG, with our compact GO+SI descriptor right behind. SI does not work well on its own, but adding it to both GO and HOG increases performance.
 
