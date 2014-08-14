@@ -29,21 +29,20 @@ end
 names = {'Go','Si','GoSi','Sift'};
 data = {dtu.PR{1},dtu.PR{2},dtu.PR{3},sift.PR};
 %data = {dtu.ROC{1},dtu.ROC{2},dtu.ROC{3},sift.ROC(:,1)};
-combinations = [1 4;2 4;3 4]';
-combinations = [3 4]';
-exportFigures = false;
+combinations = [1 2;1 3;1 4;2 3;2 4;3 4]';
+exportFigures = true;
 
 %% Stats
 
-for i = combinations
+for combination = combinations
 % Create a nicely formatted cell of confidence intervals
 ci = cell(1,numel(pathTypes));
 for p = pathTypes
     % Retrieve results for path from result matrix
     pIdx = idx2spil(:,2) == p;
-    prData1 = reshape(data{combinations(1)}(pIdx),[numel(liNum{p}) numel(imNum{p}) numel(setNum)]);
-    prData2 = reshape(data{combinations(2)}(pIdx),[numel(liNum{p}) numel(imNum{p}) numel(setNum)]);
-    
+    prData1 = reshape(data{combination(1)}(pIdx),[numel(liNum{p}) numel(imNum{p}) numel(setNum)]);
+    prData2 = reshape(data{combination(2)}(pIdx),[numel(liNum{p}) numel(imNum{p}) numel(setNum)]);
+
     % Compute means based on number of lightings per image
     if numel(liNum{p}) > 1
         % Light path
@@ -54,7 +53,7 @@ for p = pathTypes
         prData1 = reshape(prData1,numel(imNum{p}),[]);
         prData2 = reshape(prData2,numel(imNum{p}),[]);
     end
-    
+
     % Compute confidence intervals
     ci{p} = zeros(size(prData1,1),2);
     for i = 1:size(prData1,1)
@@ -74,17 +73,17 @@ for k = pathTypes % Generate figure for each image path
     width = ~mod(k,2) * 7.2 + mod(k,2) * 8;
     fig('width',width,'height',4.5,'unit','in','fontsize',10)
     hold on;
-        
+
     if before ~= 0
         plot(x(1:before),ci{k}(1:before,1),'b-');
         plot(x(1:before),ci{k}(1:before,2),'b-');
         fillBetweenLines(x(1:before),ci{k}(1:before,1),ci{k}(1:before,2),[0.9 0.9 1])
     end
-    
+
     plot(x(before+1:end),ci{k}(before+1:end,1),'b-');
     plot(x(before+1:end),ci{k}(before+1:end,2),'b-');
     fillBetweenLines(x(before+1:end),ci{k}(before+1:end,1),ci{k}(before+1:end,2),[0.9 0.9 1])
-    
+
     padding = (x(end)-x(1))/20;
     plot([x(1)-padding x(end)+padding],[0 0],'k--')
     axis([x(1)-padding x(end)+padding -0.2 0.2]);
@@ -95,7 +94,7 @@ for k = pathTypes % Generate figure for each image path
     grid on;
     box on;
     if exportFigures
-        export_fig('-r300',['../report/img/dtuResultsStats' names{combinations(1)} '_' names{combinations(2)} '_' num2str(k) '.pdf']);
+        export_fig('-r300',['../report/img/dtuResultsStats' names{combination(1)} '_' names{combination(2)} '_' num2str(k) '.pdf']);
     end
 end
 end
@@ -112,7 +111,7 @@ end
 %         disp([pathLabels{i} ': SIFT wins with significance p = ' num2str(p,3)])
 %     end
 % end
-% 
+%
 % disp('GO vs SIFT:')
 % for i = 1:6
 %     idx = idx2spil(:,2) == i;
@@ -125,7 +124,7 @@ end
 %         disp([pathLabels{i} ': SIFT wins with significance p = ' num2str(p,3)])
 %     end
 % end
-% 
+%
 % disp('GO-SI vs GO:')
 % for i = 1:6
 %     idx = idx2spil(:,2) == i;

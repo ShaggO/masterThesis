@@ -318,6 +318,184 @@ Thus an arbitrary 2D Gaussian derivative can be written as:
 	G_{x^m y^n}(x,y;\sigma) &=
 						G_{y^n}(y;\sigma)^\text{T} \ast G_{x^m}(x;\sigma)
 \end{align*}
+
+\chapter{Confidence intervals for image correspondence}
+
+\begin{figure}[tb]
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Si_1.pdf}
+		\caption{Arc 1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Si_2.pdf}
+		\caption{Arc 2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Si_3.pdf}
+		\caption{Arc 3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Si_4.pdf}
+		\caption{Linear path}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Si_5.pdf}
+		\caption{Light path, $x$-axis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Si_6.pdf}
+		\caption{Light path, $z$-axis}
+	\end{subfigure}
+	}
+	\caption{95\% confidence intervals on the PR AUC difference between our GO and SI descriptors. A positive difference denotes that GO outperforms SI and vice versa. If the confidence interval for a position contains zero, there is no significant difference in performance.}
+	\label{fig:dtuResultsStatsGo_Si}
+\end{figure}
+
+\begin{figure}[tb]
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_GoSi_1.pdf}
+		\caption{Arc 1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_GoSi_2.pdf}
+		\caption{Arc 2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_GoSi_3.pdf}
+		\caption{Arc 3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_GoSi_4.pdf}
+		\caption{Linear path}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_GoSi_5.pdf}
+		\caption{Light path, $x$-axis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_GoSi_6.pdf}
+		\caption{Light path, $z$-axis}
+	\end{subfigure}
+	}
+	\caption{95\% confidence intervals on the PR AUC difference between our GO and GO+SI descriptors. A positive difference denotes that GO outperforms GO+SI and vise versa. If the confidence interval for a position contains zero, there is no significant difference in performance.}
+	\label{fig:dtuResultsStatsGo_GoSi}
+\end{figure}
+
+\begin{figure}[tb]
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Sift_1.pdf}
+		\caption{Arc 1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Sift_2.pdf}
+		\caption{Arc 2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Sift_3.pdf}
+		\caption{Arc 3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Sift_4.pdf}
+		\caption{Linear path}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Sift_5.pdf}
+		\caption{Light path, $x$-axis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsGo_Sift_6.pdf}
+		\caption{Light path, $z$-axis}
+	\end{subfigure}
+	}
+	\caption{95\% confidence intervals on the PR AUC difference between our GO descriptor and SIFT. A positive difference denotes that GO outperforms SIFT and vise versa. If the confidence interval for a position contains zero, there is no significant difference in performance.}
+	\label{fig:dtuResultsStatsGo_Sift}
+\end{figure}
+
+\begin{figure}[tb]
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_GoSi_1.pdf}
+		\caption{Arc 1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_GoSi_2.pdf}
+		\caption{Arc 2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_GoSi_3.pdf}
+		\caption{Arc 3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_GoSi_4.pdf}
+		\caption{Linear path}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_GoSi_5.pdf}
+		\caption{Light path, $x$-axis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_GoSi_6.pdf}
+		\caption{Light path, $z$-axis}
+	\end{subfigure}
+	}
+	\caption{95\% confidence intervals on the PR AUC difference between our SI and GO+SI descriptors. A positive difference denotes that SI outperforms GO+SI and vise versa. If the confidence interval for a position contains zero, there is no significant difference in performance.}
+	\label{fig:dtuResultsStatsSi_GoSi}
+\end{figure}
+
+\begin{figure}[tb]
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_Sift_1.pdf}
+		\caption{Arc 1}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_Sift_2.pdf}
+		\caption{Arc 2}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_Sift_3.pdf}
+		\caption{Arc 3}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_Sift_4.pdf}
+		\caption{Linear path}
+	\end{subfigure}
+	}
+	\centerline{
+	\begin{subfigure}[t]{0.6242\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_Sift_5.pdf}
+		\caption{Light path, $x$-axis}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5618\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsStatsSi_Sift_6.pdf}
+		\caption{Light path, $z$-axis}
+	\end{subfigure}
+	}
+	\caption{95\% confidence intervals on the PR AUC difference between our SI descriptor and SIFT. A positive difference denotes that SI outperforms SIFT and vise versa. If the confidence interval for a position contains zero, there is no significant difference in performance.}
+	\label{fig:dtuResultsStatsSi_Sift}
+\end{figure}
+
 \subbibliography
 
 \end{document}

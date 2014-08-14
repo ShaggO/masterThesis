@@ -40,8 +40,7 @@ However, linear separation of the two classes is almost never feasible. Instead 
 %
 where $\xi_i$ are slack variables allowing for misplaced points.
 
-This formulation can be extended to a non-linear SVM by replacing $\w \cdot \x_i$ with a kernel function $k(\w,\x_i)$. Examples of alternative kernels are polynomials and Gaussian radial basis functions:
-\todo{Define alternative kernels}
+This formulation can be extended to a non-linear SVM by replacing $\w \cdot \x_i$ with a kernel function $k(\w,\x_i)$. Examples of alternative kernels are polynomials $\left( \w \cdot \x_i \right)^d$ for $d \in \mathbb{R}$, and Gaussian radial basis functions $\exp \left( -\gamma \left \| \w - \x_i  \right \|^2  \right)$ for $\gamma > 0$. \citet{dalal2005histograms} use a linear SVM and report that using a Gaussian kernel improves the results slightly but at a much higher run time. Therefore we choose to use a linear SVM as well.
 
 If there is a large skew in the number of elements in each class, the larger class will dominate the misplacement term, and we will be less likely to find a good separation. In order to correct this skew, the cost parameter $C$ can be defined for each of the two classes individually. The simplest approach is dividing $C$ by the number of elements in the respective classes.
 
@@ -115,14 +114,14 @@ Our descriptors are using the region cell layouts described in \Cref{sec:cellApe
 
 When computing descriptors on images that are larger than the $134 \times 70$ pixel regions (including boundary pixels), we use a sliding window (see \Cref{sec:slidingWindow}) with 10 pixel stride and scales at $2^{\nicefrac{n}{3}},~n=1,\hdots,m$ where $m$ is the largest number such that the entire window is inside the image. 
 
-\citet{dalal2005histograms} showed that smoothing of the pedestrian images resulted in worse performance than without smoothing. We therefore refrain from smoothing the images in our scale-space pyramids. As mentioned in \Cref{sec:hog}, we use RGB images for HOG. During our parameter study we use grayscale images to decrease the amount of computations, whereas we use RGB images for the final classifier.
+\citet{dalal2005histograms} showed that smoothing of the pedestrian images resulted in worse performance than without smoothing. We verify this for our descriptors in the parameter study in \Cref{sec:odParameterStudy}, and therefore we refrain from smoothing the images in our scale-space pyramids. As mentioned in \Cref{sec:hog}, we use RGB images for HOG. During our parameter study we use grayscale images to decrease the amount of computations, whereas we use RGB images for the final classifier.
 %
 \section{Experimental setup}
 \label{sec:inriaExperimentalSetup}
 %
 We have two experimental setups for evaluating descriptors on the INRIA dataset. The first is a validation setup for evaluating parameters during our parameter study using only the training data, and the second is a more complex test setup for evaluating the optimized or alternative descriptors on test data.
 
-For our validation setup, we split the training data into six parts for the purpose of (leave-one-out) cross-validation. This is done by, for each split, training an SVM on five parts and testing on the other. The SVM is trained using all the given positive images and 40 random cut-outs from each negative image. The results are consolidated by computing the mean PR AUC across the six splits.
+For our validation setup, we split the training data into six parts for the purpose of 6-fold cross-validation. This is done by, for each split, training an SVM on five parts and testing on the other. The SVM is trained using all the given positive images and 40 random cut-outs from each negative image. The results are consolidated by computing the mean PR AUC across the six splits.
 
 Our test setup is a modification of the one described by \citet{dalal2005histograms}. First, an SVM is trained using all positive training images and 40 random cut-outs from each negative training image. A sliding window is then run across these negative training images, and these windows are classified by the SVM in order to find hard negatives (false positives). The hard negatives are defined as the negative cut-outs with classification score $s > 0$. In other words, we search the negative training images for examples that have not been learned by the SVM from the initial random cut-outs. We add the hard negatives to the set of existing negatives and retrain an SVM with the new training set. This SVM is then used for testing on the positive test images and sliding windows across negative test images.
 

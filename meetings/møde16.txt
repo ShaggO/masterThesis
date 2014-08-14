@@ -1,0 +1,15 @@
+Noter til møde med Kim d. 13. august kl. 14:00
+- Welch's t-test, detalje grad/specifikt? Hvordan benyttes en t-test og dertilhørende frihedsgrader m.m.?
+    - Forklar konfidensintervallerne
+- Forslag til diskussionen
+    - RGB maksimering? Er der et teoretisk grundlag for at det burde virke?
+        - Maksimere kontrasten
+        - Blandingsfarver kunne blive mappet til samme farve
+    - Initial PR AUC and PR AUC after retraining.
+        - Et punkt der flyttes er bedre for den lile end den store
+        - Tilføj hård træning til parameterstudiet
+        - PCA ned til færre dimensioner (PCA GO+SI)
+        - Dimensionalitet vs. antal pixels
+- Censor og dato for forsvaret.
+- Rammer for forsvaret.
+- Gennemgang af rapport ændringer
