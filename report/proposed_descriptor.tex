@@ -6,7 +6,7 @@
 \begin{document}
 \chapter{Proposed descriptor}
 %
-Given an interest point $\x_0$ in an image at scale $\sigma_0$, we wish to effectively describe the surrounding area. Our proposed descriptor consists of weighted smooth histograms computed for $m$ \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
+Given an interest point $\x_0$ in an image at scale $\sigma_0$, we wish to effectively describe the surrounding area. Our proposed descriptor consists of weighted kernel-based histograms, explained in \Cref{sec:histograms}, computed for $m$ \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
 %
 \begin{align}
 \label{eq:proposed_histogram}
@@ -242,7 +242,7 @@ where $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions}
 \section{Binning aperture function}
 \label{sec:binningApertureFunction}
 %
-As mentioned in the introduction to the proposed descriptor, we use smooth histograms as described in \Cref{sec:histograms} for our descriptor. The binning aperture function decides the shape of the smooth histograms that make up our descriptor. We define it as
+The binning aperture function decides the shape of the histograms that make up our descriptor. We define it as
 \begin{align}
 	B(\x; f_i, f) = K \left( f(\x) - f_i; \beta \frac{f_\text{max} - f_\text{min}}{2n} \right)
 \end{align}
