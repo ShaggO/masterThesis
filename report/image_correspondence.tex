@@ -513,6 +513,7 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.781$: It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces the AUC by $0.002$. Doubling the image resolution improves the AUC by $0.009$. Computing the descriptor on opponent colour channels improves the AUC by $0.014$. Omitting pixel-wise normalization reduces the AUC by $0.023$. Omitting the center filter reduces the AUC by $0.002$. These tendencies hold for SI as well.
 %
 \section{Results}
+\label{sec:icResults}
 %
 Having found the optimal parameters for each of the 6 folds in the previous section, we are now able to compute test results for each fold and report the performance of our descriptors.
 We have chosen to compare our descriptor performance against the SIFT descriptor since \citet{dahl2011finding} found the combination of DoG and SIFT to perform well. We are however using the opponent colour space for our descriptors, and since \citet{dahl2012interest} found Opponent SIFT (see \Cref{sec:opponentColourSpace}) to perform well against other SIFT variants, this is the descriptor we will test our performance against. Throughout this section we refer to Opponent SIFT as SIFT.

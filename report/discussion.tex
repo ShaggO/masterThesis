@@ -3,15 +3,17 @@
 
 \chapter{Discussion}
 
-In this chapter we will discuss the optimal results of the work described in our report.
-First we compare our descriptors and results with SIFT and HOG individually. Secondly we discuss the differences in descriptors and their optimal parameters between the two applications.
-Finally we discuss possible future work.
+Recall that we have developed the two main descriptors: GO, which uses gradient information similar to SIFT and HOG, and SI, which uses second order information in the form of shape index and curvedness. Furthermore we have combined the two descriptors into a GO+SI descriptor. The descriptors have a large number of parameters, which can be modified to fit the application. We have optimized the parameters for each of the two applications: image correspondence and pedestrian detection. In these applications we compare the final descriptor test results against the SIFT and HOG descriptors respectively.
+
+In this chapter we first discuss our optimal descriptors and the results on each of the two applications. Then we discuss the differences between the applications, and finally we propose and discuss future work.
 
 \section{Image correspondence}
 \label{sec:discussionIc}
-Recall that the image correspondence evaluation shows that our descriptors are very close performance-wise, and marginally outperform SIFT. The difference is larger for light variations and statistically significant in a few cases. With these results in mind, we will now compare and reflect on the different design choices of SIFT and our descriptor.
+Recall that the image correspondence evaluation shows that our descriptors are very close performance-wise, and marginally outperform SIFT. The difference is larger for light variations and statistically significant with 95\% confidence in a few cases.
 
-\todo{Reason about the normal distribution assumption in the statistics}
+However these results rely on the assumption that the PR AUCs are normally distributed for each position as described in \Cref{sec:icResults}. This assumption might not hold since the PR AUCs are bounded between 0 and 1, and hence the tails will be heavily clipped when the mean is close to either bound.
+
+With the test results in mind, we now compare and reflect on the different design choices of SIFT and our descriptor.
 
 Where SIFT uses vector normalization and clipping for illumination invariance and robustness, we use pixel-wise normalization and normalization of the final vector. The choice of using local illumination estimation and normalization is most likely the reason for the difference in performance under light variations.
 
@@ -25,26 +27,25 @@ Our initial idea was to base our cell histograms on locally orderless images \ci
 
 The center aperture function, which SIFT likewise uses, only has a minor influence on the performance of our descriptor. Our performance gain from this function is most likely not as high as for SIFT, since our cell layouts already favour the structure closer to the interest point.
 
-From our test results we see that the addition of shape index to GO only increases performance marginally. The addition however adds a substantial number of dimensions to the descriptor.
+From our test results we see that the addition of SI to GO only increases performance marginally. The addition however adds a substantial number of dimensions to the descriptor.
 Given the tiny performance increase we recommend using the GO descriptor on its own.
 
 \section{Pedestrian detection}
 \label{sec:discussionOd}
+In the pedestrian detection application, our optimal parameters yield a very high dimensionality compared to HOG. We therefore introduced the compact GO+SI descriptor, which is constructed from picking slightly worse parameters than the optimal in order to achieve a lower dimensionality than HOG.
 
 Our pedestrian detection evaluation shows that our descriptors are not as good as HOG, with our compact GO+SI descriptor right behind. SI does not work well on its own, but adding it to both GO and HOG increases performance.
 
-A big difference between GO and HOG is in the strategy of local normalization. An advantage of HOG's block normalization is that each cell contains four different normalization factors for different directions away from the cell. This information is different from the histogram bins, because it is based on relative magnitudes rather than orientations. An advantage of our pixel-wise normalization is that the normalization region is defined per pixel instead of per block. This allows for pixels inside a cell to be normalized individually, where HOG normalizes them equally. Interestingly, our optimal normalization region defined by a Gaussian window with $\eta = 4$ is similar in size to the four overlapping $8 \times 8$ pixel block normalizations from HOG. Another difference between GO and HOG is that HOG computes both undirected and directed gradients.
+A big difference between our descriptors and HOG is in the strategy of local normalization. An advantage of HOG's block normalization is that each cell contains four different normalization factors for different directions away from the cell. This information is different from the histogram bins, because it is based on relative magnitudes rather than orientations. An advantage of our pixel-wise normalization is that the normalization region is defined per pixel instead of per block. This allows for pixels inside a cell to be normalized individually, where HOG normalizes them equally. Interestingly, our optimal normalization region for GO defined by a Gaussian window with $\eta = 4$ is similar in size to the four overlapping $8 \times 8$ pixel block normalizations from HOG.
+
+Another difference between GO and HOG is that HOG computes both undirected and directed gradients. The undirected gradients are subject to a more strict thresholding than the directed gradients, and hence redundancy is avoided in some cases. Under the assumption that we use a linear SVM and due to the fact that we don't use thresholding, the simple solution of summing opposite bins to get undirected gradient information would not increase the descriptive power of our descriptors.
 
 Looking at \Cref{tbl:INRIAparams}, we both have a larger density and cell overlap compared to HOG. This results in a large number of cells that are slightly larger than HOG's. Assuming a fixed number of cells, increasing the overlap between cells is a trade-off between two factors: specific gradient information will be spread out to multiple cells, increasing the robustness to small changes in pedestrian postures. However, this also reduces the influence of the information to each cell. This causes the classification ability of easily recognisable pedestrians to decrease, but a larger range of harder pedestrians to score well. The same reasoning can be said for overlap between histogram bins.
 
-Recall that compact GO+SI is constructed from picking slightly worse parameters than the optimal in order to achieve a lower dimensionality than HOG. The initial PR AUCs shown in \Cref{tbl:inriaResults} indicate that GO+SI is significantly better than compact GO+SI. Retraining on additional hard negatives removes this performance gap and compact GO+SI takes a slight lead. Taking the non-optimal parameters into account this is surprising.....
-.....
+The initial PR AUCs shown in \Cref{tbl:inriaResults} indicate that GO+SI is significantly better than compact GO+SI. Retraining on additional hard negatives removes this performance gap, and compact GO+SI takes a slight lead. Taking the non-optimal parameters into account this is surprising, and shows that we could have included retraining in the parameter study. This would however have greatly increased the run time of the optimization. We can think of two possible reasons that combined explain this effect: Firstly compact GO+SI has much lower dimensionality than GO+SI and therefore each added hard negative has a larger impact on the classifier for compact GO+SI than for GO+SI. Secondly the amount of hard negatives added for retraining of the compact GO+SI classifier is 2.2 times higher than for GO+SI.
 
-	- Initial PR AUC is not necessarily representative for the performance after hard training
+The dimensionality and test results of GO+SI and compact GO+SI suggest that GO+SI contains redundant information. The critical difference between the two descriptors is the density of cells and bins. The density causes the dimensionality to supersede the number of pixels for a single descriptor in the scale-space images. Generally we want the descriptors to represent the essential parts of a region and thus be smaller than the raw data. This is the case for compact GO+SI and HOG.
 
-HOG+SI
-
-.....
 HOG is still superior to compact GO+SI, but if we should recommend one of our descriptors, compact GO+SI would be the one.
 
 \section{Differences between applications}
