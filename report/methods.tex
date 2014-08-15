@@ -344,12 +344,14 @@ The first transformation that we describe is translation. Translation occurs whe
 An interest point detector or a sliding window is only able to give an estimate of positions of interest points based on the detail available in the pixels of the image. We therefore also wish to have a descriptor which is robust to small changes in interest point positions allowing for a small error in detection point without having a large impact on the descriptor.
 
 \subsection{Rotation}
-Rotation naturally occurs when either the camera or the object in question is rotated. Even though a precise position is located, the outcome of descriptors with spatial pooling will be affected by rotation, if no efford is done to achieve rotational invariance. For SIFT-like descriptors the general approach to achieving rotational invariance is to estimate the direction of the feature and rotate the descriptor grid before computing the descriptor. Rotation invariance is often desired but not always needed, as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed.
+Rotation naturally occurs when either the camera or the object in question is rotated. Even though a precise position is located, the outcome of descriptors with spatial pooling will be affected by rotation, if no effort is done to achieve rotational invariance. For SIFT-like descriptors the general approach to achieving rotational invariance is to estimate the direction of the feature and rotate the descriptor grid before computing the descriptor. Rotation invariance is often desired, but is not necessary for the datasets we use for our applications (\Cref{sec:dtuDataset,sec:odDataset}). Thus we refrain from pursuing rotation invariance for our descriptors.
+
+as in \cite{dalal2005histograms,felzenszwalb2008discriminatively} where only detection of pedestrians in upright positions is needed.
 
 Looking at the differential measures $\Theta, M,~S,$ and $C$, we are able to derive the resulting measure under rotation by $\theta$. We have left out the details of the derivations here, but they can be found in \Cref{apx:rotation}. The final derived results are shown in \Cref{tbl:measureInvariances}. We see that both $M,~S,$ and $C$ are rotational invariant whereas $\Theta$ is rotated by the transformation angle $\theta$.
 %
 \subsection{Reflection}
-Reflection occurs when either an object is flipped along some axis or an entire image is flipped (typically along the x- and/or y-axis). An example could be two sideshot images of a car driving in opposite directions, since a car typically looks the same from either side. Reflection is typically not handled directly in the descriptor but rather in the applications of the descriptor. An example of this is the pedestrian detection application, where \cite{dalal2005histograms} make sure to include both the original positive pedestrian images as well as their horizontally flipped versions in order to obtain a more reflection invarian pedestrian detector.
+Reflection occurs when either an object is flipped along some axis or an entire image is flipped (typically along the x- and/or y-axis). An example could be two sideshot images of a car driving in opposite directions, since a car typically looks the same from either side. Reflection is typically not handled directly in the descriptor but rather in the applications of the descriptor. An example of this is the pedestrian detection application, where \cite{dalal2005histograms} make sure to include both the original positive pedestrian images as well as their horizontally flipped versions in order to obtain a more reflection invariant pedestrian detector.
 
 \subsection{Illumination}
 \label{sec:illumination}
@@ -371,7 +373,7 @@ As mentioned in \Cref{sec:introduction} interest point detectors are used for fi
 
 The focus of this report is to study higher order descriptors and hence we simply choose to use the multi-scale DoG blob detector from SIFT \cite{lowe2004distinctive} described below.
 
-\subsection{Multiscale Difference of Gaussians}
+\subsection{Multi-scale Difference of Gaussians}
 \label{sec:multiscaleDoG}
 
 Recall from \Cref{sec:GaussianScaleSpace} that our scale-space representation removes image details below a given scale $\sigma$. The idea of the Difference of Gaussians (DoG) blob detector is that by computing the difference of two scale-space images for $\sigma_1$ and $\sigma_2$, we also remove the details at a higher scale, leaving only details between $\sigma_1$ and $\sigma_2$. Formally we define
@@ -383,7 +385,7 @@ Recall from \Cref{sec:GaussianScaleSpace} that our scale-space representation re
 %
 where $\sigma_2 > \sigma_1$. Minima and maxima of this function indicate dark and light blobs, respectively, at a scale between $\sigma_1$ and $\sigma_2$.
 
-In order to create a multi-scale DoG detector, $\Gamma$ is computed across adjacent pairs of scale-space images. In SIFT, the scales are create in scale octaves as illustrated in \Cref{fig:dogSpaces}. When we extract multiscale interest points, we find extremas that are not just extremas in their respective DoG images, but for adjacent DoG images as well. In practice this is done by finding extrema in a 26-pixel neighbourhood. As seen in the illustration, each octave has a number of DoGs, all with the same image size.
+In order to create a multi-scale DoG detector, $\Gamma$ is computed across adjacent pairs of scale-space images. In SIFT, the scales are create in scale octaves as illustrated in \Cref{fig:dogSpaces}. When we extract multi-scale interest points, we find extrema that are not just extrema in their respective DoG images, but for adjacent DoG images as well. In practice this is done by finding extrema in a 26-pixel neighbourhood. As seen in the illustration, each octave has a number of DoGs, all with the same image size.
 
 The octaves scales are defined as $2^n$ for $n = l,\hdots,h$, where $l$ is the lowest exponent and $h$ is the highest exponent needed for a desired range of octave scales. An octave is split into several scales $s$ (octave resolution), for which we wish to extract interest points. This results in Gaussian images with scale distance $2^{\nicefrac{1}{s}}$ positioned at scales $2^{\nicefrac{m}{s}}$ where $m = l,\hdots,s \cdot h$. The DoGs are however differences of these Gaussians and hence the detection scales are offset in between the Gaussian scales at $2^{\nicefrac{(n+0.5)}{s}}$.
 In practice we need to create $s+3$ Gaussian images of the same size for each octave. The first extra Gaussian image ($s+1$) is needed in order to compute the $s$ DoGs. The next two Gaussian images are needed for two additional DoGs surrounding the $s$ initial DoGs, allowing for 26-pixel neighbourhood computations within the entire octave. \Cref{fig:dogSpaces} illustrates this for $s = 2$.
