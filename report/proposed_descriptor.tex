@@ -6,7 +6,7 @@
 \begin{document}
 \chapter{Proposed descriptor}
 %
-Given an interest point $\x_0$ in an image at scale $\sigma_0$, we wish to effectively describe the surrounding area. Our proposed descriptor consists of weighted kernel-based histograms, explained in \Cref{sec:histograms}, computed for $m$ \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
+Given an region centered in $\x_0$ in an image at scale $\sigma_0$, we wish to effectively describe the region. Our proposed descriptor consists of weighted kernel-based histograms, explained in \Cref{sec:histograms}, computed for $m$ \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
 %
 \begin{align}
 \label{eq:proposed_histogram}
@@ -17,7 +17,7 @@ where
 %
 \begin{itemize}
 \item[] $f_i$ for $i = 1 \dots n$ are bin centers,
-\item[] $f$ is a bin value function on domain $[f_\text{min},f_\text{max}]$,
+\item[] $f$ is a bin value function on the domain $[f_\text{min},f_\text{max}]$,
 \item[] $F$ is a magnitude function,
 \item[] $A_j$ for $j = 1 \dots m$ are cell aperture functions,
 \item[] $P$ is a center aperture function, and
@@ -36,9 +36,9 @@ The five functions above can be seen as the components that make up our descript
 \section{Bin value and magnitude functions}
 \label{sec:valueMagnitudeFunctions}
 %
-The choice of bin value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. By far the most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function. Another good choice from the galaxy descriptor \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$. Finally we have experimented with the $l,b,a$ reparametrization of second order information weighted by 2-jet norm $\| \overset{\rightarrow}{j} \|$ \citep{griffin2007second}. We were however unable to produce good results through initial testing, and decided not to pursue the idea further. Our strategy is thus to create a descriptor based on $\Theta$ and $M$ (referred to as GO), one based on $S$ and $C$ (referred to as SI), as well as a concatenation of these descriptors (referred to as GO+SI). These functions are defined in \Cref{sec:gradientTheory,sec:shapeIndexTheory}.
+The choice of bin value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. By far the most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function. Another good choice from the galaxy descriptor \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$. Finally we have experimented with the $l,b,a$ re-parametrization of second order information weighted by 2-jet norm $\| \overset{\rightarrow}{j} \|$ \citep{griffin2007second}. We were however unable to produce good results through initial testing, and decided not to pursue the idea further. Our strategy is thus to create a descriptor based on $\Theta$ and $M$ (referred to as GO), one based on $S$ and $C$ (referred to as SI), as well as a concatenation of these descriptors (referred to as GO+SI). These functions are defined in \Cref{sec:gradientTheory,sec:shapeIndexTheory}.
 
-Recall that in order to make our descriptor scale invariant, we wish to compute the descriptor according to the scale $\sigma_0$ of its interest point $\x_0$. This is achieved by computing a scale space pyramid of both value and magnitude images across all interest point scales. The values and magnitudes needed to compute the cell histograms can then be found by lookup in these scale space images. Before making this lookup, we propose a pre-processing step on the magnitude images to make our descriptor robust to local illumination changes.
+Recall that in order to make our descriptor scale invariant, we wish to compute the descriptor according to the scale $\sigma_0$ of its region center $\x_0$. This is achieved by computing a scale space pyramid of both value and magnitude images across all region scales. The values and magnitudes needed to compute the cell histograms can then be found by lookup in these scale space images. Before making this lookup, we propose a pre-processing step on the magnitude images to make our descriptor robust to local illumination changes.
 %
 \subsection{Local magnitude normalization}
 \label{sec:localMagnitudeNormalization}
@@ -50,9 +50,9 @@ The pixel-wise normalized magnitude at a point is defined as the magnitude relat
 F_\text{norm}(\x) = \frac{F(\x)}{\int F(\y) G(\y - \x; \eta \sigma_0) \,\text{d} \y}
 \end{align}
 %
-where $\eta$ is the normalization scale, defined relative to the interest point scale $\sigma_0$. The idea behind this scheme is that an image is locally affected by light changes according to the affine illumination model. In order to estimate $a$ on a pixel-level, we use intensity information from the surrounding pixels. Using a Gaussian filter we are able to weight the surrounding intensities based on their spatial distance to the pixel in question. The rationale for this is, that pixels close to one another has a higher probability of being affected by equal light conditions than pixels further away from one another. By dividing the pixel value by the sum of all these weighted intensities (estimation of $a$), we remove the affine coefficient from the pixel.
+where $\eta$ is the normalization scale, defined relative to the region scale $\sigma_0$. The idea behind this scheme is that an image is locally affected by light changes according to the affine illumination model. In order to estimate $a$ on a pixel-level, we use intensity information from the surrounding pixels. Using a Gaussian filter we are able to weight the surrounding intensities based on their spatial distance to the pixel in question. The rationale for this is, that pixels close to one another has a higher probability of being affected by equal light conditions than pixels further away from one another. By dividing the pixel value by the sum of all these weighted intensities (estimation of $a$), we remove the affine coefficient from the pixel.
 
-Having applied the pixel-wise normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each interest point.
+Having applied the pixel-wise normalization to the magnitude scale space images we are done pre-processing the images and able to perform lookups of values and magnitudes for each region.
 \Cref{fig:pixelNormalizationExample} shows two examples of images containing shadows, their gradient magnitudes at $\sigma_0 = 1$, their pixel-wise normalized magnitudes with $\eta = 2$, and their pixel-wise normalized magnitudes with $\eta = 10$. These types of shadows are the ones we will try to handle by using pixel-wise normalization. As seen in the gradient magnitude images, the shadows have a dampening effect on the gradient magnitude. By using a small $\eta$ for the pixel-wise normalization, we see that a lot of the noise is enhanced but the shadows (especially the edges) are a lot less significant than for the normal gradient magnitudes. When using a larger $\eta$ the noise is smoothed out and less significant. Furthermore there seem to be more of the structure highlighted from within the area affected by the shadows, but the shadow edges are more significant as well. The choice of optimal $\eta$ is part of our parameter studies.
 
 An alternative technique for handling local illumination is normalizing each cell histogram, which can be done instead of or alongside pixel-wise normalization. This was used successfully in the DAISY descriptor \cite{tola2008fast}. We have tried various ways of incorporating this technique, but none were able to beat simple pixel-wise normalization through preliminary tests, and hence we have refrained from pursuing these strategies further.
@@ -99,7 +99,7 @@ An alternative technique for handling local illumination is normalizing each cel
         \caption{}
         \label{fig:pixelNormalizationExample8}
     \end{subfigure}
-    \caption{Images \subref{fig:pixelNormalizationExample1} and \subref{fig:pixelNormalizationExample2} show cut-outs of an image with leftmost and rightmost artificial lighting, respectively. Images \subref{fig:pixelNormalizationExample3} and \subref{fig:pixelNormalizationExample4} show gradient magnitudes of these images. Images \subref{fig:pixelNormalizationExample5} and \subref{fig:pixelNormalizationExample6} show pixel-wise normalized magnitudes for normalization scale $\eta = 2$. Images \subref{fig:pixelNormalizationExample7} and \subref{fig:pixelNormalizationExample8} show pixel-wise normalized magnitudes for $\eta = 10$.}
+    \caption{Images \subref{fig:pixelNormalizationExample1} and \subref{fig:pixelNormalizationExample2} show cut-outs of an image with artificial lighting from the left and right, respectively. Images \subref{fig:pixelNormalizationExample3} and \subref{fig:pixelNormalizationExample4} show gradient magnitudes of these images. Images \subref{fig:pixelNormalizationExample5} and \subref{fig:pixelNormalizationExample6} show pixel-wise normalized magnitudes for normalization scale $\eta = 2$. Images \subref{fig:pixelNormalizationExample7} and \subref{fig:pixelNormalizationExample8} show pixel-wise normalized magnitudes for $\eta = 10$.}
     \label{fig:pixelNormalizationExample}
 \end{figure}
 %
@@ -122,9 +122,9 @@ where
 \item[] $r$ is a radius parameter defined below according to the cell layout, scaling both cell scales and relative positions.
 \end{itemize}
 %
-Note that the cell aperture function is simply a kernel function centered at each cell $j$ for a specific interest point $\x_0$ and scaled according to the layout radius $r$ and $\sigma_0$.
+Note that the cell aperture function is simply a kernel function centered at each cell $j$ for a specific region center $\x_0$ and scaled according to the layout radius $r$ and $\sigma_0$.
 
-The cell aperture function is defined for all cells of the feature. Having defined $A_j$ we are now able to define the \emph{cell layouts} that define the cell centers $\c_j$ for each feature. The layouts depend on the application, and hence we split our proposed cell layouts into two categories: interest point and region layouts.
+The cell aperture function is defined for all cells of the region. Having defined $A_j$ we are now able to define the \emph{cell layouts} that define the cell centers $\c_j$ for each region. The layouts depend on the application, and hence we split our proposed cell layouts into two categories: interest point and region layouts. \todo{Should we rename the region layouts?}
 
 \subsection{Interest point cell layouts}
 \label{sec:cellApertureFunctionPoint}
