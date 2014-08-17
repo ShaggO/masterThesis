@@ -4,7 +4,7 @@
 \chapter{Conclusion}
 
 In our work we have studied the literature of descriptors and developed our descriptor framework. Based on this framework we have proposed and optimized our own descriptors for the image correspondence and pedestrian detection problems. Our descriptors have been evaluated on the DTU Robot 3D and INRIA Person datasets and compared against the SIFT \cite{lowe2004distinctive} and HOG \cite{felzenszwalb2009object} descriptors respectively.
-
+\todo{mention higher order information comes from shape index}
 Our descriptor framework is inspired by locally orderless images \cite{koenderink1999structure} and Parzen windows \cite{parzen1962estimation}, SIFT based gradient orientation histograms, and the galaxy descriptor's \cite{pedersen2013shape} shape index histograms. The main aspects that separate our descriptors from SIFT and HOG are our choices of using shape index, spatial layout of histograms, kernels used for aggregation of image information, and method for handling local illumination. In our parameter studies we found that the nature of the two applications affect the optimal descriptor parameters significantly.
 
 For image correspondence our descriptors perform marginally better than SIFT, and the difference is significant for our GO and GO+SI descriptors in some light variation cases. The addition of shape index to gradient orientation histograms has not proven important, and hence GO is the recommended descriptor from our framework.
