@@ -257,7 +257,7 @@ For our proposed descriptors the value function $f$ is either the gradient orien
 \end{align}
 which corresponds to splitting the interval into $n$ equally sized parts and placing the bin centers $f_i$ in each of the $n$ centers of these parts.
 
-The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:binCenters}, their areas will integrate to different values. \todo{Why is this repeated here?} This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{apx:gaussianKernel}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area, and hence we choose to omit re-normalization when computing the gradient orientation to save computations. The periodicity is implemented by using simple wrap-around of the distance $f(\x) - f_i$.
+The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:binCenters}, their areas will integrate to different values. \todo{Why is this repeated here?} This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{apx:gaussianKernel}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area, and hence we choose to omit re-normalization when computing the gradient orientation to save computations. \todo{rephrase} The periodicity is implemented by using simple wrap-around of the distance $f(\x) - f_i$.
 %
 \subsection{Histogram normalization}
 %
