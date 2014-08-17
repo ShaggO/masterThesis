@@ -97,14 +97,14 @@ The camera is positioned around each scene using an industrial robot arm, which 
 \begin{figure}[p]
 	\centering
 	\includegraphics[width=0.9\textwidth]{img/CameraPosbOwn.pdf}
-	\caption{Overview of camera positions and paths in the DTU dataset. The red positions mark training camera positions, the arrows mark camera positions of the light path experiments where only the ones marked with blue are used for training. Reconstructed and improved illustration from \citet[Figure 3, pp. 3]{aanaes2010recall}.}
+	\caption{Overview of camera positions and paths in the DTU dataset. The red positions mark training camera positions, the arrows mark camera positions of the light path experiments where only the ones marked with blue are used for training. Reproduced and improved illustration from \citet[Figure 3, pp. 3]{aanaes2010recall}.}
 	\label{fig:dtu_overview}
 %\end{figure}
 %\begin{figure}[tb]
 	\vspace{1cm}
 	\centering
 	\includegraphics[width=0.7\textwidth]{img/dtu_light_overview.pdf}
-	\caption{Light positions of the x- and z-axis light paths. Training light light positions marked with red. Reproduced and improved figure from \citet[Fig. 1, pp. 644]{larsen2012in}.}
+	\caption{Light positions of the x- and z-axis light paths. Training light positions marked with red. Reproduced and improved figure from \citet[Fig. 1, pp. 644]{larsen2012in}.}
 	\label{fig:dtu_light_overview}
 \end{figure}
 
@@ -118,7 +118,7 @@ Given a light position ${\boldsymbol{x}}$ in the spatial domain of the LED posit
 	I_{x} = \sum_{i = 1}^{19} G(\boldsymbol{x} - \boldsymbol{x}_i,\sigma) I_{i}
 \end{align}
 \todo{why boldsymbol?}
-\Cref{fig:dtu_light_overview} shows the selected light positions. In order to get a somewhat general measurement for the robustness against light variations, there are light paths generated for the following four image positions: 12 (arc 1), 25 (arc 1), 60 (linear path), and 87 (arc 2).
+\Cref{fig:dtu_light_overview} shows the selected light positions. In order to get a somewhat general measurement for the robustness against light variations, there are light paths generated for the following four image positions: 12 (arc 1), 25 (arc 1), 60 (linear path), and 87 (arc 2). \todo{lighting is not applied to key frame}
 See \citet{aanaes2010recall,aanaes2010ground,larsen2012jet} for more information about the dataset and the generated light paths.
 
 \Cref{fig:light_example} show 6 of the different light images for scene 4 at camera position 60. \Cref{fig:light_example_02,fig:light_example_17,fig:light_example_08} show the images taken with individual LED lighting (numbers 2, 17, and 8 respectively), and \Cref{fig:light_example_00} shows the diffuse light image. We here notice the significant difference in cast shadows using the three LEDs individually compared to the diffuse light image. The diffuse light image is however quite dark compared to the LED 8 light image, which could potentially cause problems in some scenes generating too few interest points. Such an issue could however be handled by adapting detection thresholds or by using histogram stretching/equalization. \todo{Should this be mentioned here?}
@@ -310,7 +310,7 @@ The risk of this strategy is getting stuck in local optima. To avoid this, recal
 The optimal parameters of our parameter study for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively.
 From these results we see that most of the parameters are quite stable across the folds.
 
-When comparing the parameters of GO and SI to one another, we first look at the grid type and size. SI and a single of the GO folds use the concentric polar central (CPC) grid, whereas the five other GO folds use the polar central (PC) grid. Both descriptors use grid size $12 \times 2$. Note that the amount of angular cells is higher than for GLOH and DAISY which use 8 angular cells. \Cref{tbl:dtuLayoutParametersGo,tbl:dtuLayoutParametersSi} show the average PR AUC on training data for GO and SI respectively for various choices of grid parameters. We see that the $12\times2$ PC and CPC grids have nearly equal average PR AUC for both GO and SI, and hence the choice between these two grid types only gives a marginal performance difference. By looking at the grid results, we see that the performance difference between a concentric grid and the corresponding non-concentric grid is very small. The difference between log-polar (LP) and concentric log-polar (CLP) is however significant, which is caused by a more dense grid when using CLP than LP.
+When comparing the parameters of GO and SI to one another, we first look at the grid type and size. \todo{rephrase} SI and a single of the GO folds use the concentric polar central (CPC) grid, whereas the five other GO folds use the polar central (PC) grid. Both descriptors use grid size $12 \times 2$. Note that the amount of angular cells is higher than for GLOH and DAISY which use 8 angular cells. \Cref{tbl:dtuLayoutParametersGo,tbl:dtuLayoutParametersSi} show the average PR AUC on training data for GO and SI respectively for various choices of grid parameters. We see that the $12\times2$ PC and CPC grids have nearly equal average PR AUC for both GO and SI, and hence the choice between these two grid types only gives a marginal performance difference. By looking at the grid results, we see that the performance difference between a concentric grid and the corresponding non-concentric grid is very small. The difference between log-polar (LP) and concentric log-polar (CLP) is however significant, which is caused by a more dense grid when using CLP than LP.
 The polar grids with a central cell perform slightly better than their corresponding polar grids without a central cell. Furthermore log-polar grids are always worse than the corresponding polar grids.
 
 \Cref{fig:dtuParametersGoAuc,fig:dtuParametersSiAuc} show average PR AUC on training data for GO and SI respectively when adjusting the parameters relative to the optimized parameters. Furthermore \Cref{fig:dtuParametersGoDims,fig:dtuParametersSiDims} show the dimensionality of GO and SI respectively when varying the bin count $n$. On each of these graphs, the optimal choice of each parameter is marked with a cross. From the figures we see that the grid radius $r$ as well as cell and bin kernels and scales are the parameters that affect performance the most for both GO and SI.
@@ -512,7 +512,7 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 %	\label{fig:dtuParametersGoAlt}
 %\end{figure}
 %
-We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.781$: It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces the AUC by $0.002$. Doubling the image resolution improves the AUC by $0.009$. Computing the descriptor on opponent colour channels improves the AUC by $0.014$. Omitting pixel-wise normalization reduces the AUC by $0.023$. Omitting the center filter reduces the AUC by $0.002$. These tendencies hold for SI as well.
+We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.781$: It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces the AUC by $0.002$. Doubling the image resolution improves the AUC by $0.009$. Computing the descriptor on opponent colour channels improves the AUC by $0.014$. Omitting pixel-wise normalization reduces the AUC by $0.023$. Omitting the center filter reduces the AUC by $0.002$. These tendencies hold for SI as well. \todo{is more detail needed?}
 %
 \section{Results}
 \label{sec:icResults}
@@ -531,7 +531,7 @@ This hypothesis is likewise supported by the fact that all four descriptors have
 
 For light variations (\Cref{fig:dtuResultsPRxAxis,fig:dtuResultsPRzAxis}) our descriptors perform better than SIFT.
 
-Having inspected the graphs for mean PR AUCs, we are now interested in knowing whether the descriptors are statistically significantly different. We do this separately for each camera and light position. Given a position, assume that the underlying distribution of PR AUCs over the scenes are normally distributed. We discuss whether this assumption is reasonable in \Cref{sec:discussionIc}. The difference between the mean PR AUC of two descriptors can be estimated by a 95\% confidence interval as described in \Cref{sec:confidenceIntervals}.
+Having inspected the graphs for mean PR AUCs, we are now interested in knowing whether the descriptors are statistically significantly different. We test this separately for each camera and light position. Given a position, assume that the underlying distribution of PR AUCs over the scenes are normally distributed. We discuss whether this assumption is reasonable in \Cref{sec:discussionIc}. The difference between the mean PR AUC of two descriptors can be estimated by a 95\% confidence interval as described in \Cref{sec:confidenceIntervals}.
 The resulting 95\% confidence interval graphs on the difference between our GO+SI descriptor and SIFT are show in \Cref{fig:dtuResultsStats}. As we see from the graphs, the confidence intervals contain 0 for all positions apart from position 1, 7, 8, and 9 of the $x$-axis light path and position 16 of the $z$-axis light path. In other words we cannot conclude that GO+SI and SIFT are significantly different except on these outermost positions of the light paths.
 
 Performing these estimates between the remaining combinations of the GO, SI, GO+SI, and SIFT descriptors reveal that pairwise none of our descriptors are significantly different apart from GO, which is significantly better than SIFT on positions 6-9 of the $x$-axis light path and position 16 of the $z$-axis light path. Since the graphs for all these combinations are both space-consuming and not too informative once we have the above conclusions, we have omitted the graphs from the report itself, but they can be found in \Cref{apx:confidenceIntervals}.

@@ -9,7 +9,7 @@
 \chapter{Pedestrian detection}
 \label{sec:od}
 %
-In this chapter we describe the pedestrian detection problem and how we apply our descriptor to solve it.
+In this chapter we describe the pedestrian detection problem and the application of our descriptor to solve it.
 
 Object detection is the problem of locating specified objects in images. One application of this is pedestrian detection, which we have decided to focus on as it is simple and has extensive datasets. A common approach to the problem is to split it into two steps. First, regions are extracted from the image and binary classification of the presence of a pedestrian is performed for each region. Afterwards the best regions are picked in the case of overlapping regions around the same pedestrians. For the purpose of comparing descriptors we only focus on the first part. The classification of pedestrians is done by computing a descriptor for each region and using a linear support vector machine for prediction.
 
