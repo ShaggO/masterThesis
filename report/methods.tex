@@ -109,9 +109,7 @@ Note that while these scale-space functions are defined on an infinite continuum
 
 \section{Differential structure}
 \label{sec:diffStructure}
-\todo{Explain better}
-When analysing an image, we are usually interested in the structure of the image. A typical approach to describing the structure is to compute the derivatives of the image up to the n'th order. Real world images are however usually filled with small-grained noise, which is why we often prefer to combine the derivative calculations with a smoothing of the image using a Gaussian filter. The details of this step are explained further in \Cref{sec:gaussianDerivatives}. First order information, called the gradient, is described in \Cref{sec:gradientTheory}, and second order information in the form of the shape index is described in \Cref{sec:shapeIndexTheory}.
-\todo{Remove references?}
+A typical approach to describing structure in an image is to compute local derivatives. We consider first and second order derivatives in the form of gradients and shape index. Real world images are usually filled with small-grained noise, which is why we often prefer to combine the derivative calculations with a smoothing of the image using a Gaussian filter. We first explain the details of this step, followed by a description of how to compute gradients and shape index.
 
 \subsection{Gaussian derivatives}
 \label{sec:gaussianDerivatives}
@@ -124,7 +122,7 @@ Based on the Gaussian derivatives we define the Gaussian derivative scale-space 
 \end{align}
 %
 The complexity of the convolution is not irrelevant when calculating scale-spaces. Given a filter $f$ with $k$ elements and an image $I$ with $l$ entries, the complexity of a convolution is $\mathcal{O}(k l)$ since we perform $k$ multiplications and $k-1$ summations for each of the $l$ elements. Here we have assumed that the boundaries of the image are padded to allow a full filter computation for all $l$ entries.
-In theory the Gaussian function has infinite support causing the Gaussian filter to be unfeasibly large. In practice one often uses the 3-sigma rule to determine the support radius of the Gaussian filter and hence the computational load of the convolution. The rule states that approximately 99.7\% of the area under a 1D Gaussian function lies within 3$\sigma$ of the center of the function, and hence using $3\sigma$ as the Gaussian function support radius suffices.\todo{Determine if this should be stated here}
+In theory the Gaussian function has infinite support causing the Gaussian filter to be infeasibly large. In practice one often uses the 3-sigma rule to determine the support radius of the Gaussian filter and hence the computational load of the convolution. The rule states that approximately 99.7\% of the area under a 1D Gaussian function lies within 3$\sigma$ of the center of the function, and hence using $3\sigma$ as the Gaussian function support radius suffices.
 
 When computing a single Gaussian derivative image, a typical approach is to solve $G_{x^m y^n}$ analytically and sample the 2D filter from the analytical solution. Given a square filter of width and height $6\sigma$ we get $k=(6\sigma)^2$ filter elements. By solving $G_{x^m}$ and $G_{y^n}$ analytically, sampling two 1D filters of size $6\sigma$ and performing two chained convolutions of $I$, we get the same resulting image but at the cost of two significantly smaller filter convolutions. The same strategy can of course be applied to other separable 2D filters such as the ordinary Gaussian smoothing filter.
 
@@ -152,7 +150,7 @@ Since we have a nice set of increasing scales for our scale-space images, we are
 			 \sigma_\Delta &= \sqrt{\sigma_2^2 - \sigma_1^2}
 \end{align*}
 %
-Which give us the final equations for the alternative way of computing the Gaussian derivative scale-spaces. \todo{re-write}
+These equations give us a faster way of computing the Gaussian derivative scale-spaces than the original formulation.
 
 \subsection{Gradient orientation and magnitude}
 \label{sec:gradientTheory}
@@ -192,25 +190,24 @@ S &= \frac{2}{\pi} \Atan{\frac{\kappa_1 + \kappa_2}{\kappa_1 - \kappa_2}} \\
 %
 $C$ is defined by the size of $\kappa_1$ and $\kappa_2$, and can also be expressed by the image derivatives:
 %
+\begin{samepage}
 \begin{align}
 C &= \sqrt{\frac{\kappa_1^2 + \kappa_2^2}{2}} \\
 &= \frac{1}{\sqrt2} \sqrt{L_{xx}^2 + 2 L_{xy}^2 + L_{yy}^2}
 \end{align}
+\end{samepage}
 %
-\todo{Should we avoid page breaks like this?}
 \Cref{fig:shapeIndexTheory} illustrates the relationship between the principal curvatures, shape index and curvedness, as well as the geometry of various shape indices. As seen in the figure, $S$ ranges over light blobs ($S = -1$), ridges ($S = -0.5$), saddle points ($S = 0$), valleys ($S = 0.5$), and dark blobs ($S = 1$) with continuous deformations in between.
 %
 \section{Histograms}
 \label{sec:histograms}
 
-Histograms play an essential role in SIFT-like descriptors, where they are used for aggregating gradient orientation (GO)\todo{Should we mention this here?} and magnitude information over local areas. Traditionally histograms have been constructed using hard boundaries between bins, and descriptors have been constructed with hard boundaries between the local histogram areas of a descriptor.\todo{Is this true for descriptors?}
-
-These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries. SIFT used a trilinear interpolation of the gradient magnitude based on the radial distance between the gradient orientation and the bin centers to cope with gradients close to the bin boundaries. In order to improve upon the robustness of the histograms, we here describe a kernel-based histogram framework, which is able to produce both ordinary (hard bounded) as well as smooth histograms. The framework is based on locally orderless images (LOI) \cite{koenderink1999structure} and Parzen windows \cite{parzen1962estimation}.
+Histograms play an essential role in SIFT-like descriptors, where they are used for aggregating gradient orientation and magnitude information over local areas. Traditional histograms have been constructed using hard boundaries between bins. These types of histograms are however neither robust to small interest point translation/detection errors or gradient orientations close to the bin boundaries. SIFT uses a trilinear interpolation of the gradient magnitude based on the radial distance between the gradient orientation and the bin centers to cope with gradients close to the bin boundaries. In order to improve upon the robustness of the histograms, we here describe a kernel-based histogram framework, which is able to produce both ordinary (hard bounded) as well as smooth histograms. The framework is based on locally orderless images (LOI) \cite{koenderink1999structure} and Parzen windows \cite{parzen1962estimation}.
 
 The idea behind smooth histograms is to remove the sharp boundaries of ordinary histograms (bin boundaries). Given a position we wish to create a histogram for the surrounding local area/region of interest (ROI). This is done by letting all the values from the ROI contribute to all the bins of the histogram.
 
-Given a value function $f$ with a range of $[f_\text{min},f_\text{max}]$, and a spatial ROI center $\x_0$, we wish to compute the histogram $H$ value at bin center $f_i$.
-The value function defined as $f(\x,\sigma)$ corresponds to calculating the function $f$ in position $\x$ at (inner) scale $\sigma$. In terms of images this could correspond to calculating the gradient orientation at a position $\x$ in a scale-space image at scale $\sigma$.
+Given a bin value function $f$ with a range of $[f_\text{min},f_\text{max}]$, and a spatial ROI center $\x_0$, we wish to compute the histogram $H$ value at bin center $f_i$.
+The bin value function defined as $f(\x,\sigma)$ corresponds to calculating the function $f$ in position $\x$ at (inner) scale $\sigma$. In terms of images this could correspond to calculating the gradient orientation at a position $\x$ in a scale-space image at scale $\sigma$.
 We use the distance between the bin center $f_i$ and $f(\x,\sigma)$ to compute the bin aperture function $B$ using the (tonal) scale $\beta$ as ``width'' of $B$. Finally we compute a spatial aperture function $A$ of the distance between $\x_0$ and $\x$ using the (outer) scale $\alpha$ as the ``width'' of $A$. The histogram of the bin center $f_i$ is defined from $f,~B,$ and $A$ as
 %
 \begin{align}
@@ -218,20 +215,19 @@ We use the distance between the bin center $f_i$ and $f(\x,\sigma)$ to compute t
 	H(f_i;\x_0,\sigma,\beta,\alpha) &= \int A(\x;\x_0,\alpha) B(f(\x;\sigma)-f_i;\beta)\,\text{d}\x
 \end{align}
 %
-\todo{is this part clear enough?}
-When using such a histogram in practice, the parameters $\x_0,~\sigma,~\beta,$ and $\alpha$ are already defined as well as the functions $A,~B,$ and $f$ leading to the following shorthand notation for a histogram:
+By specifying the variables $\x_0,~\sigma,~\beta,~\alpha$ in the functions $A$ and $B$, we get the following shorthand notation for a histogram:
 %
 \begin{align}
 	\label{eq:histogramShort}
 	H(f_i) &= \int A(\x) B(\x;f_i,f)\,\text{d}\x
 \end{align}
 %
-The specifics of the histograms used in our work are explained in \Cref{eq:proposed_histogram}.
+The specifics of the histograms used in our work will be explained in \Cref{eq:proposed_histogram}.
 %
 \subsection{Aperture kernel functions}
 \label{sec:apertureKernelFunctions}
 %
-We consider three choices of kernel functions for $A$ and $B$: box, triangle, and Gaussian. In 1D, the kernels are defined as\todo{Should we write $Box$, $Tri$ and $G$? after the names}
+We consider three choices of kernel functions for $A$ and $B$: box, triangle, and Gaussian. In 1D, the respective kernels are defined as
 %
 \begin{align*}
 \mathit{Box} (x; \beta) &= 
@@ -248,7 +244,7 @@ G(x;\beta) &= \frac{1}{\sqrt{2\pi} \beta}
 \exp\left( -\frac{x^2}{2 \beta^2} \right)
 \end{align*}
 %
-In practice we truncate these kernels to a range $|x| < r$ given by a support radius $r$. For box and triangle kernels, we naturally set $r = \beta$ and $r = 2 \beta$ respectively. For the Gaussian kernel, which is always non-zero, we limit $r = 3 \beta$. This contains $99.7$ percent of the total area as mentioned in \Cref{sec:gaussianDerivatives}. \todo{reference necessary?}
+In practice we truncate these kernels to a range $|x| < r$ given by a support radius $r$. For box and triangle kernels, we naturally set $r = \beta$ and $r = 2 \beta$ respectively. For the Gaussian kernel, which is always non-zero, we limit $r = 3 \beta$. This range contains $99.7$ percent of the total area as mentioned in \Cref{sec:gaussianDerivatives}.
 
 For bin aperture functions $B$ we can use these kernels directly. The spatial aperture functions $A$ are however defined on a 2D domain; this is handled by multiplying two of the same kernel functions together, e.g:
 %
@@ -258,12 +254,10 @@ G(\x;\alpha) &= G(x;\alpha) G(y;\alpha) \\
 \exp\left( -\frac{x^2 + y^2}{2 \alpha^2} \right)
 \end{align*}
 %
-where $\x = [x ~~ y]^T$. We do not allow for separate scales $\alpha$ for each dimension. \todo{explain?}
+where $\x = [x ~~ y]^T$. A single $\alpha$ for both dimensions is sufficient since we don't require a skew in the $x$- and $y$-axes for our purposes.
 %
 \subsection{Periodic histograms}
-\todo{introduce domains differently?}
-When creating histograms of periodic domains $[f_\text{min}, f_\text{max}]$, we need to take the periodicity into consideration.
-The periodicity of the domain means that there are multiple distances between any two points. Since we are computing distance bin aperture functions, we need to find the minimum distance $d_{wrap}$ from each point value to each bin center in order to correctly compute the function values. This is done by a simple wrap-around using the known period of the domain as maximum distance:
+When our bin domain $[f_\text{min}, f_\text{max}]$ is periodic, there are multiple distances between any two points. Since we are computing distance bin aperture functions, we need to find the minimum distance $d_{wrap}$ from each point value to each bin center in order to correctly compute the function values. This is done by a simple wrap-around using the known period of the domain as maximum distance:
 \begin{align*}
 	d_{wrap} = \min(d,(f_\text{max} - f_\text{min})-d)
 \end{align*}
@@ -322,10 +316,16 @@ Notice how the bounds $a$ and $b$ of the integral are offset by the bin center $
 \Cref{fig:1dFilterGaussianRenorm,fig:1dFilterTriangleRenorm,fig:1dFilterBoxRenorm} show 1D examples of four renormalized Gaussian, triangle, and box filters respectively on the interval $[-1,1]$. Notice how the two weight functions of the outer-most bins have higher peaks than the central bins in order to integrate to 1 when being cut off at the interval bounds. For periodic histograms the renormalization step is excluded since no cut off of the filters occurs.
 %
 \section{Invariants and robustness}
-When describing a local region in real world images, we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the region without any (or a predefined set) of these transformations applied, such that we get similar descriptions of the same region from images with different transformations. \todo{Maybe include more specific motivation?}
+When describing a local region in real world images, we experience a lot of transformations of the actual physical objects. We are however interested in being able to describe the object without any (or a predefined set) of these transformations applied, such that we get similar descriptions of the same object from images with different transformations.
 
 Apart from invariance to various transformations we also want to be robust to small changes in some of the transformations. This robustness should give us nearly equal descriptors despite having small errors in our estimation of the transformations.
-In this section we will go through a list of transformations that we wish for our descriptor to be invariant and possibly also robust to. \todo{explain better, move table}
+In this section we will go through a list of transformations that we wish for our descriptor to be invariant and/or robust to.
+
+\subsection{Translation}
+\label{sec:translation}
+Translation occurs when images are taken from different positions or objects are moved, and hence the region is translated in the image plane, but without affecting the perspective. Translation invariance is often achieved by combining a descriptor with an interest point detector or a sliding window, which tells the descriptor where all the regions of the image are located with respect to both the position and scale. Translation invariance is almost always desired since even tiny vibrations at the time of capture can cause an object to change position in an image.
+
+An interest point detector or a sliding window is only able to give an estimate of positions of interest points based on the detail available in the pixels of the image. We therefore also wish to have a descriptor, which is robust to small changes in interest point positions allowing for a small error in detection point without having a large impact on the descriptor.
 
 \begin{table}[tb]
 	\centering
@@ -343,25 +343,19 @@ In this section we will go through a list of transformations that we wish for ou
 	\label{tbl:measureInvariances}
 \end{table}
 
-\subsection{Translation}
-\label{sec:translation}
-Translation occurs when images are taken from different positions and hence the region is translated in the image plane. \todo{but without change in perspective} Translation invariance is often achieved by combining a descriptor with an interest point detector or a sliding window, which tells the descriptor where all the regions of the image are located with respect to both the position and scale. Translation invariance is almost always desired since even tiny vibrations at the time of capture can cause an object to change position in an image.
-
-An interest point detector or a sliding window is only able to give an estimate of positions of interest points based on the detail available in the pixels of the image. We therefore also wish to have a descriptor, which is robust to small changes in interest point positions allowing for a small error in detection point without having a large impact on the descriptor.
-
 \subsection{Rotation}
 Rotation naturally occurs when either the camera or the object in question is rotated. Even though a precise position is located, the outcome of descriptors with spatial pooling will be affected by rotation, if no effort is done to achieve rotational invariance. For SIFT-like descriptors the general approach to achieving rotational invariance is to estimate the direction of the feature and rotate the descriptor grid before computing the descriptor. Rotation invariance is often desired, but it is not necessary for the datasets we use for our applications (\Cref{sec:dtuDataset,sec:odDataset}). Thus we refrain from pursuing rotation invariance for our descriptors.
 
-Looking at the differential measures $\Theta, M,~S,$ and $C$, we are able to derive the resulting measure under rotation by the angle $\theta$. We have left out the details of the derivations here, but they can be found in \Cref{apx:rotation}. The final derived results are shown in \Cref{tbl:measureInvariances}. We see that both $M,~S,$ and $C$ are rotational invariant whereas $\Theta$ is rotated by the transformation angle $\theta$. \todo{explain significance of this?}
+Looking at the differential measures $\Theta, M,~S,$ and $C$, we are able to derive the resulting measure under rotation by the angle $\theta$. We have left out the details of the derivations here, but they can be found in \Cref{apx:rotation}. The final derived results are shown in \Cref{tbl:measureInvariances}. We see that both $M,~S,$ and $C$ are rotational invariant whereas $\Theta$ is rotated by the transformation angle $\theta$.
 %
 \subsection{Reflection}
-Reflection occurs when either an object is flipped along some axis or an entire image is flipped (typically along the x- and/or y-axis \todo{why?}). An example could be two sideshot images of a car driving in opposite directions, since a car typically looks the same from either side. Reflection is typically not handled directly in the descriptor but rather in the applications of the descriptor. An example of this is the pedestrian detection application, where \cite{dalal2005histograms} make sure to include both the original positive pedestrian images as well as their horizontally flipped versions in order to obtain a reflection invariant pedestrian detector.
+Reflection occurs when either an object is flipped along some axis or an entire image is flipped. An example could be two sideshot images of a car driving in opposite directions, since a car typically looks the same from either side. Reflection is typically not handled directly in the descriptor but rather in the applications of the descriptor. An example of this is the pedestrian detection application, where \cite{dalal2005histograms} make sure to include both the original positive pedestrian images as well as their horizontally flipped versions in order to obtain a reflection invariant pedestrian detector.
 
 \subsection{Illumination}
 \label{sec:illumination}
 Illumination transformations both occur as global as well as local transformations of light. The global transformation model the overall diffuse light level, which is visible on e.g. a sunny and a cloudy day. The local transformations model the local differences in light such as e.g. cast shadows and directed light.
 
-By assuming the image $\tilde{I} = a I + b$ \todo{where does this come from?} is an affine illumination transformation of the underlying image $I$ with no light transformations, we are able to derive the effect of the transformation on the differential measures $\Theta,~M,~S,$ and $C$. Once again we have left out the details here, which can be found in \Cref{apx:illumination}. The final results can be seen in \Cref{tbl:measureInvariances}. We see that $\Theta$ and $S$ are illumination invariant whereas $M$ and $C$ are multiplied by the linear constant $a$ of the affine transformation. These coefficients are typically estimated and corrected for by using some either local or global normalization scheme.
+By assuming the image $\tilde{I} = a I + b$ is an affine illumination transformation of the underlying image $I$ with no light transformations, we are able to derive the effect of the transformation on the differential measures $\Theta,~M,~S,$ and $C$. Once again we have left out the details here, which can be found in \Cref{apx:illumination}. The final results can be seen in \Cref{tbl:measureInvariances}. We see that $\Theta$ and $S$ are illumination invariant whereas $M$ and $C$ are multiplied by the linear constant $a$ of the affine transformation. These coefficients are typically estimated and corrected for by using some either local or global normalization scheme. Note that non-linear illumination changes can also occur due to e.g. reflections from 3D objects. These changes are not handled by the normalizations mentioned here.
 
 \subsection{Scale}
 \label{sec:scaleInvariance}
@@ -369,8 +363,6 @@ The scale of objects in images vary depending on multiple factors as described i
 
 \subsection{Perspective}
 Perspective distortions and occlusions have major impact on images. Even small changes of camera position can distort objects and occlusions might occur. The perspective transformations are hard to estimate without prior knowledge of the scene and its attributes. Therefore only perspective robustness to a certain degree has been achieved in descriptors so far.
-
-\todo{did we want to follow up on this section somewhere?}
 
 \section{Interest point detection}
 \label{sec:interestPointDetectors}
@@ -390,14 +382,16 @@ Recall from \Cref{sec:GaussianScaleSpace} that our scale-space representation re
 %
 where $\sigma_2 > \sigma_1$. Minima and maxima of this function indicate dark and light blobs, respectively, at a scale between $\sigma_1$ and $\sigma_2$.
 
-In order to create a multi-scale DoG detector, $\Gamma$ is computed across adjacent pairs of scale-space images. In SIFT, the scales are create in scale octaves as illustrated in \Cref{fig:dogSpaces}. When we extract multi-scale interest points, we find extrema that are not just extrema in their respective DoG images, but for adjacent DoG images as well. In practice this is done by finding extrema in a 26-pixel neighbourhood. As seen in the illustration, each octave has a number of DoGs, all with the same image size. \todo{DoGs?}
+In order to create a multi-scale DoG detector, $\Gamma$ is computed across adjacent pairs of scale-space images. In SIFT, the scales are created in octaves as illustrated in \Cref{fig:dogSpaces}. When we extract multi-scale interest points, we find extrema that are not just extrema in their respective DoG images, but for adjacent DoG images as well. In practice this is done by finding extrema in a 26-pixel neighbourhood. As seen in the illustration, each octave has a number of DoG images, all with the same image size.
 
-The octaves scales are defined as $2^n$ for $n = l,\hdots,h$, where $l$ is the lowest exponent and $h$ is the highest exponent needed for a desired range of octave scales. An octave is split into several scales $s$ (octave resolution), for which we wish to extract interest points. This results in Gaussian images with scale distance $2^{\nicefrac{1}{s}}$ positioned at scales $2^{\nicefrac{m}{s}}$ where $m = l,\hdots,s \cdot h$. The DoGs are however differences of these Gaussians and hence the detection scales are offset in between the Gaussian scales at $2^{\nicefrac{(n+0.5)}{s}}$.
-In practice we need to create $s+3$ Gaussian images of the same size for each octave. The first extra Gaussian image ($s+1$) is needed in order to compute the $s$ DoGs. The next two Gaussian images are needed for two additional DoGs surrounding the $s$ initial DoGs, allowing for 26-pixel neighbourhood computations within the entire octave. \Cref{fig:dogSpaces} illustrates this for $s = 2$.
+The octave scales are defined as $2^n$ for $n = l,\hdots,h$, where $l$ is the lowest exponent and $h$ is the highest exponent needed for a desired range of octave scales. An octave is split into several scales $s$, for which we wish to extract interest points. This results in Gaussian images positioned at scales $2^{\nicefrac{m}{s}}$ where $m = l,\hdots,s \cdot h$. The DoG images are however differences of these Gaussians, and hence the detection scales are offset in between the Gaussian scales at $2^{\nicefrac{(m+0.5)}{s}}$.
+In practice we need to create $s+3$ Gaussian images of the same size for each octave. The first extra Gaussian image ($s+1$) is needed in order to compute the $s$ DoG images. The next two Gaussian images are needed for two additional DoG images surrounding the $s$ initial DoG images, allowing for 26-pixel neighbourhood computations within the entire octave. \Cref{fig:dogSpaces} illustrates this for $s = 2$.
 
 To prevent extracting too many interest points, we can select only the most significant points by placing a threshold on the magnitude of $\Gamma$.
 
-An example of DoG images is shown in \Cref{fig:dogExample}, which is based on the scale-space images from \Cref{fig:scaleSpaceExample}. We see that the two different scales locate dark and light blobs of different sizes. In our work we have been using the VLFeat implementation of the multi-scale DoG detector  \citet{vedaldi2008vlfeat}.
+An example of DoG images is shown in \Cref{fig:dogExample}, which is based on the scale-space images from \Cref{fig:scaleSpaceExample}. Note that the two different scales locate dark and light blobs of different sizes.
+
+We use the VLFeat implementation of the multi-scale DoG detector  \citet{vedaldi2008vlfeat}.
 %
 \begin{figure}[p]
 	\centering
@@ -428,8 +422,7 @@ A sliding window is an alternative approach to selecting image regions for which
 
 \section{Descriptors}
 
-The field of descriptors and their applications is wide, and hence we have chosen a descriptor for each of our applications to compare our performance against. \todo{re-write} In this section we will go through the methods of computing the SIFT and HOG descriptors, which were introduced in the literature study and have proven to perform well on our applications. \todo{include figures for SIFT/HOG layouts?}
-
+In our two applications we choose the SIFT and HOG descriptors to compare our descriptors against, since these are successful and widely used. These descriptors were introduced in the literature study, and in this section we will go into the details of how they work, and how we apply them to our applications.
 \subsection{SIFT}
 
 SIFT utilizes gradient information on grayscale images to compute distinctive interest point descriptors. SIFT was originally proposed in combination with the multi-scale DoG detector described in \Cref{sec:multiscaleDoG}. After the DoG detection steps, the algorithm first determines the orientations of the interest point in question, in order to make the descriptor invariant to rotation. This is done by computing gradient magnitudes and orientations for a local area around the interest point in the associated scale-space image $L$. From the orientations a histogram of 36 bins is created, where each orientation is weighted by its magnitude and scaled by a Gaussian weight computed from the distance to the interest point. This Gaussian window has $\sigma$ equal to $1.5$ times the detection scale $\sigma_0$. A descriptor is created for the highest peak of the histogram as well as for each of the peaks that have a weight within 80\% of the maximum histogram weight. Finally, the chosen orientations are refined by fitting of a parabola to the three points around each orientation. If rotation invariance is not needed for the application, this step can be skipped.
@@ -496,7 +489,7 @@ We also use the VLFeat implementation of the extended HOG, which is denoted the 
 \section{Binary classification measures}
 \label{sec:binaryClassificationMeasures}
 %
-\emph{Binary classification} is the problem of predicting whether \todo{Elements are always classified as either. Should be re-phrased} elements have one of two conditions: positive ($+1$) or negative ($-1$). Formally, we consider elements $x \in X$ with respective condition labels $y \in \{-1, 1\}$. This is also called the ground truth or golden standard. Without the knowledge of $y$, we wish to assign elements $x \in X$ with a prediction or classification $\hat{y} \in \{-1, 1\}$, ideally equal to $y$.
+\emph{Binary classification} is the problem of predicting which of two classes (conditions) an element belongs to: positive ($+1$) or negative ($-1$). Formally, we consider elements $x \in X$ with respective condition labels $y \in \{-1, 1\}$. This is also called the ground truth or golden standard. Without the knowledge of $y$, we wish to assign elements $x \in X$ with a prediction or classification $\hat{y} \in \{-1, 1\}$, ideally equal to $y$.
 
 Many binary classification methods do not directly output such a classification, but rather a more descriptive \emph{classification score} $s \in \mathbb{R}$ for each $x \in X$, that denotes the confidence of a classification. A higher $s$ means that we find it more likely that $x$ has the label $y = 1$. Thus as an intermediate step we can select a threshold $t \in \mathbb{R}$, and classify $x$ with $\hat{y} = 1$ if $s \geq t$, or $\hat{y} = -1$ if $s < t$. Varying this threshold allows us to modify the ratio between elements classified as positive and negative.
 
