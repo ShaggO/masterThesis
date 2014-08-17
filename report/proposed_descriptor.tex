@@ -6,7 +6,7 @@
 \begin{document}
 \chapter{Proposed descriptor}
 %
-Given an region centered in $\x_0$ in an image at scale $\sigma_0$, we wish to effectively describe the region. Our proposed descriptor consists of weighted kernel-based histograms, explained in \Cref{sec:histograms}, computed for $m$ \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
+Given a region centered at a point $\x_0$ in an image at scale $\sigma_0$, we wish to effectively describe the region. Our proposed descriptor consists of weighted kernel-based histograms, explained in \Cref{sec:histograms}, computed for $m$ \textit{cells} arranged in a grid. We define the $j$'th cell histogram $H_j$ as
 %
 \begin{align}
 \label{eq:proposed_histogram}
@@ -36,14 +36,16 @@ The five functions above can be seen as the components that make up our descript
 \section{Bin value and magnitude functions}
 \label{sec:valueMagnitudeFunctions}
 %
-The choice of bin value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. By far the most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function. Another good choice from the galaxy descriptor \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$. Finally we have experimented with the $l,b,a$ re-parametrization of second order information weighted by 2-jet norm $\| \overset{\rightarrow}{j} \|$ \citep{griffin2007second}. We were however unable to produce good results through initial testing, and decided not to pursue the idea further. Our strategy is thus to create a descriptor based on $\Theta$ and $M$ (referred to as GO), one based on $S$ and $C$ (referred to as SI), as well as a concatenation of these descriptors (referred to as GO+SI). These functions are defined in \Cref{sec:gradientTheory,sec:shapeIndexTheory}.
+The choice of bin value and magnitude functions are closely connected, as we wish the magnitude function to weight the histogram values according to their importance for the local image structure. By far the most common choice in literature \cite{lowe2004distinctive,ke2004pca,mikolajczyk2005performance,tola2008fast} is using gradient orientation $\Theta$ as value function and gradient magnitude $M$ as magnitude function. Another good choice from the galaxy descriptor \cite{pedersen2013shape} is to use shape index $S$ weighted by curvedness $C$. Finally we have experimented with the $l,b,a$ re-parametrization of second order information weighted by 2-jet norm $\| \mathbf{j} \|$ \citep{griffin2007second}. This was however unable to produce good results through initial testing, and we decided not to pursue the idea further.
+
+Our strategy is thus to create a descriptor based on $\Theta$ and $M$ (referred to as GO), one based on $S$ and $C$ (referred to as SI), as well as a concatenation of these descriptors (referred to as GO+SI). These functions are defined in \Cref{sec:gradientTheory,sec:shapeIndexTheory}.
 
 Recall that in order to make our descriptor scale invariant, we wish to compute the descriptor according to the scale $\sigma_0$ of its region center $\x_0$. This is achieved by computing a scale space pyramid of both value and magnitude images across all region scales. The values and magnitudes needed to compute the cell histograms can then be found by lookup in these scale space images. Before making this lookup, we propose a pre-processing step on the magnitude images to make our descriptor robust to local illumination changes.
 %
 \subsection{Local magnitude normalization}
 \label{sec:localMagnitudeNormalization}
 %
-In \Cref{sec:illumination} we described the problem of handling illumination in images and its possible solutions. The block-normalization scheme from the HOG descriptor \cite{dalal2005histograms} is a way of locally (in blocks of $2 \times 2$ cells) estimating the affine coefficient $a$ when having assumed an affine illumination model. We wish to make this estimation even more local by estimating $a$ on a pixel-level. We propose a normalization scheme called pixel-wise normalization, which we apply to the magnitude function $F(\x)$.
+In \Cref{sec:illumination} we described the problem of handling illumination in images and its possible solutions. The block-normalization scheme from the HOG descriptor \cite{dalal2005histograms} is a way of locally (in blocks of $2 \times 2$ cells) estimating the affine coefficient $a$ when having assumed an affine illumination model. \todo{reference?} We wish to make this estimation even more local by estimating $a$ on a pixel-level. We propose a normalization scheme called pixel-wise normalization, which we apply to the magnitude function $F(\x)$.
 The pixel-wise normalized magnitude at a point is defined as the magnitude relative to a local area, which we compute by convolution with a Gaussian filter:
 %
 \begin{align}
@@ -112,7 +114,7 @@ The purpose of the cell aperture functions $A_j$ is to weight points closer to e
 A_j(\x) = K(\x - (\x_0 + r \sigma_0 \c_j); \alpha k_j r \sigma_0),
 \end{align}
 %
-where
+where \todo{annoying cut-off}
 %
 \begin{itemize}
 \item[] $K$ is a kernel function as described in \ref{sec:apertureKernelFunctions},
@@ -204,7 +206,7 @@ By increasing $\alpha$, the boundary cells will therefore keep their original sc
 		\caption{Polar Gaussian}
 		\label{fig:cellWindowPolar}
 	\end{subfigure}
-	\caption{The two types of Gaussian cell aperture functions plotted in 3D. The black curves are placed 1 standard deviation $\alpha$ from the cell centers. The yellow curves are placed $3 \alpha$ from the cell centers and confine the regions used to calculate the cell histograms.}
+	\caption{The two types of Gaussian cell aperture functions plotted in 3D. The black curves are placed 1 standard deviation $\alpha$ from the cell centers. The yellow curves are placed $3 \alpha$ from the cell centers and confine the regions used to compute the cell histograms.}
 	\label{fig:gridWindow}
 \end{figure}
 %
@@ -255,7 +257,7 @@ For our proposed descriptors the value function $f$ is either the gradient orien
 \end{align}
 which corresponds to splitting the interval into $n$ equally sized parts and placing the bin centers $f_i$ in each of the $n$ centers of these parts.
 
-The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:binCenters}, their areas will integrate to different values. This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{apx:gaussianKernel}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area, and hence we choose to omit re-normalization when computing the gradient orientation to save computations. The periodicity is implemented by using simple wrap-around of the distance $f(\x) - f_i$.
+The shape index has values spanning the interval $[-1,1]$, and hence by placing the bin centers according to \Cref{eq:binCenters}, their areas will integrate to different values. \todo{Why is this repeated here?} This is handled by integrating the area and re-normalizing by this value for each bin center. The integration is performed as described in \Cref{apx:gaussianKernel}. The gradient orientation has values spanning the periodic interval $[-\pi,\pi]$. Since the interval is periodic, all bin centers integrate to the same area, and hence we choose to omit re-normalization when computing the gradient orientation to save computations. The periodicity is implemented by using simple wrap-around of the distance $f(\x) - f_i$.
 %
 \subsection{Histogram normalization}
 %
@@ -353,7 +355,7 @@ We need to compute the cell and center weights for pixels in every cell accordin
 
 The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The purpose of these images is to illustrate the bin weighting and hence we have left out the corresponding SI examples. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and we then simply look up the value when needed in a cell.
 
-Finally, the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigureGoM,fig:cellHistFigureSiC} illustrate one of these grids for a single feature for GO and SI respectively. We see that there is a correspondence between the dominating orientations of the GO histograms and the gradient field of the underlying image. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor. For SI the correspondence between the histograms and the underlying image is harder to see.
+Finally, the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigureGoM,fig:cellHistFigureSiC} illustrate one of these grids for a single feature for GO and SI respectively. We see that there is a correspondence between the dominating orientations of the GO histograms and the gradient field of the underlying image. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor. For SI the correspondence between the histograms and the underlying image is harder to see. \todo{Is the figure layout good?}
 
 \begin{figure}[tb]
     \centering
