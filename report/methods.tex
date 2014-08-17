@@ -257,6 +257,7 @@ G(\x;\alpha) &= G(x;\alpha) G(y;\alpha) \\
 where $\x = [x ~~ y]^T$. A single $\alpha$ for both dimensions is sufficient since we don't require a skew in the $x$- and $y$-axes for our purposes.
 %
 \subsection{Periodic histograms}
+\label{sec:histogramPeriodic}
 When our bin domain $[f_\text{min}, f_\text{max}]$ is periodic, there are multiple distances between any two points. Since we are computing distance bin aperture functions, we need to find the minimum distance $d_{wrap}$ from each point value to each bin center in order to correctly compute the function values. This is done by a simple wrap-around using the known period of the domain as maximum distance:
 \begin{align*}
 	d_{wrap} = \min(d,(f_\text{max} - f_\text{min})-d)
@@ -302,6 +303,7 @@ where $d$ is the distance $x - \mu$ from a point $x$ to a bin center $\mu$, and 
 \end{figure}
 
 \subsection{Renormalization}
+\label{sec:histogramRenormalization}
 When making histograms over a non-periodic domain, the weight function will be cropped by the histogram bounds $f_\text{min}$ and $f_\text{max}$. We therefore risk biasing the weights towards the central bins of the domain, since the cropped filters will have a smaller area. In order to avoid this, we view the bins as probability densities, and hence the area under each bin's weight function has to integrate to 1. This is done by renormalizing the functions based on their areas. Given a bin aperture function $B$ and a bin center $f_i$, for which $f_\text{min} \leq f_i \leq f_\text{max}$ we calculate the bounds $a$ and $b$ when $B$ is centered around $f_i$:
 \begin{align*}
 	a = f_\text{min} - f_i,\hspace{1cm}
