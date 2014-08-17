@@ -32,7 +32,7 @@ If the data is linearly separable, we can search for the \emph{maximum-margin} h
 %
 where $\x_i$ are training data points and $y_i \in \{-1,1\}$ their respective condition labels.
 
-However, linear separation of the two classes is almost never feasible\todo{possible?}. Instead a \emph{soft-margin} SVM is used. The idea is to allow some of the data points to be placed on the wrong side of the margin. The total distance of misplaced points to the margin is minimized, in addition to maximizing the margin. This is done by introducing a \emph{cost} parameter $C$, which weights the importance of the misplacement minimization relative to the margin maximization. Formally, the soft-margin optimization problem is written as
+However, linear separation of the two classes is almost never possible. Instead a \emph{soft-margin} SVM is used. The idea is to allow some of the data points to be placed on the wrong side of the margin. The total distance of misplaced points to the margin is minimized, in addition to maximizing the margin. This is done by introducing a \emph{cost} parameter $C$, which weights the importance of the misplacement minimization relative to the margin maximization. Formally, the soft-margin optimization problem is written as
 %
 \begin{align}
 \label{eq:svmDefinition}
@@ -41,7 +41,7 @@ However, linear separation of the two classes is almost never feasible\todo{poss
 %
 where $\xi_i$ are slack variables allowing for misplaced points.
 
-This formulation can be extended to a non-linear SVM by replacing $\w \cdot \x_i$ with a kernel function $k(\w,\x_i)$. Examples of alternative kernels are polynomials $\left( \w \cdot \x_i \right)^d$ for $d \in \mathbb{R}$, and Gaussian radial basis functions $\exp \left( -\gamma \left \| \w - \x_i  \right \|^2  \right)$ for $\gamma > 0$. \citet{dalal2005histograms} use a linear SVM and report that using a Gaussian kernel improves the results slightly but at a much higher run time. Therefore we choose to use a linear SVM as well.
+This formulation can be extended to a non-linear SVM by replacing $\w \cdot \x_i$ with a kernel function $k(\w,\x_i)$. Examples of alternative kernels are polynomials $\left( \w \cdot \x_i \right)^d$ for $d \in \mathbb{R}$, and Gaussian radial basis functions $\exp \left( -\gamma \left \| \w - \x_i  \right \|^2  \right)$ for $\gamma > 0$. \citet{dalal2005histograms} use a linear SVM and report that using a Gaussian kernel improves the results slightly but at a much higher computation time. Therefore we choose to use a linear SVM as well.
 
 If there is a large skew in the number of elements in each class, the larger class will dominate the misplacement term, and we will be less likely to find a good separation. In order to correct this skew, the cost parameter $C$ can be defined for each of the two classes individually. The simplest approach is dividing $C$ by the number of elements in the respective classes.
 
@@ -52,12 +52,12 @@ When using the SVM for solving the pedestrian detection problem, we use the $L_2
 Having described the method of using an SVM for binary classification, we are now able to define a performance measure for the pedestrian detection problem. Recall that an SVM gives us the signed distances $\w \cdot \d - b$ between each descriptor $\d$ and the hyperplane dividing the two classes: positive for pedestrians and negative for non-pedestrians. Since the SVM is trained to find the best separation between the classes, we can use this distance as the classification score $s$. Following the binary classification method described in \Cref{sec:binaryClassificationMeasures}, we are able to compute both the PR- and ROC-curves and their AUCs. In other words we vary a threshold on the distance to the hyperplane to get the two measures of the performance of a descriptor.
 
 The dataset we use (described in \Cref{sec:odDataset}) has a large skew in the amount of positives and negatives. This is because the only positives are the exact cut-outs of pedestrians, while negatives can be anything else.
-Recall that the PR measure is preferred when there is a large skew towards one of the classes of a binary classification, as described in \Cref{sec:binaryClassificationMeasures}. We will therefore be using the PR measure as performance measure for our pedestrian detection parameter study as well as testing. \Citet{dalal2005histograms} use the log-log plot of the ROC-curve as performance measure, and hence we will show test results for this performance measure as well. Since recall is very close to 1 and $\FPR$ is close to 0, the actual plot is defined as the logarithm of $1-\text{Recall}$ versus the logarithm of $\FPR$.
+Recall that the PR measure is preferred when there is a large skew towards one of the classes of a binary classification, as described in \Cref{sec:binaryClassificationMeasures}. We will therefore be using the PR measure as performance measure for our pedestrian detection parameter study as well as testing. \todo{do we need to modify this like we did for IC?} \Citet{dalal2005histograms} use the log-log plot of the ROC-curve as performance measure, and hence we will show test results for this performance measure as well. Since recall is very close to 1 and $\FPR$ is close to 0, the actual plot is defined as the logarithm of $1-\text{Recall}$ versus the logarithm of $\FPR$.
 %
 \section{Dataset}
 \label{sec:odDataset}
 %
-The dataset, which we use for training and testing our descriptor on the pedestrian detection application, is called the \emph{INRIA Person Dataset}\footnote{\url{http://pascal.inrialpes.fr/data/human/}} (from now on called the INRIA dataset) created by \citet{dalal2005histograms}. The purpose of this dataset is to evaluate methods on more challenging images, compared to the earlier MIT Pedestrian dataset \cite{papageorgiou2000trainable}.
+The dataset, which we use for training and testing our descriptor on the pedestrian detection application, is called the \emph{INRIA Person Dataset}\footnote{\url{http://pascal.inrialpes.fr/data/human/}} (from now on called the INRIA dataset) created by \citet{dalal2005histograms}. The purpose of this dataset is to evaluate methods on more challenging images compared to the earlier MIT Pedestrian dataset \cite{papageorgiou2000trainable}.
 
 It consists of various real world images grouped into two subsets: images with pedestrians (positives) and images without pedestrians (negatives). From the positive images, cut-outs of pedestrians are extracted and rescaled to a fixed size, such that the pedestrian in each cut-out is 96 pixels in height from their feet to shoulders. We extract our own cut-outs from the negative images. The size of the cut-outs are $64 \times 128$ pixels with a 3 pixel border to avoid boundary condition effects. In case a pedestrian cut-out is smaller than the defined size after resizing, the borders are replicated to achieve the desired dimensions.
 The positive set only contains images of somewhat upright persons that initially were at least 100 pixels in height. In order to improve the robustness of the dataset against reflected images, each positive cut-out has its horizontally flipped image included as well.
@@ -130,7 +130,7 @@ Our test setup is a modification of the one described by \citet{dalal2005histogr
 
 \section{Example}
 %
-In this section we will show an example of our proposed GO descriptor calculated from a positive pedestrian image. Furthermore we illustrate the connection between the GO descriptor and the weights of an SVM classifier trained using the test setup in \Cref{sec:inriaExperimentalSetup}.
+In this section we will show an example of our proposed GO descriptor computed from a positive pedestrian image. Furthermore we illustrate the connection between the GO descriptor and the weights of an SVM classifier trained using the test setup in \Cref{sec:inriaExperimentalSetup}.
 Finally, we will show examples of the positive and negative images whose SVM classification we have most and least confidence in.
 
 \begin{figure}[tb]
@@ -435,7 +435,7 @@ $\log C$ & $6.3\cdot 10^{-4}$ & $1.3\cdot 10^{-4}$ & $6.3\cdot 10^{-4}$ & $4.0\c
 	\label{fig:inriaParametersSiDims}
 \end{figure}
 %
-We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.972$: Normalizing the final descriptors before training the SVMs reduces the AUC by $0.539$. Computing the gradients on RGB colour channels and taking the largest magnitude improves the AUC by $0.003$. Omitting pixel-wise normalization reduces the AUC by $0.066$. Smoothing images at scale $\sigma = 1$ reduces the AUC by $0.015$. These tendencies hold for SI as well.
+We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.972$: Normalizing the final descriptors before training the SVMs reduces the AUC by $0.539$. Computing the gradients on RGB colour channels and taking the largest magnitude improves the AUC by $0.003$. Omitting pixel-wise normalization reduces the AUC by $0.066$. Smoothing images at scale $\sigma = 1$ reduces the AUC by $0.015$. These tendencies hold for SI as well. \todo{rewrite some of this too}
 %
 \section{Results}
 %
@@ -445,7 +445,7 @@ Now that we have computed optimal parameters on the training data, we can evalua
 
 Overall HOG outperforms our descriptors, but the addition of shape index is shown to be valuable for both HOG and our descriptors. The SI descriptor performs very poorly on its own. The difference between compact GO+SI and GO+SI is negligible despite the large difference in dimensionality.
 
-By comparing the PR AUCs with and without retraining of hard negatives, we see that all descriptors benefit from retraining. Interestingly, compact GO+SI starts off worse than the much larger GO+SI, but it overtakes after retraining by adding more than twice the amount of hard negatives.
+By comparing the PR AUCs with and without retraining of hard negatives, we see that all descriptors benefit from retraining. Interestingly, compact GO+SI starts off worse than the much larger GO+SI, but it overtakes after retraining by adding more than twice the amount of hard negatives. \todo{reference discussion?}
 
 \Cref{fig:inriaTestResults} shows ROC- and PR-curves of the various descriptors. Both curves show roughly the same ordering of descriptor performance as the PR AUCs. However the compact GO+SI, GO+SI, and GO curves cross each other multiple times, and hence their ordering depends on the chosen threshold $t$. The HOG results shown here are not quite as good as those presented by \citet{dalal2005histograms}. This may be due to the VLFeat implementation of HOG, SVM differences, or our sliding window implementation.
 
