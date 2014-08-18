@@ -100,7 +100,8 @@ We use this to compute $\int_a^b G(x;\beta) \,\mathrm dx$:
 %
 \chapter{Image transformations} \label{apx:image_transformations}
 
-This appendix chapter computes the effect of certain image transformations on various differential structure functions.
+Recall the definitions of gradient orientation $\Theta$, gradient magnitude $M$, shape index $S$, and curvedness $C$ defined in \Cref{sec:diffStructure}.
+This appendix chapter computes the effect of certain image transformations on the mentioned functions.
 
 \section{Rotation} \label{apx:rotation}
 
@@ -150,7 +151,7 @@ First we show an intermediate result using a common tangent identity:
 &= \frac{-\sin \theta L_x + \cos \theta L_y}{\cos \theta L_x + \sin \theta L_y}
 \end{align*}
 %
-We use this to compute $\widetilde{\Theta}$:
+We use this to compute the transformed gradient orientation $\widetilde{\Theta}$:
 %
 \begin{align*}
 \widetilde{\Theta} &= \Atan{\frac{\widetilde{L}_y}{\widetilde{L}_x}} \\
@@ -159,6 +160,7 @@ We use this to compute $\widetilde{\Theta}$:
 \end{align*}
 %
 \subsection{Gradient magnitude} \label{apx:rotation_m}
+We here compute the transformed gradient magnitude $\widetilde{M}$:
 %
 \begin{align*}
 \widetilde{M} &= \sqrt{\widetilde{L}_x^2 + \widetilde{L}_y^2} \\
@@ -168,7 +170,9 @@ We use this to compute $\widetilde{\Theta}$:
 %
 \subsection{Shape index} \label{apx:rotation_si}
 %
-Define $S_n = -L_{xx} - L_{yy}$ and $S_d = 4 L_{xy}^2 + (L_{xx} - L_{yy})^2$ such that $\widetilde{S} = \frac{2}{\pi} \Atan{S_n/\sqrt{S_d}}$, and equivalently for $\widetilde{S}_n,\widetilde{S}_d$. We show that $\widetilde{S}_n = S_n$ and $\widetilde{S}_d = S_d$:
+Define $S_n = -L_{xx} - L_{yy}$ and $S_d = 4 L_{xy}^2 + (L_{xx} - L_{yy})^2$ such that the shape index is defined as $S = \frac{2}{\pi} \Atan{S_n/\sqrt{S_d}}$.
+
+We first define the transformed nominator $\widetilde{S}_n$ and denominator $\widetilde{S}_d$ to show that $\widetilde{S}_n = S_n$ and $\widetilde{S}_d = S_d$:
 %
 \begin{align*}
 \widetilde{S}_n &= - \widetilde{L}_{xx} - \widetilde{L}_{yy} \\
@@ -186,6 +190,7 @@ Define $S_n = -L_{xx} - L_{yy}$ and $S_d = 4 L_{xy}^2 + (L_{xx} - L_{yy})^2$ suc
 And thus $\widetilde{S} = S$.
 %
 \subsection{Curvedness} \label{apx:rotation_c}
+Let $\widetilde{L}_{xx}$ and $\widetilde{L}_{yy}$ be the transformed $L_{xx}$ and $L_{yy}$, and $\widetilde{C}$ be the transformed curvedness.
 %
 \begin{align*}
 \widetilde{L}_{xx}^2 + \widetilde{L}_{yy}^2
@@ -206,10 +211,9 @@ and thus
 %
 \section{Illumination} \label{apx:illumination}
 %
-Affine illumination model:
+Under the assumption of an affine illumination model $\widetilde{I} = aI + b$ where $I$ is the underlying image, the four transformed measures $\widetilde{\Theta}$, $\widetilde{M}$, $\widetilde{S}$ and $\widetilde{C}$ are computed:
 %
 \begin{align*}
-  \widetilde{I} &= a I  + b \\
   \widetilde{L}_{x^m y^n} &= a L_{x^m y^n}, \quad m+n > 0 \\
   \widetilde{\Theta} &= \Atan{\frac{a L_y}{a L_x}} = \Atan{\frac{L_y}{L_x}} = \Theta \\
   \widetilde{M} &= \sqrt{(a L_x)^2 + (a L_y)^2} = a \sqrt{L_x^2 + L_y^2} = a M \\
@@ -220,18 +224,18 @@ Affine illumination model:
   &= \frac12 a \sqrt{L_{xx}^2 + 2 L_{xy}^2 + L_{yy}^2} = a C
 \end{align*}
 %
-When normalizing k-jet with L2-norm:
+%When normalizing $k$-jet with $L_2$-norm:
 %
-\begin{align*}
-  \mathcal{J}_k &= \left( \mset{L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
-  \widetilde{\mathcal{J}}_k &=\left( \mset{a L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
-  \left \| \widetilde{\mathcal{J}}_k \right \|_2 &= \sqrt{\sum_{0 < n+m \leq k} (a L_{x^n y^m})^2} \\
-      &= \sqrt{a^2\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
-      &= a\sqrt{\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
-      &= a \left \| \mathcal{J}_k \right \|_2 \\
-  \frac{\widetilde{\mathcal{J}}_k}{\left \| \widetilde{\mathcal{J}}_k \right \|_2} &=
-      \frac{\mathcal{J}_k}{\left \| \mathcal{J}_k \right \|_2}
-\end{align*}
+%\begin{align*}
+%  \mathcal{J}_k &= \left( \mset{L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
+%  \widetilde{\mathcal{J}}_k &=\left( \mset{a L_{x^n y^m} | 0 < n+m \leq k} \right)^T \\
+%  \left \| \widetilde{\mathcal{J}}_k \right \|_2 &= \sqrt{\sum_{0 < n+m \leq k} (a L_{x^n y^m})^2} \\
+%      &= \sqrt{a^2\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
+%      &= a\sqrt{\sum_{0 < n+m \leq k} (L_{x^n y^m})^2} \\
+%      &= a \left \| \mathcal{J}_k \right \|_2 \\
+%  \frac{\widetilde{\mathcal{J}}_k}{\left \| \widetilde{\mathcal{J}}_k \right \|_2} &=
+%      \frac{\mathcal{J}_k}{\left \| \mathcal{J}_k \right \|_2}
+%\end{align*}
 
 \chapter{Grid layouts}
 \label{apx:gridLayouts}
@@ -257,7 +261,7 @@ First we compute the relation between $r_i$ and $d_i$. As we have a right-angled
 \label{eq:radiusDistanceRelation}
 \end{align}
 %
-Note that this linear dependence holds for any ring $i$. Thus with how the grid is defined, the only thing left is to compute the relation between two neighbouring rings, which we can write as the constant $k$ such that $r_{i+1} = k r_i$ and $d_{i+1} = k d_i$. We compute $k$:
+Note that this linear dependency holds for any ring $i$. Thus, with the grid definition, the only thing left is to compute the relation between two neighbouring rings, which we can write as the constant $k$ such that $r_{i+1} = k r_i$ and $d_{i+1} = k d_i$. We compute $k$:
 %
 \begin{align*}
 d_2 = k d_1 &= d_1 + r_1 + r_2 = d_1 + d_1 \sin \theta + k d_1 \sin \theta \quad\Rightarrow \\
@@ -303,7 +307,7 @@ Now the whole concentric log-polar grid can be constructed alike the ordinary lo
 %
 \chapter{Gaussian derivatives}
 %
-The $n$'th order $x$-derivative of the Gaussian filter $G$ has the following relation to the Hermite polynomial:
+The $n$'th order derivative of the 1D Gaussian kernel $G$ has the following relation to the Hermite polynomial:
 %
 \begin{align*}
 	G_{x^n}(x;\sigma) &= \left(\frac{1}{\sqrt{2}\sigma}\right)^n \cdot
@@ -312,7 +316,7 @@ The $n$'th order $x$-derivative of the Gaussian filter $G$ has the following rel
 						 \text{hermite} \left(n,\frac{x^2}{\sqrt{2}\sigma} \right)
 \end{align*}
 %
-Thus an arbitrary 2D Gaussian derivative can be written as:
+Thus an arbitrary 2D Gaussian derivative with equal variance in both dimensions can be written as:
 %
 \begin{align*}
 	G_{x^m y^n}(x,y;\sigma) &=
@@ -321,7 +325,7 @@ Thus an arbitrary 2D Gaussian derivative can be written as:
 
 \chapter{Confidence intervals for image correspondence}
 \label{apx:confidenceIntervals}
-
+In this appendix chapter we show the 95\% confidence interval graphs for the difference between mean performance on the DTU dataset paths of two descriptors. \Cref{fig:dtuResultsStatsGo_GoSi,fig:dtuResultsStatsSi_GoSi,fig:dtuResultsStatsGo_Si,fig:dtuResultsStatsGo_Sift,fig:dtuResultsStatsSi_Sift} shown the graphs for the combinations of the GO, SI, GO+SI and SIFT descriptors. The combination GO+SI and SIFT is left out since it is shown directly in the report in \Cref{fig:dtuResultsStats}.
 
 \begin{figure}[tb]
 	\centerline{
