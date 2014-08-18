@@ -310,8 +310,7 @@ We wish to optimize the descriptor parameters listed in \Cref{sec:descriptorPara
 Our actual parameter optimization is problematic because we need to optimize ten parameters at once, and each evaluation is computationally heavy. Our basic strategy is thus to cycle through each parameter and optimize it separately while fixing the other parameters. We do this iteratively until convergence.
 The risk of this strategy is getting stuck in local optima. To avoid this, recall that we have defined the parameters to reduce correlation: e.g. when bin count $n$ is increased, the width of the bins is automatically reduced to compensate. We also select certain correlated parameters to optimize together: grid type with grid size, as well as cell and bin kernels with their respective scales. Furthermore we optimize continuous parameters in two steps: first a coarse search and then a finer search around the best result.
 
-The optimal parameters of our parameter study for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively.
-From these results we see that most of the parameters are quite stable across the folds.
+The optimal parameters of our parameter study for our GO and SI descriptors are shown in \Cref{fig:ICparamsGo,fig:ICparamsSi} respectively. From these results we see that most of the parameters are quite stable across the folds. While we use these parameter sets for respective parts of the dataset to avoid overfitting, we also choose a set of recommended parameters based on the parameter study, shown in \Cref{fig:ICparamsAll}. We include the parameters for SIFT translated into our framework for easy comparison.
 
 We first compare the grid type and size of the GO and SI descriptors. SI and a single of the GO folds use the concentric polar central (CPC) grid, whereas the five other GO folds use the polar central (PC) grid. Both descriptors use grid size $12 \times 2$. Note that the amount of angular cells is higher than for GLOH and DAISY which use 8 angular cells. \Cref{tbl:dtuLayoutParametersGo,tbl:dtuLayoutParametersSi} show the average PR AUC on training data for GO and SI respectively for various choices of grid parameters. We see that the $12\times2$ PC and CPC grids have nearly equal average PR AUC for both GO and SI, and hence the choice between these two grid types only gives a marginal performance difference. By looking at the grid results, we see that the performance difference between a concentric grid and the corresponding non-concentric grid is very small. The difference between log-polar (LP) and concentric log-polar (CLP) is however significant, which is caused by a more dense grid when using CLP than LP.
 The polar grids with a central cell perform slightly better than their corresponding polar grids without a central cell. Furthermore log-polar grids are always worse than the corresponding polar grids.
@@ -324,53 +323,74 @@ Looking at the cell and bin kernels, we see that both GO and SI use Gaussian ker
 This holds for SI as well as seen in \Cref{fig:dtuParametersSi_cellSigma,fig:dtuParametersSi_binSigma}.
 
 For both descriptors the center scale $\rho$ has little importance once it reaches a certain minimal value for each descriptor as can be seen in \Cref{fig:dtuParametersGo_centerSigma,fig:dtuParametersSi_centerSigma} for GO and SI respectively. This is the reason why the optimal $\rho$ is unstable across the folds for GO.
-
 %
 \begin{table}[p]
 \centerline{
-\begin{tabular}{ l c c c c c c c}
+\begin{tabular}{ l c c c c c c }
 \toprule
 {} & \multicolumn{6}{c}{Cross-validation fold} \\
-Parameter & 1 & 2 & 3 & 4 & 5 & 6 & chosen \\ \midrule
-Grid type & PC & CPC & PC & PC & PC & PC & \textbf{PC} \\
-Grid size & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & \textbf{$\mathbf{12 \times 2}$} \\
-Grid radius $r$ & $13.5$ & $13.0$ & $13.5$ & $13.5$ & $13.5$ & $13.5$ & $\mathbf{13.5}$ \\
-Center scale $\rho$ & $1.4$ & $1.9$ & $1.5$ & $1.4$ & $1.7$ & $1.5$ & $\mathbf{1.6}$ \\
-Cell kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textbf{\textit{G}} \\
-Cell scale $\alpha$ & $0.8$ & $0.9$ & $0.8$ & $0.8$ & $0.8$ & $0.8$ & $\mathbf{0.8}$ \\
-Bin count $n$ & $12$ & $12$ & $12$ & $14$ & $12$ & $14$ & $\mathbf{12}$ \\
-Bin kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textbf{\textit{G}} \\
-Bin scale $\beta$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $\mathbf{1.3}$ \\
-Norm. scale $\eta$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.8$ & $\mathbf{1.6}$ \\
+Parameter & 1 & 2 & 3 & 4 & 5 & 6 \\ \midrule
+Grid type & PC & CPC & PC & PC & PC & PC \\
+Grid size & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ \\
+Grid radius $r$ & $13.5$ & $13.0$ & $13.5$ & $13.5$ & $13.5$ & $13.5$ \\
+Center scale $\rho$ & $1.4$ & $1.9$ & $1.5$ & $1.4$ & $1.7$ & $1.5$ \\
+Cell kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} \\
+Cell scale $\alpha$ & $0.8$ & $0.9$ & $0.8$ & $0.8$ & $0.8$ & $0.8$ \\
+Bin count $n$ & $12$ & $12$ & $12$ & $14$ & $12$ & $14$ \\
+Bin kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} \\
+Bin scale $\beta$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ & $1.3$ \\
+Norm. scale $\eta$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.6$ & $1.8$ \\
 \bottomrule
 \end{tabular}}
-\caption{Optimized parameters from our parameter study for GO. Separate sets of parameters are found for each fold, and we manually choose a set of recommended parameters based on these.}
+\caption{Optimized parameters from our parameter study for GO. Separate sets of parameters are found for each fold.}
 \label{fig:ICparamsGo}
 %
 \vspace{1cm}
 %
 \centerline{
-\begin{tabular}{ l c c c c c c c}
+\begin{tabular}{ l c c c c c c }
 \toprule
 {} & \multicolumn{6}{c}{Cross-validation fold} \\
-Parameter & 1 & 2 & 3 & 4 & 5 & 6 & chosen \\ \midrule
-Grid type & CPC & CPC & CPC & CPC & CPC & CPC & \textbf{CPC} \\
-Grid size & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & \textbf{$\mathbf{12 \times 2}$} \\
-Grid radius $r$ & $13.5$ & $14.0$ & $13.5$ & $14.0$ & $14.0$ & $14.0$ & $\mathbf{14.0}$ \\
-Center scale $\rho$ & $1.9$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $\mathbf{2.0}$ \\
-Cell kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textbf{\textit{G}} \\
-Cell scale $\alpha$ & $1.1$ & $1.0$ & $1.1$ & $1.0$ & $1.0$ & $1.0$ & $\mathbf{1.0}$ \\
-Bin count $n$ & $8$ & $8$ & $8$ & $8$ & $8$ & $8$ & $\mathbf{8}$ \\
-Bin kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textbf{\textit{G}} \\
-Bin scale $\beta$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $\mathbf{2.0}$ \\
-Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ & $\mathbf{2.6}$ \\
+Parameter & 1 & 2 & 3 & 4 & 5 & 6 \\ \midrule
+Grid type & CPC & CPC & CPC & CPC & CPC & CPC \\
+Grid size & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ & $12 \times 2$ \\
+Grid radius $r$ & $13.5$ & $14.0$ & $13.5$ & $14.0$ & $14.0$ & $14.0$ \\
+Center scale $\rho$ & $1.9$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ \\
+Cell kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G}  \\
+Cell scale $\alpha$ & $1.1$ & $1.0$ & $1.1$ & $1.0$ & $1.0$ & $1.0$ \\
+Bin count $n$ & $8$ & $8$ & $8$ & $8$ & $8$ & $8$ \\
+Bin kernel & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} & \textit{G} \\
+Bin scale $\beta$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ & $2.0$ \\
+Norm. scale $\eta$ & $2.6$ & $2.8$ & $2.6$ & $2.6$ & $2.6$ & $2.6$ \\
 \bottomrule
 \end{tabular}}
-\caption{Optimized parameters from our parameter study for SI. Separate sets of parameters are found for each fold, and we manually choose a set of recommended parameters based on these.}
+\caption{Optimized parameters from our parameter study for SI. Separate sets of parameters are found for each fold.}
 \label{fig:ICparamsSi}
 \end{table}
 %
-\begin{table}[tb]
+\renewcommand{\floatpagefraction}{0.1}
+\begin{table}[p]
+\centering
+\begin{tabular}{ l c c c }
+\toprule
+Parameter & GO & SI & SIFT \\ \midrule
+Grid type & PC & CPC & Square \\
+Grid size & $12 \times 2$ & $12 \times 2$ & $4 \times 4$ \\
+Grid radius $r$ & $13.5$ & $14.0$ & $8.0$ \\
+Center scale $\rho$ & $1.6$ & $2.0$ & $1.0$ \\
+Cell kernel & \textit{G} & \textit{G} & \textit{Tri} \\
+Cell scale $\alpha$ & $0.8$ & $1.0$ & $1.0$ \\
+Bin count $n$ & $12$ & $8$ & $8$ \\
+Bin kernel & \textit{G} & \textit{G} & \textit{Tri} \\
+Bin scale $\beta$ & $1.3$ & $2.0$ & $1.0$ \\
+Norm. scale $\eta$ & $1.6$ & $2.6$ & - \\
+\bottomrule
+\end{tabular}
+\caption{Based on our parameter study results above, we manually choose a set of recommended parameters for GO and SI. We also include the SIFT parameters translated into our framework when possible. SIFT uses a simple $4 \times 4$ square grid, and does not use a local normalization scheme.}
+\label{fig:ICparamsAll}
+\end{table}
+%
+\begin{table}[p]
 \centering
 \begin{tabular}{ c c c c c c c }
 \toprule
@@ -386,10 +406,9 @@ $6 \times 4$ & $0.758$ & $0.759$ & $0.767$ & $0.767$ & - & - \\
 \end{tabular}
 \caption{Average matching performance (PR AUC) on training data for GO when adjusting the grid parameters. Optimal performance is marked in bold.}
 \label{tbl:dtuLayoutParametersGo}
-\end{table}
 %
-\begin{table}[tb]
-\centering
+\vspace{5mm}
+%
 \begin{tabular}{ c c c c c c c }
 \toprule
 Grid size & P & CP & PC & CPC & LP & CLP \\ \midrule
@@ -499,6 +518,7 @@ $6 \times 4$ & $0.706$ & $0.707$ & $0.721$ & $0.720$ & - & - \\
 	\caption{Dimensionality of SI when adjusting bin count $n$.}
 	\label{fig:dtuParametersSiDims}
 \end{figure}
+%
 We have also experimented with various other parts of our descriptor that are not listed as parameters. We report some of these results for our optimal GO descriptor on training data, which has a mean PR AUC of $0.781$: It is marginally better to normalize the final descriptors before searching for matches. Omitting this step reduces the AUC by $0.002$. Recall that we resize images to half size and convert them to grayscale for training. Omitting the down-scaling step improves the AUC by $0.009$, and computing the descriptor on opponent colour channels improves the AUC by $0.014$. Omitting pixel-wise normalization reduces the AUC by $0.023$. Omitting the center aperture function reduces the AUC by $0.002$. These tendencies hold for SI as well.
 %
 \section{Results}
@@ -667,6 +687,7 @@ SIFT & $384$ & $0.831$ & $0.880$ \\
 	\label{fig:dtuResultsStats}
 \end{figure}
 %
+\renewcommand{\floatpagefraction}{0.5}
 %
 \subbibliography
 \end{document}
