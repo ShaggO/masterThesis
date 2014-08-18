@@ -216,14 +216,14 @@ By increasing $\alpha$, the boundary cells will therefore keep their original sc
 		\centering
 		\includegraphics[width=0.5\textwidth]{img/gridType_legend_cropped.pdf}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.45\textwidth}
+	\begin{subfigure}[t]{0.38\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_square_window.pdf}
 		\caption{Square grid}
 		\label{fig:gridTypeSquare}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.45\textwidth}
+	\begin{subfigure}[t]{0.38\textwidth}
 		\includegraphics[width=\textwidth]{img/gridType_triangle_window.pdf}
-		\caption{Triangular grid}
+		\caption{Triangle grid}
 		\label{fig:gridTypeTriangle}
 	\end{subfigure}
 	\caption{Examples of uniform cell layout grid types used for sliding windows, where we are interested in describing a larger area rather than the local area surrounding a detected point.}
@@ -275,6 +275,7 @@ To summarize, our descriptor has the following parameters that will be part of o
 \item Cell scale $\alpha$
 \item Interest point cell layout specific parameters:
 \begin{itemize}
+\itemsep0em
 \item Grid type
 \item Grid size
 \item Grid radius $r$ 
@@ -296,15 +297,29 @@ In order to visualize the construction of our descriptor, we will show an exampl
 
 The next step is to construct the scale space images as described in \Cref{sec:valueMagnitudeFunctions} based on the DoG scales. This results in scale space images which are smoothed and downsampled versions of the original image. Both operations are done according to the respective scales, which causes all features to have the same size in pixels regardless of their respective scales. We compute the new feature coordinates in the scale space images, and remove those points that are too close to the edge: if any cell support radius (shown in \Cref{fig:gridWindow}) belonging to a feature spans outside the image border, we discard the feature. \Cref{fig:cellHistScaleSpacesP} shows a handful of these images with their respective features, and which of the features that are discarded.
 
-\begin{figure}[p]
+From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In the case of GO, $x$- and $y$-derivatives are needed, whereas $xx$-, $xy$-, and $yy$-derivatives are needed for SI. The derivatives are used to compute bin value and magnitude functions over the entire image. We then apply our pixel-wise normalization scheme to the magnitudes with normalization scale $\eta = 2$. These images are shown in \Cref{fig:cellHistScaleSpacesVM,fig:cellHistScaleSpacesSC} for GO and SI respectively.
+
+We need to compute the cell and center weights for pixels in every cell according to the chosen cell layout parameters. In this case we use Gaussian cell kernels, where the support radius is confined to $3$ times the cell radius. Pixels outside this distance to each cell center are ignored. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, but since many cells overlap we show the maximal weight for each pixel.
+
+The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The purpose of these images is to illustrate the bin weighting and hence we have left out the corresponding SI examples. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and we then simply look up the value when needed in a cell.
+
+Finally, the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigureGoM,fig:cellHistFigureSiC} illustrate one of these grids for a single feature for GO and SI respectively. We see that there is a correspondence between the dominating orientations of the GO histograms and the gradient field of the underlying image. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor. For SI the correspondence between the histograms and the underlying image is harder to see.
+
+\begin{figure}[!b]
     \centering
     \includegraphics[width=\textwidth]{img/cellHistDetector.pdf}
     \caption{Interest points (green) found by a multi-scale DoG detector on an example image. The circle radii illustrate the detection scale of each point. $529$ points are detected in total.}
-    \label{fig:cellHistDetector}
-    \vspace{1cm}
+\end{figure}
+%
+\begin{figure}[p]
+    \centering
     \includegraphics[width=\textwidth]{img/cellHistScaleSpacesP.pdf}
     \caption{The smoothed and downsampled images at various scales with their corresponding kept interest points (green) and removed interest points (red).}
     \label{fig:cellHistScaleSpacesP}
+    \vspace{1cm}
+    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesSpatialWeights.pdf}
+    \caption{Product of cell and center weights. When cells overlap, the maximal weight is shown. The yellow borders indicate the scope of pixels within the support radii of the cells. Only these are used to construct the cell histograms.}
+    \label{fig:cellHistScaleSpacesSpatialWeights}
 \end{figure}
 
 \begin{figure}[p]
@@ -349,21 +364,6 @@ The next step is to construct the scale space images as described in \Cref{sec:v
 	\label{fig:cellHistScaleSpacesSC}
 \end{figure}
 
-From the blurred and downsampled images we apply derivative filters in order to compute value and magnitude images by their respective functions. In the case of GO, $x$- and $y$-derivatives are needed, whereas $xx$-, $xy$-, and $yy$-derivatives are needed for SI. The derivatives are used to compute bin value and magnitude functions over the entire image. We then apply our pixel-wise normalization scheme to the magnitudes with normalization scale $\eta = 2$. These images are shown in \Cref{fig:cellHistScaleSpacesVM,fig:cellHistScaleSpacesSC} for GO and SI respectively.
-
-We need to compute the cell and center weights for pixels in every cell according to the chosen cell layout parameters. In this case we use Gaussian cell kernels, where the support radius is confined to $3$ times the cell radius. Pixels outside this distance to each cell center are ignored. For pixels inside, we compute the spatial weights according to \Cref{sec:cellApertureFunction,sec:centerApertureFunction}. The products of these weights are illustrated in \Cref{fig:cellHistScaleSpacesSpatialWeights}, but since many cells overlap we show the maximal weight for each pixel.
-
-The last type of weights needed are the bin values. \Cref{fig:cellHistScaleSpacesBins} shows bin value images for two bin centers with opposite gradient orientations. The purpose of these images is to illustrate the bin weighting and hence we have left out the corresponding SI examples. The images clearly show their corresponding parts of the beer can structures as well as some background noise. Though not shown in these images, to save computation time we only compute bin values once for each pixel with a non-zero spatial weight, and we then simply look up the value when needed in a cell.
-
-Finally, the four weights are multiplied in order to construct the cell histograms. \Cref{fig:cellHistFigureGoM,fig:cellHistFigureSiC} illustrate one of these grids for a single feature for GO and SI respectively. We see that there is a correspondence between the dominating orientations of the GO histograms and the gradient field of the underlying image. The weighted histogram values are then concatenated and normalized for each feature, resulting in the final descriptor. For SI the correspondence between the histograms and the underlying image is harder to see.
-
-\begin{figure}[tb]
-    \centering
-    \includegraphics[width=\textwidth]{img/cellHistScaleSpacesSpatialWeights.pdf}
-    \caption{Product of cell and center weights. When cells overlap, the maximal weight is shown. The yellow borders indicate the scope of pixels within the support radii of the cells. Only these are used to construct the cell histograms.}
-    \label{fig:cellHistScaleSpacesSpatialWeights}
-\end{figure}
-
 \begin{figure}[p]
 	\centering
 	\begin{subfigure}[t]{\textwidth}
@@ -380,7 +380,7 @@ Finally, the four weights are multiplied in order to construct the cell histogra
 	\label{fig:cellHistScaleSpacesBins}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}[p]
     \centering
     \includegraphics[width=0.65\textwidth]{img/cellHistFigureGo.pdf}
     \caption{The cell histograms for a single feature that make up our GO descriptor. For each cell center (yellow), the weighted histogram values (red) are drawn in the direction of the corresponding bin center orientations. We see that the cell histograms generally point towards larger intensities.}
