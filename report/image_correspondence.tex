@@ -70,9 +70,9 @@ The dataset, which we use for training and evaluation of our descriptor, is call
 	\end{subfigure}
 	\caption{Example scenes from the DTU dataset}
 	\label{fig:dtu_examples}
+\end{figure}
 %
-\vspace{1cm}
-%
+\begin{table}
 	\centering
 	\begin{tabular}{l l r}
 		\toprule
@@ -92,7 +92,7 @@ The dataset, which we use for training and evaluation of our descriptor, is call
 	\end{tabular}
 	\caption{Scene object classifications from \cite[Table 1]{aanaes2010ground}}
 	\label{tbl:dtu_scene_classifications}
-\end{figure}
+\end{table}
 
 The camera is positioned around each scene using an industrial robot arm, which has automatically captured each scene from 119 positions. These positions are defined from a fixed frontal view varying the viewpoint $\theta$ in three arcs at different distance $d$ to the scene. Arc 1 has $d = \SI{0.5}{\meter}$ to the scene and $\theta$ spans $\SI{\pm40}{\degree}$, arc 2 has $d = \SI{0.65}{\meter}$ and $\theta$ spans $\SI{\pm25}{\degree}$, and arc 3 has $d = \SI{0.8}{\meter}$ and $\theta$ spans $\SI{\pm20}{\degree}$. Furthermore a linear path is captured by moving the camera away from the scene, which corresponds to zooming or scaling the scene. This is done at $\theta = \SI{0}{\degree}$ and $d$ spans $[\SI{0.5}{\meter};\SI{0.8}{\meter} ]$. At each of the 119 camera positions 19 individual images $I_i$ are taken with each of the LED lights $i,~\text{for}~i = 1,\hdots,19$ turned on. Using the given camera positions we get four camera paths: three arc paths and one linear path. \Cref{fig:dtu_overview} shows an overview of these camera paths. When computing the performance across the paths we wish to solve the image correspondence problem for matching each image in each path with the \emph{key frame} image (middle position on arc 1), since this gives us the performance when varying the viewing angle and scale in a structured manner.
 
