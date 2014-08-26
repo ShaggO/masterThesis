@@ -4,7 +4,7 @@ clc, clear
 I = imread('../defence/img/shoeOriginal.jpg');
 I = rgb2gray(im2double(I));
 
-scales = 2.^(0:5);
+scales = 2.^(0:8);
 S = dGaussScaleSpace(I,[0 0],scales,0,1);
 
 imwrite(I,'../defence/img/scaleSpaceTheory_0.png');
