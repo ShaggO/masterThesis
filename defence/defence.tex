@@ -2,6 +2,7 @@
 \usepackage{pslatex,adjustbox,graphicx,wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{animate}
 \captionsetup{compatibility=false}
 \usepackage[natbib=true,backend=biber,maxbibnames=9,bibencoding=utf8]{biblatex}
 \usetheme[unit=ics]{Frederiksberg}
@@ -237,9 +238,9 @@ Bin aperture function $B$
 \begin{frame}{Sliding window}
 \begin{figure}
 \centering
-	\begin{subfigure}[t]{0.75\textwidth}
-		\includegraphics[width=\textwidth]{../defence/img/slidingWindow.gif}
-	\end{subfigure}
+%	\begin{subfigure}[t]{0.75\textwidth}
+%	\end{subfigure}
+	\animategraphics[width=0.9\textwidth,autoplay,loop]{2}{img/slidingWindow/position_}{001}{026}
 \end{figure}
 \end{frame}
 %
