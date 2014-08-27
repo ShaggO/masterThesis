@@ -39,6 +39,10 @@
 %
 \section{Introduction to image descriptors}
 %
+\begin{frame}{Introduction to image descriptors}
+Create shoe image with descriptor
+\end{frame}
+%
 \begin{frame}{Image transformations}
 \begin{figure}
 \centering
@@ -196,7 +200,7 @@ Center aperture function $P$
 \begin{figure}
 \centering
 	\begin{subfigure}[t]{0.7\textwidth}
-		\includegraphics[width=\textwidth]{../defence/img/gridExample.pdf}
+		\includegraphics[width=\textwidth]{img/gridExample.pdf}
 	\end{subfigure}
 \end{figure}
 \end{frame}
@@ -212,7 +216,7 @@ Bin aperture function $B$
 \begin{figure}
 \centering
 	\begin{subfigure}[t]{1\textwidth}
-		\includegraphics[width=\textwidth]{../defence/img/binExample.pdf}
+		\includegraphics[width=\textwidth]{img/binExample.pdf}
 	\end{subfigure}
 \end{figure}
 \end{frame}
@@ -242,6 +246,29 @@ Bin aperture function $B$
 %	\end{subfigure}
 	\animategraphics[width=0.9\textwidth,autoplay,loop]{2}{img/slidingWindow/position_}{001}{026}
 \end{figure}
+\end{frame}
+%
+\begin{frame}{Support vector machines}
+\begin{itemize}
+\item Binary classification of each window
+\end{itemize}
+\begin{figure}
+	\includegraphics[width=0.75\textwidth]{img/svmExample.pdf}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Proposed descriptor}
+\begin{minipage}[t]{0.49\textwidth}
+\begin{itemize}
+\item Uniform cell layout
+\item No center aperture function
+\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.49\textwidth}
+\begin{figure}
+	\includegraphics[height=0.7\textheight, clip=true, trim=9 9 9 9]{img/pedestrianWindowGrid.pdf}
+\end{figure}
+\end{minipage}
 \end{frame}
 %
 \begin{frame}{HOG \cite{dalal2005histograms}}
