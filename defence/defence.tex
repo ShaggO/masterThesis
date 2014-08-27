@@ -1,10 +1,13 @@
 \documentclass[14pt,t]{beamer}
-\usepackage{pslatex,adjustbox}
+\usepackage{pslatex,adjustbox,graphicx,wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
 \captionsetup{compatibility=false}
+\usepackage[natbib=true,backend=biber,maxbibnames=9,bibencoding=utf8]{biblatex}
 \usetheme[unit=ics]{Frederiksberg}
 \useinnertheme{MLHacks}
+
+\def\x{\mathbf{x}}
 
 \AtBeginSection[]
 {
@@ -13,6 +16,11 @@
 		\ghostframe
 	\end{frame}
 }
+
+\definecolor{faded}{rgb}{0.7,0.7,0.7}
+
+\addbibresource{../bibliography.bib}
+\setbeamertemplate{bibliography item}[text]
 
 \title{A study of higher order \\ image descriptors}
 \subtitle{Thesis defence}
@@ -53,6 +61,32 @@
 \end{figure}
 \end{frame}
 %
+\begin{frame}{Scale-space}
+\begin{figure}[p]
+	\centering
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_2.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_4.png}
+	\end{subfigure}\\
+	\vspace{0.75mm}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_8.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_16.png}
+	\end{subfigure}\\
+	\vspace{0.75mm}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_32.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/scaleSpaceTheory_64.png}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
 \begin{frame}{Applications}
 \begin{figure}
 \centering
@@ -69,16 +103,159 @@
 %
 \section{Image correspondence}
 %
+\begin{frame}{Interest point detection}
+\end{frame}
+%
+\begin{frame}{Matching strategy}
+\end{frame}
+%
+\begin{frame}{Proposed descriptor}
+\begin{align*}
+H_j(f_i) = \int F(\x) A_j (\x) P (\x) B(\x; f_i,f) \,\text{d} \x
+\end{align*}
+where
+\begin{itemize}
+\item[] $i$ is the bin number
+\item[] $j$ is the cell number
+\end{itemize}
+\end{frame}
+%
+\begin{frame}{Histogram domain}
+\begin{align*}
+\textcolor{faded}{H_j(f_i) = \int \textcolor{black}{F(\x)} A_j (\x) P (\x) B(\x; f_i,\textcolor{black}{f}) \,\text{d} \x}
+\end{align*}
+Bin value function $f$
 
+Magnitude function $F$
+\end{frame}
+%
+\begin{frame}{Gradient orientation}
+\begin{figure}
+\centering
+	\begin{subfigure}[t]{0.75\textwidth}
+		\includegraphics[width=\textwidth]{../report/img/gradientOrientationTheory.pdf}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Shape index}
+\begin{figure}
+\centering
+	\begin{subfigure}[t]{0.75\textwidth}
+		\includegraphics[width=\textwidth]{../report/img/shapeIndexTheory.pdf}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Local magnitude normalization}
+\begin{figure}[p]
+	\centering
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/pixelNormalizationExample1.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/pixelNormalizationExample2.png}
+	\end{subfigure}\\
+	\vspace{0.75mm}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/pixelNormalizationExample3.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/pixelNormalizationExample4.png}
+	\end{subfigure}\\
+	\vspace{0.75mm}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/pixelNormalizationExample5.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{img/pixelNormalizationExample6.png}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Spatial weights}
+\begin{align*}
+\textcolor{faded}{H_j(f_i) = \int F(\x) \textcolor{black}{A_j (\x) P (\x)} B(\x; f_i,f) \,\text{d} \x}
+\end{align*}
+Cell aperture function $A$
+
+Center aperture function $P$
+\end{frame}
+%
+\begin{frame}{Cell aperture function}
+\begin{figure}
+\centering
+	\begin{subfigure}[t]{\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=0 0 0 90]{../defence/img/cellWindowPolar.pdf}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Grid of cells}
+\begin{figure}
+\centering
+	\begin{subfigure}[t]{0.7\textwidth}
+		\includegraphics[width=\textwidth]{../defence/img/gridExample.pdf}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Bin weights}
+\begin{align*}
+\textcolor{faded}{H_j(f_i) = \int F(\x) A_j (\x) P (\x) \textcolor{black}{B(\x; f_i,f)} \,\text{d} \x}
+\end{align*}
+Bin aperture function $B$
+\end{frame}
+%
+\begin{frame}{Bin weights}
+\begin{figure}
+\centering
+	\begin{subfigure}[t]{1\textwidth}
+		\includegraphics[width=\textwidth]{../defence/img/binExample.pdf}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{SIFT \cite{lowe2004distinctive}}
+\begin{minipage}[t]{0.7\textwidth}
+	\begin{itemize}
+	\item $4 \times 4$ square grid
+	\item Trilinear interpolation
+	\item Clipping of magnitudes
+	\item Include comparison results?
+	\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{../report/img/siftGrid.pdf}
+	\end{figure}
+\end{minipage}
+\end{frame}
 %
 \section{Pedestrian detection}
 %
-%\begin{frame}{Radon transform}
-%\begin{figure}
-%\centering
-%\adjincludegraphics[scale=.4,trim={80 80 80 80}]{radon_example.pdf}
-%\label{fig:radon_example}
-%\end{figure}
-%\end{frame}
+\begin{frame}{Sliding window}
+\begin{figure}
+\centering
+	\begin{subfigure}[t]{0.75\textwidth}
+		\includegraphics[width=\textwidth]{../defence/img/slidingWindow.gif}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{HOG \cite{dalal2005histograms}}
+\begin{minipage}[t]{0.7\textwidth}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{../report/img/siftGrid.pdf}
+	\end{figure}
+\end{minipage}
+\end{frame}
+%
+%[allowframebreaks]
+\begin{frame}{References}
+\printbibliography
+\end{frame}
 %
 \end{document}

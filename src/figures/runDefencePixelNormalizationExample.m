@@ -1,5 +1,7 @@
 clc, clear all
 
+eta = 7;
+
 I1rgb = im2double(imread('../defence/img/shoeOriginal.jpg'));
 I1 = rgb2gray(I1rgb);
 I2rgb = im2double(imread('../defence/img/shoeDark.jpg'));
@@ -12,13 +14,13 @@ S2 = dGaussScaleSpace(I2,kJetCoeffs(2),1,1,true);
 
 M1 = diffStructure('M',S1,[1 2]);
 M2 = diffStructure('M',S2,[1 2]);
-M1norm2 = pixelNormalizationVar(M1,'gaussian',[5 5]);
-M2norm2 = pixelNormalizationVar(M2,'gaussian',[5 5]);
+M1norm = pixelNormalization(M1,'gaussian',eta*[1 1]);
+M2norm = pixelNormalization(M2,'gaussian',eta*[1 1]);
 
 C1 = M1{1};
 C2 = M2{1};
-C1norm2 = M1norm2{1};
-C2norm2 = M2norm2{1};
+C1norm2 = M1norm{1};
+C2norm2 = M2norm{1};
 maxC = max([C1(:); C2(:)]);
 maxCnorm2 = max([C1norm2(:); C2norm2(:)]);
 
@@ -33,6 +35,12 @@ path = '../defence/img/pixelNormalizationExample4.png';
 imwrite(C2 / maxC,path);
 
 path = '../defence/img/pixelNormalizationExample5.png';
-imwrite(C1norm2 / max(C1norm2(:)),path);
+imwrite(C1norm2 / maxCnorm2,path);
 path = '../defence/img/pixelNormalizationExample6.png';
-imwrite(C2norm2 / max(C2norm2(:)),path);
+imwrite(C2norm2 / maxCnorm2,path);
+
+% figure
+% subplot(1,2,1)
+% imshow(C1norm2 / maxCnorm2)
+% subplot(1,2,2)
+% imshow(C2norm2 / maxCnorm2)
