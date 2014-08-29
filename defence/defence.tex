@@ -304,12 +304,34 @@ Bin aperture function $B$
 %
 \begin{frame}{HOG \cite{dalal2005histograms}}
 \begin{minipage}[t]{0.7\textwidth}
+	\begin{itemize}
+	\item $8 \times 16$ square grid
+	\item Trilinear interpolation and clipping like SIFT
+	\item Local normalization in $2 \times 2$ blocks
+	\item Include comparison results?
+	\end{itemize}
 \end{minipage}
 \begin{minipage}[t]{0.25\textwidth}
 	\begin{figure}
-		\includegraphics[width=\textwidth]{../report/img/siftGrid.pdf}
+		\includegraphics[width=\textwidth]{img/hogGrid.pdf}
 	\end{figure}
 \end{minipage}
+\end{frame}
+%
+\begin{frame}[c]{Conclusions}
+\begin{itemize}
+\item Image correspondence: local normalization effective for light variations
+\vspace{1cm}
+\item Pedestrian detection: Shape index effective when used in combination with gradient orientations
+\end{itemize}
+\end{frame}
+%
+\begin{frame}[c]
+\begin{center}
+\begin{huge}
+Thanks for listening!
+\end{huge}
+\end{center}
 \end{frame}
 %
 %[allowframebreaks]
