@@ -1,0 +1,76 @@
+1.  Welcome
+
+2.  Agenda
+
+3.  Bring out the shoe
+    Computer interpretation of structure in the shoe
+    Basic idea of using gradients
+    Propose a framework which we optimize
+
+4.  Image <-> Object
+    Transformations: Light, rotation, scale, perspective
+    Invariance against some transformations
+
+5.  Theory to achieve scale invariance:
+	   Iterative blurring -> remove details at lower scales
+   
+6.  IC: Match points between images - used for e.g. 3D reconstruction, descriptor evaluation
+    PD: Find locations of pedestrians - e.g. surveillance
+
+7.  Points with a high amount of local structure at various scales
+
+8.  Compute descriptors for all points.
+    Choose one point from A -> compute distance (L2) to all in B
+
+9.  Ratio between best and 2nd best match.
+    Positives are matches below a certain threshold $t$
+
+10. 8 best matches (2 false positives)
+
+11. The i'th bin of the j'th histogram
+    4 functions which we now explain
+
+12. Bin domain and function
+
+13. Gradient orientation ($M$ and $\Theta$)
+    Dark to light
+
+14. Change in gradients
+    2nd order differential structure. Between -1 and 1:
+    -1: Light blob, 1: dark blob, 0: saddle point, -½: ridge, ½: valley
+    (K_1, K_2 ~ eigenvalues of the Hessian matrix)
+
+15. Divide magnitude by the surrounding magnitudes (Gaussian weighting)
+    Example -> Note the cast shadow, which disappears by using local normalization
+	-> Note how local normalization boosts noise
+
+16. Spatial aggregation of information
+
+17. One cell
+    High weight at the center of the cell and lower as the distance to the cell increases
+
+18. Our cell layout - notice the overlap between cells
+    Center weight: Weight by distance to center of descriptor
+
+19. Bin aperture function
+    Recall f ~ Gradient orientation and shape index
+
+20. Example of a bin and the contribution of values based on the distance to $f_2$.
+    Now we have described the overall parts of our descriptor.
+    In order to use the functions, we have optimized the parameters for them.
+
+21. Look at the slide.
+    Comparison?
+
+22. Recall pedestrian detection
+    Basic idea of sliding window: Calculate descriptor for each location and predict whether there is a pedestrian present.
+
+23. Binary classification: Use a lot of examples of pedestrians and non-pedestrians.
+    SVM a method for seperating the two classes -> Able to classify new descriptors
+
+24. No central (interest) -> uniform description
+
+25. Similar to SIFT but used for pedestrian detection with local normalization.
+    Comparison?
+
+26. Most interesting conclusions from our study
