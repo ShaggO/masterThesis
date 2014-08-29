@@ -51,7 +51,7 @@ figure
 imshow(Irgb)
 hold on
 plot(F(:,1),F(:,2),'c.')
-drawCircle(F(:,1),F(:,2),gridRadius/rescale*F(:,3),'c')
+drawCircle(F(:,1),F(:,2),gridRadius/rescale*F(:,3),'c',true,'linewidth',3)
 path = '../defence/img/shoeDescriptor.pdf';
 saveTightFigure(gcf,path)
 

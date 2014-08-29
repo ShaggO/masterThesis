@@ -23,8 +23,8 @@ imagesc(J);
 colormap('gray');
 axis equal off
 hold on
-drawCircle(Jr+1,Jr+1,Jr,'c')
-h = quiver(x,y,u,v,2,'r','autoscale','off');
+drawCircle(Jr+1,Jr+1,Jr,'c',true,'linewidth',2)
+h = quiver(x,y,u,v,2.2,'r','autoscale','off');
 plot(cells(:,1),cells(:,2),'y.','MarkerSize',5)
 if strcmp(type,'si')
     set(h,'ShowArrowHead','off')
