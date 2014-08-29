@@ -4,7 +4,7 @@ eta = 7;
 
 I1rgb = im2double(imread('../defence/img/shoeOriginal.jpg'));
 I1 = rgb2gray(I1rgb);
-I2rgb = im2double(imread('../defence/img/shoeDark.jpg'));
+I2rgb = im2double(imread('../defence/img/shoeShadow.jpg'));
 I2 = rgb2gray(I2rgb);
 
 %cutout = {520:899,500:1099};

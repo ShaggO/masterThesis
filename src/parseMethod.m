@@ -127,6 +127,11 @@ switch lower(m.detector)
             num2str(r.n),num2str(r.seed),nums2str(r.windowSize));
         detFunc = @(I,meta) randomWindowDetector(size(I),r.n,r.seed+meta.i,r.windowSize);
         detSave = false;
+    case 'constant'
+        addParameter(p,'F',[])
+        r = parseResults(p,m.detectorArgs);
+        detName = 'constant';
+        detFunc = @(I,~) r.F;
     case 'debug'
         r = parseResults(p,m.detectorArgs);
         detName = 'debug';
@@ -414,6 +419,7 @@ else
         end
         if loaded && ismember('F',fieldnames(det))
             F = det.F;
+            detPath
             disp(['Loaded ' num2str(size(F,1)) ' features.']);
         else
             if strncmp('randomwindow',detName,12)
