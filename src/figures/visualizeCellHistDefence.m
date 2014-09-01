@@ -24,7 +24,7 @@ colormap('gray');
 axis equal off
 hold on
 drawCircle(Jr+1,Jr+1,Jr,'c',true,'linewidth',2)
-h = quiver(x,y,u,v,2.2,'r','autoscale','off');
+h = quiver(x,y,u,v,2.2,'color',[1 0.4 0.4],'autoscale','off');
 plot(cells(:,1),cells(:,2),'y.','MarkerSize',5)
 if strcmp(type,'si')
     set(h,'ShowArrowHead','off')

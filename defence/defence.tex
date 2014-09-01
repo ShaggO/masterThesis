@@ -9,6 +9,9 @@
 \useinnertheme{MLHacks}
 
 \def\x{\mathbf{x}}
+\def\y{\mathbf{y}}
+\def\d{\mathbf{d}}
+\def\c{\mathbf{c}}
 
 \AtBeginSection[]
 {
@@ -50,6 +53,36 @@
 	\end{subfigure}
 	\begin{subfigure}[t]{0.40\textwidth}
 		\includegraphics[width=\textwidth, clip=true, trim=1 1 1 1]{img/shoeDescriptorZoom.pdf}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Introduction to image descriptors}
+\begin{itemize}
+\item Representation of local image structure
+\end{itemize}
+\begin{figure}
+\centering
+	\begin{subfigure}[t]{0.58\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=165 50 155 68]{img/shoeDescriptor.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.40\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=1 1 1 1]{img/shoeDescriptorZoom2.pdf}
+	\end{subfigure}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Introduction to image descriptors}
+\begin{itemize}
+\item Representation of local image structure
+\end{itemize}
+\begin{figure}
+\centering
+	\begin{subfigure}[t]{0.58\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=165 50 155 68]{img/shoeDescriptor.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.40\textwidth}
+		\includegraphics[width=\textwidth, clip=true, trim=1 1 1 1]{img/shoeDescriptorZoom3.pdf}
 	\end{subfigure}
 \end{figure}
 \end{frame}
@@ -337,6 +370,38 @@ Thanks for listening!
 %[allowframebreaks]
 \begin{frame}{References}
 \printbibliography
+\end{frame}
+%
+\appendix
+%
+\begin{frame}{Weight functions}
+\ghostframe
+\setlength{\jot}{15pt}
+\begin{align*}
+F_\text{norm}(\x) &= \frac{F(\x)}{\int F(\y) G(\y - \x; \eta \sigma_0) \,\text{d} \y} \\
+A_j(\x) &= K(\x - (\x_0 + r \sigma_0 \c_j); \alpha k_j r \sigma_0) \\
+P(\x) &= K(\x - \x_0; \rho r \sigma_0) \\
+B(\x; f_i, f) &= K \left( f(\x) - f_i; \beta \frac{f_\text{max} - f_\text{min}}{2n} \right)
+\end{align*}
+\end{frame}
+%
+\begin{frame}{Kernels}
+\ghostframe
+\setlength{\jot}{15pt}
+\begin{align*}
+\mathit{Box} (x; \beta) &= 
+\begin{cases}
+    \frac{1}{2 \beta},& \text{if } |x| \leq \beta \\
+    0,              & \text{otherwise}
+\end{cases} \\
+\mathit{Tri} (x; \beta) &= 
+\begin{cases}
+    \frac{1}{2 \beta} \left( 1 - \frac{| x |}{2 \beta} \right) ,& \text{if } |x| \leq 2 \beta \\
+    0,              & \text{otherwise}
+\end{cases} \\
+G(x;\beta) &= \frac{1}{\sqrt{2\pi} \beta}
+\exp\left( -\frac{x^2}{2 \beta^2} \right)
+\end{align*}
 \end{frame}
 %
 \end{document}

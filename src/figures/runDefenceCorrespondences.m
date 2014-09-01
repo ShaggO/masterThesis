@@ -1,5 +1,7 @@
 clc, clear all
 
+linewidth = 2.5;
+
 % Load paths for the data
 load('paths');
 
@@ -59,31 +61,31 @@ chosenIdx = idxT(CorrectMatchSortIdx(4));
 
 figure
 set(gcf,'color','white')
-imshow([I ones(size(I,1),100,3) Ikey])
+imshow(imadjust([I ones(size(I,1),100,3) Ikey],[0 1],[0.2 1]))
 hold on
-drawCircle(imRes.X(:,1),imRes.X(:,2),imRes.X(:,3),'g');
-drawCircle(keyRes.X(:,1),keyRes.X(:,2),keyRes.X(:,3),'g');
+drawCircle(imRes.X(:,1),imRes.X(:,2),imRes.X(:,3),'g',true,'linewidth',linewidth);
+drawCircle(keyRes.X(:,1),keyRes.X(:,2),keyRes.X(:,3),'g',true,'linewidth',linewidth);
 %export_fig('-r300','../defence/img/imageCorrespondenceInterestPoints.pdf');
 
 figure
 set(gcf,'color','white')
-imshow([I ones(size(I,1),100,3) Ikey])
+imshow(imadjust([I ones(size(I,1),100,3) Ikey],[0 1],[0.2 1]))
 hold on
-drawCircle(imRes.X(chosenIdx,1),imRes.X(chosenIdx,2),imRes.X(chosenIdx,3),'g');
-drawCircle(keyRes.X(:,1),keyRes.X(:,2),keyRes.X(:,3),'g');
+drawCircle(imRes.X(chosenIdx,1),imRes.X(chosenIdx,2),imRes.X(chosenIdx,3),'g',true,'linewidth',linewidth);
+drawCircle(keyRes.X(:,1),keyRes.X(:,2),keyRes.X(:,3),'g',true,'linewidth',linewidth);
 %export_fig('-r300','../defence/img/imageCorrespondenceExample1.pdf');
 
 figure
 set(gcf,'color','white')
-imshow([I ones(size(I,1),100,3) Ikey])
+imshow(imadjust([I ones(size(I,1),100,3) Ikey],[0 1],[0.2 1]))
 hold on;
 if numel(TPmatchesX) > 0
-    plot(TPmatchesX,TPmatchesY,'g-')
-    drawCircle(TPmatchesX(:),TPmatchesY(:),TPmatchesS(:),'g')
+    plot(TPmatchesX,TPmatchesY,'g-','linewidth',linewidth)
+    drawCircle(TPmatchesX(:),TPmatchesY(:),TPmatchesS(:),'g',true,'linewidth',linewidth)
 end
 if numel(FPmatchesX) > 0
-    plot(FPmatchesX,FPmatchesY,'r-')
-    drawCircle(FPmatchesX(:),FPmatchesY(:),FPmatchesS(:),'r')
+    plot(FPmatchesX,FPmatchesY,'r-','linewidth',linewidth)
+    drawCircle(FPmatchesX(:),FPmatchesY(:),FPmatchesS(:),'r',true,'linewidth',linewidth)
 end
 % plot(imRes.X(UPidx,1),imRes.X(UPidx,2),'y.')
 %export_fig('-r300','../defence/img/imageCorrespondenceExample3.pdf');
@@ -105,18 +107,18 @@ secondMatchS = keyRes.X(match.matchIdx(idx,2),3)';
 
 figure
 set(gcf,'color','white')
-imshow([I ones(size(I,1),100,3) Ikey])
+imshow(imadjust([I ones(size(I,1),100,3) Ikey],[0 1],[0.2 1]))
 hold on
-plot(firstMatchX,firstMatchY,'g-')
+plot(firstMatchX,firstMatchY,'g-','linewidth',linewidth)
 theta = atan2d(firstMatchY(2)-firstMatchY(1),firstMatchX(2)-firstMatchX(1))
 xChosen = firstMatchX(1)*0.325+firstMatchX(2)*0.675;
 yChosen = firstMatchY(1)*0.325+firstMatchY(2)*0.675;
 h = text(double(xChosen+60*sind(theta)),double(yChosen+60*cosd(theta)),'1');
-set(h,'color','g','HorizontalAlignment','center','VerticalAlignment','middle','fontsize',50)
-plot(secondMatchX,secondMatchY,'r-')
-drawCircle(firstMatchX(:),firstMatchY(:),firstMatchS(:),'g')
-drawCircle(keyRes.X(:,1),keyRes.X(:,2),keyRes.X(:,3),'g');
-drawCircle(secondMatchX(2),secondMatchY(2),secondMatchS(:),'r')
+set(h,'color',[0 0.5 0],'HorizontalAlignment','center','VerticalAlignment','middle','fontsize',50)
+plot(secondMatchX,secondMatchY,'r-','linewidth',linewidth)
+drawCircle(firstMatchX(:),firstMatchY(:),firstMatchS(:),'g',true,'linewidth',linewidth)
+drawCircle(keyRes.X(:,1),keyRes.X(:,2),keyRes.X(:,3),'g',true,'linewidth',linewidth);
+drawCircle(secondMatchX(2),secondMatchY(2),secondMatchS(:),'r',true,'linewidth',linewidth)
 theta = atan2d(secondMatchY(2)-secondMatchY(1),secondMatchX(2)-secondMatchX(1));
 xChosen = secondMatchX(1)*0.46+secondMatchX(2)*0.54;
 yChosen = secondMatchY(1)*0.46+secondMatchY(2)*0.54;

@@ -19,10 +19,15 @@ M2norm = pixelNormalization(M2,'gaussian',eta*[1 1]);
 
 C1 = M1{1};
 C2 = M2{1};
-C1norm2 = M1norm{1};
-C2norm2 = M2norm{1};
+C1norm = M1norm{1};
+C2norm = M2norm{1};
 maxC = max([C1(:); C2(:)]);
-maxCnorm2 = max([C1norm2(:); C2norm2(:)]);
+maxCnorm2 = max([C1norm(:); C2norm(:)]);
+
+C1 = 2*C1 / maxC;
+C2 = 2*C2 / maxC;
+C1norm = 2*C1norm / maxCnorm2;
+C2norm = 2*C2norm / maxCnorm2;
 
 path = '../defence/img/pixelNormalizationExample1.png';
 imwrite(I1rgb,path);
@@ -30,14 +35,14 @@ path = '../defence/img/pixelNormalizationExample2.png';
 imwrite(I2rgb,path);
 
 path = '../defence/img/pixelNormalizationExample3.png';
-imwrite(C1 / maxC,path);
+imwrite(C1,path);
 path = '../defence/img/pixelNormalizationExample4.png';
-imwrite(C2 / maxC,path);
+imwrite(C2,path);
 
 path = '../defence/img/pixelNormalizationExample5.png';
-imwrite(C1norm2 / maxCnorm2,path);
+imwrite(C1norm,path);
 path = '../defence/img/pixelNormalizationExample6.png';
-imwrite(C2norm2 / maxCnorm2,path);
+imwrite(C2norm,path);
 
 % figure
 % subplot(1,2,1)
