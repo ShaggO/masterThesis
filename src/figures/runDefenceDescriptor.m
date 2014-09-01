@@ -43,7 +43,7 @@ load('cellHistExampleDefence')
 
 fig('unit','inches','width',6,'height',6,'fontsize',8);
 visualizeCellHistDefence({L.none},P,H,cells,binC,gridRadius,'go')
-path = '../defence/img/shoeDescriptorZoom3.pdf';
+path = '../defence/img/shoeDescriptorZoom.pdf';
 saveTightFigure(gcf,path)
 
 Irgb = imread('../defence/img/shoeOriginal.jpg');

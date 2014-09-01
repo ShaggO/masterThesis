@@ -1,5 +1,6 @@
 I = imread('../defence/img/pedestrians.png');
 I = im2double(I);
+I = imadjust(I,[0 1],[0.2 1]);
 
 stride = 41;
 scales = [2 2^(4/3)];

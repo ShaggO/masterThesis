@@ -419,7 +419,6 @@ else
         end
         if loaded && ismember('F',fieldnames(det))
             F = det.F;
-            detPath
             disp(['Loaded ' num2str(size(F,1)) ' features.']);
         else
             if strncmp('randomwindow',detName,12)

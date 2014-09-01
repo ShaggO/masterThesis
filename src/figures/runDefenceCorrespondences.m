@@ -65,7 +65,7 @@ imshow(imadjust([I ones(size(I,1),100,3) Ikey],[0 1],[0.2 1]))
 hold on
 drawCircle(imRes.X(:,1),imRes.X(:,2),imRes.X(:,3),'g',true,'linewidth',linewidth);
 drawCircle(keyRes.X(:,1),keyRes.X(:,2),keyRes.X(:,3),'g',true,'linewidth',linewidth);
-%export_fig('-r300','../defence/img/imageCorrespondenceInterestPoints.pdf');
+export_fig('-r300','../defence/img/imageCorrespondenceInterestPoints.pdf');
 
 figure
 set(gcf,'color','white')
@@ -73,7 +73,7 @@ imshow(imadjust([I ones(size(I,1),100,3) Ikey],[0 1],[0.2 1]))
 hold on
 drawCircle(imRes.X(chosenIdx,1),imRes.X(chosenIdx,2),imRes.X(chosenIdx,3),'g',true,'linewidth',linewidth);
 drawCircle(keyRes.X(:,1),keyRes.X(:,2),keyRes.X(:,3),'g',true,'linewidth',linewidth);
-%export_fig('-r300','../defence/img/imageCorrespondenceExample1.pdf');
+export_fig('-r300','../defence/img/imageCorrespondenceExample1.pdf');
 
 figure
 set(gcf,'color','white')
@@ -88,7 +88,7 @@ if numel(FPmatchesX) > 0
     drawCircle(FPmatchesX(:),FPmatchesY(:),FPmatchesS(:),'r',true,'linewidth',linewidth)
 end
 % plot(imRes.X(UPidx,1),imRes.X(UPidx,2),'y.')
-%export_fig('-r300','../defence/img/imageCorrespondenceExample3.pdf');
+export_fig('-r300','../defence/img/imageCorrespondenceExample3.pdf');
 %open('../defence/img/imageCorrespondenceExample3.pdf');
 %% Example of correct match
 
