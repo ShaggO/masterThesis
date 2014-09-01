@@ -1,10 +1,11 @@
 1.  Welcome
+ - Insert supervisor names once we have internet
 
 2.  Agenda
 
 3.  Bring out the shoe
     Computer interpretation of structure in the shoe
-    Basic idea of using gradients
+    Basic idea of using gradient histograms
     Propose a framework which we optimize
 
 4.  Image <-> Object
@@ -13,11 +14,13 @@
 
 5.  Theory to achieve scale invariance:
 	   Iterative blurring -> remove details at lower scales
-   
+    Blur according to the size of the object in the image - bigger = more blur
+
 6.  IC: Match points between images - used for e.g. 3D reconstruction, descriptor evaluation
     PD: Find locations of pedestrians - e.g. surveillance
 
 7.  Points with a high amount of local structure at various scales
+    A multi-scale algorithm called Difference of Gaussian is used for this purpose.
 
 8.  Compute descriptors for all points.
     Choose one point from A -> compute distance (L2) to all in B

@@ -1,7 +1,7 @@
 \documentclass[14pt,t]{beamer}
 \usepackage{pslatex,adjustbox,graphicx,wrapfig}
-\usepackage{caption}
-\usepackage{subcaption}
+\usepackage[labelfont=scriptsize,font=scriptsize]{caption}
+\usepackage[labelfont=scriptsize,font=scriptsize]{subcaption}
 \usepackage{animate}
 \captionsetup{compatibility=false}
 \usepackage[natbib=true,backend=biber,maxbibnames=9,bibencoding=utf8]{biblatex}
@@ -106,7 +106,7 @@
 \end{figure}
 \end{frame}
 %
-\begin{frame}{Applications}
+\begin{frame}[c]{Applications}
 \begin{figure}
 \centering
 	\begin{subfigure}[t]{0.49\textwidth}
@@ -192,6 +192,7 @@ Magnitude function $F$
 	\begin{subfigure}[t]{0.4\textwidth}
 		\includegraphics[width=\textwidth]{img/pixelNormalizationExample1.png}
 	\end{subfigure}
+	\hspace{0.5cm}
 	\begin{subfigure}[t]{0.4\textwidth}
 		\includegraphics[width=\textwidth]{img/pixelNormalizationExample2.png}
 	\end{subfigure}\\
@@ -199,6 +200,7 @@ Magnitude function $F$
 	\begin{subfigure}[t]{0.4\textwidth}
 		\includegraphics[width=\textwidth]{img/pixelNormalizationExample3.png}
 	\end{subfigure}
+	\hspace{0.5cm}
 	\begin{subfigure}[t]{0.4\textwidth}
 		\includegraphics[width=\textwidth]{img/pixelNormalizationExample4.png}
 	\end{subfigure}\\
@@ -206,6 +208,7 @@ Magnitude function $F$
 	\begin{subfigure}[t]{0.4\textwidth}
 		\includegraphics[width=\textwidth]{img/pixelNormalizationExample5.png}
 	\end{subfigure}
+	\hspace{0.5cm}
 	\begin{subfigure}[t]{0.4\textwidth}
 		\includegraphics[width=\textwidth]{img/pixelNormalizationExample6.png}
 	\end{subfigure}
@@ -255,20 +258,36 @@ Bin aperture function $B$
 \end{figure}
 \end{frame}
 %
-\begin{frame}{SIFT \cite{lowe2004distinctive}}
-\begin{minipage}[t]{0.7\textwidth}
-	\begin{itemize}
-	\item $4 \times 4$ square grid
-	\item Trilinear interpolation
-	\item Clipping of magnitudes
-	\item Include comparison results?
-	\end{itemize}
-\end{minipage}
-\begin{minipage}[t]{0.25\textwidth}
-	\begin{figure}
-		\includegraphics[width=\textwidth]{../report/img/siftGrid.pdf}
-	\end{figure}
-\end{minipage}
+\begin{frame}{Image correspondence results}
+\begin{figure}
+	\hspace{0.6cm}\includegraphics[width=0.9\textwidth]{img/dtuResults_opponent_legend_cropped.pdf} \\
+	\begin{subfigure}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_1.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.447\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_2.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_3.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.44\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_4.pdf}
+	\end{subfigure}
+	\caption{Results on the DTU Robot 3D dataset}
+\end{figure}
+\end{frame}
+%
+\begin{frame}{Image correspondence results}
+\begin{figure}
+	\hspace{0.6cm}\includegraphics[width=0.9\textwidth]{img/dtuResults_opponent_legend_cropped.pdf} \\
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_5.pdf}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{img/dtuResultsPR_opponent_6.pdf}
+	\end{subfigure}
+	\caption{Results on the DTU Robot 3D dataset}
+\end{figure}
 \end{frame}
 %
 \section{Pedestrian detection}
@@ -305,25 +324,31 @@ Bin aperture function $B$
 \end{minipage}
 \end{frame}
 %
-\begin{frame}{HOG \cite{dalal2005histograms}}
-\begin{minipage}[t]{0.7\textwidth}
-	\begin{itemize}
-	\item $8 \times 16$ square grid
-	\item Trilinear interpolation and clipping like SIFT
-	\item Local normalization in $2 \times 2$ blocks
-	\item Include comparison results?
-	\end{itemize}
-\end{minipage}
-\begin{minipage}[t]{0.25\textwidth}
-	\begin{figure}
-		\includegraphics[width=\textwidth]{img/hogGrid.pdf}
-	\end{figure}
-\end{minipage}
+\begin{frame}{Pedestrian detection results}
+\begin{figure}[tb]
+\centering
+	\hspace{0.54cm}\includegraphics[width=0.935\textwidth]{../report/img/inriaTestResultsLegend.pdf} \\
+	\includegraphics[width=\textwidth]{../report/img/inriaTestResultsPR.pdf}
+	\caption{Results on the INRIA Person dataset}
+	\label{fig:inriaTestResults}
+\end{figure}
+\end{frame}
+%
+\begin{frame}[c]{Project summary}
+\begin{itemize}
+	\item Studied the literature of descriptors
+	\vspace{0.8cm}
+	\item Developed a descriptor framework
+	\vspace{0.8cm}
+	\item Applied the framework to two problems
+	\vspace{0.8cm}
+	\item Extensive datasets used for evaluation
+\end{itemize}
 \end{frame}
 %
 \begin{frame}[c]{Conclusions}
 \begin{itemize}
-\item Image correspondence: local normalization effective for light variations
+\item Image correspondence: Local normalization effective for light variations
 \vspace{1cm}
 \item Pedestrian detection: Shape index effective when used in combination with gradient orientations
 \end{itemize}
@@ -337,13 +362,9 @@ Thanks for listening!
 \end{center}
 \end{frame}
 %
-%[allowframebreaks]
-\begin{frame}{References}
-\printbibliography
-\end{frame}
-%
 \appendix
-%
+\begin{frame}{Appendix/additional slides}
+\end{frame}
 \begin{frame}{Weight functions}
 \ghostframe
 \setlength{\jot}{15pt}
@@ -372,6 +393,44 @@ B(\x; f_i, f) &= K \left( f(\x) - f_i; \beta \frac{f_\text{max} - f_\text{min}}{
 G(x;\beta) &= \frac{1}{\sqrt{2\pi} \beta}
 \exp\left( -\frac{x^2}{2 \beta^2} \right)
 \end{align*}
+\end{frame}
+%
+\begin{frame}{SIFT \cite{lowe2004distinctive}}
+\ghostframe
+\begin{minipage}[t]{0.7\textwidth}
+	\begin{itemize}
+	\item $4 \times 4$ square grid
+	\item Trilinear interpolation
+	\item Clipping of magnitudes
+	\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{../report/img/siftGrid.pdf}
+	\end{figure}
+\end{minipage}
+\end{frame}
+%
+\begin{frame}{HOG \cite{dalal2005histograms}}
+\ghostframe
+\begin{minipage}[t]{0.7\textwidth}
+	\begin{itemize}
+	\item $8 \times 16$ square grid
+	\item Trilinear interpolation and clipping like SIFT
+	\item Local normalization in $2 \times 2$ blocks
+	\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{img/hogGrid.pdf}
+	\end{figure}
+\end{minipage}
+\end{frame}
+%
+%[allowframebreaks]
+\begin{frame}{References}
+\ghostframe
+\printbibliography
 \end{frame}
 %
 \end{document}

@@ -50,7 +50,7 @@ grid minor
 export_fig('../report/img/inriaTestResultsROC.pdf','-r300');
 
 %% PR
-fig('width',8,'height',8,'unit','in','fontsize',10)
+fig('width',16,'height',8,'unit','in','fontsize',10)
 set(gcf,'color','white');
 for i = 1:numel(svmPath)
     plot(PR{i}(:,2)+eps,1-PR{i}(:,1),'-','color',colours{i});
