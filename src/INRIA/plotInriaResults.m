@@ -53,7 +53,7 @@ export_fig('../report/img/inriaTestResultsROC.pdf','-r300');
 fig('width',16,'height',8,'unit','in','fontsize',10)
 set(gcf,'color','white');
 for i = 1:numel(svmPath)
-    plot(PR{i}(:,2)+eps,1-PR{i}(:,1),'-','color',colours{i});
+    plot(PR{i}(:,2)+eps,1-PR{i}(:,1),'-','color',colours{i},'linewidth',2);
     hold on
 end
 grid on
@@ -71,7 +71,7 @@ fig('unit','inches','width',14,'height',1,'fontsize',8);
 hold on;
 h = zeros(1,numel(order));
 for i = order
-    h(i) = plot(0,0,'-','color',colours{i});
+    h(i) = plot(0,0,'-','color',colours{i},'linewidth',2);
 end
 set(allchild(gca),'visible','off');
 set(gca,'visible','off');

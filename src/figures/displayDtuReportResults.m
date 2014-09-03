@@ -10,7 +10,7 @@ fig('unit','inches','width',12,'height',1,'fontsize',8);
 hold on;
 h = zeros(1,numel(plotParams));
 for i = 1:numel(plotParams)
-    h(i) = plot(0,0,plotParams{i}{:});
+    h(i) = plot(0,0,plotParams{i}{:},'linewidth',2);
 end
 set(allchild(gca),'visible','off');
 set(gca,'visible','off');
@@ -35,8 +35,8 @@ for k = pathTypes % Generate figure for each image path
     h = zeros(numel(plotParams),1);
     hold on;
     for i = 1:numel(plotParams)
-        plot(x(1:before),plotROCAUC{i,k}(1:before),plotParams{i}{:});
-        h(i) = plot(x(before+1:end),plotROCAUC{i,k}(before+1:end),plotParams{i}{:});
+        plot(x(1:before),plotROCAUC{i,k}(1:before),plotParams{i}{:},'linewidth',1);
+        h(i) = plot(x(before+1:end),plotROCAUC{i,k}(before+1:end),plotParams{i}{:},'linewidth',1);
     end
     padding = (x(end)-x(1))/20;
     axis([x(1)-padding x(end)+padding 0.76 1]);
@@ -52,8 +52,8 @@ for k = pathTypes % Generate figure for each image path
     fig('width',width,'height',4.5,'unit','in','fontsize',10)
     hold on;
     for i = 1:numel(plotParams)
-        plot(x(1:before),plotPRAUC{i,k}(1:before),plotParams{i}{:});
-        h(i) = plot(x(before+1:end),plotPRAUC{i,k}(before+1:end),plotParams{i}{:});
+        plot(x(1:before),plotPRAUC{i,k}(1:before),plotParams{i}{:},'linewidth',1);
+        h(i) = plot(x(before+1:end),plotPRAUC{i,k}(before+1:end),plotParams{i}{:},'linewidth',1);
     end
     axis([x(1)-padding x(end)+padding 0.58 1]);
     xlabel([pathNames{k} ' - ' pathXlabel{k}]);
