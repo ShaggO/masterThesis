@@ -24,6 +24,8 @@
 
 6. M     IC: Match points between images - used for e.g. 3D reconstruction, descriptor evaluation
          PD: Find locations of pedestrians - e.g. surveillance
+         IC: Ability to handle various transformations
+         PD: Ability to generalize a class (pedestrians)
 
 7. B     Points with a high amount of local structure at various scales
          A multi-scale algorithm called Difference of Gaussian is used for this purpose.
@@ -42,7 +44,7 @@
          The i'th bin of the j'th histogram
          4 functions which we now explain
 
-12. M    Bin domain and function
+12. B    Bin domain and function
          The information which we aggregate in the histograms
          We will consider two choices:
 
@@ -84,6 +86,7 @@
          Furthermore introduce SIFT by Lowe in 2004.
 
 22. B    Mention the DTU Robot 3D dataset and its contents
+         Camera and light changes over a large number of scenes
          Plot the mean PR AUC, which is a performance measure for our descriptors, over various changes in perspective.
          Results: Somewhat equal performance. Our descriptors slightly better at higher viewpoint changes.
 
@@ -116,3 +119,5 @@
 29. B    Project summary
 
 30. B    Most interesting conclusions from our study
+
+31. B+M  Thanks for listening
