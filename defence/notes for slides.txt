@@ -1,79 +1,118 @@
-1.  Welcome
- - Insert supervisor names once we have internet
+1. M     Welcome
+         - Insert supervisor names once we have internet
 
-2.  Agenda
+2. M     Agenda
+         Propose a framework which we apply to the two applications
 
-3.  Bring out the shoe
-    Computer interpretation of structure in the shoe
-    Basic idea of using gradient histograms
-    Propose a framework which we optimize
+3. B     Bring out the shoe
+         Compute a representation of the structure in the shoe
+         Vector of real numbers
+         Loads of ways of computing descriptors -> a common approach is to compute gradient orientation histograms
+         Each yellow point corresponds to a histogram -> Point towards lighter areas
 
-4.  Image <-> Object
-    Transformations: Light, rotation, scale, perspective
-    Invariance against some transformations
+4. M     Image <-> Object
+         Images taken under different condition
+         Descriptor equal regardless of transformations
+         Transformations: Light (both global and local), scale, rotation, and perspective
+         We don't pursue rotation invariance since our datasets don't model this transformation
 
-5.  Theory to achieve scale invariance:
-	   Iterative blurring -> remove details at lower scales
-    Blur according to the size of the object in the image - bigger = more blur
+   B     An important part of computing descriptors is how to handle scale
 
-6.  IC: Match points between images - used for e.g. 3D reconstruction, descriptor evaluation
-    PD: Find locations of pedestrians - e.g. surveillance
+5. B     Theory to achieve scale invariance:
+            Iterative blurring -> remove details at lower scales
+         Blur according to the size of the region we wish to describe
 
-7.  Points with a high amount of local structure at various scales
-    A multi-scale algorithm called Difference of Gaussian is used for this purpose.
+6. M     IC: Match points between images - used for e.g. 3D reconstruction, descriptor evaluation
+         PD: Find locations of pedestrians - e.g. surveillance
 
-8.  Compute descriptors for all points.
-    Choose one point from A -> compute distance (L2) to all in B
+7. B     Points with a high amount of local structure at various scales
+         A multi-scale algorithm called Difference of Gaussian is used for this purpose.
+         Compute descriptors for all points in the scale space images indicated by the size of the points.
 
-9.  Ratio between best and 2nd best match.
-    Positives are matches below a certain threshold $t$
+8. M     Choose one point from A -> compute distance (L2) to all in B
+         The distance describes the similarity between the descriptors
+         Rank the distances
 
-10. 8 best matches (2 false positives)
+9. M     If the two best descriptors have a distance close to one another, the descriptors are either good matches where we cannot distinct between the two, or really bad matches which should be discarded
+         If the best descriptor is a lot better than the second best, the best descriptor is a match.
 
-11. The i'th bin of the j'th histogram
-    4 functions which we now explain
+10. M    8 best matches (2 false positives)
 
-12. Bin domain and function
+11. B    Recall the descriptors are divided into cells, for which we compute histograms
+         The i'th bin of the j'th histogram
+         4 functions which we now explain
 
-13. Gradient orientation ($M$ and $\Theta$)
-    Dark to light
+12. M    Bin domain and function
+         The information which we aggregate in the histograms
+         We will consider two choices:
 
-14. Change in gradients
-    2nd order differential structure. Between -1 and 1:
-    -1: Light blob, 1: dark blob, 0: saddle point, -½: ridge, ½: valley
-    (K_1, K_2 ~ eigenvalues of the Hessian matrix)
+13. M    Gradients defined by the first order derivatives
+         Point towards lighter areas, use $\Theta$ as bin domain
+         Use $M$ as magnitude function and hence larger gradients are weighted higher in the histograms
 
-15. Divide magnitude by the surrounding magnitudes (Gaussian weighting)
-    Example -> Note the cast shadow, which disappears by using local normalization
-	-> Note how local normalization boosts noise
+14. B    Shape index based on 2nd order information
+         2nd order differential structure. Between -1 and 1:
+         -1: Light blob, 1: dark blob, 0: saddle point, -½: ridge, ½: valley
+         (K_1, K_2 ~ eigenvalues of the Hessian matrix)
+         Curvedness: Significance of the structure
 
-16. Spatial aggregation of information
+15. M    Calculate the magnitude at each point relative to the surrounding area
+         Example -> Note the cast shadow, which disappears by using local normalization
+         -> Note how local normalization boosts noise
 
-17. One cell
-    High weight at the center of the cell and lower as the distance to the cell increases
+16. B    Spatial aggregation of information
 
-18. Our cell layout - notice the overlap between cells
-    Center weight: Weight by distance to center of descriptor
+17. B    One cell
+         A cell in the middle (point)
+         The height illustrates the weight of each point
+         Points beyond the yellow curve are ignored.
+         The black curve illustrates the standard deviation
 
-19. Bin aperture function
-    Recall f ~ Gradient orientation and shape index
+18. B    Our cell layout - notice the overlap between cells
+         In addition to the cell weights, we also weight points by a center aperture function,
+         causing central points and cells to have a higher importance.
 
-20. Example of a bin and the contribution of values based on the distance to $f_2$.
-    Now we have described the overall parts of our descriptor.
-    In order to use the functions, we have optimized the parameters for them.
+19. M    Bin aperture function
+         Recall f ~ Gradient orientation and shape index
 
-21. Look at the slide.
-    Comparison?
+20. M    Divide the domain into equally sized bins
+         Example of a bin and the contribution of values based on the distance to $f_2$.
 
-22. Recall pedestrian detection
-    Basic idea of sliding window: Calculate descriptor for each location and predict whether there is a pedestrian present.
+21. M    Descriptors
+         We have now described the overall parts of our descriptor.
+         GO, SI, and the concatenation GO+SI
+         Furthermore introduce SIFT by Lowe in 2004.
 
-23. Binary classification: Use a lot of examples of pedestrians and non-pedestrians.
-    SVM a method for seperating the two classes -> Able to classify new descriptors
+22. B    Mention the DTU Robot 3D dataset and its contents
+         Plot the mean PR AUC, which is a performance measure for our descriptors, over various changes in perspective.
+         Results: Somewhat equal performance. Our descriptors slightly better at higher viewpoint changes.
 
-24. No central (interest) -> uniform description
+23. B    Light paths: Ours have better performance.
 
-25. Similar to SIFT but used for pedestrian detection with local normalization.
-    Comparison?
+24. M    Recall pedestrian detection
+         Sliding window, various scales
+         Descriptor for each position
+         Binary classification
 
-26. Most interesting conclusions from our study
+25. M    Binary classification: Use a lot of examples of pedestrians and non-pedestrians.
+         Machine learning algorithm for classification
+         Pedestrian/non-pedestrian
+         Training data -> Search for optimal separation of classes
+         Prediction on new data
+         Dataset split into train and test with both positives and negatives in both.
+
+26. B    Sliding windows large rectangular areas -> Changes to proposed descriptor.
+         No central (interest) -> uniform description
+
+27. B    Descriptors
+         GO, SI, GO+SI, Compact GO+SI, HOG (Dalal & Triggs), HOG+SI
+
+28. M    Results
+         INRIA Person dataset
+         Precision as a function of recall -> no more details, but high precision is desired
+         HOG outperforms our descriptors, with Compact GO+SI close behind.
+         Shape index not good on its own but improves both HOG and GO significantly
+
+29. B    Project summary
+
+30. B    Most interesting conclusions from our study
