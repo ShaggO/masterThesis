@@ -152,11 +152,18 @@
 \begin{align*}
 H_j(f_i) = \int F(\x) A_j (\x) P (\x) B(\x; f_i,f) \,\text{d} \x
 \end{align*}
-where
-\begin{itemize}
-\item[] $i$ is the bin number
-\item[] $j$ is the cell number
-\end{itemize}
+\begin{minipage}[t]{0.58\textwidth}
+	where
+	\begin{itemize}
+	\item[] $i$ is the bin number
+	\item[] $j$ is the cell number
+	\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.4\textwidth}
+	\begin{figure}
+		\includegraphics[width=\textwidth, clip=true, trim=1 1 1 1]{img/shoeDescriptorZoom.pdf}
+	\end{figure}
+\end{minipage}
 \end{frame}
 %
 \begin{frame}{Histogram domain}
@@ -219,7 +226,7 @@ Magnitude function $F$
 \begin{align*}
 \textcolor{faded}{H_j(f_i) = \int F(\x) \textcolor{black}{A_j (\x) P (\x)} B(\x; f_i,f) \,\text{d} \x}
 \end{align*}
-Cell aperture function $A$
+Cell aperture function $A_j$
 
 Center aperture function $P$
 \end{frame}
