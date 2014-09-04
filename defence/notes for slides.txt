@@ -1,5 +1,4 @@
 1. M     Welcome
-         - Insert supervisor names once we have internet
 
 2. M     Agenda
          Propose a framework which we apply to the two applications
